@@ -1,6 +1,3 @@
-C
-Tiny POC of a simple multi-threaded TCPServer, made during .NETGame project at #Diiage.
-
 [![Diiage logo](http://diiage.cucdb.fr/wp-content/uploads/sites/4/2014/10/diiage-couleur1.png)](http://diiage.cucdb.fr/)
 
 # CSharp-TCPServer-POC - Diiage 2022
