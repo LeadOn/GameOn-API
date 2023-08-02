@@ -16,39 +16,75 @@ namespace YuFoot.Business
     {
         private IPlayerRepository playerRepo;
         private IGamePlayedRepository gamePlayedRepo;
+        private ITeamPlayerRepository teamPlayerRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePlayedBusiness" /> class.
         /// </summary>
         /// <param name="playerRepo">Player repository, injected.</param>
-        public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo)
+        public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo)
         {
             this.playerRepo = playerRepo;
             this.gamePlayedRepo = gamePlayedRepo;
+            this.teamPlayerRepo = teamPlayerRepo;
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<GamePlayedDto>> GetLastFiveGames()
         {
-            var gamePlayed = await this.gamePlayedRepo.Search(x => true, 5);
+            var gamesPlayedDto = new List<GamePlayedDto>();
 
-            var gamePlayedDtos = new List<GamePlayedDto>();
+            // First, getting last 5 games (from GamePlayed table)
+            var gamesPlayed = await this.gamePlayedRepo.Search(x => true, 5);
 
-            foreach (var played in gamePlayed)
+            // For each game played, getting player information
+            foreach (var game in gamesPlayed)
             {
                 var gamePlayedDto = new GamePlayedDto();
-                gamePlayedDto.GameDetails = played;
-                gamePlayedDto.Players = played.TeamPlayers;
-
-                foreach (var player in gamePlayedDto.Players)
+                gamePlayedDto.Id = game.Id;
+                gamePlayedDto.PlayedOn = game.PlayedOn;
+                gamePlayedDto.Team1 = new TeamDto
                 {
-                    player.Player = await this.playerRepo.GetPlayerById(player.PlayerId) ?? null!;
+                    Id = 0,
+                    Code = game.TeamCode1,
+                    Players = new List<Player>(),
+                    Score = game.TeamScore1
+                };
+                gamePlayedDto.Team2 = new TeamDto
+                {
+                    Id = 1,
+                    Code = game.TeamCode2,
+                    Players = new List<Player>(),
+                    Score = game.TeamScore2
+                };
+                gamePlayedDto.PlatformId = 0;
+                
+                // Getting team players
+                var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
+                foreach (var teamPlayer in teamPlayers)
+                {
+                    if (teamPlayer.Team == 0)
+                    {
+                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                        if (player is not null)
+                        {
+                            gamePlayedDto.Team1.Players.Add(player);
+                        }
+                    }
+                    else
+                    {
+                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                        if (player is not null)
+                        {
+                            gamePlayedDto.Team2.Players.Add(player);
+                        }
+                    }
                 }
-
-                gamePlayedDtos.Add(gamePlayedDto);
+                
+                gamesPlayedDto.Add(gamePlayedDto);
             }
 
-            return gamePlayedDtos;
+            return gamesPlayedDto;
         }
     }
 }

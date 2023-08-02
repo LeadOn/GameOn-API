@@ -39,6 +39,7 @@ builder.Services.AddScoped<IPlayerBusiness, PlayerBusiness>();
 builder.Services.AddScoped<IGamePlayedBusiness, GamePlayedBusiness>();
 builder.Services.AddScoped<IPlayerRepository, SqLitePlayerRepository>();
 builder.Services.AddScoped<IGamePlayedRepository, SqLiteGamePlayedRepository>();
+builder.Services.AddScoped<ITeamPlayerRepository, SqLiteTeamPlayerRepository>();
 
 var app = builder.Build();
 

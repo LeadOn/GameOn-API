@@ -1,4 +1,4 @@
-﻿// <copyright file="IPlayerRepository.cs" company="LeadOn's Corp'">
+﻿// <copyright file="ITeamPlayerRepository.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -7,21 +7,15 @@ namespace YuFoot.Repository.Contracts
     using YuFoot.Entities;
 
     /// <summary>
-    /// Player repository.
+    /// Team Player repository.
     /// </summary>
-    public interface IPlayerRepository
+    public interface ITeamPlayerRepository
     {
         /// <summary>
-        /// Get player by its ID.
+        /// Get Team players by game ID.
         /// </summary>
-        /// <param name="id">Player ID.</param>
-        /// <returns>Player if found, null if not.</returns>
-        Task<Player?> GetPlayerById(int id);
-
-        /// <summary>
-        /// Get all players in database.
-        /// </summary>
-        /// <returns>List of players.</returns>
-        Task<IEnumerable<Player>> GetAll();
+        /// <param name="gamePlayedId">GamePlayed ID.</param>
+        /// <returns>List of Team Players.</returns>
+        Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId);
     }
 }

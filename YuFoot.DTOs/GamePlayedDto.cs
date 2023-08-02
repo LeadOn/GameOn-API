@@ -10,14 +10,10 @@ namespace YuFoot.DTOs
     /// </summary>
     public class GamePlayedDto
     {
-        /// <summary>
-        /// Gets or sets Game Details.
-        /// </summary>
-        public GamePlayed GameDetails { get; set; } = new GamePlayed();
-
-        /// <summary>
-        /// Gets or sets Game players.
-        /// </summary>
-        public List<TeamPlayer> Players { get; set; } = new List<TeamPlayer>();
+        public int Id { get; set; }
+        public DateTime PlayedOn { get; set; }
+        public int PlatformId { get; set; }
+        public TeamDto Team1 { get; set; }
+        public TeamDto Team2 { get; set; }
     }
 }
