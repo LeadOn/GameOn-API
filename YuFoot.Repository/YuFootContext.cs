@@ -26,6 +26,16 @@ namespace YuFoot.Repository
         public DbSet<Player> Players { get; set; }
 
         /// <summary>
+        /// Gets or sets GamePlayed.
+        /// </summary>
+        public DbSet<GamePlayed> GamesPlayed { get; set; }
+
+        /// <summary>
+        /// Gets or sets TeamPlayer.
+        /// </summary>
+        public DbSet<TeamPlayer> TeamPlayers { get; set; }
+
+        /// <summary>
         /// Gets or sets the path of the SQLite file.
         /// </summary>
         public string DbPath { get; set; }
@@ -37,6 +47,62 @@ namespace YuFoot.Repository
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TeamPlayer>(entity =>
+            {
+                entity.ToTable("TeamPlayer");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id");
+
+                entity.Property(e => e.Team)
+                    .HasColumnName("team");
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.TeamPlayers)
+                    .HasForeignKey(e => e.PlayerId)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_Player_TeamPlayer");
+
+                entity.HasOne(e => e.GamePlayed)
+                    .WithMany(f => f.TeamPlayers)
+                    .HasForeignKey(e => e.GamePlayedId)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_GamePlayed_TeamPlayer");
+            });
+
+            modelBuilder.Entity<GamePlayed>(entity =>
+            {
+                entity.ToTable("GamePlayed");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.PlayedOn)
+                    .HasColumnName("played_on")
+                    .HasDefaultValue(DateTime.Now);
+
+                entity.Property(e => e.TeamScore1)
+                    .HasColumnName("team_score_1")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TeamScore2)
+                    .HasColumnName("team_score_2")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TeamCode1)
+                    .HasColumnName("team_code_1")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.TeamCode2)
+                    .HasColumnName("team_code_2")
+                    .HasMaxLength(10);
+            });
+
             modelBuilder.Entity<Player>(entity =>
             {
                 entity.ToTable("Player");

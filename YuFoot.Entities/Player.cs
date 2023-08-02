@@ -4,6 +4,8 @@
 
 namespace YuFoot.Entities
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
     /// Player class.
     /// </summary>
@@ -33,5 +35,11 @@ namespace YuFoot.Entities
         /// Gets or sets player's creation date.
         /// </summary>
         public DateTime CreatedOn { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Gets or sets TeamPlayers.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<TeamPlayer> TeamPlayers { get; set; } = null!;
     }
 }

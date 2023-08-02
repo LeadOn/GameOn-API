@@ -36,7 +36,9 @@ builder.Services.AddDbContext<YuFootContext>();
 
 // Dependency injection
 builder.Services.AddScoped<IPlayerBusiness, PlayerBusiness>();
+builder.Services.AddScoped<IGamePlayedBusiness, GamePlayedBusiness>();
 builder.Services.AddScoped<IPlayerRepository, SqLitePlayerRepository>();
+builder.Services.AddScoped<IGamePlayedRepository, SqLiteGamePlayedRepository>();
 
 var app = builder.Build();
 

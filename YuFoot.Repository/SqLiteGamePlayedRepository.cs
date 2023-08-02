@@ -1,34 +1,38 @@
-﻿// <copyright file="SqLitePlayerRepository.cs" company="LeadOn's Corp'">
+﻿// <copyright file="SqLiteGamePlayedRepository.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
 namespace YuFoot.Repository
 {
+    using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
     using YuFoot.Entities;
     using YuFoot.Repository.Contracts;
 
     /// <summary>
-    /// Player repository SQLite implementation.
+    /// GamePlayed repository SQLite implementation.
     /// </summary>
-    public class SqLitePlayerRepository : IPlayerRepository
+    public class SqLiteGamePlayedRepository : IGamePlayedRepository
     {
         private YuFootContext context;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SqLitePlayerRepository"/> class.
+        /// Initializes a new instance of the <see cref="SqLiteGamePlayedRepository"/> class.
         /// </summary>
         /// <param name="context">Database context, injected.</param>
-        public SqLitePlayerRepository(YuFootContext context)
+        public SqLiteGamePlayedRepository(YuFootContext context)
         {
             this.context = context;
         }
 
         /// <inheritdoc />
-        public async Task<Player?> GetPlayerById(int id) =>
-            await this.context.Players.FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<GamePlayed?> GetById(int id) =>
+            await this.context.GamesPlayed.FirstOrDefaultAsync(x => x.Id == id);
 
         /// <inheritdoc />
-        public async Task<IEnumerable<Player>> GetAll() => await this.context.Players.ToListAsync();
+        public async Task<IEnumerable<GamePlayed>> Search(Expression<Func<GamePlayed, bool>> query, int limit)
+        {
+            return await this.context.GamesPlayed.Include(x => x.TeamPlayers).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
+        }
     }
 }

@@ -1,13 +1,15 @@
-﻿// <copyright file="Player.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GamePlayed.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
 namespace YuFoot.Entities
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
-    /// Player class.
+    /// GamePlayed class.
     /// </summary>
-    public class Player
+    public class GamePlayed
     {
         /// <summary>
         /// Gets or sets player's ID.
@@ -15,23 +17,34 @@ namespace YuFoot.Entities
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets player's full name.
+        /// Gets or sets game date.
         /// </summary>
-        public string FullName { get; set; } = "John Doe";
+        public DateTime PlayedOn { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// Gets or sets player's nickname.
+        /// Gets or sets Team Code 1
         /// </summary>
-        public string? Nickname { get; set; } = "J0hnD03";
+        public string? TeamCode1 { get; set; }
 
         /// <summary>
-        /// Gets or sets player's profile picture URL.
+        /// Gets or sets Team Code 2.
         /// </summary>
-        public string? ProfilePictureUrl { get; set; }
+        public string? TeamCode2 { get; set; }
 
         /// <summary>
-        /// Gets or sets player's creation date.
+        /// Gets or sets team 1 score.
         /// </summary>
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public int TeamScore1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets team 2 score.
+        /// </summary>
+        public int TeamScore2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets TeamPlayers.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<TeamPlayer> TeamPlayers { get; set; } = null!;
     }
 }

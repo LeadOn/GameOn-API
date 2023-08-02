@@ -1,27 +1,30 @@
-﻿// <copyright file="IPlayerRepository.cs" company="LeadOn's Corp'">
+﻿// <copyright file="IGamePlayedRepository.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
 namespace YuFoot.Repository.Contracts
 {
+    using System.Linq.Expressions;
     using YuFoot.Entities;
 
     /// <summary>
-    /// Player repository.
+    /// GamePlayed repository.
     /// </summary>
-    public interface IPlayerRepository
+    public interface IGamePlayedRepository
     {
         /// <summary>
-        /// Get player by its ID.
+        /// Get GamePlayed by its ID.
         /// </summary>
-        /// <param name="id">Player ID.</param>
-        /// <returns>Player if found, null if not.</returns>
-        Task<Player?> GetPlayerById(int id);
+        /// <param name="id">GamePlayed ID.</param>
+        /// <returns>GamePlay if found, null if not.</returns>
+        Task<GamePlayed?> GetById(int id);
 
         /// <summary>
-        /// Get all players in database.
+        /// Search GamePlayed in table.
         /// </summary>
-        /// <returns>List of players.</returns>
-        Task<IEnumerable<Player>> GetAll();
+        /// <param name="query">Query to filter in table.</param>
+        /// <param name="limit">Number of data to retrieve.</param>
+        /// <returns>List of GamePlayed objects.</returns>
+        Task<IEnumerable<GamePlayed>> Search(Expression<Func<GamePlayed, bool>> query, int limit);
     }
 }

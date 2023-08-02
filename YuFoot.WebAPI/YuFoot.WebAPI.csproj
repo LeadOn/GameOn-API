@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\YuFoot.Business.Contracts\YuFoot.Business.Contracts.csproj" />
     <ProjectReference Include="..\YuFoot.Business\YuFoot.Business.csproj" />
+    <ProjectReference Include="..\YuFoot.DTOs\YuFoot.DTOs.csproj" />
     <ProjectReference Include="..\YuFoot.Entities\YuFoot.Entities.csproj" />
     <ProjectReference Include="..\YuFoot.Repository.Contracts\YuFoot.Repository.Contracts.csproj" />
     <ProjectReference Include="..\YuFoot.Repository\YuFoot.Repository.csproj" />

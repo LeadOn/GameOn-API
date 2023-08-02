@@ -1,4 +1,4 @@
-﻿// <copyright file="GamePlayed.cs" company="LeadOn's Corp'">
+﻿// <copyright file="TeamPlayer.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -7,36 +7,36 @@ namespace YuFoot.Entities
     /// <summary>
     /// GamePlayed class.
     /// </summary>
-    public class GamePlayed
+    public class TeamPlayer
     {
         /// <summary>
-        /// Gets or sets player's ID.
+        /// Gets or sets ID..
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets game date.
+        /// Gets or sets Player ID.
         /// </summary>
-        public DateTime PlayedOn { get; set; } = DateTime.Now;
+        public int PlayerId { get; set; }
 
         /// <summary>
-        /// Gets or sets Team Code 1
+        /// Gets or sets GamePlayed ID.
         /// </summary>
-        public string? TeamCode1 { get; set; }
+        public int GamePlayedId { get; set; }
 
         /// <summary>
-        /// Gets or sets Team Code 2.
+        /// Gets or sets Team (team 1 = 0, team 2 = 1).
         /// </summary>
-        public string? TeamCode2 { get; set; }
+        public int Team { get; set; }
 
         /// <summary>
-        /// Gets or sets team 1 score.
+        /// Gets or sets Player.
         /// </summary>
-        public int TeamScore1 { get; set; }
+        public virtual Player Player { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets team 2 score.
+        /// Gets or sets GamePlayed.
         /// </summary>
-        public int TeamScore2 { get; set; }
+        public virtual GamePlayed GamePlayed { get; set; } = null!;
     }
 }
