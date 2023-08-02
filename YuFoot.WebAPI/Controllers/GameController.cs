@@ -31,18 +31,19 @@ namespace YuFoot.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get last 5 games played.
+        /// Get last games played.
         /// </summary>
+        /// <param name="number">Number of data to retrieve.</param>
         /// <returns>200 OK with Game list.</returns>
         [HttpGet]
-        [Route("last")]
+        [Route("last/{number}")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get last 5 games played.", Description = "Get last 5 games played with their players.")]
+        [SwaggerOperation(Summary = "Get last games played.", Description = "Get last games played with their players.")]
         [SwaggerResponse(200, "List of games played.", typeof(List<GamePlayedDto>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetLastFiveGames()
+        public async Task<IActionResult> GetLastGamesPlayed(int number)
         {
-            return this.Ok(await this.gamePlayedBusi.GetLastFiveGames());
+            return this.Ok(await this.gamePlayedBusi.GetLastGamesPlayed(number));
         }
     }
 }

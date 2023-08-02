@@ -5,7 +5,6 @@
 namespace YuFoot.Business.Contracts
 {
     using YuFoot.DTOs;
-    using YuFoot.Entities;
 
     /// <summary>
     /// GamePlayed business interface.
@@ -13,9 +12,10 @@ namespace YuFoot.Business.Contracts
     public interface IGamePlayedBusiness
     {
         /// <summary>
-        /// Get last 5 games played.
+        /// Get last games played.
         /// </summary>
-        /// <returns>5 last games.</returns>
-        Task<IEnumerable<GamePlayedDto>> GetLastFiveGames();
+        /// <param name="number">Number of data to retrieve.</param>
+        /// <returns>List of games played.</returns>
+        Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayed(int number);
     }
 }

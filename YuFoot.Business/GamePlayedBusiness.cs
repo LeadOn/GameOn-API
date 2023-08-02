@@ -32,12 +32,12 @@ namespace YuFoot.Business
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<GamePlayedDto>> GetLastFiveGames()
+        public async Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayed(int number)
         {
             var gamesPlayedDto = new List<GamePlayedDto>();
 
-            // First, getting last 5 games (from GamePlayed table)
-            var gamesPlayed = await this.gamePlayedRepo.Search(x => true, 5);
+            // First, getting last games (from GamePlayed table)
+            var gamesPlayed = await this.gamePlayedRepo.Search(x => true, number);
 
             // For each game played, getting player information
             foreach (var game in gamesPlayed)
