@@ -32,7 +32,7 @@ namespace YuFoot.Repository
         /// <inheritdoc />
         public async Task<IEnumerable<GamePlayed>> Search(Expression<Func<GamePlayed, bool>> query, int limit)
         {
-            return await this.context.GamesPlayed.Include(x => x.TeamPlayers).Include(x => x.Platform).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
+            return await this.context.GamesPlayed.Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.Highlights).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
         }
     }
 }

@@ -34,5 +34,10 @@ namespace YuFoot.DTOs
         /// Gets or sets Team 2.
         /// </summary>
         public TeamDto Team2 { get; set; } = new TeamDto();
+
+        /// <summary>
+        /// Gets or sets Highlights.
+        /// </summary>
+        public List<Highlight> Highlights { get; set; } = new List<Highlight>();
     }
 }

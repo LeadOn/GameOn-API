@@ -87,6 +87,8 @@ namespace YuFoot.Business
                     }
                 }
 
+                gamePlayedDto.Highlights = game.Highlights;
+
                 gamesPlayedDto.Add(gamePlayedDto);
             }
 
