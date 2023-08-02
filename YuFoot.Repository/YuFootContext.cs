@@ -17,7 +17,7 @@ namespace YuFoot.Repository
         /// </summary>
         public YuFootContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yufoot.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yufoot.db";
         }
 
         /// <summary>
@@ -36,6 +36,11 @@ namespace YuFoot.Repository
         public DbSet<TeamPlayer> TeamPlayers { get; set; }
 
         /// <summary>
+        /// Gets or sets Platforms.
+        /// </summary>
+        public DbSet<Platform> Platforms { get; set; }
+
+        /// <summary>
         /// Gets or sets the path of the SQLite file.
         /// </summary>
         public string DbPath { get; set; }
@@ -47,6 +52,19 @@ namespace YuFoot.Repository
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Platform>(entity =>
+            {
+                entity.ToTable("Platform");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<TeamPlayer>(entity =>
             {
                 entity.ToTable("TeamPlayer");
@@ -101,6 +119,12 @@ namespace YuFoot.Repository
                 entity.Property(e => e.TeamCode2)
                     .HasColumnName("team_code_2")
                     .HasMaxLength(10);
+
+                entity.HasOne(e => e.Platform)
+                    .WithMany(f => f.GamesPlayed)
+                    .HasForeignKey(e => e.PlatformId)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_GamePlayed_Platform");
             });
 
             modelBuilder.Entity<Player>(entity =>

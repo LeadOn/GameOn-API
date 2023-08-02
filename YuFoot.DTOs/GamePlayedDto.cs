@@ -21,9 +21,9 @@ namespace YuFoot.DTOs
         public DateTime PlayedOn { get; set; }
 
         /// <summary>
-        /// Gets or sets Platform ID.
+        /// Gets or sets Platform.
         /// </summary>
-        public int PlatformId { get; set; }
+        public string? Platform { get; set; }
 
         /// <summary>
         /// Gets or sets Team 1.

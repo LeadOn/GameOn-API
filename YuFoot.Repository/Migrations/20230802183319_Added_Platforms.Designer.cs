@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuFoot.Repository;
 
@@ -10,9 +11,11 @@ using YuFoot.Repository;
 namespace YuFoot.Repository.Migrations
 {
     [DbContext(typeof(YuFootContext))]
-    partial class YuFootContextModelSnapshot : ModelSnapshot
+    [Migration("20230802183319_Added_Platforms")]
+    partial class Added_Platforms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
