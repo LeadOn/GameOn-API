@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Business.Contracts",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Business", "YuFoot.Business\YuFoot.Business.csproj", "{D412DFDB-4400-4ACB-87A9-72A7AD65053C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.DTOs", "YuFoot.DTOs\YuFoot.DTOs.csproj", "{590718D6-548A-40EB-8891-6E373EA5475F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{D412DFDB-4400-4ACB-87A9-72A7AD65053C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D412DFDB-4400-4ACB-87A9-72A7AD65053C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D412DFDB-4400-4ACB-87A9-72A7AD65053C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{590718D6-548A-40EB-8891-6E373EA5475F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{590718D6-548A-40EB-8891-6E373EA5475F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{590718D6-548A-40EB-8891-6E373EA5475F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{590718D6-548A-40EB-8891-6E373EA5475F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

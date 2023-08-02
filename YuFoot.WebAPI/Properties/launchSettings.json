@@ -1,12 +1,23 @@
 {
   "profiles": {
-    "http": {
+    "macOS": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SQLITE_PATH": "/Users/leadon/Desktop/yufoot.db"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5184"
+    },
+    "Windows": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SQLITE_PATH": "C:\\Users\\Valentin\\Desktop\\yufoot.db"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"

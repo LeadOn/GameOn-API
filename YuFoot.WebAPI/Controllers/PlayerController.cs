@@ -55,5 +55,20 @@ namespace YuFoot.WebAPI.Controllers
                 return this.NotFound();
             }
         }
+
+        /// <summary>
+        /// Get all players in database.
+        /// </summary>
+        /// <returns>200 OK with Player list.</returns>
+        [HttpGet]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get all player in database.")]
+        [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetAll()
+        {
+            return this.Ok(await this.playerBusi.GetAll());
+        }
     }
 }
