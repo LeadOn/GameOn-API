@@ -17,7 +17,7 @@ namespace YuFoot.Repository
         /// </summary>
         public YuFootContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yufoot.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yufoot.db";
         }
 
         /// <summary>
@@ -36,6 +36,16 @@ namespace YuFoot.Repository
         public DbSet<TeamPlayer> TeamPlayers { get; set; }
 
         /// <summary>
+        /// Gets or sets Platforms.
+        /// </summary>
+        public DbSet<Platform> Platforms { get; set; }
+
+        /// <summary>
+        /// Gets or sets Highlights.
+        /// </summary>
+        public DbSet<Highlight> Highlights { get; set; }
+
+        /// <summary>
         /// Gets or sets the path of the SQLite file.
         /// </summary>
         public string DbPath { get; set; }
@@ -47,6 +57,48 @@ namespace YuFoot.Repository
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Highlight>(entity =>
+            {
+                entity.ToTable("Highlight");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ExternalUrl)
+                    .HasColumnName("external_url")
+                    .HasMaxLength(3000);
+
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany(f => f.Highlights)
+                    .HasForeignKey(e => e.CreatedById)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_Highlight_Player");
+
+                entity.HasOne(e => e.Game)
+                    .WithMany(f => f.Highlights)
+                    .HasForeignKey(e => e.GameId)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_Highlight_GamePlayed");
+            });
+
+            modelBuilder.Entity<Platform>(entity =>
+            {
+                entity.ToTable("Platform");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<TeamPlayer>(entity =>
             {
                 entity.ToTable("TeamPlayer");
@@ -101,6 +153,12 @@ namespace YuFoot.Repository
                 entity.Property(e => e.TeamCode2)
                     .HasColumnName("team_code_2")
                     .HasMaxLength(10);
+
+                entity.HasOne(e => e.Platform)
+                    .WithMany(f => f.GamesPlayed)
+                    .HasForeignKey(e => e.PlatformId)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_GamePlayed_Platform");
             });
 
             modelBuilder.Entity<Player>(entity =>

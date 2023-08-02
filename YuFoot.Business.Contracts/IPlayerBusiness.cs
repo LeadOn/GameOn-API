@@ -3,6 +3,7 @@
 // </copyright>
 namespace YuFoot.Business.Contracts
 {
+    using YuFoot.DTOs;
     using YuFoot.Entities;
 
     /// <summary>
@@ -15,7 +16,7 @@ namespace YuFoot.Business.Contracts
         /// </summary>
         /// <param name="id">Player ID.</param>
         /// <returns>Player if found, null if not.</returns>
-        Task<Player?> GetPlayerById(int id);
+        Task<PlayerDto?> GetPlayerById(int id);
 
         /// <summary>
         /// Get all players in database.

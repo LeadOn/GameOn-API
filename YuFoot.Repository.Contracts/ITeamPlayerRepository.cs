@@ -17,5 +17,7 @@ namespace YuFoot.Repository.Contracts
         /// <param name="gamePlayedId">GamePlayed ID.</param>
         /// <returns>List of Team Players.</returns>
         Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId);
+
+        Task<IEnumerable<TeamPlayer>> GetTeamPlayerByPlayerId(int playerId);
     }
 }

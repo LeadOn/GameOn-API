@@ -1,15 +1,13 @@
-﻿// <copyright file="Player.cs" company="LeadOn's Corp'">
+﻿// <copyright file="PlayerDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace YuFoot.Entities
+namespace YuFoot.DTOs
 {
-    using System.Text.Json.Serialization;
-
     /// <summary>
-    /// Player class.
+    /// Player DTO class.
     /// </summary>
-    public class Player
+    public class PlayerDto
     {
         /// <summary>
         /// Gets or sets player's ID.
@@ -37,15 +35,23 @@ namespace YuFoot.Entities
         public DateTime CreatedOn { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// Gets or sets TeamPlayers.
+        /// Gets or sets number of match played.
         /// </summary>
-        [JsonIgnore]
-        public virtual List<TeamPlayer> TeamPlayers { get; set; } = null!;
+        public int MatchPlayed { get; set; }
 
         /// <summary>
-        /// Gets or sets Highlights.
+        /// Gets or sets number of wins.
         /// </summary>
-        [JsonIgnore]
-        public virtual List<Highlight> Highlights { get; set; } = null!;
+        public int Wins { get; set; }
+
+        /// <summary>
+        /// Gets or sets number of losses.
+        /// </summary>
+        public int Losses { get; set; }
+
+        /// <summary>
+        /// Gets or sets number of draws.
+        /// </summary>
+        public int Draws { get; set; }
     }
 }

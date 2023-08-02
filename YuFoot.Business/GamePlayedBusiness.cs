@@ -59,7 +59,11 @@ namespace YuFoot.Business
                     Players = new List<Player>(),
                     Score = game.TeamScore2,
                 };
-                gamePlayedDto.PlatformId = 0;
+
+                if (game.Platform is not null)
+                {
+                    gamePlayedDto.Platform = game.Platform.Name;
+                }
 
                 // Getting team players
                 var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
@@ -82,6 +86,8 @@ namespace YuFoot.Business
                         }
                     }
                 }
+
+                gamePlayedDto.Highlights = game.Highlights;
 
                 gamesPlayedDto.Add(gamePlayedDto);
             }

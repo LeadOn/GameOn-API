@@ -22,7 +22,7 @@ namespace YuFoot.Entities
         public DateTime PlayedOn { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// Gets or sets Team Code 1
+        /// Gets or sets Team Code 1.
         /// </summary>
         public string? TeamCode1 { get; set; }
 
@@ -42,9 +42,26 @@ namespace YuFoot.Entities
         public int TeamScore2 { get; set; }
 
         /// <summary>
+        /// Gets or sets Platform ID.
+        /// </summary>
+        public int? PlatformId { get; set; }
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
         public virtual List<TeamPlayer> TeamPlayers { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Platform.
+        /// </summary>
+        [JsonIgnore]
+        public virtual Platform? Platform { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Highlights.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<Highlight> Highlights { get; set; } = null!;
     }
 }

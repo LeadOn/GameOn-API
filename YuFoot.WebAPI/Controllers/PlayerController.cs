@@ -7,6 +7,7 @@ namespace YuFoot.WebAPI.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuFoot.Business.Contracts;
+    using YuFoot.DTOs;
     using YuFoot.Entities;
 
     /// <summary>
@@ -39,7 +40,7 @@ namespace YuFoot.WebAPI.Controllers
         [Route("{id}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get a player by its ID.", Description = "Get a player by its ID, and retrieve its information.")]
-        [SwaggerResponse(200, "Player is found.", typeof(Player))]
+        [SwaggerResponse(200, "Player is found.", typeof(PlayerDto))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetById(int id)

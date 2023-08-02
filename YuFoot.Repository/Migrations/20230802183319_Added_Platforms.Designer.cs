@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuFoot.Repository;
 
@@ -10,9 +11,11 @@ using YuFoot.Repository;
 namespace YuFoot.Repository.Migrations
 {
     [DbContext(typeof(YuFootContext))]
-    partial class YuFootContextModelSnapshot : ModelSnapshot
+    [Migration("20230802183319_Added_Platforms")]
+    partial class Added_Platforms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
@@ -30,7 +33,7 @@ namespace YuFoot.Repository.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 2, 20, 50, 9, 750, DateTimeKind.Local).AddTicks(4548))
+                        .HasDefaultValue(new DateTime(2023, 8, 2, 20, 33, 19, 57, DateTimeKind.Local).AddTicks(5418))
                         .HasColumnName("played_on");
 
                     b.Property<string>("TeamCode1")
@@ -58,40 +61,6 @@ namespace YuFoot.Repository.Migrations
                     b.HasIndex("PlatformId");
 
                     b.ToTable("GamePlayed", (string)null);
-                });
-
-            modelBuilder.Entity("YuFoot.Entities.Highlight", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ExternalUrl")
-                        .IsRequired()
-                        .HasMaxLength(3000)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("external_url");
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("Highlight", (string)null);
                 });
 
             modelBuilder.Entity("YuFoot.Entities.Platform", b =>
@@ -122,7 +91,7 @@ namespace YuFoot.Repository.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 2, 20, 50, 9, 750, DateTimeKind.Local).AddTicks(6291))
+                        .HasDefaultValue(new DateTime(2023, 8, 2, 20, 33, 19, 57, DateTimeKind.Local).AddTicks(7568))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -184,27 +153,6 @@ namespace YuFoot.Repository.Migrations
                     b.Navigation("Platform");
                 });
 
-            modelBuilder.Entity("YuFoot.Entities.Highlight", b =>
-                {
-                    b.HasOne("YuFoot.Entities.Player", "CreatedBy")
-                        .WithMany("Highlights")
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Highlight_Player");
-
-                    b.HasOne("YuFoot.Entities.GamePlayed", "Game")
-                        .WithMany("Highlights")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_Highlight_GamePlayed");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Game");
-                });
-
             modelBuilder.Entity("YuFoot.Entities.TeamPlayer", b =>
                 {
                     b.HasOne("YuFoot.Entities.GamePlayed", "GamePlayed")
@@ -228,8 +176,6 @@ namespace YuFoot.Repository.Migrations
 
             modelBuilder.Entity("YuFoot.Entities.GamePlayed", b =>
                 {
-                    b.Navigation("Highlights");
-
                     b.Navigation("TeamPlayers");
                 });
 
@@ -240,8 +186,6 @@ namespace YuFoot.Repository.Migrations
 
             modelBuilder.Entity("YuFoot.Entities.Player", b =>
                 {
-                    b.Navigation("Highlights");
-
                     b.Navigation("TeamPlayers");
                 });
 #pragma warning restore 612, 618
