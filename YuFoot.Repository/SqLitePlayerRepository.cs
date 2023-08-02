@@ -25,6 +25,10 @@ namespace YuFoot.Repository
         }
 
         /// <inheritdoc />
-        public async Task<Player?> GetPlayerById(int id) => await this.context.Players.FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Player?> GetPlayerById(int id) =>
+            await this.context.Players.FirstOrDefaultAsync(x => x.Id == id);
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<Player>> GetAll() => await this.context.Players.ToListAsync();
     }
 }

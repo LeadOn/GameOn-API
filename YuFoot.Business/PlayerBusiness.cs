@@ -29,5 +29,11 @@ namespace YuFoot.Business
         {
             return await this.playerRepo.GetPlayerById(id);
         }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<Player>> GetAll()
+        {
+            return await this.playerRepo.GetAll();
+        }
     }
 }

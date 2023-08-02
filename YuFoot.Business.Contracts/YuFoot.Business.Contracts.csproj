@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\YuFoot.DTOs\YuFoot.DTOs.csproj" />
     <ProjectReference Include="..\YuFoot.Entities\YuFoot.Entities.csproj" />
   </ItemGroup>
 

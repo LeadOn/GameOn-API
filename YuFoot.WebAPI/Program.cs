@@ -11,6 +11,11 @@ using YuFoot.Repository.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+{
+    policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+}));
+
 builder.Services.AddControllers();
 
 // Used for Swagger
@@ -36,7 +41,10 @@ builder.Services.AddDbContext<YuFootContext>();
 
 // Dependency injection
 builder.Services.AddScoped<IPlayerBusiness, PlayerBusiness>();
+builder.Services.AddScoped<IGamePlayedBusiness, GamePlayedBusiness>();
 builder.Services.AddScoped<IPlayerRepository, SqLitePlayerRepository>();
+builder.Services.AddScoped<IGamePlayedRepository, SqLiteGamePlayedRepository>();
+builder.Services.AddScoped<ITeamPlayerRepository, SqLiteTeamPlayerRepository>();
 
 var app = builder.Build();
 
@@ -46,6 +54,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseAuthorization();
 
