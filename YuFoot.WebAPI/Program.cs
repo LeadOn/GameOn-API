@@ -25,7 +25,7 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Version = "1.0",
+        Version = "0.2",
         Title = "LeadOn's Corp - YuFoot API",
         Description = "This API goal is to monitor Yunit's Soccer team players performance accross real-world and virtual Soccer games.",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact

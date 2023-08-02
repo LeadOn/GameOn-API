@@ -24,6 +24,11 @@ namespace YuFoot.Repository
             this.context = context;
         }
 
+        public async Task<IEnumerable<TeamPlayer>> GetTeamPlayerByPlayerId(int playerId)
+        {
+            return await this.context.TeamPlayers.Where(x => x.PlayerId == playerId).ToListAsync();
+        }
+
         public async Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId)
         {
             return await this.context.TeamPlayers.Where(x => x.GamePlayedId == gamePlayedId).ToListAsync();
