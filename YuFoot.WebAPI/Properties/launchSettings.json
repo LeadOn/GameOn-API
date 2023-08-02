@@ -6,7 +6,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "SQLITE_PATH": "C:\\Users\\Valentin\\AppData\\Local\\YuFoot-API\\yufoot.db"
+        "SQLITE_PATH": "/Users/leadon/Desktop/yufoot.db"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"
