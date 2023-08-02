@@ -2,8 +2,6 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using YuFoot.Entities;
-
 namespace YuFoot.WebAPI.Controllers
 {
     using Microsoft.AspNetCore.Mvc;

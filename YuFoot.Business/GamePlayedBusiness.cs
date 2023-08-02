@@ -22,6 +22,8 @@ namespace YuFoot.Business
         /// Initializes a new instance of the <see cref="GamePlayedBusiness" /> class.
         /// </summary>
         /// <param name="playerRepo">Player repository, injected.</param>
+        /// <param name="gamePlayedRepo">GamePlayed repository, injected.</param>
+        /// <param name="teamPlayerRepo">TeamPlayer repository, injected.</param>
         public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo)
         {
             this.playerRepo = playerRepo;
@@ -46,19 +48,19 @@ namespace YuFoot.Business
                 gamePlayedDto.Team1 = new TeamDto
                 {
                     Id = 0,
-                    Code = game.TeamCode1,
+                    Code = game.TeamCode1 ?? "Unknown",
                     Players = new List<Player>(),
-                    Score = game.TeamScore1
+                    Score = game.TeamScore1,
                 };
                 gamePlayedDto.Team2 = new TeamDto
                 {
                     Id = 1,
-                    Code = game.TeamCode2,
+                    Code = game.TeamCode2 ?? "Unknown",
                     Players = new List<Player>(),
-                    Score = game.TeamScore2
+                    Score = game.TeamScore2,
                 };
                 gamePlayedDto.PlatformId = 0;
-                
+
                 // Getting team players
                 var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
                 foreach (var teamPlayer in teamPlayers)
@@ -80,7 +82,7 @@ namespace YuFoot.Business
                         }
                     }
                 }
-                
+
                 gamesPlayedDto.Add(gamePlayedDto);
             }
 

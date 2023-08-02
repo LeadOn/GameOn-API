@@ -10,9 +10,24 @@ namespace YuFoot.DTOs
     /// </summary>
     public class TeamDto
     {
+        /// <summary>
+        /// Gets or sets ID.
+        /// </summary>
         public int Id { get; set; }
-        public string Code { get; set; }
+
+        /// <summary>
+        /// Gets or sets team code.
+        /// </summary>
+        public string Code { get; set; } = "Unknown";
+
+        /// <summary>
+        /// Gets or sets Score.
+        /// </summary>
         public int Score { get; set; }
-        public List<Player> Players { get; set; }
+
+        /// <summary>
+        /// Gets or sets players.
+        /// </summary>
+        public List<Player> Players { get; set; } = new List<Player>();
     }
 }
