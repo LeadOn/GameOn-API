@@ -58,6 +58,7 @@ namespace YuFoot.Business
 
                 // Getting TeamPlayer entries
                 var teamPlayers = await this.teamPlayerRepo.GetTeamPlayerByPlayerId(player.Id);
+                var goalsTaken = 0;
 
                 foreach (var teamPlayer in teamPlayers)
                 {
@@ -82,15 +83,18 @@ namespace YuFoot.Business
                         if (teamPlayer.Team == 0 && gamePlayed.PlatformId != 3)
                         {
                             playerDto.TotalGoals += gamePlayed.TeamScore1;
+                            goalsTaken += gamePlayed.TeamScore2;
                         }
                         else if (teamPlayer.Team == 1 && gamePlayed.PlatformId != 3)
                         {
                             playerDto.TotalGoals += gamePlayed.TeamScore2;
+                            goalsTaken += gamePlayed.TeamScore1;
                         }
                     }
                 }
 
                 playerDto.MatchPlayed = playerDto.Wins + playerDto.Draws + playerDto.Losses;
+                playerDto.TotalGoalDifference = playerDto.TotalGoals - goalsTaken;
 
                 return playerDto;
             }
