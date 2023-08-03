@@ -53,6 +53,7 @@ namespace YuFoot.Business
                     Nickname = player.Nickname,
                     ProfilePictureUrl = player.ProfilePictureUrl,
                     Wins = 0,
+                    TotalGoals = 0,
                 };
 
                 // Getting TeamPlayer entries
@@ -76,6 +77,15 @@ namespace YuFoot.Business
                         else
                         {
                             playerDto.Draws++;
+                        }
+
+                        if (teamPlayer.Team == 0 && gamePlayed.PlatformId != 3)
+                        {
+                            playerDto.TotalGoals += gamePlayed.TeamScore1;
+                        }
+                        else if (teamPlayer.Team == 1 && gamePlayed.PlatformId != 3)
+                        {
+                            playerDto.TotalGoals += gamePlayed.TeamScore2;
                         }
                     }
                 }

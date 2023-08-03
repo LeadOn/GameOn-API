@@ -53,5 +53,10 @@ namespace YuFoot.DTOs
         /// Gets or sets number of draws.
         /// </summary>
         public int Draws { get; set; }
+
+        /// <summary>
+        /// Gets or sets Total Goals.
+        /// </summary>
+        public int TotalGoals { get; set; }
     }
 }
