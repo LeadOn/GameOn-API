@@ -53,10 +53,12 @@ namespace YuFoot.Business
                     Nickname = player.Nickname,
                     ProfilePictureUrl = player.ProfilePictureUrl,
                     Wins = 0,
+                    TotalGoals = 0,
                 };
 
                 // Getting TeamPlayer entries
                 var teamPlayers = await this.teamPlayerRepo.GetTeamPlayerByPlayerId(player.Id);
+                var goalsTaken = 0;
 
                 foreach (var teamPlayer in teamPlayers)
                 {
@@ -77,10 +79,22 @@ namespace YuFoot.Business
                         {
                             playerDto.Draws++;
                         }
+
+                        if (teamPlayer.Team == 0 && gamePlayed.PlatformId != 3)
+                        {
+                            playerDto.TotalGoals += gamePlayed.TeamScore1;
+                            goalsTaken += gamePlayed.TeamScore2;
+                        }
+                        else if (teamPlayer.Team == 1 && gamePlayed.PlatformId != 3)
+                        {
+                            playerDto.TotalGoals += gamePlayed.TeamScore2;
+                            goalsTaken += gamePlayed.TeamScore1;
+                        }
                     }
                 }
 
                 playerDto.MatchPlayed = playerDto.Wins + playerDto.Draws + playerDto.Losses;
+                playerDto.TotalGoalDifference = playerDto.TotalGoals - goalsTaken;
 
                 return playerDto;
             }
