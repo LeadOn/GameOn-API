@@ -16,7 +16,7 @@ namespace YuFoot.WebAPI.Classes
         /// </summary>
         /// <param name="user">User identity.</param>
         /// <returns>User ID.</returns>
-        public static string? GetUserId(this ClaimsPrincipal user)
+        public static string GetUserId(this ClaimsPrincipal user)
         {
             var userIdentity = user.Identities.FirstOrDefault();
 
@@ -24,7 +24,7 @@ namespace YuFoot.WebAPI.Classes
             var userIdClaim = userIdentity?.Claims.FirstOrDefault(
                 x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
 
-            return userIdClaim?.Value;
+            return userIdClaim?.Value ?? "INVALID ID";
         }
 
         /// <summary>
@@ -81,14 +81,14 @@ namespace YuFoot.WebAPI.Classes
         /// </summary>
         /// <param name="user">User identity.</param>
         /// <returns>User email.</returns>
-        public static string? GetUserEmail(this ClaimsPrincipal user)
+        public static string GetUserEmail(this ClaimsPrincipal user)
         {
             var userIdentity = user.Identities.FirstOrDefault();
 
             var userEmailClaim = userIdentity?.Claims.FirstOrDefault(
                 x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
 
-            return userEmailClaim?.Value ?? null;
+            return userEmailClaim?.Value ?? "INVALID EMAIL";
         }
     }
 }

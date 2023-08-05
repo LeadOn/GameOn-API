@@ -5,6 +5,7 @@
 namespace YuFoot.Repository
 {
     using Microsoft.EntityFrameworkCore;
+    using YuFoot.Common.Exceptions;
     using YuFoot.Entities;
 
     /// <summary>
@@ -17,7 +18,7 @@ namespace YuFoot.Repository
         /// </summary>
         public YuFootContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yufoot.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? throw new MissingEnvironmentVariableException("SQLITE_PATH");
         }
 
         /// <summary>

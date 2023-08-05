@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.WebAPI", "YuFoot.WebAPI\YuFoot.WebAPI.csproj", "{69C61B11-111E-4F48-806B-EAD3929FFE4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YuFoot.WebAPI", "YuFoot.WebAPI\YuFoot.WebAPI.csproj", "{69C61B11-111E-4F48-806B-EAD3929FFE4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Entities", "YuFoot.Entities\YuFoot.Entities.csproj", "{1674406F-7830-4CB5-9526-AEDFFD160966}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YuFoot.Entities", "YuFoot.Entities\YuFoot.Entities.csproj", "{1674406F-7830-4CB5-9526-AEDFFD160966}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Repository.Contracts", "YuFoot.Repository.Contracts\YuFoot.Repository.Contracts.csproj", "{F29571F1-E996-4E66-BB25-489E53A8D196}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YuFoot.Repository.Contracts", "YuFoot.Repository.Contracts\YuFoot.Repository.Contracts.csproj", "{F29571F1-E996-4E66-BB25-489E53A8D196}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Repository", "YuFoot.Repository\YuFoot.Repository.csproj", "{073B9FF5-A5D5-4B8C-8986-8F0F83E79D63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YuFoot.Repository", "YuFoot.Repository\YuFoot.Repository.csproj", "{073B9FF5-A5D5-4B8C-8986-8F0F83E79D63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Business.Contracts", "YuFoot.Business.Contracts\YuFoot.Business.Contracts.csproj", "{0C50EBE4-6DEC-49D0-9812-0FD9579CDB12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YuFoot.Business.Contracts", "YuFoot.Business.Contracts\YuFoot.Business.Contracts.csproj", "{0C50EBE4-6DEC-49D0-9812-0FD9579CDB12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Business", "YuFoot.Business\YuFoot.Business.csproj", "{D412DFDB-4400-4ACB-87A9-72A7AD65053C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YuFoot.Business", "YuFoot.Business\YuFoot.Business.csproj", "{D412DFDB-4400-4ACB-87A9-72A7AD65053C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.DTOs", "YuFoot.DTOs\YuFoot.DTOs.csproj", "{590718D6-548A-40EB-8891-6E373EA5475F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YuFoot.DTOs", "YuFoot.DTOs\YuFoot.DTOs.csproj", "{590718D6-548A-40EB-8891-6E373EA5475F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuFoot.Common", "YuFoot.Common\YuFoot.Common.csproj", "{5F942FA8-22C1-4295-8EE4-3C5B803E1A3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{590718D6-548A-40EB-8891-6E373EA5475F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{590718D6-548A-40EB-8891-6E373EA5475F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{590718D6-548A-40EB-8891-6E373EA5475F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F942FA8-22C1-4295-8EE4-3C5B803E1A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F942FA8-22C1-4295-8EE4-3C5B803E1A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F942FA8-22C1-4295-8EE4-3C5B803E1A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F942FA8-22C1-4295-8EE4-3C5B803E1A3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
