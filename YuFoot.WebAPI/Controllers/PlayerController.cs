@@ -47,13 +47,14 @@ namespace YuFoot.WebAPI.Controllers
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetConnectedUser()
         {
-#pragma warning disable CS8601 // Possible null reference assignment.
             var connectedPlayer = new ConnectedPlayerDto
             {
                 Email = this.User.GetUserEmail(),
                 KeycloakId = this.User.GetUserId(),
+                FirstName = this.User.GetUserFirstName(),
+                LastName = this.User.GetUserLastName(),
+                PreferredUsername = this.User.GetUserPreferredName(),
             };
-#pragma warning restore CS8601 // Possible null reference assignment.
 
             return this.Ok(await this.playerBusi.GetConnectedUser(connectedPlayer));
         }

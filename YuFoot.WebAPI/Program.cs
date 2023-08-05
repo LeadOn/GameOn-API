@@ -6,6 +6,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using YuFoot.Business;
 using YuFoot.Business.Contracts;
+using YuFoot.Common.Exceptions;
 using YuFoot.Repository;
 using YuFoot.Repository.Contracts;
 #pragma warning restore SA1200 // Using directives should be placed correctly
@@ -23,8 +24,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(o =>
 {
-    o.Authority = Environment.GetEnvironmentVariable("JWT_AUTHORITY");
-    o.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+    o.Authority = Environment.GetEnvironmentVariable("JWT_AUTHORITY") ?? throw new MissingEnvironmentVariableException("JWT_AUTHORITY");
+    o.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new MissingEnvironmentVariableException("JWT_AUDIENCE");
     o.RequireHttpsMetadata = false;
     o.Events = new JwtBearerEvents()
     {

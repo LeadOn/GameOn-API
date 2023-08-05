@@ -5,6 +5,7 @@
 namespace YuFoot.Repository
 {
     using Microsoft.EntityFrameworkCore;
+    using YuFoot.DTOs;
     using YuFoot.Entities;
     using YuFoot.Repository.Contracts;
 
@@ -32,9 +33,9 @@ namespace YuFoot.Repository
         public async Task<IEnumerable<Player>> GetAll() => await this.context.Players.ToListAsync();
 
         /// <inheritdoc />
-        public async Task<Player> GetPlayerByKeycloakId(string keycloakId, string email)
+        public async Task<Player> GetPlayerByKeycloakId(ConnectedPlayerDto player)
         {
-            var userInDb = await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == keycloakId);
+            var userInDb = await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == player.KeycloakId);
 
             if (userInDb is not null)
             {
@@ -42,14 +43,33 @@ namespace YuFoot.Repository
             }
             else
             {
+                var fullName = player.Email;
+
+                if (player.FirstName is not null)
+                {
+                    fullName = player.FirstName;
+                    if (player.LastName is not null)
+                    {
+                        fullName += " " + player.LastName;
+                    }
+                }
+
+                var nickname = fullName;
+
+                if (player.PreferredUsername is not null)
+                {
+                    nickname = player.PreferredUsername;
+                }
+
                 // Creating user
                 var user = new Player
                 {
-                    KeycloakId = keycloakId,
+                    KeycloakId = player.KeycloakId,
                     CreatedOn = DateTime.UtcNow,
-                    FullName = email,
-                    Nickname = email,
+                    FullName = fullName,
+                    Nickname = nickname,
                 };
+
                 this.context.Players.Add(user);
                 await this.context.SaveChangesAsync();
                 return user;
