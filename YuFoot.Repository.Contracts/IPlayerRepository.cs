@@ -4,6 +4,7 @@
 
 namespace YuFoot.Repository.Contracts
 {
+    using YuFoot.DTOs;
     using YuFoot.Entities;
 
     /// <summary>
@@ -27,9 +28,8 @@ namespace YuFoot.Repository.Contracts
         /// <summary>
         /// Gets player from database by it's Keycloak ID.
         /// </summary>
-        /// <param name="keycloakId">Keycloak ID.</param>
-        /// <param name="email">Email address (used if user doesn't exist).</param>
+        /// <param name="player">Connected player DTO.</param>
         /// <returns><see cref="Player"/> entity.</returns>
-        Task<Player> GetPlayerByKeycloakId(string keycloakId, string email);
+        Task<Player> GetPlayerByKeycloakId(ConnectedPlayerDto player);
     }
 }

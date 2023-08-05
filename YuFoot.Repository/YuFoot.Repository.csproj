@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\YuFoot.Common\YuFoot.Common.csproj" />
     <ProjectReference Include="..\YuFoot.Entities\YuFoot.Entities.csproj" />
     <ProjectReference Include="..\YuFoot.Repository.Contracts\YuFoot.Repository.Contracts.csproj" />
   </ItemGroup>

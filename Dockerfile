@@ -10,6 +10,7 @@ WORKDIR /src
 COPY ["YuFoot.Business/YuFoot.Business.csproj", "YuFoot.Business/"]
 COPY ["YuFoot.Business.Contracts/YuFoot.Business.Contracts.csproj", "YuFoot.Business.Contracts/"]
 COPY ["YuFoot.DTOs/YuFoot.DTOs.csproj", "YuFoot.DTOs/"]
+COPY ["YuFoot.Common/YuFoot.Common.csproj", "YuFoot.Common/"]
 COPY ["YuFoot.Entities/YuFoot.Entities.csproj", "YuFoot.Entities/"]
 COPY ["YuFoot.Repository/YuFoot.Repository.csproj", "YuFoot.Repository/"]
 COPY ["YuFoot.Repository.Contracts/YuFoot.Repository.Contracts.csproj", "YuFoot.Repository.Contracts/"]

@@ -109,7 +109,7 @@ namespace YuFoot.Business
         /// <inheritdoc />
         public async Task<PlayerDto> GetConnectedUser(ConnectedPlayerDto player)
         {
-            var userInDb = await this.playerRepo.GetPlayerByKeycloakId(player.KeycloakId, player.Email);
+            var userInDb = await this.playerRepo.GetPlayerByKeycloakId(player);
 #pragma warning disable CS8603 // Possible null reference return.
             return await this.GetPlayerById(userInDb.Id);
 #pragma warning restore CS8603 // Possible null reference return.
