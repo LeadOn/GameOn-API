@@ -31,5 +31,15 @@ namespace YuFoot.Repository.Contracts
         /// <param name="player">Connected player DTO.</param>
         /// <returns><see cref="Player"/> entity.</returns>
         Task<Player> GetPlayerByKeycloakId(ConnectedPlayerDto player);
+
+        /// <summary>
+        /// Updates user.
+        /// </summary>
+        /// <param name="keycloakId">Keycloak ID.</param>
+        /// <param name="fullName">Full name.</param>
+        /// <param name="nickname">Nickname.</param>
+        /// <param name="profilePictureUrl">Profile Picture URL.</param>
+        /// <returns><see cref="Player"/>.</returns>
+        Task<Player> UpdateUser(string keycloakId, string fullName, string nickname, string profilePictureUrl);
     }
 }

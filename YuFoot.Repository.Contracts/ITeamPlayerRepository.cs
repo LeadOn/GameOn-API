@@ -18,6 +18,11 @@ namespace YuFoot.Repository.Contracts
         /// <returns>List of Team Players.</returns>
         Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId);
 
+        /// <summary>
+        /// Get TeamPlayer by Player ID.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <returns>List of <see cref="TeamPlayer"/>.</returns>
         Task<IEnumerable<TeamPlayer>> GetTeamPlayerByPlayerId(int playerId);
     }
 }

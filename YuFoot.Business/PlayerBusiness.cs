@@ -4,6 +4,7 @@
 
 namespace YuFoot.Business
 {
+    using System.Numerics;
     using YuFoot.Business.Contracts;
     using YuFoot.DTOs;
     using YuFoot.Entities;
@@ -112,6 +113,17 @@ namespace YuFoot.Business
             var userInDb = await this.playerRepo.GetPlayerByKeycloakId(player);
 #pragma warning disable CS8603 // Possible null reference return.
             return await this.GetPlayerById(userInDb.Id);
+#pragma warning restore CS8603 // Possible null reference return.
+        }
+
+        /// <inheritdoc />
+        public async Task<PlayerDto> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId)
+        {
+            // Now that we have user, update it
+            var updatedUser = await this.playerRepo.UpdateUser(keycloakId, fullName, nickname, profilePictureUrl);
+
+#pragma warning disable CS8603 // Possible null reference return.
+            return await this.GetPlayerById(updatedUser.Id);
 #pragma warning restore CS8603 // Possible null reference return.
         }
     }

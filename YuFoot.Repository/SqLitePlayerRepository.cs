@@ -75,5 +75,24 @@ namespace YuFoot.Repository
                 return user;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<Player> UpdateUser(string keycloakId, string fullName, string nickname, string profilePictureUrl)
+        {
+            var userInDb = await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == keycloakId);
+
+            if (userInDb is not null)
+            {
+                userInDb.FullName = fullName;
+                userInDb.Nickname = nickname;
+                userInDb.ProfilePictureUrl = profilePictureUrl;
+                await this.context.SaveChangesAsync();
+                return userInDb;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
