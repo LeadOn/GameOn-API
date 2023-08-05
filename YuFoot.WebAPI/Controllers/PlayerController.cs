@@ -11,6 +11,7 @@ namespace YuFoot.WebAPI.Controllers
     using YuFoot.DTOs;
     using YuFoot.Entities;
     using YuFoot.WebAPI.Classes;
+    using YuFoot.WebAPI.Models;
 
     /// <summary>
     /// Player Controller.
@@ -57,6 +58,36 @@ namespace YuFoot.WebAPI.Controllers
             };
 
             return this.Ok(await this.playerBusi.GetConnectedUser(connectedPlayer));
+        }
+
+        /// <summary>
+        /// Update connected user.
+        /// </summary>
+        /// <param name="update"><see cref="UpdatePlayerModel"/>.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize]
+        [Route("me")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update current user profile.", Description = "Updates current user profile in database.")]
+        [SwaggerResponse(200, "Updated user profile.", typeof(PlayerDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateConnectedUser([FromBody] UpdatePlayerModel update)
+        {
+            // Getting connected user
+            var connectedPlayer = new ConnectedPlayerDto
+            {
+                Email = this.User.GetUserEmail(),
+                KeycloakId = this.User.GetUserId(),
+                FirstName = this.User.GetUserFirstName(),
+                LastName = this.User.GetUserLastName(),
+                PreferredUsername = this.User.GetUserPreferredName(),
+            };
+
+            await this.playerBusi.GetConnectedUser(connectedPlayer);
+
+            return this.Ok(await this.playerBusi.UpdatePlayer(update.FullName, update.Nickname, update.ProfilePictureUrl, connectedPlayer.KeycloakId));
         }
 
         /// <summary>
