@@ -4,11 +4,13 @@
 
 namespace YuFoot.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuFoot.Business.Contracts;
     using YuFoot.DTOs;
     using YuFoot.Entities;
+    using YuFoot.WebAPI.Classes;
 
     /// <summary>
     /// Player Controller.
@@ -29,6 +31,31 @@ namespace YuFoot.WebAPI.Controllers
         {
             this.logger = logger;
             this.playerBusi = player;
+        }
+
+        /// <summary>
+        /// Gets connected user from Database.
+        /// </summary>
+        /// <returns>200 OK with user account, 401 if not authorized, 500 if something bad happens.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("me")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Gets current user profile.", Description = "Gets current user profile as stored in database. If the user account doesn't exists, it creates it automatically.")]
+        [SwaggerResponse(200, "Current user profile.", typeof(PlayerDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetConnectedUser()
+        {
+#pragma warning disable CS8601 // Possible null reference assignment.
+            var connectedPlayer = new ConnectedPlayerDto
+            {
+                Email = this.User.GetUserEmail(),
+                KeycloakId = this.User.GetUserId(),
+            };
+#pragma warning restore CS8601 // Possible null reference assignment.
+
+            return this.Ok(await this.playerBusi.GetConnectedUser(connectedPlayer));
         }
 
         /// <summary>

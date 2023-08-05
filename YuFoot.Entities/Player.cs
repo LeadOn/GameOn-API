@@ -17,6 +17,11 @@ namespace YuFoot.Entities
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets player's Keycloak ID.
+        /// </summary>
+        public string KeycloakId { get; set; } = "Unknown ID";
+
+        /// <summary>
         /// Gets or sets player's full name.
         /// </summary>
         public string FullName { get; set; } = "John Doe";
