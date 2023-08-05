@@ -30,5 +30,15 @@ namespace YuFoot.Business.Contracts
         /// <param name="player"><see cref="ConnectedPlayerDto"/>Connected user.</param>
         /// <returns><see cref="PlayerDto"/> object.</returns>
         Task<PlayerDto> GetConnectedUser(ConnectedPlayerDto player);
+
+        /// <summary>
+        /// Updates user.
+        /// </summary>
+        /// <param name="fullName">Full name.</param>
+        /// <param name="nickname">Nickname.</param>
+        /// <param name="profilePictureUrl">Profile Picture URL.</param>
+        /// <param name="keycloakId">Keycloak ID.</param>
+        /// <returns><see cref="PlayerDto" />.</returns>
+        Task<PlayerDto> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId);
     }
 }
