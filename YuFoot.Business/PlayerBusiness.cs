@@ -105,5 +105,14 @@ namespace YuFoot.Business
         {
             return await this.playerRepo.GetAll();
         }
+
+        /// <inheritdoc />
+        public async Task<PlayerDto> GetConnectedUser(ConnectedPlayerDto player)
+        {
+            var userInDb = await this.playerRepo.GetPlayerByKeycloakId(player.KeycloakId, player.Email);
+#pragma warning disable CS8603 // Possible null reference return.
+            return await this.GetPlayerById(userInDb.Id);
+#pragma warning restore CS8603 // Possible null reference return.
+        }
     }
 }
