@@ -3,6 +3,7 @@
 // </copyright>
 
 #pragma warning disable SA1200 // Using directives should be placed correctly
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using YuFoot.Business;
 using YuFoot.Business.Contracts;
 using YuFoot.Repository;
@@ -15,6 +16,28 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 {
     policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
 }));
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.Authority = Environment.GetEnvironmentVariable("JWT_AUTHORITY");
+    o.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+    o.RequireHttpsMetadata = false;
+    o.Events = new JwtBearerEvents()
+    {
+        OnAuthenticationFailed = c =>
+        {
+            c.NoResult();
+
+            c.Response.StatusCode = 401;
+            c.Response.ContentType = "application/json";
+            return c.Response.WriteAsJsonAsync(new { Error = "Unable to authenticate. Maybe your token is expired?" });
+        },
+    };
+});
 
 builder.Services.AddControllers();
 
@@ -48,14 +71,12 @@ builder.Services.AddScoped<ITeamPlayerRepository, SqLiteTeamPlayerRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

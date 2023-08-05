@@ -169,6 +169,10 @@ namespace YuFoot.Repository
                       .ValueGeneratedOnAdd()
                       .HasColumnName("id");
 
+                entity.Property(e => e.KeycloakId)
+                      .HasMaxLength(50)
+                      .HasColumnName("keycloak_id");
+
                 entity.Property(e => e.FullName)
                       .HasColumnName("full_name")
                       .HasMaxLength(100);

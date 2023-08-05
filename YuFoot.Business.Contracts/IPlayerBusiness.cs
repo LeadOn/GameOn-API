@@ -23,5 +23,12 @@ namespace YuFoot.Business.Contracts
         /// </summary>
         /// <returns>List of players.</returns>
         Task<IEnumerable<Player>> GetAll();
+
+        /// <summary>
+        /// Gets connected user from database.
+        /// </summary>
+        /// <param name="player"><see cref="ConnectedPlayerDto"/>Connected user.</param>
+        /// <returns><see cref="PlayerDto"/> object.</returns>
+        Task<PlayerDto> GetConnectedUser(ConnectedPlayerDto player);
     }
 }

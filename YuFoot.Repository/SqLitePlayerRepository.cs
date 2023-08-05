@@ -30,5 +30,30 @@ namespace YuFoot.Repository
 
         /// <inheritdoc />
         public async Task<IEnumerable<Player>> GetAll() => await this.context.Players.ToListAsync();
+
+        /// <inheritdoc />
+        public async Task<Player> GetPlayerByKeycloakId(string keycloakId, string email)
+        {
+            var userInDb = await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == keycloakId);
+
+            if (userInDb is not null)
+            {
+                return userInDb;
+            }
+            else
+            {
+                // Creating user
+                var user = new Player
+                {
+                    KeycloakId = keycloakId,
+                    CreatedOn = DateTime.UtcNow,
+                    FullName = email,
+                    Nickname = email,
+                };
+                this.context.Players.Add(user);
+                await this.context.SaveChangesAsync();
+                return user;
+            }
+        }
     }
 }
