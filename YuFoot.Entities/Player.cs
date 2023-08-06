@@ -52,5 +52,11 @@ namespace YuFoot.Entities
         /// </summary>
         [JsonIgnore]
         public virtual List<Highlight> Highlights { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets games created.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<GamePlayed> GamesCreated { get; set; } = null!;
     }
 }

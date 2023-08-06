@@ -47,10 +47,21 @@ namespace YuFoot.Entities
         public int? PlatformId { get; set; }
 
         /// <summary>
+        /// Gets or sets Created By ID.
+        /// </summary>
+        public int CreatedById { get; set; }
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
         public virtual List<TeamPlayer> TeamPlayers { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets CreatedBy.
+        /// </summary>
+        [JsonIgnore]
+        public virtual Player CreatedBy { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Platform.
