@@ -94,5 +94,11 @@ namespace YuFoot.Repository
                 throw new NotImplementedException();
             }
         }
+
+        /// <inheritdoc />
+        public async Task<Player?> GetPlayerByKeycloakId(string keycloakId)
+        {
+            return await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == keycloakId);
+        }
     }
 }

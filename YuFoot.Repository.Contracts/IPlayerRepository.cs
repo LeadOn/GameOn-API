@@ -33,6 +33,13 @@ namespace YuFoot.Repository.Contracts
         Task<Player> GetPlayerByKeycloakId(ConnectedPlayerDto player);
 
         /// <summary>
+        /// Gets player from database by it's Keycloak ID.
+        /// </summary>
+        /// <param name="keycloakId">Keycloak ID.</param>
+        /// <returns><see cref="Player"/> entity.</returns>
+        Task<Player?> GetPlayerByKeycloakId(string keycloakId);
+
+        /// <summary>
         /// Updates user.
         /// </summary>
         /// <param name="keycloakId">Keycloak ID.</param>

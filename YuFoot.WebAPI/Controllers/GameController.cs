@@ -4,10 +4,12 @@
 
 namespace YuFoot.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuFoot.Business.Contracts;
     using YuFoot.DTOs;
+    using YuFoot.WebAPI.Classes;
 
     /// <summary>
     /// Game Controller.
@@ -44,6 +46,32 @@ namespace YuFoot.WebAPI.Controllers
         public async Task<IActionResult> GetLastGamesPlayed(int number)
         {
             return this.Ok(await this.gamePlayedBusi.GetLastGamesPlayed(number));
+        }
+
+        /// <summary>
+        /// Create game in database.
+        /// </summary>
+        /// <param name="game">Create game object.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("create")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Create game in database.")]
+        [SwaggerResponse(200, "Created game.", typeof(List<GamePlayedDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> CreateGame([FromBody] CreateGameDto game)
+        {
+            game.KeycloakId = this.User.GetUserId();
+            var gameInDb = await this.gamePlayedBusi.CreateGame(game);
+            if (gameInDb is null)
+            {
+                return this.Problem();
+            }
+            else
+            {
+                return this.Ok(gameInDb);
+            }
         }
     }
 }

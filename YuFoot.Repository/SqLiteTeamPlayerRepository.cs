@@ -25,6 +25,14 @@ namespace YuFoot.Repository
         }
 
         /// <inheritdoc />
+        public async Task<TeamPlayer> CreateTeamPlayer(TeamPlayer teamPlayer)
+        {
+            this.context.TeamPlayers.Add(teamPlayer);
+            await this.context.SaveChangesAsync();
+            return teamPlayer;
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<TeamPlayer>> GetTeamPlayerByPlayerId(int playerId)
         {
             return await this.context.TeamPlayers.Where(x => x.PlayerId == playerId).ToListAsync();
