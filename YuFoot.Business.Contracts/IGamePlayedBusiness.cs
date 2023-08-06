@@ -5,6 +5,7 @@
 namespace YuFoot.Business.Contracts
 {
     using YuFoot.DTOs;
+    using YuFoot.Entities;
 
     /// <summary>
     /// GamePlayed business interface.
@@ -17,5 +18,12 @@ namespace YuFoot.Business.Contracts
         /// <param name="number">Number of data to retrieve.</param>
         /// <returns>List of games played.</returns>
         Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayed(int number);
+
+        /// <summary>
+        /// Creates game in database.
+        /// </summary>
+        /// <param name="createGameDto"><see cref="CreateGameDto"/>.</param>
+        /// <returns><see cref="GamePlayed"/>.</returns>
+        Task<GamePlayed?> CreateGame(CreateGameDto createGameDto);
     }
 }

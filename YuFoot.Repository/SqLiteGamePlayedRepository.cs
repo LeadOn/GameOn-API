@@ -26,6 +26,14 @@ namespace YuFoot.Repository
         }
 
         /// <inheritdoc />
+        public async Task<GamePlayed> CreateGame(GamePlayed game)
+        {
+            this.context.Add(game);
+            await this.context.SaveChangesAsync();
+            return game;
+        }
+
+        /// <inheritdoc />
         public async Task<GamePlayed?> GetById(int id) =>
             await this.context.GamesPlayed.FirstOrDefaultAsync(x => x.Id == id);
 

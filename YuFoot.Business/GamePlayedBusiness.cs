@@ -17,6 +17,7 @@ namespace YuFoot.Business
         private IPlayerRepository playerRepo;
         private IGamePlayedRepository gamePlayedRepo;
         private ITeamPlayerRepository teamPlayerRepo;
+        private IPlatformRepository platformRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePlayedBusiness" /> class.
@@ -24,11 +25,103 @@ namespace YuFoot.Business
         /// <param name="playerRepo">Player repository, injected.</param>
         /// <param name="gamePlayedRepo">GamePlayed repository, injected.</param>
         /// <param name="teamPlayerRepo">TeamPlayer repository, injected.</param>
-        public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo)
+        /// <param name="platformRepo">Platform repository, injected.</param>
+        public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo)
         {
             this.playerRepo = playerRepo;
             this.gamePlayedRepo = gamePlayedRepo;
             this.teamPlayerRepo = teamPlayerRepo;
+            this.platformRepo = platformRepo;
+        }
+
+        /// <inheritdoc />
+        public async Task<GamePlayed?> CreateGame(CreateGameDto createGameDto)
+        {
+            // First, getting that platform
+            var platformInDb = await this.platformRepo.GetById(createGameDto.PlatformId);
+
+            if (platformInDb is null)
+            {
+                return null;
+            }
+
+            // Then, getting creator profile
+            var creatorInDb = await this.playerRepo.GetPlayerByKeycloakId(createGameDto.KeycloakId);
+            if (creatorInDb is null)
+            {
+                return null;
+            }
+
+            // Now, getting all player accounts
+            foreach (var playerId in createGameDto.Team1)
+            {
+                var playerInDb = await this.playerRepo.GetPlayerById(int.Parse(playerId));
+                if (playerInDb is null)
+                {
+                    return null;
+                }
+            }
+
+            foreach (var playerId in createGameDto.Team2)
+            {
+                var playerInDb = await this.playerRepo.GetPlayerById(int.Parse(playerId));
+                if (playerInDb is null)
+                {
+                    return null;
+                }
+            }
+
+            // Now that every player as been found, creating elements in db
+            var gameInDb = await this.gamePlayedRepo.CreateGame(new GamePlayed
+            {
+                PlatformId = platformInDb.Id,
+                PlayedOn = createGameDto.CreatedOn,
+                TeamCode1 = createGameDto.TeamCode1,
+                TeamCode2 = createGameDto.TeamCode2,
+                TeamScore1 = createGameDto.TeamScore1,
+                TeamScore2 = createGameDto.TeamScore2,
+                CreatedById = creatorInDb.Id,
+            });
+
+            if (gameInDb is null)
+            {
+                return null;
+            }
+            else
+            {
+                // Now creating team players
+                foreach (var playerId in createGameDto.Team1)
+                {
+                    var teamPlayerInDb = await this.teamPlayerRepo.CreateTeamPlayer(new TeamPlayer
+                    {
+                        GamePlayedId = gameInDb.Id,
+                        PlayerId = int.Parse(playerId),
+                        Team = 0,
+                    });
+
+                    if (teamPlayerInDb is null)
+                    {
+                        return null;
+                    }
+                }
+
+                foreach (var playerId in createGameDto.Team2)
+                {
+                    var teamPlayerInDb = await this.teamPlayerRepo.CreateTeamPlayer(new TeamPlayer
+                    {
+                        GamePlayedId = gameInDb.Id,
+                        PlayerId = int.Parse(playerId),
+                        Team = 1,
+                    });
+
+                    if (teamPlayerInDb is null)
+                    {
+                        return null;
+                    }
+                }
+            }
+
+            return gameInDb;
         }
 
         /// <inheritdoc />

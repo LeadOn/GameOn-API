@@ -26,5 +26,12 @@ namespace YuFoot.Repository.Contracts
         /// <param name="limit">Number of data to retrieve.</param>
         /// <returns>List of GamePlayed objects.</returns>
         Task<IEnumerable<GamePlayed>> Search(Expression<Func<GamePlayed, bool>> query, int limit);
+
+        /// <summary>
+        /// Creates game in database.
+        /// </summary>
+        /// <param name="game"><see cref="GamePlayed" />.</param>
+        /// <returns><see cref="GamePlayed"/> object.</returns>
+        Task<GamePlayed> CreateGame(GamePlayed game);
     }
 }

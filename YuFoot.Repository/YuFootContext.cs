@@ -131,6 +131,12 @@ namespace YuFoot.Repository
             {
                 entity.ToTable("GamePlayed");
 
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany(f => f.GamesCreated)
+                    .HasForeignKey(e => e.CreatedById)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_GamePlayed_CreatedBy");
+
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
