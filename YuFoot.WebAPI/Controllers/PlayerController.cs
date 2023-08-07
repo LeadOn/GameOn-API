@@ -43,7 +43,7 @@ namespace YuFoot.WebAPI.Controllers
         [Route("me")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Gets current user profile.", Description = "Gets current user profile as stored in database. If the user account doesn't exists, it creates it automatically.")]
-        [SwaggerResponse(200, "Current user profile.", typeof(PlayerDto))]
+        [SwaggerResponse(200, "Current user profile.", typeof(Player))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetConnectedUser()
@@ -70,7 +70,7 @@ namespace YuFoot.WebAPI.Controllers
         [Route("me")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Update current user profile.", Description = "Updates current user profile in database.")]
-        [SwaggerResponse(200, "Updated user profile.", typeof(PlayerDto))]
+        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> UpdateConnectedUser([FromBody] UpdatePlayerModel update)
@@ -99,7 +99,7 @@ namespace YuFoot.WebAPI.Controllers
         [Route("{id}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get a player by its ID.", Description = "Get a player by its ID, and retrieve its information.")]
-        [SwaggerResponse(200, "Player is found.", typeof(PlayerDto))]
+        [SwaggerResponse(200, "Player is found.", typeof(Player))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetById(int id)

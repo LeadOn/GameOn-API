@@ -16,7 +16,7 @@ namespace YuFoot.Business.Contracts
         /// </summary>
         /// <param name="id">Player ID.</param>
         /// <returns>Player if found, null if not.</returns>
-        Task<PlayerDto?> GetPlayerById(int id);
+        Task<Player?> GetPlayerById(int id);
 
         /// <summary>
         /// Get all players in database.
@@ -28,8 +28,8 @@ namespace YuFoot.Business.Contracts
         /// Gets connected user from database.
         /// </summary>
         /// <param name="player"><see cref="ConnectedPlayerDto"/>Connected user.</param>
-        /// <returns><see cref="PlayerDto"/> object.</returns>
-        Task<PlayerDto> GetConnectedUser(ConnectedPlayerDto player);
+        /// <returns><see cref="Player"/> object.</returns>
+        Task<Player> GetConnectedUser(ConnectedPlayerDto player);
 
         /// <summary>
         /// Updates user.
@@ -38,8 +38,8 @@ namespace YuFoot.Business.Contracts
         /// <param name="nickname">Nickname.</param>
         /// <param name="profilePictureUrl">Profile Picture URL.</param>
         /// <param name="keycloakId">Keycloak ID.</param>
-        /// <returns><see cref="PlayerDto" />.</returns>
-        Task<PlayerDto> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId);
+        /// <returns><see cref="Player" />.</returns>
+        Task<Player> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId);
 
         /// <summary>
         /// Get player stats.

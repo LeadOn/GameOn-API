@@ -37,72 +37,9 @@ namespace YuFoot.Business
         }
 
         /// <inheritdoc />
-        public async Task<PlayerDto?> GetPlayerById(int id)
+        public async Task<Player?> GetPlayerById(int id)
         {
-            var player = await this.playerRepo.GetPlayerById(id);
-
-            if (player == null)
-            {
-                return null;
-            }
-            else
-            {
-                var playerDto = new PlayerDto
-                {
-                    CreatedOn = player.CreatedOn,
-                    Draws = 0,
-                    FullName = player.FullName,
-                    Id = player.Id,
-                    Losses = 0,
-                    MatchPlayed = 0,
-                    Nickname = player.Nickname,
-                    ProfilePictureUrl = player.ProfilePictureUrl,
-                    Wins = 0,
-                    TotalGoals = 0,
-                };
-
-                // Getting TeamPlayer entries
-                var teamPlayers = await this.teamPlayerRepo.GetTeamPlayerByPlayerId(player.Id);
-                var goalsTaken = 0;
-
-                foreach (var teamPlayer in teamPlayers)
-                {
-                    // Getting associated match
-                    var gamePlayed = await this.gamePlayedRepo.GetById(teamPlayer.GamePlayedId);
-
-                    if (gamePlayed is not null)
-                    {
-                        if ((teamPlayer.Team == 0 && gamePlayed.TeamScore1 < gamePlayed.TeamScore2) || (teamPlayer.Team == 1 && gamePlayed.TeamScore1 > gamePlayed.TeamScore2))
-                        {
-                            playerDto.Losses++;
-                        }
-                        else if ((teamPlayer.Team == 0 && gamePlayed.TeamScore1 > gamePlayed.TeamScore2) || (teamPlayer.Team == 1 && gamePlayed.TeamScore1 < gamePlayed.TeamScore2))
-                        {
-                            playerDto.Wins++;
-                        }
-                        else
-                        {
-                            playerDto.Draws++;
-                        }
-
-                        if (teamPlayer.Team == 0 && gamePlayed.PlatformId != 3)
-                        {
-                            playerDto.TotalGoals += gamePlayed.TeamScore1;
-                            goalsTaken += gamePlayed.TeamScore2;
-                        }
-                        else if (teamPlayer.Team == 1 && gamePlayed.PlatformId != 3)
-                        {
-                            playerDto.TotalGoals += gamePlayed.TeamScore2;
-                            goalsTaken += gamePlayed.TeamScore1;
-                        }
-                    }
-                }
-
-                playerDto.MatchPlayed = playerDto.Wins + playerDto.Draws + playerDto.Losses;
-                playerDto.TotalGoalDifference = playerDto.TotalGoals - goalsTaken;
-
-                return playerDto;
-            }
+            return await this.playerRepo.GetPlayerById(id);
         }
 
         /// <inheritdoc />
@@ -112,7 +49,7 @@ namespace YuFoot.Business
         }
 
         /// <inheritdoc />
-        public async Task<PlayerDto> GetConnectedUser(ConnectedPlayerDto player)
+        public async Task<Player> GetConnectedUser(ConnectedPlayerDto player)
         {
             var userInDb = await this.playerRepo.GetPlayerByKeycloakId(player);
 #pragma warning disable CS8603 // Possible null reference return.
@@ -121,7 +58,7 @@ namespace YuFoot.Business
         }
 
         /// <inheritdoc />
-        public async Task<PlayerDto> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId)
+        public async Task<Player> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId)
         {
             // Now that we have user, update it
             var updatedUser = await this.playerRepo.UpdateUser(keycloakId, fullName, nickname, profilePictureUrl);

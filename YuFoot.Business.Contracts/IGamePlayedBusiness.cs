@@ -25,5 +25,13 @@ namespace YuFoot.Business.Contracts
         /// <param name="createGameDto"><see cref="CreateGameDto"/>.</param>
         /// <returns><see cref="GamePlayed"/>.</returns>
         Task<GamePlayed?> CreateGame(CreateGameDto createGameDto);
+
+        /// <summary>
+        /// Get last games played by player.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="limit">Limit.</param>
+        /// <returns>List of GamePlayed DTOs.</returns>
+        Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayedByPlayerId(int playerId, int limit);
     }
 }
