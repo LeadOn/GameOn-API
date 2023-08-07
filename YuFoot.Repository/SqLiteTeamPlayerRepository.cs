@@ -4,6 +4,8 @@
 
 namespace YuFoot.Repository
 {
+    using System;
+    using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
     using YuFoot.Entities;
     using YuFoot.Repository.Contracts;
@@ -42,6 +44,12 @@ namespace YuFoot.Repository
         public async Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId)
         {
             return await this.context.TeamPlayers.Where(x => x.GamePlayedId == gamePlayedId).ToListAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<TeamPlayer>> Search(Expression<Func<TeamPlayer, bool>> query, int limit)
+        {
+            return await this.context.TeamPlayers.Where(query).Take(limit).ToListAsync();
         }
     }
 }
