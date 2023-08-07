@@ -130,5 +130,21 @@ namespace YuFoot.WebAPI.Controllers
         {
             return this.Ok(await this.playerBusi.GetAll());
         }
+
+        /// <summary>
+        /// Get all player stats.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <returns>200 OK with Player list.</returns>
+        [HttpGet]
+        [Route("{playerId}/stats")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get all stats of a user.", Description = "Get all statistics for each platform of a user.")]
+        [SwaggerResponse(200, "List of stats.", typeof(List<PlatformStatsDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetPlayerStats(int playerId)
+        {
+            return this.Ok(await this.playerBusi.GetPlayerStats(playerId));
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace YuFoot.DTOs
         /// <summary>
         /// Gets or sets player's nickname.
         /// </summary>
-        public string? Nickname { get; set; } = "J0hnD03";
+        public string? Nickname { get; set; }
 
         /// <summary>
         /// Gets or sets player's profile picture URL.

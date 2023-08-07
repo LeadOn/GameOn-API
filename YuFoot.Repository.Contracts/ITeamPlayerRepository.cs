@@ -4,6 +4,7 @@
 
 namespace YuFoot.Repository.Contracts
 {
+    using System.Linq.Expressions;
     using YuFoot.Entities;
 
     /// <summary>
@@ -31,5 +32,13 @@ namespace YuFoot.Repository.Contracts
         /// <param name="teamPlayer">Team player.</param>
         /// <returns><see cref="TeamPlayer"/>.</returns>
         Task<TeamPlayer> CreateTeamPlayer(TeamPlayer teamPlayer);
+
+        /// <summary>
+        /// Search TeamPlayer in table.
+        /// </summary>
+        /// <param name="query">Query to filter in table.</param>
+        /// <param name="limit">Number of data to retrieve.</param>
+        /// <returns>List of TeamPlayer objects.</returns>
+        Task<IEnumerable<TeamPlayer>> Search(Expression<Func<TeamPlayer, bool>> query, int limit);
     }
 }

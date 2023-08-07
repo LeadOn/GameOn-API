@@ -40,5 +40,12 @@ namespace YuFoot.Business.Contracts
         /// <param name="keycloakId">Keycloak ID.</param>
         /// <returns><see cref="PlayerDto" />.</returns>
         Task<PlayerDto> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId);
+
+        /// <summary>
+        /// Get player stats.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <returns><see cref="List{PlatformStatsDto}"/>.</returns>
+        Task<List<PlatformStatsDto>?> GetPlayerStats(int playerId);
     }
 }
