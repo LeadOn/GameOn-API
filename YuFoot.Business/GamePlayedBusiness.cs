@@ -8,6 +8,7 @@ namespace YuFoot.Business
     using YuFoot.DTOs;
     using YuFoot.Entities;
     using YuFoot.Repository.Contracts;
+    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     /// <summary>
     /// Player business.
@@ -131,6 +132,70 @@ namespace YuFoot.Business
 
             // First, getting last games (from GamePlayed table)
             var gamesPlayed = await this.gamePlayedRepo.Search(x => true, number);
+
+            // For each game played, getting player information
+            foreach (var game in gamesPlayed)
+            {
+                var gamePlayedDto = new GamePlayedDto();
+                gamePlayedDto.Id = game.Id;
+                gamePlayedDto.PlayedOn = game.PlayedOn;
+                gamePlayedDto.Team1 = new TeamDto
+                {
+                    Id = 0,
+                    Code = game.TeamCode1 ?? "Unknown",
+                    Players = new List<Player>(),
+                    Score = game.TeamScore1,
+                };
+                gamePlayedDto.Team2 = new TeamDto
+                {
+                    Id = 1,
+                    Code = game.TeamCode2 ?? "Unknown",
+                    Players = new List<Player>(),
+                    Score = game.TeamScore2,
+                };
+
+                if (game.Platform is not null)
+                {
+                    gamePlayedDto.Platform = game.Platform.Name;
+                }
+
+                // Getting team players
+                var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
+                foreach (var teamPlayer in teamPlayers)
+                {
+                    if (teamPlayer.Team == 0)
+                    {
+                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                        if (player is not null)
+                        {
+                            gamePlayedDto.Team1.Players.Add(player);
+                        }
+                    }
+                    else
+                    {
+                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                        if (player is not null)
+                        {
+                            gamePlayedDto.Team2.Players.Add(player);
+                        }
+                    }
+                }
+
+                gamePlayedDto.Highlights = game.Highlights;
+
+                gamesPlayedDto.Add(gamePlayedDto);
+            }
+
+            return gamesPlayedDto;
+        }
+
+        /// <inheritdoc/>
+        public async Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayedByPlayerId(int playerId, int limit)
+        {
+            var gamesPlayedDto = new List<GamePlayedDto>();
+
+            // First, getting last games (from GamePlayed table)
+            var gamesPlayed = await this.gamePlayedRepo.Search(x => x.TeamPlayers.FirstOrDefault(x => x.PlayerId == playerId) != null, limit);
 
             // For each game played, getting player information
             foreach (var game in gamesPlayed)

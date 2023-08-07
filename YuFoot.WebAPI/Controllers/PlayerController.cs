@@ -43,7 +43,7 @@ namespace YuFoot.WebAPI.Controllers
         [Route("me")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Gets current user profile.", Description = "Gets current user profile as stored in database. If the user account doesn't exists, it creates it automatically.")]
-        [SwaggerResponse(200, "Current user profile.", typeof(PlayerDto))]
+        [SwaggerResponse(200, "Current user profile.", typeof(Player))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetConnectedUser()
@@ -70,7 +70,7 @@ namespace YuFoot.WebAPI.Controllers
         [Route("me")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Update current user profile.", Description = "Updates current user profile in database.")]
-        [SwaggerResponse(200, "Updated user profile.", typeof(PlayerDto))]
+        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> UpdateConnectedUser([FromBody] UpdatePlayerModel update)
@@ -99,7 +99,7 @@ namespace YuFoot.WebAPI.Controllers
         [Route("{id}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get a player by its ID.", Description = "Get a player by its ID, and retrieve its information.")]
-        [SwaggerResponse(200, "Player is found.", typeof(PlayerDto))]
+        [SwaggerResponse(200, "Player is found.", typeof(Player))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetById(int id)
@@ -129,6 +129,22 @@ namespace YuFoot.WebAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             return this.Ok(await this.playerBusi.GetAll());
+        }
+
+        /// <summary>
+        /// Get all player stats.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <returns>200 OK with Player list.</returns>
+        [HttpGet]
+        [Route("{playerId}/stats")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get all stats of a user.", Description = "Get all statistics for each platform of a user.")]
+        [SwaggerResponse(200, "List of stats.", typeof(List<PlatformStatsDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetPlayerStats(int playerId)
+        {
+            return this.Ok(await this.playerBusi.GetPlayerStats(playerId));
         }
     }
 }
