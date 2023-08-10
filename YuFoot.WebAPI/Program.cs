@@ -4,6 +4,7 @@
 
 #pragma warning disable SA1200 // Using directives should be placed correctly
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using YuFoot.Business;
 using YuFoot.Business.Contracts;
 using YuFoot.Common.Exceptions;
@@ -42,6 +43,24 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 
+// Adding API Versionning
+builder.Services.AddApiVersioning(o =>
+{
+    o.AssumeDefaultVersionWhenUnspecified = true;
+    o.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    o.ReportApiVersions = true;
+    o.ApiVersionReader = ApiVersionReader.Combine(
+        new QueryStringApiVersionReader("api-version"),
+        new HeaderApiVersionReader("X-Version"),
+        new MediaTypeApiVersionReader("ver"));
+});
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
 // Used for Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -49,9 +68,9 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Version = "0.2",
+        Version = "1.0",
         Title = "LeadOn's Corp - YuFoot API",
-        Description = "This API goal is to monitor Yunit's Soccer team players performance accross real-world and virtual Soccer games.",
+        Description = "This API goal is to monitor Soccer players performance across real-world and virtual Soccer games.",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact
         {
             Email = "virot.valentin@gmail.com",

@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "5c7e0c0c-4a3f-4486-bcc8-1270131038d8",
 		"name": "YuFoot API",
+		"description": "This API goal is to monitor Soccer players performance across real-world and virtual Soccer games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25561894"
 	},
@@ -10,7 +11,7 @@
 			"name": "Player",
 			"item": [
 				{
-					"name": "Get connected player",
+					"name": "Get current",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -28,8 +29,38 @@
 					"response": []
 				},
 				{
-					"name": "Get player by ID",
+					"name": "Update",
 					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"FullName\": \"Test update\",\r\n    \"Nickname\": \"The Nickname\",\r\n    \"ProfilePictureUrl\": \"https://kultt.fr/wp-content/uploads/2022/09/RickAstley-ad2022.jpg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/player/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"player",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -46,17 +77,43 @@
 					"response": []
 				},
 				{
-					"name": "Get all players",
+					"name": "Get all",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/player",
+							"raw": "{{baseUrl}}/player/all",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"player"
+								"player",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get stats by platform",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/player/1/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"player",
+								"1",
+								"stats"
 							]
 						}
 					},
@@ -68,8 +125,11 @@
 			"name": "Game",
 			"item": [
 				{
-					"name": "Get last X games played",
+					"name": "Get last X played",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -85,10 +145,96 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get last X played by player",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/game/last/5/player/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"game",
+								"last",
+								"5",
+								"player",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"CreatedOn\": \"2023-08-06T14:29:42\",\r\n    \"KeycloakId\": \"zfzef\",\r\n    \"PlatformId\": 1,\r\n    \"Team1\": [\r\n        \"1\", \"2\"\r\n    ],\r\n    \"TeamCode1\": \"FRA\",\r\n    \"TeamScore1\": 42,\r\n    \"Team2\": [\r\n        \"3\", \"4\"\r\n    ],\r\n    \"TeamCode2\": \"POR\",\r\n    \"TeamScore2\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/game",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"game"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Platform",
+			"item": [
+				{
+					"name": "Get all",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/platform/all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"platform",
+								"all"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",

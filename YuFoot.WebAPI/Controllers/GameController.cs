@@ -15,20 +15,18 @@ namespace YuFoot.WebAPI.Controllers
     /// Game Controller.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class GameController : ControllerBase
     {
-        private readonly ILogger<GameController> logger;
         private IGamePlayedBusiness gamePlayedBusi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameController"/> class.
         /// </summary>
-        /// <param name="logger">Logger interface (injected).</param>
         /// <param name="gamePlayed">GamePlayed business interface (injected).</param>
-        public GameController(ILogger<GameController> logger, IGamePlayedBusiness gamePlayed)
+        public GameController(IGamePlayedBusiness gamePlayed)
         {
-            this.logger = logger;
             this.gamePlayedBusi = gamePlayed;
         }
 
@@ -38,7 +36,7 @@ namespace YuFoot.WebAPI.Controllers
         /// <param name="number">Number of data to retrieve.</param>
         /// <returns>200 OK with Game list.</returns>
         [HttpGet]
-        [Route("last/{number}")]
+        [Route("last/{number:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get last games played.", Description = "Get last games played with their players.")]
         [SwaggerResponse(200, "List of games played.", typeof(List<GamePlayedDto>))]
@@ -55,7 +53,7 @@ namespace YuFoot.WebAPI.Controllers
         /// <param name="playerId">Player ID.</param>
         /// <returns>IActionResult object.</returns>
         [HttpGet]
-        [Route("last/{number}/player/{playerId}")]
+        [Route("last/{number:int}/player/{playerId:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get last games played by player.", Description = "Get last games played by player with their team members.")]
         [SwaggerResponse(200, "List of games played.", typeof(List<GamePlayedDto>))]
@@ -72,7 +70,7 @@ namespace YuFoot.WebAPI.Controllers
         /// <returns>IActionResult object.</returns>
         [HttpPost]
         [Authorize]
-        [Route("create")]
+        [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Create game in database.")]
         [SwaggerResponse(200, "Created game.", typeof(List<GamePlayedDto>))]
@@ -81,14 +79,8 @@ namespace YuFoot.WebAPI.Controllers
         {
             game.KeycloakId = this.User.GetUserId();
             var gameInDb = await this.gamePlayedBusi.CreateGame(game);
-            if (gameInDb is null)
-            {
-                return this.Problem();
-            }
-            else
-            {
-                return this.Ok(gameInDb);
-            }
+
+            return gameInDb is null ? this.Problem() : this.Ok(gameInDb);
         }
     }
 }
