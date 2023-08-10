@@ -11,26 +11,23 @@ namespace YuFoot.WebAPI.Controllers
     using YuFoot.DTOs;
     using YuFoot.Entities;
     using YuFoot.WebAPI.Classes;
-    using YuFoot.WebAPI.Models;
 
     /// <summary>
     /// Player Controller.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class PlayerController : ControllerBase
     {
-        private readonly ILogger<PlayerController> logger;
         private IPlayerBusiness playerBusi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerController"/> class.
         /// </summary>
-        /// <param name="logger">Logger interface (injected).</param>
         /// <param name="player">Player business interface (injected).</param>
-        public PlayerController(ILogger<PlayerController> logger, IPlayerBusiness player)
+        public PlayerController(IPlayerBusiness player)
         {
-            this.logger = logger;
             this.playerBusi = player;
         }
 
@@ -63,7 +60,7 @@ namespace YuFoot.WebAPI.Controllers
         /// <summary>
         /// Update connected user.
         /// </summary>
-        /// <param name="update"><see cref="UpdatePlayerModel"/>.</param>
+        /// <param name="update"><see cref="UpdatePlayerDto"/>.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPatch]
         [Authorize]
@@ -73,7 +70,7 @@ namespace YuFoot.WebAPI.Controllers
         [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> UpdateConnectedUser([FromBody] UpdatePlayerModel update)
+        public async Task<IActionResult> UpdateConnectedUser([FromBody] UpdatePlayerDto update)
         {
             // Getting connected user
             var connectedPlayer = new ConnectedPlayerDto
@@ -96,7 +93,7 @@ namespace YuFoot.WebAPI.Controllers
         /// <param name="id">Player ID.</param>
         /// <returns>200 OK with Player if found, 404 if not found.</returns>
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get a player by its ID.", Description = "Get a player by its ID, and retrieve its information.")]
         [SwaggerResponse(200, "Player is found.", typeof(Player))]
@@ -121,9 +118,9 @@ namespace YuFoot.WebAPI.Controllers
         /// </summary>
         /// <returns>200 OK with Player list.</returns>
         [HttpGet]
-        [Route("")]
+        [Route("all")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get all player in database.")]
+        [SwaggerOperation(Summary = "Get all players in database.")]
         [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetAll()

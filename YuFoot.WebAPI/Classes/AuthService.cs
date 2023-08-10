@@ -7,7 +7,7 @@ namespace YuFoot.WebAPI.Classes
     using System.Security.Claims;
 
     /// <summary>
-    /// AuthService class (overrided).
+    /// AuthService class.
     /// </summary>
     public static class AuthService
     {
