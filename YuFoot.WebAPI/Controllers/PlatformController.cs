@@ -13,7 +13,8 @@ namespace YuFoot.WebAPI.Controllers
     /// Platform Controller.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class PlatformController : ControllerBase
     {
         private IPlatformBusiness platformBusi;
@@ -32,9 +33,9 @@ namespace YuFoot.WebAPI.Controllers
         /// </summary>
         /// <returns>200 OK with Platform list.</returns>
         [HttpGet]
-        [Route("")]
+        [Route("all")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get all platforms in database.")]
+        [SwaggerOperation(Summary = "Get all gaming platforms in database.")]
         [SwaggerResponse(200, "Platform in database.", typeof(List<Player>))]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetAll()

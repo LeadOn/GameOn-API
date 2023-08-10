@@ -1,13 +1,13 @@
-﻿// <copyright file="UpdatePlayerModel.cs" company="LeadOn's Corp'">
+﻿// <copyright file="UpdatePlayerDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace YuFoot.WebAPI.Models
+namespace YuFoot.DTOs
 {
     /// <summary>
-    /// Update user model.
+    /// Update user DTO.
     /// </summary>
-    public class UpdatePlayerModel
+    public class UpdatePlayerDto
     {
         /// <summary>
         /// Gets or sets Full Name.
