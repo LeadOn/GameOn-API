@@ -47,6 +47,11 @@ namespace YuFoot.EntitiesContext
         public DbSet<Highlight> Highlights { get; set; }
 
         /// <summary>
+        /// Gets or sets FIFA Teams.
+        /// </summary>
+        public DbSet<FifaTeam> FifaTeams { get; set; }
+
+        /// <summary>
         /// Gets or sets the path of the SQLite file.
         /// </summary>
         public string DbPath { get; set; }
@@ -58,6 +63,27 @@ namespace YuFoot.EntitiesContext
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<FifaTeam>(entity =>
+            {
+                entity.ToTable("FifaTeam");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Logo)
+                    .HasColumnName("logo")
+                    .HasMaxLength(200000);
+            });
+
             modelBuilder.Entity<Highlight>(entity =>
             {
                 entity.ToTable("Highlight");

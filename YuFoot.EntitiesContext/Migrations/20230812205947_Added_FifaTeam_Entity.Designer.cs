@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuFoot.EntitiesContext;
 
@@ -10,9 +11,11 @@ using YuFoot.EntitiesContext;
 namespace YuFoot.EntitiesContext.Migrations
 {
     [DbContext(typeof(YuFootContext))]
-    partial class YuFootContextModelSnapshot : ModelSnapshot
+    [Migration("20230812205947_Added_FifaTeam_Entity")]
+    partial class Added_FifaTeam_Entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
@@ -29,16 +32,20 @@ namespace YuFoot.EntitiesContext.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("code");
 
-                    b.Property<string>("Logo")
-                        .HasMaxLength(200000)
+                    b.Property<string>("LogoUrl")
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT")
-                        .HasColumnName("logo");
+                        .HasColumnName("logo_url");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT")
                         .HasColumnName("name");
+
+                    b.Property<string>("ShortName")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("short_name");
 
                     b.HasKey("Id");
 
@@ -61,7 +68,7 @@ namespace YuFoot.EntitiesContext.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 13, 0, 38, 22, 327, DateTimeKind.Local).AddTicks(5536))
+                        .HasDefaultValue(new DateTime(2023, 8, 12, 22, 59, 47, 683, DateTimeKind.Local).AddTicks(6101))
                         .HasColumnName("played_on");
 
                     b.Property<string>("TeamCode1")
@@ -155,7 +162,7 @@ namespace YuFoot.EntitiesContext.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 13, 0, 38, 22, 327, DateTimeKind.Local).AddTicks(7355))
+                        .HasDefaultValue(new DateTime(2023, 8, 12, 22, 59, 47, 683, DateTimeKind.Local).AddTicks(7777))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")

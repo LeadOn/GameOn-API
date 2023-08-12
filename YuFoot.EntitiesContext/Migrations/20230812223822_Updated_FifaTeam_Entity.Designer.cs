@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuFoot.EntitiesContext;
 
@@ -10,9 +11,11 @@ using YuFoot.EntitiesContext;
 namespace YuFoot.EntitiesContext.Migrations
 {
     [DbContext(typeof(YuFootContext))]
-    partial class YuFootContextModelSnapshot : ModelSnapshot
+    [Migration("20230812223822_Updated_FifaTeam_Entity")]
+    partial class Updated_FifaTeam_Entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");

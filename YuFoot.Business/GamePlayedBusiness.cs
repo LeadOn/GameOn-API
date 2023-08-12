@@ -125,6 +125,67 @@ namespace YuFoot.Business
             return gameInDb;
         }
 
+        /// <inheritdoc/>
+        public async Task<GamePlayedDto?> GetById(int gameId)
+        {
+            // First, getting game
+            var gameInDb = await this.gamePlayedRepo.GetById(gameId);
+
+            if (gameInDb is null)
+            {
+                return null;
+            }
+
+            var gamePlayedDto = new GamePlayedDto();
+            gamePlayedDto.CreatedBy = gameInDb.CreatedBy;
+            gamePlayedDto.Id = gameInDb.Id;
+            gamePlayedDto.PlayedOn = gameInDb.PlayedOn;
+            gamePlayedDto.Team1 = new TeamDto
+            {
+                Id = 0,
+                Code = gameInDb.TeamCode1 ?? "Unknown",
+                Players = new List<Player>(),
+                Score = gameInDb.TeamScore1,
+            };
+            gamePlayedDto.Team2 = new TeamDto
+            {
+                Id = 1,
+                Code = gameInDb.TeamCode2 ?? "Unknown",
+                Players = new List<Player>(),
+                Score = gameInDb.TeamScore2,
+            };
+
+            if (gameInDb.Platform is not null)
+            {
+                gamePlayedDto.Platform = gameInDb.Platform.Name;
+            }
+
+            // Getting team players
+            foreach (var teamPlayer in gameInDb.TeamPlayers)
+            {
+                if (teamPlayer.Team == 0)
+                {
+                    var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                    if (player is not null)
+                    {
+                        gamePlayedDto.Team1.Players.Add(player);
+                    }
+                }
+                else
+                {
+                    var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                    if (player is not null)
+                    {
+                        gamePlayedDto.Team2.Players.Add(player);
+                    }
+                }
+            }
+
+            gamePlayedDto.Highlights = gameInDb.Highlights;
+
+            return gamePlayedDto;
+        }
+
         /// <inheritdoc />
         public async Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayed(int number)
         {
@@ -137,6 +198,7 @@ namespace YuFoot.Business
             foreach (var game in gamesPlayed)
             {
                 var gamePlayedDto = new GamePlayedDto();
+                gamePlayedDto.CreatedBy = game.CreatedBy;
                 gamePlayedDto.Id = game.Id;
                 gamePlayedDto.PlayedOn = game.PlayedOn;
                 gamePlayedDto.Team1 = new TeamDto
@@ -201,6 +263,7 @@ namespace YuFoot.Business
             foreach (var game in gamesPlayed)
             {
                 var gamePlayedDto = new GamePlayedDto();
+                gamePlayedDto.CreatedBy = game.CreatedBy;
                 gamePlayedDto.Id = game.Id;
                 gamePlayedDto.PlayedOn = game.PlayedOn;
                 gamePlayedDto.Team1 = new TeamDto

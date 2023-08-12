@@ -36,12 +36,12 @@ namespace YuFoot.Repository
 
         /// <inheritdoc />
         public async Task<GamePlayed?> GetById(int id) =>
-            await this.context.GamesPlayed.FirstOrDefaultAsync(x => x.Id == id);
+            await this.context.GamesPlayed.Include(x => x.Highlights).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.CreatedBy).FirstOrDefaultAsync(x => x.Id == id);
 
         /// <inheritdoc />
         public async Task<IEnumerable<GamePlayed>> Search(Expression<Func<GamePlayed, bool>> query, int limit)
         {
-            return await this.context.GamesPlayed.Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.Highlights).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
+            return await this.context.GamesPlayed.Include(x => x.CreatedBy).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.Highlights).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
         }
     }
 }
