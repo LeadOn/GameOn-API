@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace YuFoot.Repository
+namespace YuFoot.EntitiesContext
 {
     using Microsoft.EntityFrameworkCore;
     using YuFoot.Common.Exceptions;
@@ -18,7 +18,7 @@ namespace YuFoot.Repository
         /// </summary>
         public YuFootContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? throw new MissingEnvironmentVariableException("SQLITE_PATH");
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yufoot.db";
         }
 
         /// <summary>

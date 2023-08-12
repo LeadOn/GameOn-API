@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using YuFoot.Business;
 using YuFoot.Business.Contracts;
 using YuFoot.Common.Exceptions;
+using YuFoot.EntitiesContext;
 using YuFoot.Repository;
 using YuFoot.Repository.Contracts;
 #pragma warning restore SA1200 // Using directives should be placed correctly

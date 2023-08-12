@@ -8,6 +8,7 @@ namespace YuFoot.Repository
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
     using YuFoot.Entities;
+    using YuFoot.EntitiesContext;
     using YuFoot.Repository.Contracts;
 
     /// <summary>
