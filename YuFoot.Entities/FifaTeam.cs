@@ -4,6 +4,8 @@
 
 namespace YuFoot.Entities
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
     /// FifaTeam class.
     /// </summary>
@@ -17,16 +19,18 @@ namespace YuFoot.Entities
         /// <summary>
         /// Gets or sets name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "UNKNOWN NAME";
 
         /// <summary>
-        /// Gets or sets Code.
+        /// Gets or sets Games played Team 1.
         /// </summary>
-        public string? Code { get; set; }
+        [JsonIgnore]
+        public virtual List<GamePlayed> GamesPlayedTeam1 { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets Logo.
+        /// Gets or sets Games played Team 2.
         /// </summary>
-        public string? Logo { get; set; }
+        [JsonIgnore]
+        public virtual List<GamePlayed> GamesPlayedTeam2 { get; set; } = null!;
     }
 }

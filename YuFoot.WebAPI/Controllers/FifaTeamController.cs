@@ -1,4 +1,4 @@
-// <copyright file="PlatformController.cs" company="LeadOn's Corp'">
+// <copyright file="FifaTeamController.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -10,37 +10,37 @@ namespace YuFoot.WebAPI.Controllers
     using YuFoot.Entities;
 
     /// <summary>
-    /// Platform Controller.
+    /// FifaTeam Controller.
     /// </summary>
     [ApiController]
     [Route("v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
-    public class PlatformController : ControllerBase
+    public class FifaTeamController : ControllerBase
     {
-        private IPlatformBusiness platformBusi;
+        private IFifaTeamBusiness fifaTeamBusi;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlatformController"/> class.
+        /// Initializes a new instance of the <see cref="FifaTeamController"/> class.
         /// </summary>
-        /// <param name="platform">Platform business interface (injected).</param>
-        public PlatformController(IPlatformBusiness platform)
+        /// <param name="fifaTeamBusi">FifaTeam business interface (injected).</param>
+        public FifaTeamController(IFifaTeamBusiness fifaTeamBusi)
         {
-            this.platformBusi = platform;
+            this.fifaTeamBusi = fifaTeamBusi;
         }
 
         /// <summary>
-        /// Get all platforms in database.
+        /// Get all FIFA Teams in database.
         /// </summary>
-        /// <returns>200 OK with Platform list.</returns>
+        /// <returns>200 OK with Fifa Team list.</returns>
         [HttpGet]
         [Route("all")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get all gaming platforms in database.")]
-        [SwaggerResponse(200, "Platform in database.", typeof(List<Player>))]
+        [SwaggerOperation(Summary = "Get all FIFA Teams in database.")]
+        [SwaggerResponse(200, "FIFA Teams in database.", typeof(List<FifaTeam>))]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetAll()
         {
-            return this.Ok(await this.platformBusi.GetAll());
+            return this.Ok(await this.fifaTeamBusi.GetAll());
         }
     }
 }

@@ -143,6 +143,7 @@ namespace YuFoot.Business
             gamePlayedDto.Team1 = new TeamDto
             {
                 Id = 0,
+                FifaTeamId = gameInDb.Team1Id,
                 Code = gameInDb.TeamCode1 ?? "Unknown",
                 Players = new List<Player>(),
                 Score = gameInDb.TeamScore1,
@@ -150,6 +151,7 @@ namespace YuFoot.Business
             gamePlayedDto.Team2 = new TeamDto
             {
                 Id = 1,
+                FifaTeamId = gameInDb.Team2Id,
                 Code = gameInDb.TeamCode2 ?? "Unknown",
                 Players = new List<Player>(),
                 Score = gameInDb.TeamScore2,
@@ -204,6 +206,7 @@ namespace YuFoot.Business
                 gamePlayedDto.Team1 = new TeamDto
                 {
                     Id = 0,
+                    FifaTeamId = game.Team1Id,
                     Code = game.TeamCode1 ?? "Unknown",
                     Players = new List<Player>(),
                     Score = game.TeamScore1,
@@ -211,6 +214,7 @@ namespace YuFoot.Business
                 gamePlayedDto.Team2 = new TeamDto
                 {
                     Id = 1,
+                    FifaTeamId = game.Team2Id,
                     Code = game.TeamCode2 ?? "Unknown",
                     Players = new List<Player>(),
                     Score = game.TeamScore2,
@@ -269,6 +273,7 @@ namespace YuFoot.Business
                 gamePlayedDto.Team1 = new TeamDto
                 {
                     Id = 0,
+                    FifaTeamId = game.Team1Id,
                     Code = game.TeamCode1 ?? "Unknown",
                     Players = new List<Player>(),
                     Score = game.TeamScore1,
@@ -276,6 +281,7 @@ namespace YuFoot.Business
                 gamePlayedDto.Team2 = new TeamDto
                 {
                     Id = 1,
+                    FifaTeamId = game.Team2Id,
                     Code = game.TeamCode2 ?? "Unknown",
                     Players = new List<Player>(),
                     Score = game.TeamScore2,

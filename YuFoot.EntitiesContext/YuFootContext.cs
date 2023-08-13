@@ -18,7 +18,7 @@ namespace YuFoot.EntitiesContext
         /// </summary>
         public YuFootContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yufoot.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yufoot.db";
         }
 
         /// <summary>
@@ -75,13 +75,17 @@ namespace YuFoot.EntitiesContext
                     .HasColumnName("name")
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Code)
-                    .HasColumnName("code")
-                    .HasMaxLength(10);
+                entity.HasMany(e => e.GamesPlayedTeam1)
+                    .WithOne(f => f.Team1)
+                    .HasForeignKey(e => e.Team1Id)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_FifaTeam_GamePlayed_Team1");
 
-                entity.Property(e => e.Logo)
-                    .HasColumnName("logo")
-                    .HasMaxLength(200000);
+                entity.HasMany(e => e.GamesPlayedTeam2)
+                    .WithOne(f => f.Team2)
+                    .HasForeignKey(e => e.Team2Id)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_FifaTeam_GamePlayed_Team2");
             });
 
             modelBuilder.Entity<Highlight>(entity =>
@@ -182,6 +186,12 @@ namespace YuFoot.EntitiesContext
                 entity.Property(e => e.TeamCode1)
                     .HasColumnName("team_code_1")
                     .HasMaxLength(10);
+
+                entity.Property(e => e.Team1Id)
+                    .HasColumnName("team_1_id");
+
+                entity.Property(e => e.Team2Id)
+                    .HasColumnName("team_2_id");
 
                 entity.Property(e => e.TeamCode2)
                     .HasColumnName("team_code_2")

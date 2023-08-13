@@ -1,4 +1,4 @@
-﻿// <copyright file="ITeamPlayerRepository.cs" company="LeadOn's Corp'">
+﻿// <copyright file="IFifaTeamRepository.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -8,37 +8,14 @@ namespace YuFoot.Repository.Contracts
     using YuFoot.Entities;
 
     /// <summary>
-    /// Team Player repository.
+    /// Fifa Team repository.
     /// </summary>
-    public interface ITeamPlayerRepository
+    public interface IFifaTeamRepository
     {
         /// <summary>
-        /// Get Team players by game ID.
+        /// Get all teams in database.
         /// </summary>
-        /// <param name="gamePlayedId">GamePlayed ID.</param>
-        /// <returns>List of Team Players.</returns>
-        Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId);
-
-        /// <summary>
-        /// Get TeamPlayer by Player ID.
-        /// </summary>
-        /// <param name="playerId">Player ID.</param>
-        /// <returns>List of <see cref="TeamPlayer"/>.</returns>
-        Task<IEnumerable<TeamPlayer>> GetTeamPlayerByPlayerId(int playerId);
-
-        /// <summary>
-        /// Create team player.
-        /// </summary>
-        /// <param name="teamPlayer">Team player.</param>
-        /// <returns><see cref="TeamPlayer"/>.</returns>
-        Task<TeamPlayer> CreateTeamPlayer(TeamPlayer teamPlayer);
-
-        /// <summary>
-        /// Search TeamPlayer in table.
-        /// </summary>
-        /// <param name="query">Query to filter in table.</param>
-        /// <param name="limit">Number of data to retrieve.</param>
-        /// <returns>List of TeamPlayer objects.</returns>
-        Task<IEnumerable<TeamPlayer>> Search(Expression<Func<TeamPlayer, bool>> query, int limit);
+        /// <returns>List of Teams.</returns>
+        Task<IEnumerable<FifaTeam>> GetAll();
     }
 }

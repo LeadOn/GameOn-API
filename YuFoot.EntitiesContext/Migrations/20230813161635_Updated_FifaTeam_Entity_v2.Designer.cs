@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuFoot.EntitiesContext;
 
@@ -10,9 +11,11 @@ using YuFoot.EntitiesContext;
 namespace YuFoot.EntitiesContext.Migrations
 {
     [DbContext(typeof(YuFootContext))]
-    partial class YuFootContextModelSnapshot : ModelSnapshot
+    [Migration("20230813161635_Updated_FifaTeam_Entity_v2")]
+    partial class Updated_FifaTeam_Entity_v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
@@ -51,16 +54,8 @@ namespace YuFoot.EntitiesContext.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 13, 19, 18, 55, 466, DateTimeKind.Local).AddTicks(7690))
+                        .HasDefaultValue(new DateTime(2023, 8, 13, 18, 16, 35, 593, DateTimeKind.Local).AddTicks(8480))
                         .HasColumnName("played_on");
-
-                    b.Property<int?>("Team1Id")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("team_1_id");
-
-                    b.Property<int?>("Team2Id")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("team_2_id");
 
                     b.Property<string>("TeamCode1")
                         .HasMaxLength(10)
@@ -87,10 +82,6 @@ namespace YuFoot.EntitiesContext.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("PlatformId");
-
-                    b.HasIndex("Team1Id");
-
-                    b.HasIndex("Team2Id");
 
                     b.ToTable("GamePlayed", (string)null);
                 });
@@ -157,7 +148,7 @@ namespace YuFoot.EntitiesContext.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 13, 19, 18, 55, 466, DateTimeKind.Local).AddTicks(8740))
+                        .HasDefaultValue(new DateTime(2023, 8, 13, 18, 16, 35, 593, DateTimeKind.Local).AddTicks(9390))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -229,25 +220,9 @@ namespace YuFoot.EntitiesContext.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_GamePlayed_Platform");
 
-                    b.HasOne("YuFoot.Entities.FifaTeam", "Team1")
-                        .WithMany("GamesPlayedTeam1")
-                        .HasForeignKey("Team1Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .HasConstraintName("FK_FifaTeam_GamePlayed_Team1");
-
-                    b.HasOne("YuFoot.Entities.FifaTeam", "Team2")
-                        .WithMany("GamesPlayedTeam2")
-                        .HasForeignKey("Team2Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .HasConstraintName("FK_FifaTeam_GamePlayed_Team2");
-
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Platform");
-
-                    b.Navigation("Team1");
-
-                    b.Navigation("Team2");
                 });
 
             modelBuilder.Entity("YuFoot.Entities.Highlight", b =>
@@ -290,13 +265,6 @@ namespace YuFoot.EntitiesContext.Migrations
                     b.Navigation("GamePlayed");
 
                     b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("YuFoot.Entities.FifaTeam", b =>
-                {
-                    b.Navigation("GamesPlayedTeam1");
-
-                    b.Navigation("GamesPlayedTeam2");
                 });
 
             modelBuilder.Entity("YuFoot.Entities.GamePlayed", b =>

@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 
-// Adding API Versionning
+// Adding API Versioning
 builder.Services.AddApiVersioning(o =>
 {
     o.AssumeDefaultVersionWhenUnspecified = true;
@@ -91,6 +91,8 @@ builder.Services.AddScoped<IGamePlayedRepository, SqLiteGamePlayedRepository>();
 builder.Services.AddScoped<ITeamPlayerRepository, SqLiteTeamPlayerRepository>();
 builder.Services.AddScoped<IPlatformBusiness, PlatformBusiness>();
 builder.Services.AddScoped<IPlatformRepository, SqLitePlatformRepository>();
+builder.Services.AddScoped<IFifaTeamRepository, SqLiteFifaTeamRepository>();
+builder.Services.AddScoped<IFifaTeamBusiness, FifaTeamBusiness>();
 
 var app = builder.Build();
 
