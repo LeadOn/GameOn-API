@@ -33,5 +33,12 @@ namespace YuFoot.Business.Contracts
         /// <param name="limit">Limit.</param>
         /// <returns>List of GamePlayed DTOs.</returns>
         Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayedByPlayerId(int playerId, int limit);
+
+        /// <summary>
+        /// Get game by it's ID.
+        /// </summary>
+        /// <param name="gameId">Game ID.</param>
+        /// <returns><see cref="GamePlayedDto" /> if found, null if not found.</returns>
+        Task<GamePlayedDto?> GetById(int gameId);
     }
 }

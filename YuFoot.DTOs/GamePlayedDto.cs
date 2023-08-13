@@ -16,6 +16,11 @@ namespace YuFoot.DTOs
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets Created By.
+        /// </summary>
+        public Player CreatedBy { get; set; } = new Player();
+
+        /// <summary>
         /// Gets or sets Played On.
         /// </summary>
         public DateTime PlayedOn { get; set; }

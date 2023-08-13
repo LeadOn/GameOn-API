@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace YuFoot.Repository.Migrations
+namespace YuFoot.EntitiesContext.Migrations
 {
     /// <inheritdoc />
     public partial class Added_Highlights : Migration
