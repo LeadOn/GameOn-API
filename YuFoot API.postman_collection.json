@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5c7e0c0c-4a3f-4486-bcc8-1270131038d8",
+		"_postman_id": "1521cc65-adad-407a-8301-cec57d94d576",
 		"name": "YuFoot API",
 		"description": "This API goal is to monitor Soccer players performance across real-world and virtual Soccer games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -171,6 +171,27 @@
 					"response": []
 				},
 				{
+					"name": "Get by ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/game/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"game",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create",
 					"request": {
 						"method": "POST",
@@ -216,6 +237,32 @@
 							],
 							"path": [
 								"platform",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FifaTeam",
+			"item": [
+				{
+					"name": "Get all",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fifateam/all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fifateam",
 								"all"
 							]
 						}
