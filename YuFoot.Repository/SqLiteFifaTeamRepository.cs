@@ -30,7 +30,13 @@ namespace YuFoot.Repository
         /// <inheritdoc />
         public async Task<IEnumerable<FifaTeam>> GetAll()
         {
-            return await this.context.FifaTeams.ToListAsync();
+            return await this.context.FifaTeams.OrderBy(x => x.Name).ToListAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<FifaTeam?> GetById(int id)
+        {
+            return await this.context.FifaTeams.FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

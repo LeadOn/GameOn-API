@@ -17,5 +17,12 @@ namespace YuFoot.Repository.Contracts
         /// </summary>
         /// <returns>List of Teams.</returns>
         Task<IEnumerable<FifaTeam>> GetAll();
+
+        /// <summary>
+        /// Gets FIFA Team by ID.
+        /// </summary>
+        /// <param name="id">Team ID.</param>
+        /// <returns>Team if found, null if not.</returns>
+        Task<FifaTeam?> GetById(int id);
     }
 }
