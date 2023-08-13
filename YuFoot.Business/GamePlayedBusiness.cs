@@ -19,6 +19,7 @@ namespace YuFoot.Business
         private IGamePlayedRepository gamePlayedRepo;
         private ITeamPlayerRepository teamPlayerRepo;
         private IPlatformRepository platformRepo;
+        private IFifaTeamRepository fifaTeamRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePlayedBusiness" /> class.
@@ -27,12 +28,14 @@ namespace YuFoot.Business
         /// <param name="gamePlayedRepo">GamePlayed repository, injected.</param>
         /// <param name="teamPlayerRepo">TeamPlayer repository, injected.</param>
         /// <param name="platformRepo">Platform repository, injected.</param>
-        public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo)
+        /// <param name="fifaTeamRepo">FifaTeam repository, injected.</param>
+        public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo, IFifaTeamRepository fifaTeamRepo)
         {
             this.playerRepo = playerRepo;
             this.gamePlayedRepo = gamePlayedRepo;
             this.teamPlayerRepo = teamPlayerRepo;
             this.platformRepo = platformRepo;
+            this.fifaTeamRepo = fifaTeamRepo;
         }
 
         /// <inheritdoc />
@@ -72,8 +75,7 @@ namespace YuFoot.Business
                 }
             }
 
-            // Now that every player as been found, creating elements in db
-            var gameInDb = await this.gamePlayedRepo.CreateGame(new GamePlayed
+            var newGame = new GamePlayed
             {
                 PlatformId = platformInDb.Id,
                 PlayedOn = createGameDto.CreatedOn,
@@ -82,7 +84,29 @@ namespace YuFoot.Business
                 TeamScore1 = createGameDto.TeamScore1,
                 TeamScore2 = createGameDto.TeamScore2,
                 CreatedById = creatorInDb.Id,
-            });
+            };
+
+            // Checking if fifa teams are in Database.
+            if (createGameDto.FifaTeam1 is not null && createGameDto.FifaTeam1 != 0)
+            {
+                var fifaTeam1 = await this.fifaTeamRepo.GetById((int)createGameDto.FifaTeam1);
+                if (fifaTeam1 is not null)
+                {
+                    newGame.Team1Id = fifaTeam1.Id;
+                }
+            }
+
+            if (createGameDto.FifaTeam2 is not null && createGameDto.FifaTeam2 != 0)
+            {
+                var fifaTeam2 = await this.fifaTeamRepo.GetById((int)createGameDto.FifaTeam2);
+                if (fifaTeam2 is not null)
+                {
+                    newGame.Team2Id = fifaTeam2.Id;
+                }
+            }
+
+            // Now that every player as been found, creating elements in db
+            var gameInDb = await this.gamePlayedRepo.CreateGame(newGame);
 
             if (gameInDb is null)
             {

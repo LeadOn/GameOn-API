@@ -36,6 +36,11 @@ namespace YuFoot.DTOs
         public string TeamCode1 { get; set; } = "????";
 
         /// <summary>
+        /// Gets or sets FifaTeam 1.
+        /// </summary>
+        public int? FifaTeam1 { get; set; }
+
+        /// <summary>
         /// Gets or sets Team 2 players IDs.
         /// </summary>
         public List<string> Team2 { get; set; } = new List<string>();
@@ -44,6 +49,11 @@ namespace YuFoot.DTOs
         /// Gets or sets Team Code 2.
         /// </summary>
         public string TeamCode2 { get; set; } = "????";
+
+        /// <summary>
+        /// Gets or sets FifaTeam 2.
+        /// </summary>
+        public int? FifaTeam2 { get; set; }
 
         /// <summary>
         /// Gets or sets Team score 1.
