@@ -27,6 +27,16 @@ namespace YuFoot.Entities
         public string? TeamCode1 { get; set; }
 
         /// <summary>
+        /// Gets or sets Team 1 ID.
+        /// </summary>
+        public int? Team1Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets Team 2 ID.
+        /// </summary>
+        public int? Team2Id { get; set; }
+
+        /// <summary>
         /// Gets or sets Team Code 2.
         /// </summary>
         public string? TeamCode2 { get; set; }
@@ -68,6 +78,18 @@ namespace YuFoot.Entities
         /// </summary>
         [JsonIgnore]
         public virtual Platform? Platform { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Team 1.
+        /// </summary>
+        [JsonIgnore]
+        public virtual FifaTeam? Team1 { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Team 2.
+        /// </summary>
+        [JsonIgnore]
+        public virtual FifaTeam? Team2 { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Highlights.

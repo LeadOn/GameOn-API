@@ -7,6 +7,7 @@ namespace YuFoot.Repository
     using Microsoft.EntityFrameworkCore;
     using YuFoot.DTOs;
     using YuFoot.Entities;
+    using YuFoot.EntitiesContext;
     using YuFoot.Repository.Contracts;
 
     /// <summary>

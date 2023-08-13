@@ -21,6 +21,11 @@ namespace YuFoot.DTOs
         public string Code { get; set; } = "Unknown";
 
         /// <summary>
+        /// Gets or sets Fifa Team ID.
+        /// </summary>
+        public int? FifaTeamId { get; set; }
+
+        /// <summary>
         /// Gets or sets Score.
         /// </summary>
         public int Score { get; set; }

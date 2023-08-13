@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using YuFoot.Business;
 using YuFoot.Business.Contracts;
 using YuFoot.Common.Exceptions;
+using YuFoot.EntitiesContext;
 using YuFoot.Repository;
 using YuFoot.Repository.Contracts;
 #pragma warning restore SA1200 // Using directives should be placed correctly
@@ -43,7 +44,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 
-// Adding API Versionning
+// Adding API Versioning
 builder.Services.AddApiVersioning(o =>
 {
     o.AssumeDefaultVersionWhenUnspecified = true;
@@ -90,6 +91,8 @@ builder.Services.AddScoped<IGamePlayedRepository, SqLiteGamePlayedRepository>();
 builder.Services.AddScoped<ITeamPlayerRepository, SqLiteTeamPlayerRepository>();
 builder.Services.AddScoped<IPlatformBusiness, PlatformBusiness>();
 builder.Services.AddScoped<IPlatformRepository, SqLitePlatformRepository>();
+builder.Services.AddScoped<IFifaTeamRepository, SqLiteFifaTeamRepository>();
+builder.Services.AddScoped<IFifaTeamBusiness, FifaTeamBusiness>();
 
 var app = builder.Build();
 

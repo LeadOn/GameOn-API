@@ -82,5 +82,29 @@ namespace YuFoot.WebAPI.Controllers
 
             return gameInDb is null ? this.Problem() : this.Ok(gameInDb);
         }
+
+        /// <summary>
+        /// Get game played by ID.
+        /// </summary>
+        /// <param name="gameId">Game ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{gameId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get game played by ID.", Description = "Get game played by ID with its team players and highlights.")]
+        [SwaggerResponse(200, "Game played.", typeof(GamePlayedDto))]
+        [SwaggerResponse(404, "Game not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetById(int gameId)
+        {
+            var gameInDb = await this.gamePlayedBusi.GetById(gameId);
+
+            if (gameInDb is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(gameInDb);
+        }
     }
 }
