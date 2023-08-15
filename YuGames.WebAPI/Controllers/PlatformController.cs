@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace YuGames.WebAPI.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
@@ -41,6 +43,34 @@ namespace YuGames.WebAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             return this.Ok(await this.platformBusi.GetAll());
+        }
+
+        /// <summary>
+        /// Creates platform in database.
+        /// </summary>
+        /// <param name="platform"><see cref="Platform" />.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Creates a platform in database.")]
+        [SwaggerResponse(200, "Created platform.", typeof(Platform))]
+        [SwaggerResponse(401, "User is not logged in.")]
+        [SwaggerResponse(403, "User isn't admin.")]
+        [SwaggerResponse(500, "Unknown error.")]
+        public async Task<IActionResult> Create([FromBody] Platform platform)
+        {
+            var platformCreated = await this.platformBusi.Create(platform);
+
+            if (platformCreated is null)
+            {
+                return this.Problem();
+            }
+            else
+            {
+                return this.Ok(platformCreated);
+            }
         }
     }
 }

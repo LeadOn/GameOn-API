@@ -11,7 +11,6 @@ using YuGames.Common.Exceptions;
 using YuGames.EntitiesContext;
 using YuGames.Repository;
 using YuGames.Repository.Contracts;
-
 #pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);

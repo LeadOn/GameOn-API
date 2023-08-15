@@ -17,21 +17,21 @@ namespace YuGames.Repository.Contracts
         /// </summary>
         /// <param name="gamePlayedId">GamePlayed ID.</param>
         /// <returns>List of Team Players.</returns>
-        Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId);
+        Task<IEnumerable<FifaTeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId);
 
         /// <summary>
         /// Get TeamPlayer by Player ID.
         /// </summary>
         /// <param name="playerId">Player ID.</param>
-        /// <returns>List of <see cref="TeamPlayer"/>.</returns>
-        Task<IEnumerable<TeamPlayer>> GetTeamPlayerByPlayerId(int playerId);
+        /// <returns>List of <see cref="FifaTeamPlayer"/>.</returns>
+        Task<IEnumerable<FifaTeamPlayer>> GetTeamPlayerByPlayerId(int playerId);
 
         /// <summary>
         /// Create team player.
         /// </summary>
-        /// <param name="teamPlayer">Team player.</param>
-        /// <returns><see cref="TeamPlayer"/>.</returns>
-        Task<TeamPlayer> CreateTeamPlayer(TeamPlayer teamPlayer);
+        /// <param name="fifaTeamPlayer">Team player.</param>
+        /// <returns><see cref="FifaTeamPlayer"/>.</returns>
+        Task<FifaTeamPlayer> CreateTeamPlayer(FifaTeamPlayer fifaTeamPlayer);
 
         /// <summary>
         /// Search TeamPlayer in table.
@@ -39,6 +39,6 @@ namespace YuGames.Repository.Contracts
         /// <param name="query">Query to filter in table.</param>
         /// <param name="limit">Number of data to retrieve.</param>
         /// <returns>List of TeamPlayer objects.</returns>
-        Task<IEnumerable<TeamPlayer>> Search(Expression<Func<TeamPlayer, bool>> query, int limit);
+        Task<IEnumerable<FifaTeamPlayer>> Search(Expression<Func<FifaTeamPlayer, bool>> query, int limit);
     }
 }

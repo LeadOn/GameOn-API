@@ -17,7 +17,7 @@ namespace YuGames.Repository.Contracts
         /// </summary>
         /// <param name="id">GamePlayed ID.</param>
         /// <returns>GamePlay if found, null if not.</returns>
-        Task<GamePlayed?> GetById(int id);
+        Task<FifaGamePlayed?> GetById(int id);
 
         /// <summary>
         /// Search GamePlayed in table.
@@ -25,13 +25,13 @@ namespace YuGames.Repository.Contracts
         /// <param name="query">Query to filter in table.</param>
         /// <param name="limit">Number of data to retrieve.</param>
         /// <returns>List of GamePlayed objects.</returns>
-        Task<IEnumerable<GamePlayed>> Search(Expression<Func<GamePlayed, bool>> query, int limit);
+        Task<IEnumerable<FifaGamePlayed>> Search(Expression<Func<FifaGamePlayed, bool>> query, int limit);
 
         /// <summary>
         /// Creates game in database.
         /// </summary>
-        /// <param name="game"><see cref="GamePlayed" />.</param>
-        /// <returns><see cref="GamePlayed"/> object.</returns>
-        Task<GamePlayed> CreateGame(GamePlayed game);
+        /// <param name="fifaGame"><see cref="FifaGamePlayed" />.</param>
+        /// <returns><see cref="FifaGamePlayed"/> object.</returns>
+        Task<FifaGamePlayed> CreateGame(FifaGamePlayed fifaGame);
     }
 }

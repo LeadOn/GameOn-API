@@ -86,13 +86,13 @@ namespace YuGames.Business
                 var stats = new PlatformStatsDto { AverageGoalGiven = 0, AverageGoalTaken = 0, Draws = 0, GoalDifference = 0, Losses = 0, Platform = platform, Wins = 0, GoalsGiven = 0, GoalsTaken = 0 };
 
                 // Getting games played by platform
-                var teamPlayersInDb = await this.teamPlayerRepo.Search(x => x.GamePlayed.PlatformId == platform.Id && x.PlayerId == playerInDb.Id, 1000000);
+                var teamPlayersInDb = await this.teamPlayerRepo.Search(x => x.FifaGamePlayed.PlatformId == platform.Id && x.PlayerId == playerInDb.Id, 1000000);
 
                 // For each game played, getting that stats
                 foreach (var teamPlayer in teamPlayersInDb)
                 {
                     // Getting game
-                    var gameInDb = await this.gamePlayedRepo.GetById(teamPlayer.GamePlayedId);
+                    var gameInDb = await this.gamePlayedRepo.GetById(teamPlayer.FifaGameId);
 
                     if (gameInDb is null)
                     {

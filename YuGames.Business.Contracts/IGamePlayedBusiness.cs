@@ -23,8 +23,8 @@ namespace YuGames.Business.Contracts
         /// Creates game in database.
         /// </summary>
         /// <param name="createGameDto"><see cref="CreateGameDto"/>.</param>
-        /// <returns><see cref="GamePlayed"/>.</returns>
-        Task<GamePlayed?> CreateGame(CreateGameDto createGameDto);
+        /// <returns><see cref="FifaGamePlayed"/>.</returns>
+        Task<FifaGamePlayed?> CreateGame(CreateGameDto createGameDto);
 
         /// <summary>
         /// Get last games played by player.

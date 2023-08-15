@@ -27,27 +27,27 @@ namespace YuGames.Repository
         }
 
         /// <inheritdoc />
-        public async Task<TeamPlayer> CreateTeamPlayer(TeamPlayer teamPlayer)
+        public async Task<FifaTeamPlayer> CreateTeamPlayer(FifaTeamPlayer fifaTeamPlayer)
         {
-            this.context.TeamPlayers.Add(teamPlayer);
+            this.context.TeamPlayers.Add(fifaTeamPlayer);
             await this.context.SaveChangesAsync();
-            return teamPlayer;
+            return fifaTeamPlayer;
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<TeamPlayer>> GetTeamPlayerByPlayerId(int playerId)
+        public async Task<IEnumerable<FifaTeamPlayer>> GetTeamPlayerByPlayerId(int playerId)
         {
             return await this.context.TeamPlayers.Where(x => x.PlayerId == playerId).ToListAsync();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<TeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId)
+        public async Task<IEnumerable<FifaTeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId)
         {
-            return await this.context.TeamPlayers.Where(x => x.GamePlayedId == gamePlayedId).ToListAsync();
+            return await this.context.TeamPlayers.Where(x => x.FifaGameId == gamePlayedId).ToListAsync();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<TeamPlayer>> Search(Expression<Func<TeamPlayer, bool>> query, int limit)
+        public async Task<IEnumerable<FifaTeamPlayer>> Search(Expression<Func<FifaTeamPlayer, bool>> query, int limit)
         {
             return await this.context.TeamPlayers.Where(query).Take(limit).ToListAsync();
         }

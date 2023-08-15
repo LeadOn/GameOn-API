@@ -25,12 +25,12 @@ namespace YuGames.Entities
         /// Gets or sets Games played Team 1.
         /// </summary>
         [JsonIgnore]
-        public virtual List<GamePlayed> GamesPlayedTeam1 { get; set; } = null!;
+        public virtual List<FifaGamePlayed> GamesPlayedTeam1 { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Games played Team 2.
         /// </summary>
         [JsonIgnore]
-        public virtual List<GamePlayed> GamesPlayedTeam2 { get; set; } = null!;
+        public virtual List<FifaGamePlayed> GamesPlayedTeam2 { get; set; } = null!;
     }
 }

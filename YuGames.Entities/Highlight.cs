@@ -20,19 +20,24 @@ namespace YuGames.Entities
         public string Name { get; set; } = "Random name";
 
         /// <summary>
+        /// Gets or sets Highlight description.
+        /// </summary>
+        public string? Description { get; set; }
+
+        /// <summary>
         /// Gets or sets Created By ID.
         /// </summary>
         public int CreatedById { get; set; }
 
         /// <summary>
-        /// Gets or sets Game ID.
+        /// Gets or sets Fifa Game ID.
         /// </summary>
-        public int GameId { get; set; }
+        public int FifaGameId { get; set; }
 
         /// <summary>
         /// Gets or sets External URL.
         /// </summary>
-        public string ExternalUrl { get; set; } = "https://www.valentinvirot.fr/";
+        public string? ExternalUrl { get; set; }
 
         /// <summary>
         /// Gets or sets Created by.
@@ -42,6 +47,6 @@ namespace YuGames.Entities
         /// <summary>
         /// Gets or sets Game.
         /// </summary>
-        public virtual GamePlayed Game { get; set; } = null!;
+        public virtual FifaGamePlayed FifaGame { get; set; } = null!;
     }
 }

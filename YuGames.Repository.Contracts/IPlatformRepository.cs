@@ -23,5 +23,12 @@ namespace YuGames.Repository.Contracts
         /// <param name="id">Platform ID.</param>
         /// <returns><see cref="Platform"/>.</returns>
         Task<Platform?> GetById(int id);
+
+        /// <summary>
+        /// Creates platform in database.
+        /// </summary>
+        /// <param name="platform"><see cref="Platform" /> to create.</param>
+        /// <returns>Created platform / Null if error happened.</returns>
+        Task<Platform?> Create(Platform platform);
     }
 }

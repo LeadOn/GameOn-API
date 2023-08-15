@@ -36,5 +36,19 @@ namespace YuGames.Repository
         {
             return await this.context.Platforms.FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        /// <inheritdoc />
+        public async Task<Platform?> Create(Platform platform)
+        {
+            var platformToCreate = new Platform
+            {
+                Name = platform.Name,
+            };
+
+            await this.context.Platforms.AddAsync(platformToCreate);
+            await this.context.SaveChangesAsync();
+
+            return platformToCreate;
+        }
     }
 }

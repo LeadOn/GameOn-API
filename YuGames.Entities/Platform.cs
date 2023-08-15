@@ -25,6 +25,6 @@ namespace YuGames.Entities
         /// Gets or sets Games Played on that platform.
         /// </summary>
         [JsonIgnore]
-        public virtual List<GamePlayed> GamesPlayed { get; set; } = null!;
+        public virtual List<FifaGamePlayed>? GamesPlayed { get; set; }
     }
 }

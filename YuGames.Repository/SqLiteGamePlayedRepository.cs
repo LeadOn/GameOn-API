@@ -27,19 +27,19 @@ namespace YuGames.Repository
         }
 
         /// <inheritdoc />
-        public async Task<GamePlayed> CreateGame(GamePlayed game)
+        public async Task<FifaGamePlayed> CreateGame(FifaGamePlayed fifaGame)
         {
-            this.context.Add(game);
+            this.context.Add(fifaGame);
             await this.context.SaveChangesAsync();
-            return game;
+            return fifaGame;
         }
 
         /// <inheritdoc />
-        public async Task<GamePlayed?> GetById(int id) =>
+        public async Task<FifaGamePlayed?> GetById(int id) =>
             await this.context.GamesPlayed.Include(x => x.Highlights).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.CreatedBy).FirstOrDefaultAsync(x => x.Id == id);
 
         /// <inheritdoc />
-        public async Task<IEnumerable<GamePlayed>> Search(Expression<Func<GamePlayed, bool>> query, int limit)
+        public async Task<IEnumerable<FifaGamePlayed>> Search(Expression<Func<FifaGamePlayed, bool>> query, int limit)
         {
             return await this.context.GamesPlayed.Include(x => x.CreatedBy).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.Highlights).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
         }

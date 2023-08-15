@@ -20,17 +20,17 @@ namespace YuGames.Entities
         /// Gets or sets player's Keycloak ID.
         /// </summary>
         [JsonIgnore]
-        public string KeycloakId { get; set; } = "Unknown ID";
+        public string? KeycloakId { get; set; }
 
         /// <summary>
         /// Gets or sets player's full name.
         /// </summary>
-        public string FullName { get; set; } = "John Doe";
+        public string? FullName { get; set; }
 
         /// <summary>
         /// Gets or sets player's nickname.
         /// </summary>
-        public string? Nickname { get; set; } = "J0hnD03";
+        public string Nickname { get; set; } = "J0hnD03";
 
         /// <summary>
         /// Gets or sets player's profile picture URL.
@@ -46,7 +46,7 @@ namespace YuGames.Entities
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
-        public virtual List<TeamPlayer> TeamPlayers { get; set; } = null!;
+        public virtual List<FifaTeamPlayer> FifaTeamPlayers { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Highlights.
@@ -58,6 +58,6 @@ namespace YuGames.Entities
         /// Gets or sets games created.
         /// </summary>
         [JsonIgnore]
-        public virtual List<GamePlayed> GamesCreated { get; set; } = null!;
+        public virtual List<FifaGamePlayed> FifaGameCreated { get; set; } = null!;
     }
 }

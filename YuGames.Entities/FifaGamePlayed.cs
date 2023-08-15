@@ -1,4 +1,4 @@
-﻿// <copyright file="GamePlayed.cs" company="LeadOn's Corp'">
+﻿// <copyright file="FifaGamePlayed.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -7,7 +7,7 @@ namespace YuGames.Entities
     using System.Text.Json.Serialization;
 
     /// <summary>
-    /// GamePlayed class.
+    /// FifaGamePlayed class.
     /// </summary>
     public class FifaGamePlayed
     {
@@ -19,7 +19,7 @@ namespace YuGames.Entities
         /// <summary>
         /// Gets or sets game date.
         /// </summary>
-        public DateTime PlayedOn { get; set; } = DateTime.Now;
+        public DateTime PlayedOn { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Gets or sets Team Code 1.
@@ -54,7 +54,7 @@ namespace YuGames.Entities
         /// <summary>
         /// Gets or sets Platform ID.
         /// </summary>
-        public int? PlatformId { get; set; }
+        public int PlatformId { get; set; }
 
         /// <summary>
         /// Gets or sets Created By ID.
@@ -65,7 +65,7 @@ namespace YuGames.Entities
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
-        public virtual List<TeamPlayer> TeamPlayers { get; set; } = null!;
+        public virtual List<FifaTeamPlayer> TeamPlayers { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets CreatedBy.

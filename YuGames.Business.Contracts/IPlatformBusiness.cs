@@ -16,5 +16,12 @@ namespace YuGames.Business.Contracts
         /// </summary>
         /// <returns>List of <see cref="Platform"/>.</returns>
         Task<IEnumerable<Platform>> GetAll();
+
+        /// <summary>
+        /// Creates platform in database.
+        /// </summary>
+        /// <param name="platform"><see cref="Platform" /> to create.</param>
+        /// <returns>Created platform / Null if error happened.</returns>
+        Task<Platform?> Create(Platform platform);
     }
 }

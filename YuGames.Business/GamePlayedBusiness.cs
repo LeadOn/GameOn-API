@@ -38,7 +38,7 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
-        public async Task<GamePlayed?> CreateGame(CreateGameDto createGameDto)
+        public async Task<FifaGamePlayed?> CreateGame(CreateGameDto createGameDto)
         {
             // First, getting that platform
             var platformInDb = await this.platformRepo.GetById(createGameDto.PlatformId);
@@ -74,7 +74,7 @@ namespace YuGames.Business
                 }
             }
 
-            var newGame = new GamePlayed
+            var newGame = new FifaGamePlayed
             {
                 PlatformId = platformInDb.Id,
                 PlayedOn = createGameDto.CreatedOn,
@@ -116,9 +116,9 @@ namespace YuGames.Business
                 // Now creating team players
                 foreach (var playerId in createGameDto.Team1)
                 {
-                    var teamPlayerInDb = await this.teamPlayerRepo.CreateTeamPlayer(new TeamPlayer
+                    var teamPlayerInDb = await this.teamPlayerRepo.CreateTeamPlayer(new FifaTeamPlayer
                     {
-                        GamePlayedId = gameInDb.Id,
+                        FifaGameId = gameInDb.Id,
                         PlayerId = int.Parse(playerId),
                         Team = 0,
                     });
@@ -131,9 +131,9 @@ namespace YuGames.Business
 
                 foreach (var playerId in createGameDto.Team2)
                 {
-                    var teamPlayerInDb = await this.teamPlayerRepo.CreateTeamPlayer(new TeamPlayer
+                    var teamPlayerInDb = await this.teamPlayerRepo.CreateTeamPlayer(new FifaTeamPlayer
                     {
-                        GamePlayedId = gameInDb.Id,
+                        FifaGameId = gameInDb.Id,
                         PlayerId = int.Parse(playerId),
                         Team = 1,
                     });
