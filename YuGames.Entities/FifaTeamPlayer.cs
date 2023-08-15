@@ -37,6 +37,6 @@ namespace YuGames.Entities
         /// <summary>
         /// Gets or sets GamePlayed.
         /// </summary>
-        public virtual GamePlayed GamePlayed { get; set; } = null!;
+        public virtual FifaGamePlayed FifaGamePlayed { get; set; } = null!;
     }
 }

@@ -5,6 +5,7 @@
 namespace YuGames.EntitiesContext
 {
     using Microsoft.EntityFrameworkCore;
+    using YuGames.Common.Exceptions;
     using YuGames.Entities;
 
     /// <summary>
@@ -17,38 +18,38 @@ namespace YuGames.EntitiesContext
         /// </summary>
         public YuGamesContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yufoot.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? throw new MissingEnvironmentVariableException("SQLITE_PATH");
         }
 
         /// <summary>
         /// Gets or sets Players.
         /// </summary>
-        public DbSet<Player> Players { get; set; }
-
-        /// <summary>
-        /// Gets or sets GamePlayed.
-        /// </summary>
-        public DbSet<GamePlayed> GamesPlayed { get; set; }
-
-        /// <summary>
-        /// Gets or sets TeamPlayer.
-        /// </summary>
-        public DbSet<TeamPlayer> TeamPlayers { get; set; }
+        public DbSet<Player> Players { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Platforms.
         /// </summary>
-        public DbSet<Platform> Platforms { get; set; }
-
-        /// <summary>
-        /// Gets or sets Highlights.
-        /// </summary>
-        public DbSet<Highlight> Highlights { get; set; }
+        public DbSet<Platform> Platforms { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets FIFA Teams.
         /// </summary>
-        public DbSet<FifaTeam> FifaTeams { get; set; }
+        public DbSet<FifaTeam> FifaTeams { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets GamePlayed.
+        /// </summary>
+        public DbSet<FifaGamePlayed> GamesPlayed { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets TeamPlayer.
+        /// </summary>
+        public DbSet<FifaTeamPlayer> TeamPlayers { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Highlights.
+        /// </summary>
+        public DbSet<Highlight> Highlights { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the path of the SQLite file.
@@ -62,58 +63,34 @@ namespace YuGames.EntitiesContext
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<FifaTeam>(entity =>
+            modelBuilder.Entity<Player>(entity =>
             {
-                entity.ToTable("FifaTeam");
+                entity.ToTable("Player");
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
-                entity.Property(e => e.Name)
-                    .HasColumnName("name")
+                entity.Property(e => e.KeycloakId)
+                    .HasMaxLength(50)
+                    .HasColumnName("keycloak_id");
+
+                entity.Property(e => e.FullName)
+                    .HasColumnName("full_name")
                     .HasMaxLength(100);
 
-                entity.HasMany(e => e.GamesPlayedTeam1)
-                    .WithOne(f => f.Team1)
-                    .HasForeignKey(e => e.Team1Id)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_FifaTeam_GamePlayed_Team1");
-
-                entity.HasMany(e => e.GamesPlayedTeam2)
-                    .WithOne(f => f.Team2)
-                    .HasForeignKey(e => e.Team2Id)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_FifaTeam_GamePlayed_Team2");
-            });
-
-            modelBuilder.Entity<Highlight>(entity =>
-            {
-                entity.ToTable("Highlight");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .HasColumnName("name")
+                entity.Property(e => e.Nickname)
+                    .HasColumnName("nickname")
+                    .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.ExternalUrl)
-                    .HasColumnName("external_url")
-                    .HasMaxLength(3000);
+                entity.Property(e => e.ProfilePictureUrl)
+                    .HasColumnName("profile_picture_url")
+                    .HasMaxLength(500);
 
-                entity.HasOne(e => e.CreatedBy)
-                    .WithMany(f => f.Highlights)
-                    .HasForeignKey(e => e.CreatedById)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_Highlight_Player");
-
-                entity.HasOne(e => e.Game)
-                    .WithMany(f => f.Highlights)
-                    .HasForeignKey(e => e.GameId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_Highlight_GamePlayed");
+                entity.Property(e => e.CreatedOn)
+                    .HasDefaultValue(DateTime.UtcNow)
+                    .HasColumnName("created_on");
             });
 
             modelBuilder.Entity<Platform>(entity =>
@@ -126,45 +103,27 @@ namespace YuGames.EntitiesContext
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
+                    .IsRequired()
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<TeamPlayer>(entity =>
+            modelBuilder.Entity<FifaTeam>(entity =>
             {
-                entity.ToTable("TeamPlayer");
+                entity.ToTable("FifaTeam");
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
-                entity.Property(e => e.PlayerId)
-                    .HasColumnName("player_id");
-
-                entity.Property(e => e.Team)
-                    .HasColumnName("team");
-
-                entity.HasOne(e => e.Player)
-                    .WithMany(f => f.TeamPlayers)
-                    .HasForeignKey(e => e.PlayerId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_Player_TeamPlayer");
-
-                entity.HasOne(e => e.GamePlayed)
-                    .WithMany(f => f.TeamPlayers)
-                    .HasForeignKey(e => e.GamePlayedId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_GamePlayed_TeamPlayer");
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
-            modelBuilder.Entity<GamePlayed>(entity =>
+            modelBuilder.Entity<FifaGamePlayed>(entity =>
             {
-                entity.ToTable("GamePlayed");
-
-                entity.HasOne(e => e.CreatedBy)
-                    .WithMany(f => f.GamesCreated)
-                    .HasForeignKey(e => e.CreatedById)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_GamePlayed_CreatedBy");
+                entity.ToTable("FifaGamePlayed");
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
@@ -176,10 +135,12 @@ namespace YuGames.EntitiesContext
 
                 entity.Property(e => e.TeamScore1)
                     .HasColumnName("team_score_1")
+                    .HasDefaultValue(0)
                     .HasMaxLength(100);
 
                 entity.Property(e => e.TeamScore2)
                     .HasColumnName("team_score_2")
+                    .HasDefaultValue(0)
                     .HasMaxLength(100);
 
                 entity.Property(e => e.TeamCode1)
@@ -189,47 +150,112 @@ namespace YuGames.EntitiesContext
                 entity.Property(e => e.Team1Id)
                     .HasColumnName("team_1_id");
 
+                entity.HasOne(e => e.Team1)
+                    .WithMany(f => f.GamesPlayedTeam1)
+                    .HasForeignKey(e => e.Team1Id)
+                    .HasConstraintName("FK_FifaGamePlayed_FifaTeam1")
+                    .OnDelete(DeleteBehavior.Cascade);
+
                 entity.Property(e => e.Team2Id)
                     .HasColumnName("team_2_id");
+
+                entity.HasOne(e => e.Team2)
+                    .WithMany(f => f.GamesPlayedTeam2)
+                    .HasForeignKey(e => e.Team2Id)
+                    .HasConstraintName("FK_FifaGamePlayed_FifaTeam2")
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(e => e.TeamCode2)
                     .HasColumnName("team_code_2")
                     .HasMaxLength(10);
 
+                entity.Property(e => e.PlatformId)
+                    .HasColumnName("platform_id");
+
                 entity.HasOne(e => e.Platform)
                     .WithMany(f => f.GamesPlayed)
                     .HasForeignKey(e => e.PlatformId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_GamePlayed_Platform");
+                    .HasConstraintName("FK_FifaGamePlayed_Platform")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.CreatedById)
+                    .HasColumnName("created_by_id");
+
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany(f => f.FifaGameCreated)
+                    .HasForeignKey(e => e.CreatedById)
+                    .HasConstraintName("FK_FifaGamePlayed_Player_Created_By")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Player>(entity =>
+            modelBuilder.Entity<Highlight>(entity =>
             {
-                entity.ToTable("Player");
+                entity.ToTable("Highlight");
 
                 entity.Property(e => e.Id)
-                      .ValueGeneratedOnAdd()
-                      .HasColumnName("id");
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
 
-                entity.Property(e => e.KeycloakId)
-                      .HasMaxLength(50)
-                      .HasColumnName("keycloak_id");
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.FullName)
-                      .HasColumnName("full_name")
-                      .HasMaxLength(100);
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(500);
 
-                entity.Property(e => e.Nickname)
-                      .HasColumnName("nickname")
-                      .HasMaxLength(100);
+                entity.Property(e => e.CreatedById)
+                    .IsRequired()
+                    .HasColumnName("created_by_id");
 
-                entity.Property(e => e.ProfilePictureUrl)
-                      .HasColumnName("profile_picture_url")
-                      .HasMaxLength(500);
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany(f => f.Highlights)
+                    .HasForeignKey(e => e.CreatedById)
+                    .HasConstraintName("FK_Highlight_Player_Created_By")
+                    .OnDelete(DeleteBehavior.Cascade);
 
-                entity.Property(e => e.CreatedOn)
-                      .HasDefaultValue(DateTime.Now)
-                      .HasColumnName("created_on");
+                entity.Property(e => e.FifaGameId)
+                    .IsRequired()
+                    .HasColumnName("fifa_game_id");
+
+                entity.HasOne(e => e.FifaGame)
+                    .WithMany(f => f.Highlights)
+                    .HasForeignKey(e => e.FifaGameId)
+                    .HasConstraintName("FK_FifaGame_Highlight")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.ExternalUrl)
+                    .HasColumnName("external_url")
+                    .HasMaxLength(3000);
+            });
+
+            modelBuilder.Entity<FifaTeamPlayer>(entity =>
+            {
+                entity.ToTable("FifaTeamPlayer");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.PlayerId)
+                    .IsRequired()
+                    .HasColumnName("player_id");
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.FifaTeamPlayers)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_FifaTeamPlayer_Player")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.FifaGameId)
+                    .IsRequired()
+                    .HasColumnName("fifa_game_id");
+
+                entity.Property(e => e.Team)
+                    .IsRequired()
+                    .HasDefaultValue(0)
+                    .HasColumnName("team");
             });
         }
     }

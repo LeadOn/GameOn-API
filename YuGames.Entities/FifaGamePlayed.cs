@@ -9,7 +9,7 @@ namespace YuGames.Entities
     /// <summary>
     /// GamePlayed class.
     /// </summary>
-    public class GamePlayed
+    public class FifaGamePlayed
     {
         /// <summary>
         /// Gets or sets player's ID.
