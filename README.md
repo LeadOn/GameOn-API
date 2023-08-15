@@ -1,8 +1,8 @@
-<h1 align="center">YuFoot API</h1>
+<h1 align="center">YuGames API</h1>
 
 # Description
 
-This project is a back-end for the YuFoot project, done using ASP.NET on the .NET 7 framework, and will be running live on [this site](https://yufoot-api.valentinvirot.fr/).
+This project is a back-end for the YuGames project, done using ASP.NET on the .NET 7 framework, and will be running live on [this site](https://yugames-api.valentinvirot.fr/).
 
 ## How to run it?
 
