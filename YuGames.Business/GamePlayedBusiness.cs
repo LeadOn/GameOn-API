@@ -38,7 +38,7 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
-        public async Task<FifaGamePlayed?> CreateGame(CreateGameDto createGameDto)
+        public async Task<FifaGamePlayed?> Create(CreateGameDto createGameDto)
         {
             // First, getting that platform
             var platformInDb = await this.platformRepo.GetById(createGameDto.PlatformId);
@@ -85,6 +85,11 @@ namespace YuGames.Business
                 CreatedById = creatorInDb.Id,
             };
 
+            if (newGame.TeamScore1 < 0 || newGame.TeamScore2 < 0)
+            {
+                return null;
+            }
+
             // Checking if fifa teams are in Database.
             if (createGameDto.FifaTeam1 is not null && createGameDto.FifaTeam1 != 0)
             {
@@ -105,7 +110,7 @@ namespace YuGames.Business
             }
 
             // Now that every player as been found, creating elements in db
-            var gameInDb = await this.gamePlayedRepo.CreateGame(newGame);
+            var gameInDb = await this.gamePlayedRepo.Create(newGame);
 
             if (gameInDb is null)
             {
@@ -146,6 +151,69 @@ namespace YuGames.Business
             }
 
             return gameInDb;
+        }
+
+        /// <inheritdoc />
+        public async Task<FifaGamePlayed?> Update(UpdateGameDto fifaGame)
+        {
+            // First, getting game from database
+            var gameInDb = await this.gamePlayedRepo.GetById(fifaGame.Id);
+
+            if (gameInDb is null)
+            {
+                return null;
+            }
+
+            // Updating game data
+            gameInDb.TeamCode1 = fifaGame.TeamCode1;
+            gameInDb.TeamCode2 = fifaGame.TeamCode2;
+            gameInDb.TeamScore1 = fifaGame.TeamScore1;
+            gameInDb.TeamScore2 = fifaGame.TeamScore2;
+
+            if (gameInDb.TeamScore1 < 0 || gameInDb.TeamScore2 < 0)
+            {
+                return null;
+            }
+
+            // Getting wanted platform
+            var platformInDb = await this.platformRepo.GetById(fifaGame.PlatformId);
+            if (platformInDb is null)
+            {
+                return null;
+            }
+
+            gameInDb.PlatformId = platformInDb.Id;
+
+            if (fifaGame.FifaTeam1 is not null)
+            {
+                // Getting Fifa Team 1
+                var fifaTeam1InDb = await this.fifaTeamRepo.GetById((int)fifaGame.FifaTeam1);
+
+                if (fifaTeam1InDb is null)
+                {
+                    return null;
+                }
+
+                gameInDb.Team1Id = fifaTeam1InDb.Id;
+            }
+
+            if (fifaGame.FifaTeam2 is not null)
+            {
+                // Getting Fifa Team 1
+                var fifaTeam2InDb = await this.fifaTeamRepo.GetById((int)fifaGame.FifaTeam2);
+
+                if (fifaTeam2InDb is null)
+                {
+                    return null;
+                }
+
+                gameInDb.Team2Id = fifaTeam2InDb.Id;
+            }
+
+            // Updating game in database
+            var updatedGame = await this.gamePlayedRepo.Update(gameInDb);
+
+            return updatedGame;
         }
 
         /// <inheritdoc/>

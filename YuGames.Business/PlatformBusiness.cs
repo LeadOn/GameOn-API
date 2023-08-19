@@ -35,5 +35,11 @@ namespace YuGames.Business
         {
             return await this.platformRepo.Create(platform);
         }
+
+        /// <inheritdoc />
+        public async Task<Platform?> Update(Platform platform)
+        {
+            return await this.platformRepo.Update(platform);
+        }
     }
 }

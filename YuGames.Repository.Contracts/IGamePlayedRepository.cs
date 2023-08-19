@@ -32,6 +32,13 @@ namespace YuGames.Repository.Contracts
         /// </summary>
         /// <param name="fifaGame"><see cref="FifaGamePlayed" />.</param>
         /// <returns><see cref="FifaGamePlayed"/> object.</returns>
-        Task<FifaGamePlayed> CreateGame(FifaGamePlayed fifaGame);
+        Task<FifaGamePlayed> Create(FifaGamePlayed fifaGame);
+
+        /// <summary>
+        /// Updates game in database.
+        /// </summary>
+        /// <param name="fifaGame"><see cref="FifaGamePlayed" />.</param>
+        /// <returns><see cref="FifaGamePlayed"/> object.</returns>
+        Task<FifaGamePlayed?> Update(FifaGamePlayed fifaGame);
     }
 }
