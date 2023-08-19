@@ -85,6 +85,11 @@ namespace YuGames.Business
                 CreatedById = creatorInDb.Id,
             };
 
+            if (newGame.TeamScore1 < 0 || newGame.TeamScore2 < 0)
+            {
+                return null;
+            }
+
             // Checking if fifa teams are in Database.
             if (createGameDto.FifaTeam1 is not null && createGameDto.FifaTeam1 != 0)
             {
@@ -164,6 +169,11 @@ namespace YuGames.Business
             gameInDb.TeamCode2 = fifaGame.TeamCode2;
             gameInDb.TeamScore1 = fifaGame.TeamScore1;
             gameInDb.TeamScore2 = fifaGame.TeamScore2;
+
+            if (gameInDb.TeamScore1 < 0 || gameInDb.TeamScore2 < 0)
+            {
+                return null;
+            }
 
             // Getting wanted platform
             var platformInDb = await this.platformRepo.GetById(fifaGame.PlatformId);
