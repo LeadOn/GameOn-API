@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1521cc65-adad-407a-8301-cec57d94d576",
+		"_postman_id": "39545f35-d128-474b-b8dd-bbc55f07a524",
 		"name": "YuGames API",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -179,13 +179,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/game/1",
+							"raw": "{{baseUrl}}/game/89",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"game",
-								"1"
+								"89"
 							]
 						}
 					},
@@ -199,6 +199,32 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"CreatedOn\": \"2023-08-06T14:29:42\",\r\n    \"KeycloakId\": \"zfzef\",\r\n    \"PlatformId\": 1,\r\n    \"Team1\": [\r\n        \"1\", \"2\"\r\n    ],\r\n    \"TeamCode1\": \"FRA\",\r\n    \"TeamScore1\": 42,\r\n    \"Team2\": [\r\n        \"3\", \"4\"\r\n    ],\r\n    \"TeamCode2\": \"POR\",\r\n    \"TeamScore2\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/game",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"game"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 89,\r\n    \"PlatformId\": 2,\r\n    \"TeamCode1\": \"FCB\",\r\n    \"FifaTeam1\": 21,\r\n    \"TeamScore1\": 2,\r\n    \"TeamCode2\": \"MCI\",\r\n    \"FifaTeam2\": 10,\r\n    \"TeamScore2\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -250,7 +276,33 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Five\"\n}",
+							"raw": "{\n    \"name\": \"ezefezfezf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/platform",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"platform"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 3,\n    \"name\": \"Xbox\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

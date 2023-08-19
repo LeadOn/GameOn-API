@@ -10,6 +10,7 @@ COPY ["YuGames.Business.Contracts/YuGames.Business.Contracts.csproj", "YuGames.B
 COPY ["YuGames.DTOs/YuGames.DTOs.csproj", "YuGames.DTOs/"]
 COPY ["YuGames.Common/YuGames.Common.csproj", "YuGames.Common/"]
 COPY ["YuGames.Entities/YuGames.Entities.csproj", "YuGames.Entities/"]
+COPY ["YuGames.EntitiesContext/YuGames.EntitiesContext.csproj", "YuGames.EntitiesContext/"]
 COPY ["YuGames.Repository/YuGames.Repository.csproj", "YuGames.Repository/"]
 COPY ["YuGames.Repository.Contracts/YuGames.Repository.Contracts.csproj", "YuGames.Repository.Contracts/"]
 COPY ["YuGames.WebAPI/YuGames.WebAPI.csproj", "YuGames.WebAPI/"]
