@@ -23,5 +23,12 @@ namespace YuGames.Business.Contracts
         /// <param name="platform"><see cref="Platform" /> to create.</param>
         /// <returns>Created platform / Null if error happened.</returns>
         Task<Platform?> Create(Platform platform);
+
+        /// <summary>
+        /// Update platform in database.
+        /// </summary>
+        /// <param name="platform">Updated platform.</param>
+        /// <returns>Updated platform if success, null if error.</returns>
+        Task<Platform?> Update(Platform platform);
     }
 }
