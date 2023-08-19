@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Title>YuGames DTOs</Title>
+        <Authors>LeadOn</Authors>
+        <Description>DTOs classes of the YuGames Project.</Description>
+        <Copyright>LeadOn's Corp</Copyright>
+        <PackageProjectUrl>https://yugames.valentinvirot.fr</PackageProjectUrl>
+        <Company>LeadOn's Corp</Company>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="stylecop.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\YuGames.Entities\YuGames.Entities.csproj" />
+    </ItemGroup>
+
+</Project>
