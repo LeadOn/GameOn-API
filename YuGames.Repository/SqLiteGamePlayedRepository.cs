@@ -27,7 +27,7 @@ namespace YuGames.Repository
         }
 
         /// <inheritdoc />
-        public async Task<FifaGamePlayed> CreateGame(FifaGamePlayed fifaGame)
+        public async Task<FifaGamePlayed> Create(FifaGamePlayed fifaGame)
         {
             this.context.Add(fifaGame);
             await this.context.SaveChangesAsync();
@@ -42,6 +42,14 @@ namespace YuGames.Repository
         public async Task<IEnumerable<FifaGamePlayed>> Search(Expression<Func<FifaGamePlayed, bool>> query, int limit)
         {
             return await this.context.GamesPlayed.Include(x => x.CreatedBy).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.Highlights).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<FifaGamePlayed?> Update(FifaGamePlayed fifaGame)
+        {
+            this.context.Update(fifaGame);
+            await this.context.SaveChangesAsync();
+            return fifaGame;
         }
     }
 }

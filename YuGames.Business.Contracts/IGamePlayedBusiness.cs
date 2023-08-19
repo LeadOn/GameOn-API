@@ -24,7 +24,7 @@ namespace YuGames.Business.Contracts
         /// </summary>
         /// <param name="createGameDto"><see cref="CreateGameDto"/>.</param>
         /// <returns><see cref="FifaGamePlayed"/>.</returns>
-        Task<FifaGamePlayed?> CreateGame(CreateGameDto createGameDto);
+        Task<FifaGamePlayed?> Create(CreateGameDto createGameDto);
 
         /// <summary>
         /// Get last games played by player.
@@ -40,5 +40,12 @@ namespace YuGames.Business.Contracts
         /// <param name="gameId">Game ID.</param>
         /// <returns><see cref="GamePlayedDto" /> if found, null if not found.</returns>
         Task<GamePlayedDto?> GetById(int gameId);
+
+        /// <summary>
+        /// Updates game in database.
+        /// </summary>
+        /// <param name="fifaGame"><see cref="FifaGamePlayed" />.</param>
+        /// <returns><see cref="FifaGamePlayed"/> object.</returns>
+        Task<FifaGamePlayed?> Update(UpdateGameDto fifaGame);
     }
 }
