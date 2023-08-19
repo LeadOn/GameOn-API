@@ -35,7 +35,7 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 15, 19, 3, 43, 701, DateTimeKind.Local).AddTicks(5340))
+                        .HasDefaultValue(new DateTime(2023, 8, 19, 18, 22, 11, 778, DateTimeKind.Local).AddTicks(276))
                         .HasColumnName("played_on");
 
                     b.Property<int?>("Team1Id")
@@ -112,9 +112,6 @@ namespace YuGames.EntitiesContext.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("fifa_game_id");
 
-                    b.Property<int>("FifaGamePlayedId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("player_id");
@@ -127,7 +124,7 @@ namespace YuGames.EntitiesContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FifaGamePlayedId");
+                    b.HasIndex("FifaGameId");
 
                     b.HasIndex("PlayerId");
 
@@ -202,7 +199,7 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 8, 15, 17, 3, 43, 701, DateTimeKind.Utc).AddTicks(4760))
+                        .HasDefaultValue(new DateTime(2023, 8, 19, 16, 22, 11, 777, DateTimeKind.Utc).AddTicks(9521))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -272,9 +269,10 @@ namespace YuGames.EntitiesContext.Migrations
                 {
                     b.HasOne("YuGames.Entities.FifaGamePlayed", "FifaGamePlayed")
                         .WithMany("TeamPlayers")
-                        .HasForeignKey("FifaGamePlayedId")
+                        .HasForeignKey("FifaGameId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_FifaTeamPlayer_FifaGamePlayed");
 
                     b.HasOne("YuGames.Entities.Player", "Player")
                         .WithMany("FifaTeamPlayers")

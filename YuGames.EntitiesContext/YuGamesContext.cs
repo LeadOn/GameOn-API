@@ -133,6 +133,20 @@ namespace YuGames.EntitiesContext
                     .HasColumnName("played_on")
                     .HasDefaultValue(DateTime.Now);
 
+                entity.Property(e => e.TeamCode1)
+                    .HasColumnName("team_code_1")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Team1Id)
+                    .HasColumnName("team_1_id");
+
+                entity.Property(e => e.Team2Id)
+                    .HasColumnName("team_2_id");
+
+                entity.Property(e => e.TeamCode2)
+                    .HasColumnName("team_code_2")
+                    .HasMaxLength(10);
+
                 entity.Property(e => e.TeamScore1)
                     .HasColumnName("team_score_1")
                     .HasDefaultValue(0)
@@ -143,12 +157,11 @@ namespace YuGames.EntitiesContext
                     .HasDefaultValue(0)
                     .HasMaxLength(100);
 
-                entity.Property(e => e.TeamCode1)
-                    .HasColumnName("team_code_1")
-                    .HasMaxLength(10);
+                entity.Property(e => e.PlatformId)
+                    .HasColumnName("platform_id");
 
-                entity.Property(e => e.Team1Id)
-                    .HasColumnName("team_1_id");
+                entity.Property(e => e.CreatedById)
+                    .HasColumnName("created_by_id");
 
                 entity.HasOne(e => e.Team1)
                     .WithMany(f => f.GamesPlayedTeam1)
@@ -156,30 +169,17 @@ namespace YuGames.EntitiesContext
                     .HasConstraintName("FK_FifaGamePlayed_FifaTeam1")
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.Property(e => e.Team2Id)
-                    .HasColumnName("team_2_id");
-
                 entity.HasOne(e => e.Team2)
                     .WithMany(f => f.GamesPlayedTeam2)
                     .HasForeignKey(e => e.Team2Id)
                     .HasConstraintName("FK_FifaGamePlayed_FifaTeam2")
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.Property(e => e.TeamCode2)
-                    .HasColumnName("team_code_2")
-                    .HasMaxLength(10);
-
-                entity.Property(e => e.PlatformId)
-                    .HasColumnName("platform_id");
-
                 entity.HasOne(e => e.Platform)
                     .WithMany(f => f.GamesPlayed)
                     .HasForeignKey(e => e.PlatformId)
                     .HasConstraintName("FK_FifaGamePlayed_Platform")
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.Property(e => e.CreatedById)
-                    .HasColumnName("created_by_id");
 
                 entity.HasOne(e => e.CreatedBy)
                     .WithMany(f => f.FifaGameCreated)
@@ -209,25 +209,25 @@ namespace YuGames.EntitiesContext
                     .IsRequired()
                     .HasColumnName("created_by_id");
 
+                entity.Property(e => e.FifaGameId)
+                    .IsRequired()
+                    .HasColumnName("fifa_game_id");
+
+                entity.Property(e => e.ExternalUrl)
+                    .HasColumnName("external_url")
+                    .HasMaxLength(3000);
+
                 entity.HasOne(e => e.CreatedBy)
                     .WithMany(f => f.Highlights)
                     .HasForeignKey(e => e.CreatedById)
                     .HasConstraintName("FK_Highlight_Player_Created_By")
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.Property(e => e.FifaGameId)
-                    .IsRequired()
-                    .HasColumnName("fifa_game_id");
-
                 entity.HasOne(e => e.FifaGame)
                     .WithMany(f => f.Highlights)
                     .HasForeignKey(e => e.FifaGameId)
                     .HasConstraintName("FK_FifaGame_Highlight")
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.Property(e => e.ExternalUrl)
-                    .HasColumnName("external_url")
-                    .HasMaxLength(3000);
             });
 
             modelBuilder.Entity<FifaTeamPlayer>(entity =>
@@ -242,12 +242,6 @@ namespace YuGames.EntitiesContext
                     .IsRequired()
                     .HasColumnName("player_id");
 
-                entity.HasOne(e => e.Player)
-                    .WithMany(f => f.FifaTeamPlayers)
-                    .HasForeignKey(e => e.PlayerId)
-                    .HasConstraintName("FK_FifaTeamPlayer_Player")
-                    .OnDelete(DeleteBehavior.Cascade);
-
                 entity.Property(e => e.FifaGameId)
                     .IsRequired()
                     .HasColumnName("fifa_game_id");
@@ -256,6 +250,17 @@ namespace YuGames.EntitiesContext
                     .IsRequired()
                     .HasDefaultValue(0)
                     .HasColumnName("team");
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.FifaTeamPlayers)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_FifaTeamPlayer_Player")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.FifaGamePlayed)
+                    .WithMany(f => f.TeamPlayers)
+                    .HasForeignKey(e => e.FifaGameId)
+                    .HasConstraintName("FK_FifaTeamPlayer_FifaGamePlayed");
             });
         }
     }
