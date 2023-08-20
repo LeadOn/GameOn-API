@@ -5,6 +5,7 @@
 namespace YuGames.Repository
 {
     using Microsoft.EntityFrameworkCore;
+    using YuGames.Entities;
     using YuGames.EntitiesContext;
     using YuGames.Repository.Contracts;
 
@@ -37,6 +38,12 @@ namespace YuGames.Repository
             this.context.RemoveRange(highlights);
             await this.context.SaveChangesAsync();
             return true;
+        }
+
+        /// <inheritdoc />
+        public async Task<List<Highlight>> GetAll()
+        {
+            return await this.context.Highlights.ToListAsync();
         }
     }
 }
