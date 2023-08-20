@@ -39,12 +39,12 @@ namespace YuGames.EntitiesContext
         /// <summary>
         /// Gets or sets GamePlayed.
         /// </summary>
-        public DbSet<FifaGamePlayed> GamesPlayed { get; set; } = null!;
+        public DbSet<FifaGamePlayed> FifaGamesPlayed { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets TeamPlayer.
         /// </summary>
-        public DbSet<FifaTeamPlayer> TeamPlayers { get; set; } = null!;
+        public DbSet<FifaTeamPlayer> FifaTeamPlayers { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Highlights.

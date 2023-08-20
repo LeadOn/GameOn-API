@@ -101,5 +101,11 @@ namespace YuGames.Repository
         {
             return await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == keycloakId);
         }
+
+        /// <inheritdoc />
+        public async Task<int> Count()
+        {
+            return await this.context.Players.CountAsync();
+        }
     }
 }

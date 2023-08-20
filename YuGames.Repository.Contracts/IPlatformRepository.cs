@@ -37,5 +37,11 @@ namespace YuGames.Repository.Contracts
         /// <param name="platform">Updated platform.</param>
         /// <returns>Updated platform if success, null if error.</returns>
         Task<Platform?> Update(Platform platform);
+
+        /// <summary>
+        /// Gets count.
+        /// </summary>
+        /// <returns>Count.</returns>
+        Task<int> Count();
     }
 }

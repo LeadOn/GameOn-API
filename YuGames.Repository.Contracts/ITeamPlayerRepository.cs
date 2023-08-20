@@ -40,5 +40,12 @@ namespace YuGames.Repository.Contracts
         /// <param name="limit">Number of data to retrieve.</param>
         /// <returns>List of TeamPlayer objects.</returns>
         Task<IEnumerable<FifaTeamPlayer>> Search(Expression<Func<FifaTeamPlayer, bool>> query, int limit);
+
+        /// <summary>
+        /// Deletes all team players associated to a given fifa game.
+        /// </summary>
+        /// <param name="fifaGameId">Fifa Game ID.</param>
+        /// <returns>true if success.</returns>
+        Task<bool> DeleteAllFifaGame(int fifaGameId);
     }
 }

@@ -30,5 +30,12 @@ namespace YuGames.Business.Contracts
         /// <param name="platform">Updated platform.</param>
         /// <returns>Updated platform if success, null if error.</returns>
         Task<Platform?> Update(Platform platform);
+
+        /// <summary>
+        /// Get platform by ID.
+        /// </summary>
+        /// <param name="id">Platform ID.</param>
+        /// <returns><see cref="Platform"/>.</returns>
+        Task<Platform?> GetById(int id);
     }
 }

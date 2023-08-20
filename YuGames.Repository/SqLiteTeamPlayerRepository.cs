@@ -29,27 +29,36 @@ namespace YuGames.Repository
         /// <inheritdoc />
         public async Task<FifaTeamPlayer> CreateTeamPlayer(FifaTeamPlayer fifaTeamPlayer)
         {
-            this.context.TeamPlayers.Add(fifaTeamPlayer);
+            this.context.FifaTeamPlayers.Add(fifaTeamPlayer);
             await this.context.SaveChangesAsync();
             return fifaTeamPlayer;
         }
 
         /// <inheritdoc />
+        public async Task<bool> DeleteAllFifaGame(int fifaGameId)
+        {
+            var teamPlayers = await this.context.FifaTeamPlayers.Where(x => x.FifaGameId == fifaGameId).ToListAsync();
+            this.context.FifaTeamPlayers.RemoveRange(teamPlayers);
+            await this.context.SaveChangesAsync();
+            return true;
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<FifaTeamPlayer>> GetTeamPlayerByPlayerId(int playerId)
         {
-            return await this.context.TeamPlayers.Where(x => x.PlayerId == playerId).ToListAsync();
+            return await this.context.FifaTeamPlayers.Where(x => x.PlayerId == playerId).ToListAsync();
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<FifaTeamPlayer>> GetTeamPlayersByGameId(int gamePlayedId)
         {
-            return await this.context.TeamPlayers.Where(x => x.FifaGameId == gamePlayedId).ToListAsync();
+            return await this.context.FifaTeamPlayers.Where(x => x.FifaGameId == gamePlayedId).ToListAsync();
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<FifaTeamPlayer>> Search(Expression<Func<FifaTeamPlayer, bool>> query, int limit)
         {
-            return await this.context.TeamPlayers.Where(query).Take(limit).ToListAsync();
+            return await this.context.FifaTeamPlayers.Where(query).Take(limit).ToListAsync();
         }
     }
 }
