@@ -32,6 +32,11 @@ namespace YuGames.DTOs
         public string? Platform { get; set; }
 
         /// <summary>
+        /// Gets or sets Platform ID.
+        /// </summary>
+        public int? PlatformId { get; set; }
+
+        /// <summary>
         /// Gets or sets Team 1.
         /// </summary>
         public TeamDto Team1 { get; set; } = new TeamDto();
