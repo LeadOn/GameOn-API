@@ -254,6 +254,7 @@ namespace YuGames.Business
             if (gameInDb.Platform is not null)
             {
                 gamePlayedDto.Platform = gameInDb.Platform.Name;
+                gamePlayedDto.PlatformId = gameInDb.PlatformId;
             }
 
             // Getting team players
@@ -317,6 +318,7 @@ namespace YuGames.Business
                 if (game.Platform is not null)
                 {
                     gamePlayedDto.Platform = game.Platform.Name;
+                    gamePlayedDto.PlatformId = game.PlatformId;
                 }
 
                 // Getting team players
@@ -384,6 +386,7 @@ namespace YuGames.Business
                 if (game.Platform is not null)
                 {
                     gamePlayedDto.Platform = game.Platform.Name;
+                    gamePlayedDto.PlatformId = game.PlatformId;
                 }
 
                 // Getting team players
