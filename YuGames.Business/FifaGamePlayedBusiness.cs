@@ -1,4 +1,4 @@
-﻿// <copyright file="GamePlayedBusiness.cs" company="LeadOn's Corp'">
+﻿// <copyright file="FifaGamePlayedBusiness.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -12,29 +12,32 @@ namespace YuGames.Business
     /// <summary>
     /// Player business.
     /// </summary>
-    public class GamePlayedBusiness : IGamePlayedBusiness
+    public class FifaGamePlayedBusiness : IFifaGamePlayedBusiness
     {
         private IPlayerRepository playerRepo;
-        private IGamePlayedRepository gamePlayedRepo;
+        private IFifaGamePlayedRepository gamePlayedRepo;
         private ITeamPlayerRepository teamPlayerRepo;
         private IPlatformRepository platformRepo;
         private IFifaTeamRepository fifaTeamRepo;
+        private IHighlightRepository highlightRepo;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GamePlayedBusiness" /> class.
+        /// Initializes a new instance of the <see cref="FifaGamePlayedBusiness" /> class.
         /// </summary>
         /// <param name="playerRepo">Player repository, injected.</param>
         /// <param name="gamePlayedRepo">GamePlayed repository, injected.</param>
         /// <param name="teamPlayerRepo">TeamPlayer repository, injected.</param>
         /// <param name="platformRepo">Platform repository, injected.</param>
         /// <param name="fifaTeamRepo">FifaTeam repository, injected.</param>
-        public GamePlayedBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo, IFifaTeamRepository fifaTeamRepo)
+        /// <param name="highlightRepo">Highlight repository, injected.</param>
+        public FifaGamePlayedBusiness(IPlayerRepository playerRepo, IFifaGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo, IFifaTeamRepository fifaTeamRepo, IHighlightRepository highlightRepo)
         {
             this.playerRepo = playerRepo;
             this.gamePlayedRepo = gamePlayedRepo;
             this.teamPlayerRepo = teamPlayerRepo;
             this.platformRepo = platformRepo;
             this.fifaTeamRepo = fifaTeamRepo;
+            this.highlightRepo = highlightRepo;
         }
 
         /// <inheritdoc />
@@ -411,6 +414,23 @@ namespace YuGames.Business
             }
 
             return gamesPlayedDto;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> Delete(int fifaGameId)
+        {
+            var gameInDb = await this.gamePlayedRepo.GetById(fifaGameId);
+
+            if (gameInDb is null)
+            {
+                return false;
+            }
+
+            await this.highlightRepo.DeleteAllFifaGame(gameInDb.Id);
+            await this.teamPlayerRepo.DeleteAllFifaGame(gameInDb.Id);
+            await this.gamePlayedRepo.Delete(gameInDb.Id);
+
+            return true;
         }
     }
 }

@@ -85,14 +85,16 @@ builder.Services.AddDbContext<YuGamesContext>();
 
 // Dependency injection
 builder.Services.AddScoped<IPlayerBusiness, PlayerBusiness>();
-builder.Services.AddScoped<IGamePlayedBusiness, GamePlayedBusiness>();
+builder.Services.AddScoped<IFifaGamePlayedBusiness, FifaGamePlayedBusiness>();
 builder.Services.AddScoped<IPlayerRepository, SqLitePlayerRepository>();
-builder.Services.AddScoped<IGamePlayedRepository, SqLiteGamePlayedRepository>();
+builder.Services.AddScoped<IFifaGamePlayedRepository, SqLiteFifaGamePlayedRepository>();
 builder.Services.AddScoped<ITeamPlayerRepository, SqLiteTeamPlayerRepository>();
 builder.Services.AddScoped<IPlatformBusiness, PlatformBusiness>();
 builder.Services.AddScoped<IPlatformRepository, SqLitePlatformRepository>();
 builder.Services.AddScoped<IFifaTeamRepository, SqLiteFifaTeamRepository>();
 builder.Services.AddScoped<IFifaTeamBusiness, FifaTeamBusiness>();
+builder.Services.AddScoped<IHighlightRepository, SqLiteHightlightRepository>();
+builder.Services.AddScoped<IAdminBusiness, AdminBusiness>();
 
 var app = builder.Build();
 
