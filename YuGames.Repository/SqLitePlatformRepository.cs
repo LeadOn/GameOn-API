@@ -70,5 +70,11 @@ namespace YuGames.Repository
                 return platformInDb;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<int> Count()
+        {
+            return await this.context.Platforms.CountAsync();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="IGamePlayedRepository.cs" company="LeadOn's Corp'">
+﻿// <copyright file="IFifaGamePlayedRepository.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -10,7 +10,7 @@ namespace YuGames.Repository.Contracts
     /// <summary>
     /// GamePlayed repository.
     /// </summary>
-    public interface IGamePlayedRepository
+    public interface IFifaGamePlayedRepository
     {
         /// <summary>
         /// Get GamePlayed by its ID.
@@ -40,5 +40,18 @@ namespace YuGames.Repository.Contracts
         /// <param name="fifaGame"><see cref="FifaGamePlayed" />.</param>
         /// <returns><see cref="FifaGamePlayed"/> object.</returns>
         Task<FifaGamePlayed?> Update(FifaGamePlayed fifaGame);
+
+        /// <summary>
+        /// Gets count.
+        /// </summary>
+        /// <returns>Count.</returns>
+        Task<int> Count();
+
+        /// <summary>
+        /// Delete game.
+        /// </summary>
+        /// <param name="fifaGameId">Fifa Game ID.</param>
+        /// <returns>true if success.</returns>
+        Task<bool> Delete(int fifaGameId);
     }
 }

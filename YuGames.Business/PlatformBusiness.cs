@@ -41,5 +41,11 @@ namespace YuGames.Business
         {
             return await this.platformRepo.Update(platform);
         }
+
+        /// <inheritdoc />
+        public async Task<Platform?> GetById(int id)
+        {
+            return await this.platformRepo.GetById(id);
+        }
     }
 }

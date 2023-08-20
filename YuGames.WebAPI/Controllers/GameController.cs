@@ -20,13 +20,13 @@ namespace YuGames.WebAPI.Controllers
     [ApiVersion("1.0")]
     public class GameController : ControllerBase
     {
-        private IGamePlayedBusiness gamePlayedBusi;
+        private IFifaGamePlayedBusiness gamePlayedBusi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameController"/> class.
         /// </summary>
         /// <param name="gamePlayed">GamePlayed business interface (injected).</param>
-        public GameController(IGamePlayedBusiness gamePlayed)
+        public GameController(IFifaGamePlayedBusiness gamePlayed)
         {
             this.gamePlayedBusi = gamePlayed;
         }
@@ -134,6 +134,26 @@ namespace YuGames.WebAPI.Controllers
             {
                 return this.Ok(updatedGame);
             }
+        }
+
+        /// <summary>
+        /// Delete game in database.
+        /// </summary>
+        /// <param name="gameId">Game ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{gameId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Delete game in database.", Description = "Delete game in database (including highlights / team-players). WARNING: it really deletes!")]
+        [SwaggerResponse(204, "Deleted Game.")]
+        [SwaggerResponse(401, "User is not logged in.")]
+        [SwaggerResponse(403, "User isn't admin.")]
+        [SwaggerResponse(500, "Unknown error.")]
+        public async Task<IActionResult> Delete(int gameId)
+        {
+            await this.gamePlayedBusi.Delete(gameId);
+            return this.NoContent();
         }
     }
 }

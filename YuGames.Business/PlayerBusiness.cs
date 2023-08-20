@@ -15,7 +15,7 @@ namespace YuGames.Business
     public class PlayerBusiness : IPlayerBusiness
     {
         private IPlayerRepository playerRepo;
-        private IGamePlayedRepository gamePlayedRepo;
+        private IFifaGamePlayedRepository gamePlayedRepo;
         private ITeamPlayerRepository teamPlayerRepo;
         private IPlatformRepository platformRepo;
 
@@ -26,7 +26,7 @@ namespace YuGames.Business
         /// <param name="gamePlayedRepo">Game played repository, injected.</param>
         /// <param name="teamPlayerRepo">Team player repository, injected.</param>
         /// <param name="platformRepo">Platform repository, injected.</param>
-        public PlayerBusiness(IPlayerRepository playerRepo, IGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo)
+        public PlayerBusiness(IPlayerRepository playerRepo, IFifaGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo)
         {
             this.playerRepo = playerRepo;
             this.gamePlayedRepo = gamePlayedRepo;

@@ -270,6 +270,27 @@
 					"response": []
 				},
 				{
+					"name": "Get by ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/platform/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"platform",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create",
 					"request": {
 						"method": "POST",
@@ -342,6 +363,29 @@
 							"path": [
 								"fifateam",
 								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Get dashboard stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/dashboard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"dashboard"
 							]
 						}
 					},

@@ -8,6 +8,7 @@ namespace YuGames.WebAPI.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Business.Contracts;
+    using YuGames.DTOs;
     using YuGames.Entities;
 
     /// <summary>
@@ -98,6 +99,30 @@ namespace YuGames.WebAPI.Controllers
             {
                 return this.Ok(updatedPlatform);
             }
+        }
+
+        /// <summary>
+        /// Get platform by ID.
+        /// </summary>
+        /// <param name="platformId">Platform ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{platformId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get platform by ID.")]
+        [SwaggerResponse(200, "Platform.", typeof(Platform))]
+        [SwaggerResponse(404, "Platform not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetById(int platformId)
+        {
+            var platformInDb = await this.platformBusi.GetById(platformId);
+
+            if (platformInDb is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(platformInDb);
         }
     }
 }

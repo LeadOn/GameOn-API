@@ -1,4 +1,4 @@
-// <copyright file="IGamePlayedBusiness.cs" company="LeadOn's Corp'">
+// <copyright file="IFifaGamePlayedBusiness.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -10,7 +10,7 @@ namespace YuGames.Business.Contracts
     /// <summary>
     /// GamePlayed business interface.
     /// </summary>
-    public interface IGamePlayedBusiness
+    public interface IFifaGamePlayedBusiness
     {
         /// <summary>
         /// Get last games played.
@@ -47,5 +47,12 @@ namespace YuGames.Business.Contracts
         /// <param name="fifaGame"><see cref="FifaGamePlayed" />.</param>
         /// <returns><see cref="FifaGamePlayed"/> object.</returns>
         Task<FifaGamePlayed?> Update(UpdateGameDto fifaGame);
+
+        /// <summary>
+        /// Delete game.
+        /// </summary>
+        /// <param name="fifaGameId">Fifa Game ID.</param>
+        /// <returns>true if success.</returns>
+        Task<bool> Delete(int fifaGameId);
     }
 }

@@ -10,6 +10,60 @@
     "version": "1.0"
   },
   "paths": {
+    "/v{version}/Admin/dashboard": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Gets administrator dashboard.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Administrator dashboard.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminDashboardDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Not enough roles."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/v{version}/FifaTeam/all": {
       "get": {
         "tags": ["FifaTeam"],
@@ -396,6 +450,62 @@
             "description": "Unknown error happened."
           }
         }
+      },
+      "delete": {
+        "tags": ["Game"],
+        "summary": "Delete game in database.",
+        "description": "Delete game in database (including highlights / team-players). WARNING: it really deletes!",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted Game."
+          },
+          "401": {
+            "description": "User is not logged in."
+          },
+          "403": {
+            "description": "User isn't admin."
+          },
+          "500": {
+            "description": "Unknown error."
+          }
+        }
       }
     },
     "/v{version}/Platform/all": {
@@ -589,6 +699,67 @@
           },
           "500": {
             "description": "Unknown error."
+          }
+        }
+      }
+    },
+    "/v{version}/Platform/{platformId}": {
+      "get": {
+        "tags": ["Platform"],
+        "summary": "Get platform by ID.",
+        "parameters": [
+          {
+            "name": "platformId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Platform"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Unknown error happened."
           }
         }
       }
@@ -892,6 +1063,31 @@
   },
   "components": {
     "schemas": {
+      "AdminDashboardDto": {
+        "type": "object",
+        "properties": {
+          "currentUser": {
+            "$ref": "#/components/schemas/Player"
+          },
+          "platforms": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "players": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highlights": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fifaGames": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateGameDto": {
         "type": "object",
         "properties": {
