@@ -1,4 +1,4 @@
-﻿// <copyright file="TeamDto.cs" company="LeadOn's Corp'">
+﻿// <copyright file="FifaTeamDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -7,9 +7,9 @@ namespace YuGames.DTOs
     using YuGames.Entities;
 
     /// <summary>
-    /// TeamDto class.
+    /// FifaTeamDto class.
     /// </summary>
-    public class TeamDto
+    public class FifaTeamDto
     {
         /// <summary>
         /// Gets or sets ID.

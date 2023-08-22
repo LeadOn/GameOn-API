@@ -41,7 +41,7 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
-        public async Task<FifaGamePlayed?> Create(CreateGameDto createGameDto)
+        public async Task<FifaGamePlayed?> Create(CreateFifaGameDto createGameDto)
         {
             // First, getting that platform
             var platformInDb = await this.platformRepo.GetById(createGameDto.PlatformId);
@@ -220,7 +220,7 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc/>
-        public async Task<GamePlayedDto?> GetById(int gameId)
+        public async Task<FifaGamePlayedDto?> GetById(int gameId)
         {
             // First, getting game
             var gameInDb = await this.gamePlayedRepo.GetById(gameId);
@@ -230,11 +230,11 @@ namespace YuGames.Business
                 return null;
             }
 
-            var gamePlayedDto = new GamePlayedDto();
+            var gamePlayedDto = new FifaGamePlayedDto();
             gamePlayedDto.CreatedBy = gameInDb.CreatedBy;
             gamePlayedDto.Id = gameInDb.Id;
             gamePlayedDto.PlayedOn = gameInDb.PlayedOn;
-            gamePlayedDto.Team1 = new TeamDto
+            gamePlayedDto.Team1 = new FifaTeamDto
             {
                 Id = 0,
                 FifaTeamId = gameInDb.Team1Id,
@@ -242,7 +242,7 @@ namespace YuGames.Business
                 Players = new List<Player>(),
                 Score = gameInDb.TeamScore1,
             };
-            gamePlayedDto.Team2 = new TeamDto
+            gamePlayedDto.Team2 = new FifaTeamDto
             {
                 Id = 1,
                 FifaTeamId = gameInDb.Team2Id,
@@ -284,9 +284,9 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayed(int number)
+        public async Task<IEnumerable<FifaGamePlayedDto>> GetLastGamesPlayed(int number)
         {
-            var gamesPlayedDto = new List<GamePlayedDto>();
+            var gamesPlayedDto = new List<FifaGamePlayedDto>();
 
             // First, getting last games (from GamePlayed table)
             var gamesPlayed = await this.gamePlayedRepo.Search(x => true, number);
@@ -294,11 +294,11 @@ namespace YuGames.Business
             // For each game played, getting player information
             foreach (var game in gamesPlayed)
             {
-                var gamePlayedDto = new GamePlayedDto();
+                var gamePlayedDto = new FifaGamePlayedDto();
                 gamePlayedDto.CreatedBy = game.CreatedBy;
                 gamePlayedDto.Id = game.Id;
                 gamePlayedDto.PlayedOn = game.PlayedOn;
-                gamePlayedDto.Team1 = new TeamDto
+                gamePlayedDto.Team1 = new FifaTeamDto
                 {
                     Id = 0,
                     FifaTeamId = game.Team1Id,
@@ -306,7 +306,7 @@ namespace YuGames.Business
                     Players = new List<Player>(),
                     Score = game.TeamScore1,
                 };
-                gamePlayedDto.Team2 = new TeamDto
+                gamePlayedDto.Team2 = new FifaTeamDto
                 {
                     Id = 1,
                     FifaTeamId = game.Team2Id,
@@ -352,9 +352,9 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayedByPlayerId(int playerId, int limit)
+        public async Task<IEnumerable<FifaGamePlayedDto>> GetLastGamesPlayedByPlayerId(int playerId, int limit)
         {
-            var gamesPlayedDto = new List<GamePlayedDto>();
+            var gamesPlayedDto = new List<FifaGamePlayedDto>();
 
             // First, getting last games (from GamePlayed table)
             var gamesPlayed = await this.gamePlayedRepo.Search(x => x.TeamPlayers.FirstOrDefault(x => x.PlayerId == playerId) != null, limit);
@@ -362,11 +362,11 @@ namespace YuGames.Business
             // For each game played, getting player information
             foreach (var game in gamesPlayed)
             {
-                var gamePlayedDto = new GamePlayedDto();
+                var gamePlayedDto = new FifaGamePlayedDto();
                 gamePlayedDto.CreatedBy = game.CreatedBy;
                 gamePlayedDto.Id = game.Id;
                 gamePlayedDto.PlayedOn = game.PlayedOn;
-                gamePlayedDto.Team1 = new TeamDto
+                gamePlayedDto.Team1 = new FifaTeamDto
                 {
                     Id = 0,
                     FifaTeamId = game.Team1Id,
@@ -374,7 +374,7 @@ namespace YuGames.Business
                     Players = new List<Player>(),
                     Score = game.TeamScore1,
                 };
-                gamePlayedDto.Team2 = new TeamDto
+                gamePlayedDto.Team2 = new FifaTeamDto
                 {
                     Id = 1,
                     FifaTeamId = game.Team2Id,
