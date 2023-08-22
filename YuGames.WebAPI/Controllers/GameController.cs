@@ -40,7 +40,7 @@ namespace YuGames.WebAPI.Controllers
         [Route("last/{number:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get last games played.", Description = "Get last games played with their players.")]
-        [SwaggerResponse(200, "List of games played.", typeof(List<GamePlayedDto>))]
+        [SwaggerResponse(200, "List of games played.", typeof(List<FifaGamePlayedDto>))]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetLastGamesPlayed(int number)
         {
@@ -57,7 +57,7 @@ namespace YuGames.WebAPI.Controllers
         [Route("last/{number:int}/player/{playerId:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get last games played by player.", Description = "Get last games played by player with their team members.")]
-        [SwaggerResponse(200, "List of games played.", typeof(List<GamePlayedDto>))]
+        [SwaggerResponse(200, "List of games played.", typeof(List<FifaGamePlayedDto>))]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetLastGamesPlayedByPlayer(int number, int playerId)
         {
@@ -74,9 +74,9 @@ namespace YuGames.WebAPI.Controllers
         [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Create game in database.")]
-        [SwaggerResponse(200, "Created game.", typeof(List<GamePlayedDto>))]
+        [SwaggerResponse(200, "Created game.", typeof(List<FifaGamePlayedDto>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> Create([FromBody] CreateGameDto game)
+        public async Task<IActionResult> Create([FromBody] CreateFifaGameDto game)
         {
             game.KeycloakId = this.User.GetUserId();
             var gameInDb = await this.gamePlayedBusi.Create(game);
@@ -93,7 +93,7 @@ namespace YuGames.WebAPI.Controllers
         [Route("{gameId:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get game played by ID.", Description = "Get game played by ID with its team players and highlights.")]
-        [SwaggerResponse(200, "Game played.", typeof(GamePlayedDto))]
+        [SwaggerResponse(200, "Game played.", typeof(FifaGamePlayedDto))]
         [SwaggerResponse(404, "Game not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetById(int gameId)
