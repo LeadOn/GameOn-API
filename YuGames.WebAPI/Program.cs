@@ -95,6 +95,7 @@ builder.Services.AddScoped<IFifaTeamRepository, SqLiteFifaTeamRepository>();
 builder.Services.AddScoped<IFifaTeamBusiness, FifaTeamBusiness>();
 builder.Services.AddScoped<IHighlightRepository, SqLiteHightlightRepository>();
 builder.Services.AddScoped<IAdminBusiness, AdminBusiness>();
+builder.Services.AddScoped<IHighlightBusiness, HighlightBusiness>();
 
 var app = builder.Build();
 

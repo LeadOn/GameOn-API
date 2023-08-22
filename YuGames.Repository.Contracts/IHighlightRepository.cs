@@ -4,6 +4,8 @@
 
 namespace YuGames.Repository.Contracts
 {
+    using YuGames.Entities;
+
     /// <summary>
     /// Highlight repository.
     /// </summary>
@@ -21,5 +23,11 @@ namespace YuGames.Repository.Contracts
         /// <param name="fifaGameId">Fifa Game ID.</param>
         /// <returns>true if success.</returns>
         Task<bool> DeleteAllFifaGame(int fifaGameId);
+
+        /// <summary>
+        /// Returns all highlights in database.
+        /// </summary>
+        /// <returns>List of Highlights.</returns>
+        Task<List<Highlight>> GetAll();
     }
 }
