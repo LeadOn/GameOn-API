@@ -17,14 +17,14 @@ namespace YuGames.Business.Contracts
         /// </summary>
         /// <param name="number">Number of data to retrieve.</param>
         /// <returns>List of games played.</returns>
-        Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayed(int number);
+        Task<IEnumerable<FifaGamePlayedDto>> GetLastGamesPlayed(int number);
 
         /// <summary>
         /// Creates game in database.
         /// </summary>
-        /// <param name="createGameDto"><see cref="CreateGameDto"/>.</param>
+        /// <param name="createGameDto"><see cref="CreateFifaGameDto"/>.</param>
         /// <returns><see cref="FifaGamePlayed"/>.</returns>
-        Task<FifaGamePlayed?> Create(CreateGameDto createGameDto);
+        Task<FifaGamePlayed?> Create(CreateFifaGameDto createGameDto);
 
         /// <summary>
         /// Get last games played by player.
@@ -32,14 +32,14 @@ namespace YuGames.Business.Contracts
         /// <param name="playerId">Player ID.</param>
         /// <param name="limit">Limit.</param>
         /// <returns>List of GamePlayed DTOs.</returns>
-        Task<IEnumerable<GamePlayedDto>> GetLastGamesPlayedByPlayerId(int playerId, int limit);
+        Task<IEnumerable<FifaGamePlayedDto>> GetLastGamesPlayedByPlayerId(int playerId, int limit);
 
         /// <summary>
         /// Get game by it's ID.
         /// </summary>
         /// <param name="gameId">Game ID.</param>
-        /// <returns><see cref="GamePlayedDto" /> if found, null if not found.</returns>
-        Task<GamePlayedDto?> GetById(int gameId);
+        /// <returns><see cref="FifaGamePlayedDto" /> if found, null if not found.</returns>
+        Task<FifaGamePlayedDto?> GetById(int gameId);
 
         /// <summary>
         /// Updates game in database.

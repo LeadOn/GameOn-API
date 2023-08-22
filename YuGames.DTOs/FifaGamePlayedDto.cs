@@ -1,4 +1,4 @@
-﻿// <copyright file="GamePlayedDto.cs" company="LeadOn's Corp'">
+﻿// <copyright file="FifaGamePlayedDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -7,9 +7,9 @@ namespace YuGames.DTOs
     using YuGames.Entities;
 
     /// <summary>
-    /// GamePlayedDto class.
+    /// FifaGamePlayedDto class.
     /// </summary>
-    public class GamePlayedDto
+    public class FifaGamePlayedDto
     {
         /// <summary>
         /// Gets or sets ID.
@@ -39,12 +39,12 @@ namespace YuGames.DTOs
         /// <summary>
         /// Gets or sets Team 1.
         /// </summary>
-        public TeamDto Team1 { get; set; } = new TeamDto();
+        public FifaTeamDto Team1 { get; set; } = new FifaTeamDto();
 
         /// <summary>
         /// Gets or sets Team 2.
         /// </summary>
-        public TeamDto Team2 { get; set; } = new TeamDto();
+        public FifaTeamDto Team2 { get; set; } = new FifaTeamDto();
 
         /// <summary>
         /// Gets or sets Highlights.
