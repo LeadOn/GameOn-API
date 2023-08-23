@@ -4,6 +4,7 @@
 
 namespace YuGames.Business
 {
+    using System;
     using YuGames.Business.Contracts;
     using YuGames.DTOs;
     using YuGames.Entities;
@@ -230,57 +231,7 @@ namespace YuGames.Business
                 return null;
             }
 
-            var gamePlayedDto = new FifaGamePlayedDto();
-            gamePlayedDto.CreatedBy = gameInDb.CreatedBy;
-            gamePlayedDto.Id = gameInDb.Id;
-            gamePlayedDto.PlayedOn = gameInDb.PlayedOn;
-            gamePlayedDto.Team1 = new FifaTeamDto
-            {
-                Id = 0,
-                FifaTeamId = gameInDb.Team1Id,
-                Code = gameInDb.TeamCode1 ?? "Unknown",
-                Players = new List<Player>(),
-                Score = gameInDb.TeamScore1,
-            };
-            gamePlayedDto.Team2 = new FifaTeamDto
-            {
-                Id = 1,
-                FifaTeamId = gameInDb.Team2Id,
-                Code = gameInDb.TeamCode2 ?? "Unknown",
-                Players = new List<Player>(),
-                Score = gameInDb.TeamScore2,
-            };
-
-            if (gameInDb.Platform is not null)
-            {
-                gamePlayedDto.Platform = gameInDb.Platform.Name;
-                gamePlayedDto.PlatformId = gameInDb.PlatformId;
-            }
-
-            // Getting team players
-            foreach (var teamPlayer in gameInDb.TeamPlayers)
-            {
-                if (teamPlayer.Team == 0)
-                {
-                    var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
-                    if (player is not null)
-                    {
-                        gamePlayedDto.Team1.Players.Add(player);
-                    }
-                }
-                else
-                {
-                    var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
-                    if (player is not null)
-                    {
-                        gamePlayedDto.Team2.Players.Add(player);
-                    }
-                }
-            }
-
-            gamePlayedDto.Highlights = gameInDb.Highlights;
-
-            return gamePlayedDto;
+            return await this.Convert(gameInDb);
         }
 
         /// <inheritdoc />
@@ -294,58 +245,7 @@ namespace YuGames.Business
             // For each game played, getting player information
             foreach (var game in gamesPlayed)
             {
-                var gamePlayedDto = new FifaGamePlayedDto();
-                gamePlayedDto.CreatedBy = game.CreatedBy;
-                gamePlayedDto.Id = game.Id;
-                gamePlayedDto.PlayedOn = game.PlayedOn;
-                gamePlayedDto.Team1 = new FifaTeamDto
-                {
-                    Id = 0,
-                    FifaTeamId = game.Team1Id,
-                    Code = game.TeamCode1 ?? "Unknown",
-                    Players = new List<Player>(),
-                    Score = game.TeamScore1,
-                };
-                gamePlayedDto.Team2 = new FifaTeamDto
-                {
-                    Id = 1,
-                    FifaTeamId = game.Team2Id,
-                    Code = game.TeamCode2 ?? "Unknown",
-                    Players = new List<Player>(),
-                    Score = game.TeamScore2,
-                };
-
-                if (game.Platform is not null)
-                {
-                    gamePlayedDto.Platform = game.Platform.Name;
-                    gamePlayedDto.PlatformId = game.PlatformId;
-                }
-
-                // Getting team players
-                var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
-                foreach (var teamPlayer in teamPlayers)
-                {
-                    if (teamPlayer.Team == 0)
-                    {
-                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
-                        if (player is not null)
-                        {
-                            gamePlayedDto.Team1.Players.Add(player);
-                        }
-                    }
-                    else
-                    {
-                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
-                        if (player is not null)
-                        {
-                            gamePlayedDto.Team2.Players.Add(player);
-                        }
-                    }
-                }
-
-                gamePlayedDto.Highlights = game.Highlights;
-
-                gamesPlayedDto.Add(gamePlayedDto);
+                gamesPlayedDto.Add(await this.Convert(game));
             }
 
             return gamesPlayedDto;
@@ -362,58 +262,7 @@ namespace YuGames.Business
             // For each game played, getting player information
             foreach (var game in gamesPlayed)
             {
-                var gamePlayedDto = new FifaGamePlayedDto();
-                gamePlayedDto.CreatedBy = game.CreatedBy;
-                gamePlayedDto.Id = game.Id;
-                gamePlayedDto.PlayedOn = game.PlayedOn;
-                gamePlayedDto.Team1 = new FifaTeamDto
-                {
-                    Id = 0,
-                    FifaTeamId = game.Team1Id,
-                    Code = game.TeamCode1 ?? "Unknown",
-                    Players = new List<Player>(),
-                    Score = game.TeamScore1,
-                };
-                gamePlayedDto.Team2 = new FifaTeamDto
-                {
-                    Id = 1,
-                    FifaTeamId = game.Team2Id,
-                    Code = game.TeamCode2 ?? "Unknown",
-                    Players = new List<Player>(),
-                    Score = game.TeamScore2,
-                };
-
-                if (game.Platform is not null)
-                {
-                    gamePlayedDto.Platform = game.Platform.Name;
-                    gamePlayedDto.PlatformId = game.PlatformId;
-                }
-
-                // Getting team players
-                var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
-                foreach (var teamPlayer in teamPlayers)
-                {
-                    if (teamPlayer.Team == 0)
-                    {
-                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
-                        if (player is not null)
-                        {
-                            gamePlayedDto.Team1.Players.Add(player);
-                        }
-                    }
-                    else
-                    {
-                        var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
-                        if (player is not null)
-                        {
-                            gamePlayedDto.Team2.Players.Add(player);
-                        }
-                    }
-                }
-
-                gamePlayedDto.Highlights = game.Highlights;
-
-                gamesPlayedDto.Add(gamePlayedDto);
+                gamesPlayedDto.Add(await this.Convert(game));
             }
 
             return gamesPlayedDto;
@@ -434,6 +283,120 @@ namespace YuGames.Business
             await this.gamePlayedRepo.Delete(gameInDb.Id);
 
             return true;
+        }
+
+        /// <inheritdoc />
+        public async Task<List<FifaGamePlayedDto>> Search(int? limit, int? platformId, DateTime? startDate, DateTime? endDate)
+        {
+            limit ??= 10;
+
+            if (limit is not null && limit > 50)
+            {
+                limit = 50;
+            }
+
+            if (platformId is not null)
+            {
+                // checking if platform exists in database
+                var platformInDb = await this.platformRepo.GetById((int)platformId);
+
+                if (platformInDb is null)
+                {
+                    platformId = null;
+                }
+            }
+
+            if (startDate is null)
+            {
+                startDate = DateTime.UtcNow.AddMonths(-1);
+            }
+
+            if (endDate is null)
+            {
+                endDate = DateTime.UtcNow.AddDays(1);
+            }
+
+            IEnumerable<FifaGamePlayed> gamesInDb = new List<FifaGamePlayed>();
+
+            if (platformId is null && limit is not null)
+            {
+                gamesInDb = await this.gamePlayedRepo.Search(x => x.PlayedOn >= startDate && x.PlayedOn <= endDate, (int)limit);
+            }
+            else if (platformId is not null && limit is not null)
+            {
+                gamesInDb = await this.gamePlayedRepo.Search(x => x.PlayedOn >= startDate && x.PlayedOn <= endDate && x.PlatformId == platformId, (int)limit);
+            }
+
+            var gamePlayedDtos = new List<FifaGamePlayedDto>();
+
+            // For each game played, getting player information
+            foreach (var game in gamesInDb)
+            {
+                gamePlayedDtos.Add(await this.Convert(game));
+            }
+
+            return gamePlayedDtos;
+        }
+
+        /// <summary>
+        /// Converts FifaGamePlayed from Database to FifaGamePlayedDto with embeded entities.
+        /// </summary>
+        /// <param name="game"><see cref="FifaGamePlayed"/>.</param>
+        /// <returns><see cref="FifaGamePlayedDto"/>.</returns>
+        private async Task<FifaGamePlayedDto> Convert(FifaGamePlayed game)
+        {
+            var gamePlayedDto = new FifaGamePlayedDto();
+            gamePlayedDto.CreatedBy = game.CreatedBy;
+            gamePlayedDto.Id = game.Id;
+            gamePlayedDto.PlayedOn = game.PlayedOn;
+            gamePlayedDto.Team1 = new FifaTeamDto
+            {
+                Id = 0,
+                FifaTeamId = game.Team1Id,
+                Code = game.TeamCode1 ?? "Unknown",
+                Players = new List<Player>(),
+                Score = game.TeamScore1,
+            };
+            gamePlayedDto.Team2 = new FifaTeamDto
+            {
+                Id = 1,
+                FifaTeamId = game.Team2Id,
+                Code = game.TeamCode2 ?? "Unknown",
+                Players = new List<Player>(),
+                Score = game.TeamScore2,
+            };
+
+            if (game.Platform is not null)
+            {
+                gamePlayedDto.Platform = game.Platform.Name;
+                gamePlayedDto.PlatformId = game.PlatformId;
+            }
+
+            // Getting team players
+            var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
+            foreach (var teamPlayer in teamPlayers)
+            {
+                if (teamPlayer.Team == 0)
+                {
+                    var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                    if (player is not null)
+                    {
+                        gamePlayedDto.Team1.Players.Add(player);
+                    }
+                }
+                else
+                {
+                    var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                    if (player is not null)
+                    {
+                        gamePlayedDto.Team2.Players.Add(player);
+                    }
+                }
+            }
+
+            gamePlayedDto.Highlights = game.Highlights;
+
+            return gamePlayedDto;
         }
     }
 }

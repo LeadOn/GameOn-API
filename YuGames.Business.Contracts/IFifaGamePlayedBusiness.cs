@@ -54,5 +54,15 @@ namespace YuGames.Business.Contracts
         /// <param name="fifaGameId">Fifa Game ID.</param>
         /// <returns>true if success.</returns>
         Task<bool> Delete(int fifaGameId);
+
+        /// <summary>
+        /// Search game in database.
+        /// </summary>
+        /// <param name="limit">Limit (10 by default, 50 max).</param>
+        /// <param name="platformId">Platform ID.</param>
+        /// <param name="startDate">Start Date.</param>
+        /// <param name="endDate">End date.</param>
+        /// <returns>List of <see cref="FifaGamePlayedDto"/>.</returns>
+        Task<List<FifaGamePlayedDto>> Search(int? limit, int? platformId, DateTime? startDate, DateTime? endDate);
     }
 }
