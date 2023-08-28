@@ -4,6 +4,7 @@
 
 namespace YuGames.Business.Contracts
 {
+    using YuGames.DTOs;
     using YuGames.Entities;
 
     /// <summary>
@@ -16,5 +17,13 @@ namespace YuGames.Business.Contracts
         /// </summary>
         /// <returns>List of teams.</returns>
         Task<IEnumerable<FifaTeam>> GetAll();
+
+        /// <summary>
+        /// Get Most Played Teams of a player.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="numberOfTeams">Number of teams to retrieve.</param>
+        /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
+        Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams);
     }
 }
