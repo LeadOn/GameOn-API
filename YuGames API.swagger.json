@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "1.0"
+    "version": "1.1"
   },
   "paths": {
     "/v{version}/Admin/dashboard": {
@@ -165,7 +165,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GamePlayedDto"
+                    "$ref": "#/components/schemas/FifaGamePlayedDto"
                   }
                 }
               }
@@ -237,7 +237,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GamePlayedDto"
+                    "$ref": "#/components/schemas/FifaGamePlayedDto"
                   }
                 }
               }
@@ -284,17 +284,17 @@
           "content": {
             "application/json; ver=1.0": {
               "schema": {
-                "$ref": "#/components/schemas/CreateGameDto"
+                "$ref": "#/components/schemas/CreateFifaGameDto"
               }
             },
             "text/json; ver=1.0": {
               "schema": {
-                "$ref": "#/components/schemas/CreateGameDto"
+                "$ref": "#/components/schemas/CreateFifaGameDto"
               }
             },
             "application/*+json; ver=1.0": {
               "schema": {
-                "$ref": "#/components/schemas/CreateGameDto"
+                "$ref": "#/components/schemas/CreateFifaGameDto"
               }
             }
           }
@@ -307,7 +307,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GamePlayedDto"
+                    "$ref": "#/components/schemas/FifaGamePlayedDto"
                   }
                 }
               }
@@ -388,6 +388,91 @@
             "description": "Unknown error."
           }
         }
+      },
+      "get": {
+        "tags": ["Game"],
+        "summary": "Search games played in database.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "platformId",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Games played.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FifaGamePlayedDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something wrong happened."
+          }
+        }
       }
     },
     "/v{version}/Game/{gameId}": {
@@ -438,7 +523,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GamePlayedDto"
+                  "$ref": "#/components/schemas/FifaGamePlayedDto"
                 }
               }
             }
@@ -504,6 +589,57 @@
           },
           "500": {
             "description": "Unknown error."
+          }
+        }
+      }
+    },
+    "/v{version}/Highlight/all": {
+      "get": {
+        "tags": ["Highlight"],
+        "summary": "Get all Highlights in database.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Highlights in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Highlight"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
           }
         }
       }
@@ -1059,6 +1195,79 @@
           }
         }
       }
+    },
+    "/v{version}/Player/{playerId}/mostplayedteams": {
+      "get": {
+        "tags": ["Player"],
+        "summary": "Get most played teams of a user.",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "numberOfTeams",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of most played teams.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopTeamStatDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found in database."
+          },
+          "500": {
+            "description": "Something wrong happened.."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1088,7 +1297,7 @@
         },
         "additionalProperties": false
       },
-      "CreateGameDto": {
+      "CreateFifaGameDto": {
         "type": "object",
         "properties": {
           "createdOn": {
@@ -1194,21 +1403,7 @@
         },
         "additionalProperties": false
       },
-      "FifaTeam": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GamePlayedDto": {
+      "FifaGamePlayedDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1226,16 +1421,65 @@
             "type": "string",
             "nullable": true
           },
+          "platformId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "team1": {
-            "$ref": "#/components/schemas/TeamDto"
+            "$ref": "#/components/schemas/FifaTeamDto"
           },
           "team2": {
-            "$ref": "#/components/schemas/TeamDto"
+            "$ref": "#/components/schemas/FifaTeamDto"
           },
           "highlights": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Highlight"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FifaTeam": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FifaTeamDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "fifaTeamId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Player"
             },
             "nullable": true
           }
@@ -1359,32 +1603,15 @@
         },
         "additionalProperties": false
       },
-      "TeamDto": {
+      "TopTeamStatDto": {
         "type": "object",
         "properties": {
-          "id": {
+          "numberOfGames": {
             "type": "integer",
             "format": "int32"
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "fifaTeamId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "score": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "players": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Player"
-            },
-            "nullable": true
+          "fifaTeam": {
+            "$ref": "#/components/schemas/FifaTeam"
           }
         },
         "additionalProperties": false
