@@ -42,9 +42,10 @@ namespace YuGames.Repository
         public async Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams)
         {
             // Getting games played by user
-            var gamePlayedInTeam = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam1 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 0).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam2 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 1).Select(x => x.FifaGamePlayed).ToListAsync();
 
-            if (gamePlayedInTeam.Count == 0)
+            if (gamePlayedInTeam1.Count == 0 && gamePlayedInTeam2.Count == 0)
             {
                 return new List<TopTeamStatDto>();
             }
@@ -55,8 +56,9 @@ namespace YuGames.Repository
                 // Getting all of the Team IDs, with their game count
                 var teamIdsCount = new Dictionary<int, int>();
 
-                var team1IdsCount = gamePlayedInTeam.GroupBy(x => x.Team1Id).Select(x => new { TeamId = x.Key, GamesPlayed = x.Count() }).ToList();
-                var team2IdsCount = gamePlayedInTeam.GroupBy(x => x.Team2Id).Select(x => new { TeamId = x.Key, GamesPlayed = x.Count() }).ToList();
+                var team1IdsCount = gamePlayedInTeam1.GroupBy(x => x.Team1Id).Select(x => new { TeamId = x.Key, GamesPlayed = x.Count() }).ToList();
+                var team2IdsCount = gamePlayedInTeam2.GroupBy(x => x.Team2Id).Select(x => new { TeamId = x.Key, GamesPlayed = x.Count() }).ToList();
+
                 team1IdsCount.ForEach(x =>
                 {
                     var id = x.TeamId;
