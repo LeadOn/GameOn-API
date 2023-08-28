@@ -10,6 +10,7 @@ namespace YuGames.WebAPI.Controllers
     using YuGames.Business.Contracts;
     using YuGames.DTOs;
     using YuGames.Entities;
+    using YuGames.Repository.Contracts;
     using YuGames.WebAPI.Classes;
 
     /// <summary>
@@ -21,14 +22,17 @@ namespace YuGames.WebAPI.Controllers
     public class PlayerController : ControllerBase
     {
         private IPlayerBusiness playerBusi;
+        private IFifaTeamBusiness teamBusi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerController"/> class.
         /// </summary>
         /// <param name="player">Player business interface (injected).</param>
-        public PlayerController(IPlayerBusiness player)
+        /// <param name="teamBusi">FifaTeam business interface (injected).</param>
+        public PlayerController(IPlayerBusiness player, IFifaTeamBusiness teamBusi)
         {
             this.playerBusi = player;
+            this.teamBusi = teamBusi;
         }
 
         /// <summary>
@@ -142,6 +146,39 @@ namespace YuGames.WebAPI.Controllers
         public async Task<IActionResult> GetPlayerStats(int playerId)
         {
             return this.Ok(await this.playerBusi.GetPlayerStats(playerId));
+        }
+
+        /// <summary>
+        /// Get most played teams of a user.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="numberOfTeams">Number of Teams.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{playerId:int}/mostplayedteams")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get most played teams of a user.")]
+        [SwaggerResponse(200, "List of most played teams.", typeof(List<TopTeamStatDto>))]
+        [SwaggerResponse(404, "Player not found in database.")]
+        [SwaggerResponse(500, "Something wrong happened..")]
+        public async Task<IActionResult> GetMostPlayedTeams(int playerId, int? numberOfTeams)
+        {
+            if (numberOfTeams is null)
+            {
+                numberOfTeams = 3;
+            }
+
+            var userInDb = await this.playerBusi.GetPlayerById(playerId);
+
+            if (userInDb is null)
+            {
+                return this.NotFound();
+            }
+            else
+            {
+                var mostPlayedTeams = await this.teamBusi.GetMostPlayedTeams(userInDb.Id, (int)numberOfTeams);
+                return this.Ok(mostPlayedTeams);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@
 
 namespace YuGames.Repository.Contracts
 {
+    using YuGames.DTOs;
     using YuGames.Entities;
 
     /// <summary>
@@ -23,5 +24,13 @@ namespace YuGames.Repository.Contracts
         /// <param name="id">Team ID.</param>
         /// <returns>Team if found, null if not.</returns>
         Task<FifaTeam?> GetById(int id);
+
+        /// <summary>
+        /// Get Most Played Teams of a player.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="numberOfTeams">Number of teams to retrieve.</param>
+        /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
+        Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams);
     }
 }

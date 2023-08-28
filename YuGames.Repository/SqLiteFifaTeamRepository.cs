@@ -5,6 +5,7 @@
 namespace YuGames.Repository
 {
     using Microsoft.EntityFrameworkCore;
+    using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.EntitiesContext;
     using YuGames.Repository.Contracts;
@@ -35,6 +36,82 @@ namespace YuGames.Repository
         public async Task<FifaTeam?> GetById(int id)
         {
             return await this.context.FifaTeams.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams)
+        {
+            // Getting games played by user
+            var gamePlayedInTeam = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId).Select(x => x.FifaGamePlayed).ToListAsync();
+
+            if (gamePlayedInTeam.Count == 0)
+            {
+                return new List<TopTeamStatDto>();
+            }
+            else
+            {
+                var topTeamStats = new List<TopTeamStatDto>();
+
+                // Getting all of the Team IDs, with their game count
+                var teamIdsCount = new Dictionary<int, int>();
+
+                var team1IdsCount = gamePlayedInTeam.GroupBy(x => x.Team1Id).Select(x => new { TeamId = x.Key, GamesPlayed = x.Count() }).ToList();
+                var team2IdsCount = gamePlayedInTeam.GroupBy(x => x.Team2Id).Select(x => new { TeamId = x.Key, GamesPlayed = x.Count() }).ToList();
+                team1IdsCount.ForEach(x =>
+                {
+                    var id = x.TeamId;
+
+                    if (id is null)
+                    {
+                        id = 0;
+                    }
+
+                    if (teamIdsCount.ContainsKey((int)id))
+                    {
+                        teamIdsCount[(int)id] = teamIdsCount[(int)id] + x.GamesPlayed;
+                    }
+                    else
+                    {
+                        teamIdsCount.Add((int)id, (int)x.GamesPlayed);
+                    }
+                });
+                team2IdsCount.ForEach(x =>
+                {
+                    var id = x.TeamId;
+
+                    if (id is null)
+                    {
+                        id = 0;
+                    }
+
+                    if (teamIdsCount.ContainsKey((int)id))
+                    {
+                        teamIdsCount[(int)id] = teamIdsCount[(int)id] + x.GamesPlayed;
+                    }
+                    else
+                    {
+                        teamIdsCount.Add((int)id, (int)x.GamesPlayed);
+                    }
+                });
+
+                // Now that we have all of team IDs + their count, building returned object
+                var wantedTeam = teamIdsCount.OrderByDescending(x => x.Value).Take(numberOfTeams).ToList();
+
+                foreach (var team in wantedTeam)
+                {
+                    if (team.Key == 0)
+                    {
+                        topTeamStats.Add(new TopTeamStatDto { NumberOfGames = team.Value });
+                    }
+                    else
+                    {
+                        var teamInDb = await this.context.FifaTeams.FirstOrDefaultAsync(x => x.Id == team.Key);
+                        topTeamStats.Add(new TopTeamStatDto { NumberOfGames = team.Value, FifaTeam = teamInDb });
+                    }
+                }
+
+                return topTeamStats;
+            }
         }
     }
 }

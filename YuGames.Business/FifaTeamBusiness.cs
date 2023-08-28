@@ -4,7 +4,9 @@
 
 namespace YuGames.Business
 {
+    using System.Collections.Generic;
     using YuGames.Business.Contracts;
+    using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.Repository.Contracts;
 
@@ -28,6 +30,12 @@ namespace YuGames.Business
         public async Task<IEnumerable<FifaTeam>> GetAll()
         {
             return await this.fifaTeamRepo.GetAll();
+        }
+
+        /// <inheritdoc />
+        public async Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams)
+        {
+            return await this.fifaTeamRepo.GetMostPlayedTeams(playerId, numberOfTeams);
         }
     }
 }
