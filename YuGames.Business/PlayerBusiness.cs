@@ -18,6 +18,7 @@ namespace YuGames.Business
         private IFifaGamePlayedRepository gamePlayedRepo;
         private ITeamPlayerRepository teamPlayerRepo;
         private IPlatformRepository platformRepo;
+        private IFifaTeamBusiness fifaTeamBusiness;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerBusiness" /> class.
@@ -26,12 +27,14 @@ namespace YuGames.Business
         /// <param name="gamePlayedRepo">Game played repository, injected.</param>
         /// <param name="teamPlayerRepo">Team player repository, injected.</param>
         /// <param name="platformRepo">Platform repository, injected.</param>
-        public PlayerBusiness(IPlayerRepository playerRepo, IFifaGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo)
+        /// <param name="fifaTeamBusiness">FifaTeamBusiness, injected.</param>
+        public PlayerBusiness(IPlayerRepository playerRepo, IFifaGamePlayedRepository gamePlayedRepo, ITeamPlayerRepository teamPlayerRepo, IPlatformRepository platformRepo, IFifaTeamBusiness fifaTeamBusiness)
         {
             this.playerRepo = playerRepo;
             this.gamePlayedRepo = gamePlayedRepo;
             this.teamPlayerRepo = teamPlayerRepo;
             this.platformRepo = platformRepo;
+            this.fifaTeamBusiness = fifaTeamBusiness;
         }
 
         /// <inheritdoc />
@@ -67,19 +70,25 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
-        public async Task<List<PlatformStatsDto>?> GetPlayerStats(int playerId)
+        public async Task<FifaPlayerStatsDto> GetPlayerStats(int playerId)
         {
             // Get player from database.
             var playerInDb = await this.playerRepo.GetPlayerById(playerId);
 
             if (playerInDb is null)
             {
-                return null;
+                return new FifaPlayerStatsDto();
             }
 
+            // Getting stats per platforms
             var platformsStats = new List<PlatformStatsDto>();
 
             var platformsInDb = await this.platformRepo.GetAll();
+
+            var globalStats = new PlatformStatsDto();
+            globalStats.Platform = new Platform { Id = 0, Name = "Global" };
+            var avgGoalsTaken = new List<float>();
+            var avgGoalsGiven = new List<float>();
 
             foreach (var platform in platformsInDb)
             {
@@ -145,10 +154,94 @@ namespace YuGames.Business
                     stats.AverageGoalTaken = (float)Math.Round((double)(stats.GoalsTaken / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
                 }
 
+                var gamesPlayed = stats.Wins + stats.Losses + stats.Draws;
+
+                // Calculating win rate
+                if (stats.Wins == 0 || gamesPlayed == 0)
+                {
+                    stats.WinRate = 0;
+                }
+                else
+                {
+                    stats.WinRate = (float)Math.Round((double)((stats.Wins * 100) / (float)gamesPlayed), 2);
+                }
+
+                // Calculating loose rate
+                if (stats.Losses == 0 || gamesPlayed == 0)
+                {
+                    stats.LooseRate = 0;
+                }
+                else
+                {
+                    stats.LooseRate = (float)Math.Round((double)((stats.Losses * 100) / (float)gamesPlayed), 2);
+                }
+
+                // Calculating draw rate
+                if (stats.Draws == 0 || gamesPlayed == 0)
+                {
+                    stats.DrawRate = 0;
+                }
+                else
+                {
+                    stats.DrawRate = (float)Math.Round((double)((stats.Draws * 100) / (float)gamesPlayed), 2);
+                }
+
+                globalStats.Wins += stats.Wins;
+                globalStats.Losses += stats.Losses;
+                globalStats.Draws += stats.Draws;
+                globalStats.GoalDifference += stats.GoalDifference;
+                globalStats.GoalsTaken += stats.GoalsTaken;
+                globalStats.GoalsGiven += stats.GoalsGiven;
+                avgGoalsGiven.Add(stats.AverageGoalGiven);
+                avgGoalsTaken.Add(stats.AverageGoalTaken);
+
                 platformsStats.Add(stats);
             }
 
-            return platformsStats;
+            globalStats.AverageGoalGiven = (float)Math.Round((double)avgGoalsGiven.Average(), 2);
+            globalStats.AverageGoalTaken = (float)Math.Round((double)avgGoalsTaken.Average(), 2);
+
+            var totalGamesPlayed = globalStats.Wins + globalStats.Losses + globalStats.Draws;
+
+            // Calculating win rate
+            if (globalStats.Wins == 0 || totalGamesPlayed == 0)
+            {
+                globalStats.WinRate = 0;
+            }
+            else
+            {
+                globalStats.WinRate = (float)Math.Round((double)((globalStats.Wins * 100) / (float)totalGamesPlayed), 2);
+            }
+
+            // Calculating loose rate
+            if (globalStats.Losses == 0 || totalGamesPlayed == 0)
+            {
+                globalStats.LooseRate = 0;
+            }
+            else
+            {
+                globalStats.LooseRate = (float)Math.Round((double)((globalStats.Losses * 100) / (float)totalGamesPlayed), 2);
+            }
+
+            // Calculating draw rate
+            if (globalStats.Draws == 0 || totalGamesPlayed == 0)
+            {
+                globalStats.DrawRate = 0;
+            }
+            else
+            {
+                globalStats.DrawRate = (float)Math.Round((double)((globalStats.Draws * 100) / (float)totalGamesPlayed), 2);
+            }
+
+            platformsStats.Add(globalStats);
+
+            return new FifaPlayerStatsDto
+            {
+                StatsPerPlatform = platformsStats.OrderBy(x => x.Platform.Id).ToList(),
+                MostWinsTeams = await this.fifaTeamBusiness.GetMostWinsTeams(playerId, 3),
+                MostLossesTeams = await this.fifaTeamBusiness.GetMostLossesTeams(playerId, 3),
+                MostPlayedTeams = await this.fifaTeamBusiness.GetMostPlayedTeams(playerId, 3),
+            };
         }
     }
 }

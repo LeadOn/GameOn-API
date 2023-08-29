@@ -55,5 +55,20 @@ namespace YuGames.DTOs
         /// Gets or sets Goal difference.
         /// </summary>
         public int GoalDifference { get; set; }
+
+        /// <summary>
+        /// Gets or sets win rate.
+        /// </summary>
+        public float WinRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets loose rate.
+        /// </summary>
+        public float LooseRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets draw rate.
+        /// </summary>
+        public float DrawRate { get; set; }
     }
 }
