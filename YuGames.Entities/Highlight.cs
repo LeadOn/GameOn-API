@@ -4,6 +4,8 @@
 
 namespace YuGames.Entities
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
     /// Highlight class.
     /// </summary>
@@ -42,11 +44,13 @@ namespace YuGames.Entities
         /// <summary>
         /// Gets or sets Created by.
         /// </summary>
+        [JsonIgnore]
         public virtual Player CreatedBy { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Game.
         /// </summary>
+        [JsonIgnore]
         public virtual FifaGamePlayed FifaGame { get; set; } = null!;
     }
 }

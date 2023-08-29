@@ -259,6 +259,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get all Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test create with desc and URL\",\r\n    \"fifaGameId\": 118,\r\n    \"description\": \"this is a desc\",\r\n    \"externalUrl\": \"https://www.google.fr\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/highlight",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"highlight"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -460,13 +486,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/player/1/stats",
+							"raw": "{{baseUrl}}/player/14/stats",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"player",
-								"1",
+								"14",
 								"stats"
 							]
 						}
@@ -503,7 +529,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjREtSMzBVU1VQeXNkdGViUmx6XzFXaWwzYWFKT2t3YkQ5eGhUSmhhckhJIn0.eyJleHAiOjE2OTI2NDAzMjIsImlhdCI6MTY5MjYzOTQyMiwiYXV0aF90aW1lIjoxNjkyNjM4NjE0LCJqdGkiOiJkM2ZhYTYzOS00ZjU0LTQ2MWYtOGU5NC03NDUxYjNkNTc2YTYiLCJpc3MiOiJodHRwczovL2F1dGgudmFsZW50aW52aXJvdC5mci9yZWFsbXMveXVmb290IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjVhM2RlZmZiLTBhZGQtNDcwMi05YjM3LWQ3NWE5OGE3ZTFjNCIsInR5cCI6IkJlYXJlciIsImF6cCI6Inl1Zm9vdC1mcm9udCIsIm5vbmNlIjoiNDE5MDk2YzktMDM3OS00MWFkLTg3NjktNjdiZGY3Zjc4ZDhiIiwic2Vzc2lvbl9zdGF0ZSI6ImQ1ZmVlOGU4LTU5MDItNDYyMC05NmE5LTNjM2MyZDA0MDhjYiIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cHM6Ly95dWdhbWVzLWJldGEudmFsZW50aW52aXJvdC5mciIsImh0dHBzOi8veXVnYW1lcy52YWxlbnRpbnZpcm90LmZyIiwiaHR0cHM6Ly9vYXV0aC5wc3Rtbi5pbyIsImh0dHA6Ly9sb2NhbGhvc3Q6NDIwMCIsImh0dHBzOi8veXVmb290LnZhbGVudGludmlyb3QuZnIiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZnJvbnRmYWN0b3J5Iiwib2ZmbGluZV9hY2Nlc3MiLCJ5dWdhbWVzX2FkbWluIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzaWQiOiJkNWZlZThlOC01OTAyLTQ2MjAtOTZhOS0zYzNjMmQwNDA4Y2IiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInJvbGVzIjpbInl1Z2FtZXNfYWRtaW4iLCJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl0sIm5hbWUiOiJWYWxlbnRpbiBWaXJvdCIsInByZWZlcnJlZF91c2VybmFtZSI6ImxlYWRvbiIsImdpdmVuX25hbWUiOiJWYWxlbnRpbiIsImZhbWlseV9uYW1lIjoiVmlyb3QiLCJlbWFpbCI6InZpcm90LnZhbGVudGluQGdtYWlsLmNvbSJ9.hzMFOibHM8iU4bcfHhBucwRYSK52ExemipqLxDhPPWBNqEHouRe_SvhBNs-9HO3alrpMiz27k3zFdR21zFB8ZOeJ5vU8ht7l1UrEFyRUdiQ-4H-Bn1GWWoGyoroovZTt_LYEqi92pu8pIJ9OxCyicIya0ztrXmvYskHgkjF_jF6BYRtxFTaF8cbWR5oCAJ34mvikcJ1L7Yy5KIbeYxUFqvR5-1pnzQ8qY4UHCxVDJETAY6Svt-uyRQPwTV2DLqGfm55hX_55DQ63J1iJUBzVSAaRrmH4TPMHUvdPBWFMJhqgnaz0ikNUDzG9iomy0uw5z3ZWi7YWK88PIrZFzuI6pA",
+				"value": "{{token}}",
 				"type": "string"
 			}
 		]

@@ -16,5 +16,16 @@ namespace YuGames.Business.Contracts
         /// </summary>
         /// <returns>List of Highlights.</returns>
         Task<IEnumerable<Highlight>> GetAll();
+
+        /// <summary>
+        /// Create highlight in database.
+        /// </summary>
+        /// <param name="name">Name of the highlight.</param>
+        /// <param name="description">Description of the highlight.</param>
+        /// <param name="playerId">Player ID (person who creates).</param>
+        /// <param name="fifaGameId">FIFA Game ID.</param>
+        /// <param name="externalUrl">External URL.</param>
+        /// <returns><see cref="Highlight"/> created.</returns>
+        Task<Highlight> Create(string name, string? description, int playerId, int fifaGameId, string? externalUrl);
     }
 }
