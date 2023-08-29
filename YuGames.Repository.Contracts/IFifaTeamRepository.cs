@@ -32,5 +32,21 @@ namespace YuGames.Repository.Contracts
         /// <param name="numberOfTeams">Number of teams to retrieve.</param>
         /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
         Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams);
+
+        /// <summary>
+        /// Get Most wins Teams of a player.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="numberOfTeams">Number of teams to retrieve.</param>
+        /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
+        Task<List<TopTeamStatDto>> GetMostWinsTeams(int playerId, int numberOfTeams);
+
+        /// <summary>
+        /// Get Most Losses Teams of a player.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="numberOfTeams">Number of teams to retrieve.</param>
+        /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
+        Task<List<TopTeamStatDto>> GetMostLossesTeams(int playerId, int numberOfTeams);
     }
 }

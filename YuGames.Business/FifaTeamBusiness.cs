@@ -33,9 +33,21 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
+        public async Task<List<TopTeamStatDto>> GetMostLossesTeams(int playerId, int numberOfTeams)
+        {
+            return await this.fifaTeamRepo.GetMostLossesTeams(playerId, numberOfTeams);
+        }
+
+        /// <inheritdoc />
         public async Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams)
         {
             return await this.fifaTeamRepo.GetMostPlayedTeams(playerId, numberOfTeams);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<TopTeamStatDto>> GetMostWinsTeams(int playerId, int numberOfTeams)
+        {
+            return await this.fifaTeamRepo.GetMostWinsTeams(playerId, numberOfTeams);
         }
     }
 }
