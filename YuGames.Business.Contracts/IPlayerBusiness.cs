@@ -46,7 +46,7 @@ namespace YuGames.Business.Contracts
         /// Get player stats.
         /// </summary>
         /// <param name="playerId">Player ID.</param>
-        /// <returns><see cref="List{PlatformStatsDto}"/>.</returns>
-        Task<List<PlatformStatsDto>?> GetPlayerStats(int playerId);
+        /// <returns><see cref="FifaPlayerStatsDto"/>.</returns>
+        Task<FifaPlayerStatsDto> GetPlayerStats(int playerId);
     }
 }

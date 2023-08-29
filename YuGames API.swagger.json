@@ -1182,10 +1182,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PlatformStatsDto"
-                  }
+                  "$ref": "#/components/schemas/FifaPlayerStatsDto"
                 }
               }
             }
@@ -1442,6 +1439,40 @@
         },
         "additionalProperties": false
       },
+      "FifaPlayerStatsDto": {
+        "type": "object",
+        "properties": {
+          "statsPerPlatform": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformStatsDto"
+            },
+            "nullable": true
+          },
+          "mostPlayedTeams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TopTeamStatDto"
+            },
+            "nullable": true
+          },
+          "mostLossesTeams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TopTeamStatDto"
+            },
+            "nullable": true
+          },
+          "mostWinsTeams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TopTeamStatDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "FifaTeam": {
         "type": "object",
         "properties": {
@@ -1573,6 +1604,18 @@
           "goalDifference": {
             "type": "integer",
             "format": "int32"
+          },
+          "winRate": {
+            "type": "number",
+            "format": "float"
+          },
+          "looseRate": {
+            "type": "number",
+            "format": "float"
+          },
+          "drawRate": {
+            "type": "number",
+            "format": "float"
           }
         },
         "additionalProperties": false

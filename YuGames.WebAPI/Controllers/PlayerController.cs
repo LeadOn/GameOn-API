@@ -141,7 +141,7 @@ namespace YuGames.WebAPI.Controllers
         [Route("{playerId}/stats")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get all stats of a user.", Description = "Get all statistics for each platform of a user.")]
-        [SwaggerResponse(200, "List of stats.", typeof(List<PlatformStatsDto>))]
+        [SwaggerResponse(200, "List of stats.", typeof(FifaPlayerStatsDto))]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetPlayerStats(int playerId)
         {
