@@ -29,5 +29,12 @@ namespace YuGames.Repository.Contracts
         /// </summary>
         /// <returns>List of Highlights.</returns>
         Task<List<Highlight>> GetAll();
+
+        /// <summary>
+        /// Create highlight in database.
+        /// </summary>
+        /// <param name="highlight"><see cref="Highlight"/>.</param>
+        /// <returns><see cref="Highlight"/> created.</returns>
+        Task<Highlight> Create(Highlight highlight);
     }
 }

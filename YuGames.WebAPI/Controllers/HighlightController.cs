@@ -4,10 +4,13 @@
 
 namespace YuGames.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Business.Contracts;
+    using YuGames.DTOs;
     using YuGames.Entities;
+    using YuGames.WebAPI.Classes;
 
     /// <summary>
     /// Highlight Controller.
@@ -18,14 +21,17 @@ namespace YuGames.WebAPI.Controllers
     public class HighlightController : ControllerBase
     {
         private IHighlightBusiness highlightBusi;
+        private IPlayerBusiness playerBusi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HighlightController"/> class.
         /// </summary>
         /// <param name="highlightBusi">Highlight business interface (injected).</param>
-        public HighlightController(IHighlightBusiness highlightBusi)
+        /// <param name="playerBusi">Player business interface (injected).</param>
+        public HighlightController(IHighlightBusiness highlightBusi, IPlayerBusiness playerBusi)
         {
             this.highlightBusi = highlightBusi;
+            this.playerBusi = playerBusi;
         }
 
         /// <summary>
@@ -41,6 +47,46 @@ namespace YuGames.WebAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             return this.Ok(await this.highlightBusi.GetAll());
+        }
+
+        /// <summary>
+        /// Creates highlight in database.
+        /// </summary>
+        /// <param name="highlight"><see cref="CreateHighlightDto"/>.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Creates Highlight in database.", Description = "Creates a highlight in database that is linked to a FIFA Game Played.")]
+        [SwaggerResponse(201, "Highlight created.", typeof(Highlight))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Something wrong happened.")]
+        public async Task<IActionResult> Create([FromBody] CreateHighlightDto highlight)
+        {
+            // Getting connected user
+            var connectedPlayer = new ConnectedPlayerDto
+            {
+                Email = this.User.GetUserEmail(),
+                KeycloakId = this.User.GetUserId(),
+                FirstName = this.User.GetUserFirstName(),
+                LastName = this.User.GetUserLastName(),
+                PreferredUsername = this.User.GetUserPreferredName(),
+            };
+
+            if (highlight.Description == string.Empty)
+            {
+                highlight.Description = null;
+            }
+
+            if (highlight.ExternalUrl == string.Empty)
+            {
+                highlight.ExternalUrl = null;
+            }
+
+            var playerInDb = await this.playerBusi.GetConnectedUser(connectedPlayer);
+
+            return this.Ok(await this.highlightBusi.Create(highlight.Name, highlight.Description, playerInDb.Id, highlight.FifaGameId, highlight.ExternalUrl));
         }
     }
 }
