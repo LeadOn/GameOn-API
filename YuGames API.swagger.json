@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "1.1"
+    "version": "1.2"
   },
   "paths": {
     "/v{version}/Admin/dashboard": {
@@ -640,6 +640,77 @@
           },
           "500": {
             "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/v{version}/Highlight": {
+      "post": {
+        "tags": ["Highlight"],
+        "summary": "Creates Highlight in database.",
+        "description": "Creates a highlight in database that is linked to a FIFA Game Played.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHighlightDto"
+              }
+            },
+            "text/json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHighlightDto"
+              }
+            },
+            "application/*+json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHighlightDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Highlight created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Highlight"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Something wrong happened."
           }
         }
       }
@@ -1352,6 +1423,28 @@
         },
         "additionalProperties": false
       },
+      "CreateHighlightDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "fifaGameId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "externalUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "FifaGamePlayed": {
         "type": "object",
         "properties": {
@@ -1543,12 +1636,6 @@
           "externalUrl": {
             "type": "string",
             "nullable": true
-          },
-          "createdBy": {
-            "$ref": "#/components/schemas/Player"
-          },
-          "fifaGame": {
-            "$ref": "#/components/schemas/FifaGamePlayed"
           }
         },
         "additionalProperties": false

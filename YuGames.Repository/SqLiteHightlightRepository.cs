@@ -32,6 +32,14 @@ namespace YuGames.Repository
         }
 
         /// <inheritdoc />
+        public async Task<Highlight> Create(Highlight highlight)
+        {
+            this.context.Highlights.Add(highlight);
+            await this.context.SaveChangesAsync();
+            return highlight;
+        }
+
+        /// <inheritdoc />
         public async Task<bool> DeleteAllFifaGame(int fifaGameId)
         {
             var highlights = await this.context.Highlights.Where(x => x.FifaGameId == fifaGameId).ToListAsync();
