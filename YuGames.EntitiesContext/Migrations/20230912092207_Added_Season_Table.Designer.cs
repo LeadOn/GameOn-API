@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuGames.EntitiesContext;
 
@@ -10,9 +11,11 @@ using YuGames.EntitiesContext;
 namespace YuGames.EntitiesContext.Migrations
 {
     [DbContext(typeof(YuGamesContext))]
-    partial class YuGamesContextModelSnapshot : ModelSnapshot
+    [Migration("20230912092207_Added_Season_Table")]
+    partial class Added_Season_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
@@ -35,12 +38,8 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 12, 13, 9, 42, 498, DateTimeKind.Local).AddTicks(470))
+                        .HasDefaultValue(new DateTime(2023, 9, 12, 11, 22, 7, 180, DateTimeKind.Local).AddTicks(760))
                         .HasColumnName("played_on");
-
-                    b.Property<int>("SeasonId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("season_id");
 
                     b.Property<int?>("Team1Id")
                         .HasColumnType("INTEGER")
@@ -79,8 +78,6 @@ namespace YuGames.EntitiesContext.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("PlatformId");
-
-                    b.HasIndex("SeasonId");
 
                     b.HasIndex("Team1Id");
 
@@ -205,7 +202,7 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 12, 11, 9, 42, 497, DateTimeKind.Utc).AddTicks(9950))
+                        .HasDefaultValue(new DateTime(2023, 9, 12, 9, 22, 7, 180, DateTimeKind.Utc).AddTicks(150))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -268,13 +265,6 @@ namespace YuGames.EntitiesContext.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_FifaGamePlayed_Platform");
 
-                    b.HasOne("YuGames.Entities.Season", "Season")
-                        .WithMany("FifaGamePlayed")
-                        .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_FifaGamePlayed_Season");
-
                     b.HasOne("YuGames.Entities.FifaTeam", "Team1")
                         .WithMany("GamesPlayedTeam1")
                         .HasForeignKey("Team1Id")
@@ -290,8 +280,6 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Platform");
-
-                    b.Navigation("Season");
 
                     b.Navigation("Team1");
 
@@ -366,11 +354,6 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Navigation("FifaTeamPlayers");
 
                     b.Navigation("Highlights");
-                });
-
-            modelBuilder.Entity("YuGames.Entities.Season", b =>
-                {
-                    b.Navigation("FifaGamePlayed");
                 });
 #pragma warning restore 612, 618
         }

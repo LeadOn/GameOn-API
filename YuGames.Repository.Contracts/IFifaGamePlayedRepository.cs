@@ -53,5 +53,11 @@ namespace YuGames.Repository.Contracts
         /// <param name="fifaGameId">Fifa Game ID.</param>
         /// <returns>true if success.</returns>
         Task<bool> Delete(int fifaGameId);
+
+        /// <summary>
+        /// Gets current season.
+        /// </summary>
+        /// <returns><see cref="Season" />.</returns>
+        Task<Season?> GetCurrentSeason();
     }
 }

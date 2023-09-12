@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YuGames.Business.Contracts\YuGames.Business.Contracts.csproj" />
+    <ProjectReference Include="..\YuGames.Common\YuGames.Common.csproj" />
     <ProjectReference Include="..\YuGames.DTOs\YuGames.DTOs.csproj" />
     <ProjectReference Include="..\YuGames.Repository.Contracts\YuGames.Repository.Contracts.csproj" />
   </ItemGroup>

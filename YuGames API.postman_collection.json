@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "39545f35-d128-474b-b8dd-bbc55f07a524",
+		"_postman_id": "24128046-f55e-41af-9d0d-ab41f920a565",
 		"name": "YuGames API",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -229,6 +229,27 @@
 							"path": [
 								"game",
 								"89"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current season",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/game/season",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"game",
+								"season"
 							]
 						}
 					},

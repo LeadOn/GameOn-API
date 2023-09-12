@@ -64,5 +64,11 @@ namespace YuGames.Business.Contracts
         /// <param name="endDate">End date.</param>
         /// <returns>List of <see cref="FifaGamePlayedDto"/>.</returns>
         Task<List<FifaGamePlayedDto>> Search(int? limit, int? platformId, DateTime? startDate, DateTime? endDate);
+
+        /// <summary>
+        /// Gets current season.
+        /// </summary>
+        /// <returns><see cref="Season" />.</returns>
+        Task<Season?> GetCurrentSeason();
     }
 }
