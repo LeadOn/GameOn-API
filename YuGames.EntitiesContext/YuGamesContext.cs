@@ -18,7 +18,7 @@ namespace YuGames.EntitiesContext
         /// </summary>
         public YuGamesContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? throw new MissingEnvironmentVariableException("SQLITE_PATH");
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yugames.db";
         }
 
         /// <summary>
@@ -52,6 +52,11 @@ namespace YuGames.EntitiesContext
         public DbSet<Highlight> Highlights { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets Seasons.
+        /// </summary>
+        public DbSet<Season> Seasons { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the path of the SQLite file.
         /// </summary>
         public string DbPath { get; set; }
@@ -63,6 +68,20 @@ namespace YuGames.EntitiesContext
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Season>(entity =>
+            {
+                entity.ToTable("Season");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(50)
+                    .IsRequired();
+            });
+
             modelBuilder.Entity<Player>(entity =>
             {
                 entity.ToTable("Player");
@@ -163,6 +182,10 @@ namespace YuGames.EntitiesContext
                 entity.Property(e => e.CreatedById)
                     .HasColumnName("created_by_id");
 
+                entity.Property(e => e.SeasonId)
+                    .HasColumnName("season_id")
+                    .IsRequired();
+
                 entity.HasOne(e => e.Team1)
                     .WithMany(f => f.GamesPlayedTeam1)
                     .HasForeignKey(e => e.Team1Id)
@@ -185,6 +208,12 @@ namespace YuGames.EntitiesContext
                     .WithMany(f => f.FifaGameCreated)
                     .HasForeignKey(e => e.CreatedById)
                     .HasConstraintName("FK_FifaGamePlayed_Player_Created_By")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Season)
+                    .WithMany(f => f.FifaGamePlayed)
+                    .HasForeignKey(e => e.SeasonId)
+                    .HasConstraintName("FK_FifaGamePlayed_Season")
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

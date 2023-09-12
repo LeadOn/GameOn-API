@@ -593,6 +593,57 @@
         }
       }
     },
+    "/v{version}/Game/season": {
+      "get": {
+        "tags": ["Game"],
+        "summary": "Get current season.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Season.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FifaGamePlayedDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something wrong happened."
+          }
+        }
+      }
+    },
     "/v{version}/Highlight/all": {
       "get": {
         "tags": ["Highlight"],
@@ -1487,6 +1538,10 @@
             "format": "int32"
           },
           "createdById": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonId": {
             "type": "integer",
             "format": "int32"
           }

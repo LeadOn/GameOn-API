@@ -74,5 +74,12 @@ namespace YuGames.Repository
                 return true;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<Season?> GetCurrentSeason()
+        {
+            return await this.context.Seasons.FirstOrDefaultAsync(x =>
+                x.Id == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"));
+        }
     }
 }

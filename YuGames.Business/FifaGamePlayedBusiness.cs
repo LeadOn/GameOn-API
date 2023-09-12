@@ -6,6 +6,7 @@ namespace YuGames.Business
 {
     using System;
     using YuGames.Business.Contracts;
+    using YuGames.Common.Exceptions;
     using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.Repository.Contracts;
@@ -87,6 +88,7 @@ namespace YuGames.Business
                 TeamScore1 = createGameDto.TeamScore1,
                 TeamScore2 = createGameDto.TeamScore2,
                 CreatedById = creatorInDb.Id,
+                SeasonId = int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? throw new MissingEnvironmentVariableException("CURRENT_SEASON")),
             };
 
             if (newGame.TeamScore1 < 0 || newGame.TeamScore2 < 0)
@@ -336,6 +338,12 @@ namespace YuGames.Business
             }
 
             return gamePlayedDtos;
+        }
+
+        /// <inheritdoc />
+        public async Task<Season?> GetCurrentSeason()
+        {
+            return await this.gamePlayedRepo.GetCurrentSeason();
         }
 
         /// <summary>
