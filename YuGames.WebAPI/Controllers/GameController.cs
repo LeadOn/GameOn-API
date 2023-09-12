@@ -174,20 +174,5 @@ namespace YuGames.WebAPI.Controllers
         {
             return this.Ok(await this.gamePlayedBusi.Search(limit, platformId, startDate, endDate));
         }
-
-        /// <summary>
-        /// Get current Season.
-        /// </summary>
-        /// <returns>IActionResult object.</returns>
-        [HttpGet]
-        [Route("season")]
-        [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get current season.")]
-        [SwaggerResponse(200, "Season.", typeof(List<FifaGamePlayedDto>))]
-        [SwaggerResponse(500, "Something wrong happened.")]
-        public async Task<IActionResult> GetCurrentSeason()
-        {
-            return this.Ok(await this.gamePlayedBusi.GetCurrentSeason());
-        }
     }
 }

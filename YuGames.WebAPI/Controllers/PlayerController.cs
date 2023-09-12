@@ -10,7 +10,6 @@ namespace YuGames.WebAPI.Controllers
     using YuGames.Business.Contracts;
     using YuGames.DTOs;
     using YuGames.Entities;
-    using YuGames.Repository.Contracts;
     using YuGames.WebAPI.Classes;
 
     /// <summary>
@@ -136,6 +135,7 @@ namespace YuGames.WebAPI.Controllers
         /// Get all player stats.
         /// </summary>
         /// <param name="playerId">Player ID.</param>
+        /// <param name="seasonId">Season ID.</param>
         /// <returns>200 OK with Player list.</returns>
         [HttpGet]
         [Route("{playerId}/stats")]
@@ -143,9 +143,9 @@ namespace YuGames.WebAPI.Controllers
         [SwaggerOperation(Summary = "Get all stats of a user.", Description = "Get all statistics for each platform of a user.")]
         [SwaggerResponse(200, "List of stats.", typeof(FifaPlayerStatsDto))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetPlayerStats(int playerId)
+        public async Task<IActionResult> GetPlayerStats(int playerId, int? seasonId)
         {
-            return this.Ok(await this.playerBusi.GetPlayerStats(playerId));
+            return this.Ok(await this.playerBusi.GetPlayerStats(playerId, seasonId));
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace YuGames.WebAPI.Controllers
             }
             else
             {
-                var mostPlayedTeams = await this.teamBusi.GetMostPlayedTeams(userInDb.Id, (int)numberOfTeams);
+                var mostPlayedTeams = await this.teamBusi.GetMostPlayedTeams(userInDb.Id, (int)numberOfTeams, int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"));
                 return this.Ok(mostPlayedTeams);
             }
         }

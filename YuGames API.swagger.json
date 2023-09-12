@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "1.2"
+    "version": "1.3"
   },
   "paths": {
     "/v{version}/Admin/dashboard": {
@@ -589,57 +589,6 @@
           },
           "500": {
             "description": "Unknown error."
-          }
-        }
-      }
-    },
-    "/v{version}/Game/season": {
-      "get": {
-        "tags": ["Game"],
-        "summary": "Get current season.",
-        "parameters": [
-          {
-            "name": "version",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-version",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-Version",
-            "in": "header",
-            "style": "simple",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Season.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FifaGamePlayedDto"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Something wrong happened."
           }
         }
       }
@@ -1273,6 +1222,15 @@
             }
           },
           {
+            "name": "seasonId",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "version",
             "in": "path",
             "required": true,
@@ -1384,6 +1342,108 @@
           },
           "500": {
             "description": "Something wrong happened.."
+          }
+        }
+      }
+    },
+    "/v{version}/Season/current": {
+      "get": {
+        "tags": ["Season"],
+        "summary": "Get current season.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current Season.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Season"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Current Season not found."
+          },
+          "500": {
+            "description": "Something wrong happened."
+          }
+        }
+      }
+    },
+    "/v{version}/Season": {
+      "get": {
+        "tags": ["Season"],
+        "summary": "Get all seasons.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Season.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Season"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something wrong happened."
           }
         }
       }
@@ -1576,6 +1636,9 @@
           },
           "team2": {
             "$ref": "#/components/schemas/FifaTeamDto"
+          },
+          "season": {
+            "$ref": "#/components/schemas/Season"
           },
           "highlights": {
             "type": "array",
@@ -1784,6 +1847,20 @@
           "createdOn": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Season": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
