@@ -36,12 +36,12 @@ namespace YuGames.Repository
 
         /// <inheritdoc />
         public async Task<FifaGamePlayed?> GetById(int id) =>
-            await this.context.FifaGamesPlayed.Include(x => x.Highlights).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.CreatedBy).FirstOrDefaultAsync(x => x.Id == id);
+            await this.context.FifaGamesPlayed.Include(x => x.Season).Include(x => x.Highlights).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.CreatedBy).FirstOrDefaultAsync(x => x.Id == id);
 
         /// <inheritdoc />
         public async Task<IEnumerable<FifaGamePlayed>> Search(Expression<Func<FifaGamePlayed, bool>> query, int limit)
         {
-            return await this.context.FifaGamesPlayed.Include(x => x.CreatedBy).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.Highlights).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
+            return await this.context.FifaGamesPlayed.Include(x => x.Season).Include(x => x.CreatedBy).Include(x => x.TeamPlayers).Include(x => x.Platform).Include(x => x.Highlights).Where(query).OrderByDescending(x => x.PlayedOn).Take(limit).ToListAsync();
         }
 
         /// <inheritdoc />

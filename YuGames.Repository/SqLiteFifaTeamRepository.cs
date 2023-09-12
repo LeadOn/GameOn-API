@@ -42,8 +42,8 @@ namespace YuGames.Repository
         public async Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams)
         {
             // Getting games played by user
-            var gamePlayedInTeam1 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 0).Select(x => x.FifaGamePlayed).ToListAsync();
-            var gamePlayedInTeam2 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 1).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam1 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 0 && x.FifaGamePlayed.SeasonId == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1")).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam2 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 1 && x.FifaGamePlayed.SeasonId == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1")).Select(x => x.FifaGamePlayed).ToListAsync();
 
             if (gamePlayedInTeam1.Count == 0 && gamePlayedInTeam2.Count == 0)
             {
@@ -120,8 +120,8 @@ namespace YuGames.Repository
         public async Task<List<TopTeamStatDto>> GetMostLossesTeams(int playerId, int numberOfTeams)
         {
             // Getting games played by user
-            var gamePlayedInTeam1 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 0 && x.FifaGamePlayed.TeamScore1 < x.FifaGamePlayed.TeamScore2).Select(x => x.FifaGamePlayed).ToListAsync();
-            var gamePlayedInTeam2 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 1 && x.FifaGamePlayed.TeamScore1 > x.FifaGamePlayed.TeamScore2).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam1 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 0 && x.FifaGamePlayed.TeamScore1 < x.FifaGamePlayed.TeamScore2 && x.FifaGamePlayed.SeasonId == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1")).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam2 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 1 && x.FifaGamePlayed.TeamScore1 > x.FifaGamePlayed.TeamScore2 && x.FifaGamePlayed.SeasonId == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1")).Select(x => x.FifaGamePlayed).ToListAsync();
 
             if (gamePlayedInTeam1.Count == 0 && gamePlayedInTeam2.Count == 0)
             {
@@ -198,8 +198,8 @@ namespace YuGames.Repository
         public async Task<List<TopTeamStatDto>> GetMostWinsTeams(int playerId, int numberOfTeams)
         {
             // Getting games played by user
-            var gamePlayedInTeam1 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 0 && x.FifaGamePlayed.TeamScore1 > x.FifaGamePlayed.TeamScore2).Select(x => x.FifaGamePlayed).ToListAsync();
-            var gamePlayedInTeam2 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 1 && x.FifaGamePlayed.TeamScore1 < x.FifaGamePlayed.TeamScore2).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam1 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 0 && x.FifaGamePlayed.TeamScore1 > x.FifaGamePlayed.TeamScore2 && x.FifaGamePlayed.SeasonId == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1")).Select(x => x.FifaGamePlayed).ToListAsync();
+            var gamePlayedInTeam2 = await this.context.FifaTeamPlayers.Include(x => x.FifaGamePlayed).Where(x => x.PlayerId == playerId && x.Team == 1 && x.FifaGamePlayed.TeamScore1 < x.FifaGamePlayed.TeamScore2 && x.FifaGamePlayed.SeasonId == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1")).Select(x => x.FifaGamePlayed).ToListAsync();
 
             if (gamePlayedInTeam1.Count == 0 && gamePlayedInTeam2.Count == 0)
             {
