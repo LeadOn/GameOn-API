@@ -70,8 +70,13 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
-        public async Task<FifaPlayerStatsDto> GetPlayerStats(int playerId)
+        public async Task<FifaPlayerStatsDto> GetPlayerStats(int playerId, int? seasonId)
         {
+            if (seasonId is null)
+            {
+                seasonId = int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1");
+            }
+
             // Get player from database.
             var playerInDb = await this.playerRepo.GetPlayerById(playerId);
 
@@ -95,7 +100,7 @@ namespace YuGames.Business
                 var stats = new PlatformStatsDto { AverageGoalGiven = 0, AverageGoalTaken = 0, Draws = 0, GoalDifference = 0, Losses = 0, Platform = platform, Wins = 0, GoalsGiven = 0, GoalsTaken = 0 };
 
                 // Getting games played by platform
-                var teamPlayersInDb = await this.teamPlayerRepo.Search(x => x.FifaGamePlayed.PlatformId == platform.Id && x.PlayerId == playerInDb.Id && x.FifaGamePlayed.SeasonId == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"), 1000000);
+                var teamPlayersInDb = await this.teamPlayerRepo.Search(x => x.FifaGamePlayed.PlatformId == platform.Id && x.PlayerId == playerInDb.Id && x.FifaGamePlayed.SeasonId == seasonId, 1000000);
 
                 // For each game played, getting that stats
                 foreach (var teamPlayer in teamPlayersInDb)
@@ -238,9 +243,9 @@ namespace YuGames.Business
             return new FifaPlayerStatsDto
             {
                 StatsPerPlatform = platformsStats.OrderBy(x => x.Platform.Id).ToList(),
-                MostWinsTeams = await this.fifaTeamBusiness.GetMostWinsTeams(playerId, 3),
-                MostLossesTeams = await this.fifaTeamBusiness.GetMostLossesTeams(playerId, 3),
-                MostPlayedTeams = await this.fifaTeamBusiness.GetMostPlayedTeams(playerId, 3),
+                MostWinsTeams = await this.fifaTeamBusiness.GetMostWinsTeams(playerId, 3, (int)seasonId),
+                MostLossesTeams = await this.fifaTeamBusiness.GetMostLossesTeams(playerId, 3, (int)seasonId),
+                MostPlayedTeams = await this.fifaTeamBusiness.GetMostPlayedTeams(playerId, 3, (int)seasonId),
             };
         }
     }

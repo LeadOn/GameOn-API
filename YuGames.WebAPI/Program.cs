@@ -69,7 +69,7 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Version = "1.2",
+        Version = "1.3",
         Title = "LeadOn's Corp - YuGames API",
         Description = "This API goal is to monitor players performance across multiple games.",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact
@@ -96,6 +96,8 @@ builder.Services.AddScoped<IFifaTeamBusiness, FifaTeamBusiness>();
 builder.Services.AddScoped<IHighlightRepository, SqLiteHightlightRepository>();
 builder.Services.AddScoped<IAdminBusiness, AdminBusiness>();
 builder.Services.AddScoped<IHighlightBusiness, HighlightBusiness>();
+builder.Services.AddScoped<ISeasonBusiness, SeasonBusiness>();
+builder.Services.AddScoped<ISeasonRepository, SqLiteSeasonRepository>();
 
 var app = builder.Build();
 
