@@ -47,6 +47,11 @@ namespace YuGames.DTOs
         public FifaTeamDto Team2 { get; set; } = new FifaTeamDto();
 
         /// <summary>
+        /// Gets or sets Season.
+        /// </summary>
+        public Season Season { get; set; } = new Season();
+
+        /// <summary>
         /// Gets or sets Highlights.
         /// </summary>
         public List<Highlight> Highlights { get; set; } = new List<Highlight>();

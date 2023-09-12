@@ -310,7 +310,7 @@ namespace YuGames.Business
 
             if (startDate is null)
             {
-                startDate = DateTime.UtcNow.AddMonths(-1);
+                startDate = DateTime.UtcNow.AddYears(-1);
             }
 
             if (endDate is null)
@@ -379,6 +379,8 @@ namespace YuGames.Business
                 gamePlayedDto.Platform = game.Platform.Name;
                 gamePlayedDto.PlatformId = game.PlatformId;
             }
+
+            gamePlayedDto.Season = game.Season;
 
             // Getting team players
             var teamPlayers = await this.teamPlayerRepo.GetTeamPlayersByGameId(game.Id);
