@@ -62,6 +62,11 @@ namespace YuGames.Entities
         public int CreatedById { get; set; }
 
         /// <summary>
+        /// Gets or sets Season ID.
+        /// </summary>
+        public int SeasonId { get; set; }
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
@@ -96,5 +101,11 @@ namespace YuGames.Entities
         /// </summary>
         [JsonIgnore]
         public virtual List<Highlight> Highlights { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Season.
+        /// </summary>
+        [JsonIgnore]
+        public virtual Season Season { get; set; } = null!;
     }
 }
