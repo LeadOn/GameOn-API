@@ -46,7 +46,8 @@ namespace YuGames.Business.Contracts
         /// Get player stats.
         /// </summary>
         /// <param name="playerId">Player ID.</param>
+        /// <param name="seasonId">Season ID (default is current).</param>
         /// <returns><see cref="FifaPlayerStatsDto"/>.</returns>
-        Task<FifaPlayerStatsDto> GetPlayerStats(int playerId);
+        Task<FifaPlayerStatsDto> GetPlayerStats(int playerId, int? seasonId);
     }
 }

@@ -23,23 +23,26 @@ namespace YuGames.Business.Contracts
         /// </summary>
         /// <param name="playerId">Player ID.</param>
         /// <param name="numberOfTeams">Number of teams to retrieve.</param>
+        /// <param name="seasonId">Season ID.</param>
         /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
-        Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams);
+        Task<List<TopTeamStatDto>> GetMostPlayedTeams(int playerId, int numberOfTeams, int seasonId);
 
         /// <summary>
         /// Get Most wins Teams of a player.
         /// </summary>
         /// <param name="playerId">Player ID.</param>
         /// <param name="numberOfTeams">Number of teams to retrieve.</param>
+        /// <param name="seasonId">Season ID.</param>
         /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
-        Task<List<TopTeamStatDto>> GetMostWinsTeams(int playerId, int numberOfTeams);
+        Task<List<TopTeamStatDto>> GetMostWinsTeams(int playerId, int numberOfTeams, int seasonId);
 
         /// <summary>
         /// Get Most Losses Teams of a player.
         /// </summary>
         /// <param name="playerId">Player ID.</param>
         /// <param name="numberOfTeams">Number of teams to retrieve.</param>
+        /// <param name="seasonId">Season ID.</param>
         /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
-        Task<List<TopTeamStatDto>> GetMostLossesTeams(int playerId, int numberOfTeams);
+        Task<List<TopTeamStatDto>> GetMostLossesTeams(int playerId, int numberOfTeams, int seasonId);
     }
 }

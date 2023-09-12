@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "24128046-f55e-41af-9d0d-ab41f920a565",
+		"_postman_id": "53fe2ebc-fcf9-4ff8-9c04-f9eb17577dd0",
 		"name": "YuGames API",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -23,6 +23,52 @@
 							"path": [
 								"admin",
 								"dashboard"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Season",
+			"item": [
+				{
+					"name": "Get current season",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/season/current",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"season",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/season",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"season"
 							]
 						}
 					},
@@ -229,27 +275,6 @@
 							"path": [
 								"game",
 								"89"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get current season",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/game/season",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"game",
-								"season"
 							]
 						}
 					},
@@ -507,14 +532,20 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/player/14/stats",
+							"raw": "{{baseUrl}}/player/1/stats?seasonId=",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"player",
-								"14",
+								"1",
 								"stats"
+							],
+							"query": [
+								{
+									"key": "seasonId",
+									"value": ""
+								}
 							]
 						}
 					},
