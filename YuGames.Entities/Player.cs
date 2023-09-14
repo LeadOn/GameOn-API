@@ -19,7 +19,6 @@ namespace YuGames.Entities
         /// <summary>
         /// Gets or sets player's Keycloak ID.
         /// </summary>
-        [JsonIgnore]
         public string? KeycloakId { get; set; }
 
         /// <summary>

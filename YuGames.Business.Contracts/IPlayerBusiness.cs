@@ -41,6 +41,8 @@ namespace YuGames.Business.Contracts
         /// <param name="keycloakId">Keycloak ID.</param>
         /// <returns><see cref="Player" />.</returns>
         Task<Player> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId);
+        
+        Task<Player> UpdatePlayerAdmin(UpdatePlayerDto update);
 
         /// <summary>
         /// Get player stats.

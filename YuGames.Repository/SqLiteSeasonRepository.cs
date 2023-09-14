@@ -38,5 +38,11 @@ namespace YuGames.Repository
         {
             return await this.context.Seasons.FirstOrDefaultAsync(x => x.Id == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"));
         }
+        
+        /// <inheritdoc />
+        public async Task<int> Count()
+        {
+            return await this.context.Seasons.CountAsync();
+        }
     }
 }

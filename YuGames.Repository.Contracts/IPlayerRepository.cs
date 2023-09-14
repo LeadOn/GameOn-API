@@ -48,6 +48,8 @@ namespace YuGames.Repository.Contracts
         /// <param name="profilePictureUrl">Profile Picture URL.</param>
         /// <returns><see cref="Player"/>.</returns>
         Task<Player> UpdateUser(string keycloakId, string fullName, string nickname, string profilePictureUrl);
+        
+        Task<Player> UpdateUserAdmin(Player player);
 
         /// <summary>
         /// Gets count.

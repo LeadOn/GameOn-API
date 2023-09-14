@@ -35,5 +35,8 @@ namespace YuGames.DTOs
         /// Gets or sets number of FifaGames.
         /// </summary>
         public int FifaGames { get; set; }
+        
+        public int Tournaments { get; set; }
+        public int Seasons { get; set; }
     }
 }

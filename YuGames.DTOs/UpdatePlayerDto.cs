@@ -9,6 +9,9 @@ namespace YuGames.DTOs
     /// </summary>
     public class UpdatePlayerDto
     {
+        public int? Id { get; set; }
+        public string? KeycloakId { get; set; }
+
         /// <summary>
         /// Gets or sets Full Name.
         /// </summary>

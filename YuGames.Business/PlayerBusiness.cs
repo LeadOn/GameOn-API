@@ -69,6 +69,24 @@ namespace YuGames.Business
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
+        public async Task<Player> UpdatePlayerAdmin(UpdatePlayerDto update)
+        {
+            if (update.Id is null)
+            {
+                throw new NotImplementedException();
+            }
+
+            // Getting user in database
+            var userInDb = await this.playerRepo.GetPlayerById((int)update.Id);
+
+            userInDb.KeycloakId = update.KeycloakId;
+            userInDb.Nickname = update.Nickname;
+            userInDb.FullName = update.FullName;
+            userInDb.ProfilePictureUrl = update.ProfilePictureUrl;
+
+            return await this.playerRepo.UpdateUserAdmin(userInDb);
+        }
+
         /// <inheritdoc />
         public async Task<FifaPlayerStatsDto> GetPlayerStats(int playerId, int? seasonId)
         {

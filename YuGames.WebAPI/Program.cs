@@ -98,6 +98,8 @@ builder.Services.AddScoped<IAdminBusiness, AdminBusiness>();
 builder.Services.AddScoped<IHighlightBusiness, HighlightBusiness>();
 builder.Services.AddScoped<ISeasonBusiness, SeasonBusiness>();
 builder.Services.AddScoped<ISeasonRepository, SqLiteSeasonRepository>();
+builder.Services.AddScoped<ITournamentRepository, SqLiteTournamentRepository>();
+builder.Services.AddScoped<ITournamentBusiness, TournamentBusiness>();
 
 var app = builder.Build();
 

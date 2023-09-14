@@ -55,6 +55,11 @@ namespace YuGames.EntitiesContext
         /// Gets or sets Seasons.
         /// </summary>
         public DbSet<Season> Seasons { get; set; } = null!;
+        
+        /// <summary>
+        /// Gets or sets Tournaments.
+        /// </summary>
+        public DbSet<Tournament> Tournaments { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the path of the SQLite file.
@@ -68,6 +73,43 @@ namespace YuGames.EntitiesContext
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Tournament>(entity =>
+            {
+                entity.ToTable("Tournament");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(5000);
+
+                entity.Property(e => e.State)
+                    .HasColumnName("state")
+                    .IsRequired()
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.LogoUrl)
+                    .HasColumnName("logo_url")
+                    .HasMaxLength(3000);
+
+                entity.Property(e => e.PlannedFrom)
+                    .HasColumnName("planned_from")
+                    .IsRequired()
+                    .HasDefaultValue(DateTime.UtcNow);
+
+                entity.Property(e => e.PlannedTo)
+                    .HasColumnName("planned_to")
+                    .IsRequired()
+                    .HasDefaultValue(DateTime.UtcNow.AddDays(1));
+            });
+
             modelBuilder.Entity<Season>(entity =>
             {
                 entity.ToTable("Season");

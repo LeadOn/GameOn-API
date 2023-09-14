@@ -22,5 +22,11 @@ namespace YuGames.Repository.Contracts
         /// </summary>
         /// <returns><see cref="List{Season}"/>.</returns>
         Task<List<Season>> GetAll();
+        
+        /// <summary>
+        /// Gets count.
+        /// </summary>
+        /// <returns>Count.</returns>
+        Task<int> Count();
     }
 }
