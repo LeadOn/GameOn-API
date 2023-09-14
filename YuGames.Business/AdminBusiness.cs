@@ -18,6 +18,8 @@ namespace YuGames.Business
         private IPlatformRepository platformRepo;
         private IHighlightRepository highlightRepo;
         private IFifaGamePlayedRepository fifaGamePlayedRepo;
+        private ITournamentRepository tournamentRepo;
+        private ISeasonRepository seasonRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdminBusiness" /> class.
@@ -26,12 +28,16 @@ namespace YuGames.Business
         /// <param name="platformRepo">Platform repository, injected.</param>
         /// <param name="highlightRepo">Highlight repository, injected.</param>
         /// <param name="fifaGamePlayedRepo">FifaGamePlayed repository, injected.</param>
-        public AdminBusiness(IPlayerRepository playerRepo, IPlatformRepository platformRepo, IHighlightRepository highlightRepo, IFifaGamePlayedRepository fifaGamePlayedRepo)
+        /// <param name="tournamentRepo">Tournament repository, injected.</param>
+        /// <param name="seasonRepo">SeasonRepo repository, injected.</param>
+        public AdminBusiness(IPlayerRepository playerRepo, IPlatformRepository platformRepo, IHighlightRepository highlightRepo, IFifaGamePlayedRepository fifaGamePlayedRepo, ITournamentRepository tournamentRepo, ISeasonRepository seasonRepo)
         {
             this.playerRepo = playerRepo;
             this.platformRepo = platformRepo;
             this.highlightRepo = highlightRepo;
             this.fifaGamePlayedRepo = fifaGamePlayedRepo;
+            this.tournamentRepo = tournamentRepo;
+            this.seasonRepo = seasonRepo;
         }
 
         /// <inheritdoc />
@@ -55,6 +61,8 @@ namespace YuGames.Business
             adminDashboard.Players = await this.playerRepo.Count();
             adminDashboard.Highlights = await this.highlightRepo.Count();
             adminDashboard.FifaGames = await this.fifaGamePlayedRepo.Count();
+            adminDashboard.Tournaments = await this.tournamentRepo.Count();
+            adminDashboard.Seasons = await this.seasonRepo.Count();
 
             return adminDashboard;
         }

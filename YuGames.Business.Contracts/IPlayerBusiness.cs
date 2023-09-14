@@ -43,6 +43,13 @@ namespace YuGames.Business.Contracts
         Task<Player> UpdatePlayer(string fullName, string nickname, string profilePictureUrl, string keycloakId);
 
         /// <summary>
+        /// Update player in database (admin only).
+        /// </summary>
+        /// <param name="update">Player Update DTO.</param>
+        /// <returns><see cref="Player" />.</returns>
+        Task<Player> UpdatePlayerAdmin(UpdatePlayerDto update);
+
+        /// <summary>
         /// Get player stats.
         /// </summary>
         /// <param name="playerId">Player ID.</param>

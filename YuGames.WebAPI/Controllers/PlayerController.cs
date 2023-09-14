@@ -66,6 +66,24 @@ namespace YuGames.WebAPI.Controllers
         /// <param name="update"><see cref="UpdatePlayerDto"/>.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPatch]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update user profile (Admin only).", Description = "Updates user profile in database, only for admins.")]
+        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdatePlayerDto update)
+        {
+            return this.Ok(await this.playerBusi.UpdatePlayerAdmin(update));
+        }
+
+        /// <summary>
+        /// Update user (admin only).
+        /// </summary>
+        /// <param name="update"><see cref="UpdatePlayerDto"/>.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
         [Authorize]
         [Route("me")]
         [Produces("application/json")]
