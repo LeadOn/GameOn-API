@@ -33,6 +33,12 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
+        public async Task<FifaTeam?> GetById(int id)
+        {
+            return await this.fifaTeamRepo.GetById(id);
+        }
+
+        /// <inheritdoc />
         public async Task<List<TopTeamStatDto>> GetMostLossesTeams(int playerId, int numberOfTeams, int seasonId)
         {
             return await this.fifaTeamRepo.GetMostLossesTeams(playerId, numberOfTeams, seasonId);

@@ -5,6 +5,7 @@
 namespace YuGames.EntitiesContext
 {
     using Microsoft.EntityFrameworkCore;
+    using YuGames.Common.Collections;
     using YuGames.Common.Exceptions;
     using YuGames.Entities;
 
@@ -18,7 +19,7 @@ namespace YuGames.EntitiesContext
         /// </summary>
         public YuGamesContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\valentin.virot\\Desktop\\yugames.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yugames.db";
         }
 
         /// <summary>
@@ -62,6 +63,11 @@ namespace YuGames.EntitiesContext
         public DbSet<Tournament> Tournaments { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets TournamentPlayers.
+        /// </summary>
+        public DbSet<TournamentPlayer> TournamentPlayers { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the path of the SQLite file.
         /// </summary>
         public string DbPath { get; set; }
@@ -93,7 +99,7 @@ namespace YuGames.EntitiesContext
                 entity.Property(e => e.State)
                     .HasColumnName("state")
                     .IsRequired()
-                    .HasDefaultValue(0);
+                    .HasDefaultValue(TournamentStates.Draft);
 
                 entity.Property(e => e.LogoUrl)
                     .HasColumnName("logo_url")
@@ -108,6 +114,50 @@ namespace YuGames.EntitiesContext
                     .HasColumnName("planned_to")
                     .IsRequired()
                     .HasDefaultValue(DateTime.UtcNow.AddDays(1));
+            });
+
+            modelBuilder.Entity<TournamentPlayer>(entity =>
+            {
+                entity.ToTable("TournamentPlayer");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id")
+                    .IsRequired();
+
+                entity.Property(e => e.FifaTeamId)
+                    .HasColumnName("fifa_team_id")
+                    .IsRequired();
+
+                entity.Property(e => e.TournamentId)
+                   .HasColumnName("tournament_id")
+                   .IsRequired();
+
+                entity.Property(e => e.JoinedAt)
+                    .HasColumnName("joined_at")
+                    .IsRequired()
+                    .HasDefaultValue(DateTime.UtcNow);
+
+                entity.HasOne(e => e.Player)
+                      .WithMany(f => f.TournamentPlayed)
+                      .HasForeignKey(e => e.PlayerId)
+                      .HasConstraintName("FK_TournamentPlayer_Player")
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Tournament)
+                      .WithMany(f => f.Players)
+                      .HasForeignKey(e => e.TournamentId)
+                      .HasConstraintName("FK_TournamentPlayer_Tournament")
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.FifaTeam)
+                      .WithMany(f => f.TournamentPlayers)
+                      .HasForeignKey(e => e.FifaTeamId)
+                      .HasConstraintName("FK_TournamentPlayer_FifaTeam")
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Season>(entity =>

@@ -44,5 +44,12 @@ namespace YuGames.Business.Contracts
         /// <param name="seasonId">Season ID.</param>
         /// <returns><see cref="List{TopTeamStatDto}"/>.</returns>
         Task<List<TopTeamStatDto>> GetMostLossesTeams(int playerId, int numberOfTeams, int seasonId);
+
+        /// <summary>
+        /// Gets FIFA Team by ID.
+        /// </summary>
+        /// <param name="id">Team ID.</param>
+        /// <returns>Team if found, null if not.</returns>
+        Task<FifaTeam?> GetById(int id);
     }
 }

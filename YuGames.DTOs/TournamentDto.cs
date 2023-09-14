@@ -16,6 +16,7 @@ namespace YuGames.DTOs
         /// </summary>
         public TournamentDto()
         {
+            this.Players = new List<TournamentPlayerDto>();
         }
 
         /// <summary>
@@ -30,6 +31,7 @@ namespace YuGames.DTOs
             this.LogoUrl = tour.LogoUrl;
             this.PlannedFrom = tour.PlannedFrom;
             this.PlannedTo = tour.PlannedTo;
+            this.Players = new List<TournamentPlayerDto>();
         }
 
         /// <summary>
@@ -61,5 +63,10 @@ namespace YuGames.DTOs
         /// Gets or sets PlannedTo.
         /// </summary>
         public DateTime PlannedTo { get; set; }
+
+        /// <summary>
+        /// Gets or sets Players.
+        /// </summary>
+        public List<TournamentPlayerDto>? Players { get; set; }
     }
 }
