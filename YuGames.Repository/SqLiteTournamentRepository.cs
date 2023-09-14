@@ -70,5 +70,54 @@ namespace YuGames.Repository
             await this.context.SaveChangesAsync();
             return tournament;
         }
+
+        /// <inheritdoc />
+        public async Task<bool> CheckPlayerSubscription(int tournamentId, int playerId)
+        {
+            var playerSubscription = await this.context.TournamentPlayers.FirstOrDefaultAsync(x => x.TournamentId == tournamentId && x.PlayerId == playerId);
+
+            if (playerSubscription is not null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<TournamentPlayer> Subscribe(int tournamentId, int playerId, int fifaTeamId)
+        {
+            var tournamentPlayer = new TournamentPlayer
+            {
+                TournamentId = tournamentId,
+                PlayerId = playerId,
+                FifaTeamId = fifaTeamId,
+            };
+
+            this.context.TournamentPlayers.Add(tournamentPlayer);
+
+            await this.context.SaveChangesAsync();
+
+            return tournamentPlayer;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> Delete(int tournamentId)
+        {
+            var tournament = await this.context.Tournaments.FirstOrDefaultAsync(x => x.Id == tournamentId);
+
+            if (tournament is null)
+            {
+                return true;
+            }
+            else
+            {
+                this.context.Tournaments.Remove(tournament);
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+        }
     }
 }

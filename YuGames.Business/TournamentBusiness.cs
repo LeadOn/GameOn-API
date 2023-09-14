@@ -17,14 +17,23 @@ namespace YuGames.Business
     public class TournamentBusiness : ITournamentBusiness
     {
         private ITournamentRepository tournamentRepository;
+        private IFifaTeamBusiness fifaTeamBusi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TournamentBusiness" /> class.
         /// </summary>
         /// <param name="tournamentRepo">Tournament repository, injected.</param>
-        public TournamentBusiness(ITournamentRepository tournamentRepo)
+        /// <param name="fifaTeamBusi">Fifa Team business, injected.</param>
+        public TournamentBusiness(ITournamentRepository tournamentRepo, IFifaTeamBusiness fifaTeamBusi)
         {
             this.tournamentRepository = tournamentRepo;
+            this.fifaTeamBusi = fifaTeamBusi;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> CheckPlayerSubscription(int tournamentId, int playerId)
+        {
+            return await this.tournamentRepository.CheckPlayerSubscription(tournamentId, playerId);
         }
 
         /// <inheritdoc />
@@ -39,6 +48,12 @@ namespace YuGames.Business
                 PlannedFrom = tournament.PlannedFrom,
                 PlannedTo = tournament.PlannedTo,
             });
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> Delete(int tournamentId)
+        {
+            return await this.tournamentRepository.Delete(tournamentId);
         }
 
         /// <inheritdoc />
@@ -64,6 +79,26 @@ namespace YuGames.Business
 
                 return tournament;
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<TournamentPlayer> Subscribe(int tournamentId, int playerId, int fifaTeamId)
+        {
+            var isSubscribed = await this.CheckPlayerSubscription(tournamentId, playerId);
+
+            if (isSubscribed == true)
+            {
+                throw new NotImplementedException();
+            }
+
+            var fifaTeamInDb = await this.fifaTeamBusi.GetById(fifaTeamId);
+
+            if (fifaTeamInDb is null)
+            {
+                throw new NotImplementedException();
+            }
+
+            return await this.tournamentRepository.Subscribe(tournamentId, playerId, fifaTeamId);
         }
 
         /// <inheritdoc />
