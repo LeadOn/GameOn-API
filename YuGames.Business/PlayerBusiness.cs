@@ -102,109 +102,119 @@ namespace YuGames.Business
                 // Getting games played by platform
                 var teamPlayersInDb = await this.teamPlayerRepo.Search(x => x.FifaGamePlayed.PlatformId == platform.Id && x.PlayerId == playerInDb.Id && x.FifaGamePlayed.SeasonId == seasonId, 1000000);
 
-                // For each game played, getting that stats
-                foreach (var teamPlayer in teamPlayersInDb)
+                if (teamPlayersInDb.ToList().Count > 0)
                 {
-                    // Getting game
-                    var gameInDb = await this.gamePlayedRepo.GetById(teamPlayer.FifaGameId);
-
-                    if (gameInDb is null)
+                    // For each game played, getting that stats
+                    foreach (var teamPlayer in teamPlayersInDb)
                     {
-                        throw new NotImplementedException();
+                        // Getting game
+                        var gameInDb = await this.gamePlayedRepo.GetById(teamPlayer.FifaGameId);
+
+                        if (gameInDb is null)
+                        {
+                            throw new NotImplementedException();
+                        }
+                        else
+                        {
+                            if (gameInDb.TeamScore1 == gameInDb.TeamScore2)
+                            {
+                                stats.Draws++;
+                            }
+                            else if ((teamPlayer.Team == 0 && gameInDb.TeamScore1 > gameInDb.TeamScore2) || (teamPlayer.Team == 1 && gameInDb.TeamScore1 < gameInDb.TeamScore2))
+                            {
+                                stats.Wins++;
+                            }
+                            else if ((teamPlayer.Team == 0 && gameInDb.TeamScore1 < gameInDb.TeamScore2) || (teamPlayer.Team == 1 && gameInDb.TeamScore1 > gameInDb.TeamScore2))
+                            {
+                                stats.Losses++;
+                            }
+
+                            if (teamPlayer.Team == 0)
+                            {
+                                stats.GoalsGiven += gameInDb.TeamScore1;
+                                stats.GoalsTaken += gameInDb.TeamScore2;
+                            }
+                            else if (teamPlayer.Team == 1)
+                            {
+                                stats.GoalsGiven += gameInDb.TeamScore2;
+                                stats.GoalsTaken += gameInDb.TeamScore1;
+                            }
+                        }
+                    }
+
+                    stats.GoalDifference = stats.GoalsGiven - stats.GoalsTaken;
+                    if (stats.GoalsGiven == 0 || (stats.Wins + stats.Losses + stats.Draws) == 0)
+                    {
+                        stats.AverageGoalGiven = 0;
                     }
                     else
                     {
-                        if (gameInDb.TeamScore1 == gameInDb.TeamScore2)
-                        {
-                            stats.Draws++;
-                        }
-                        else if ((teamPlayer.Team == 0 && gameInDb.TeamScore1 > gameInDb.TeamScore2) || (teamPlayer.Team == 1 && gameInDb.TeamScore1 < gameInDb.TeamScore2))
-                        {
-                            stats.Wins++;
-                        }
-                        else if ((teamPlayer.Team == 0 && gameInDb.TeamScore1 < gameInDb.TeamScore2) || (teamPlayer.Team == 1 && gameInDb.TeamScore1 > gameInDb.TeamScore2))
-                        {
-                            stats.Losses++;
-                        }
-
-                        if (teamPlayer.Team == 0)
-                        {
-                            stats.GoalsGiven += gameInDb.TeamScore1;
-                            stats.GoalsTaken += gameInDb.TeamScore2;
-                        }
-                        else if (teamPlayer.Team == 1)
-                        {
-                            stats.GoalsGiven += gameInDb.TeamScore2;
-                            stats.GoalsTaken += gameInDb.TeamScore1;
-                        }
+                        stats.AverageGoalGiven = (float)Math.Round((double)(stats.GoalsGiven / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
                     }
-                }
 
-                stats.GoalDifference = stats.GoalsGiven - stats.GoalsTaken;
-                if (stats.GoalsGiven == 0 || (stats.Wins + stats.Losses + stats.Draws) == 0)
-                {
-                    stats.AverageGoalGiven = 0;
-                }
-                else
-                {
-                    stats.AverageGoalGiven = (float)Math.Round((double)(stats.GoalsGiven / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
-                }
+                    if (stats.GoalsTaken == 0 || (stats.Wins + stats.Losses + stats.Draws) == 0)
+                    {
+                        stats.AverageGoalTaken = 0;
+                    }
+                    else
+                    {
+                        stats.AverageGoalTaken = (float)Math.Round((double)(stats.GoalsTaken / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
+                    }
 
-                if (stats.GoalsTaken == 0 || (stats.Wins + stats.Losses + stats.Draws) == 0)
-                {
-                    stats.AverageGoalTaken = 0;
-                }
-                else
-                {
-                    stats.AverageGoalTaken = (float)Math.Round((double)(stats.GoalsTaken / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
-                }
+                    var gamesPlayed = stats.Wins + stats.Losses + stats.Draws;
 
-                var gamesPlayed = stats.Wins + stats.Losses + stats.Draws;
+                    // Calculating win rate
+                    if (stats.Wins == 0 || gamesPlayed == 0)
+                    {
+                        stats.WinRate = 0;
+                    }
+                    else
+                    {
+                        stats.WinRate = (float)Math.Round((double)((stats.Wins * 100) / (float)gamesPlayed), 2);
+                    }
 
-                // Calculating win rate
-                if (stats.Wins == 0 || gamesPlayed == 0)
-                {
-                    stats.WinRate = 0;
-                }
-                else
-                {
-                    stats.WinRate = (float)Math.Round((double)((stats.Wins * 100) / (float)gamesPlayed), 2);
-                }
+                    // Calculating loose rate
+                    if (stats.Losses == 0 || gamesPlayed == 0)
+                    {
+                        stats.LooseRate = 0;
+                    }
+                    else
+                    {
+                        stats.LooseRate = (float)Math.Round((double)((stats.Losses * 100) / (float)gamesPlayed), 2);
+                    }
 
-                // Calculating loose rate
-                if (stats.Losses == 0 || gamesPlayed == 0)
-                {
-                    stats.LooseRate = 0;
-                }
-                else
-                {
-                    stats.LooseRate = (float)Math.Round((double)((stats.Losses * 100) / (float)gamesPlayed), 2);
-                }
+                    // Calculating draw rate
+                    if (stats.Draws == 0 || gamesPlayed == 0)
+                    {
+                        stats.DrawRate = 0;
+                    }
+                    else
+                    {
+                        stats.DrawRate = (float)Math.Round((double)((stats.Draws * 100) / (float)gamesPlayed), 2);
+                    }
 
-                // Calculating draw rate
-                if (stats.Draws == 0 || gamesPlayed == 0)
-                {
-                    stats.DrawRate = 0;
-                }
-                else
-                {
-                    stats.DrawRate = (float)Math.Round((double)((stats.Draws * 100) / (float)gamesPlayed), 2);
-                }
+                    globalStats.Wins += stats.Wins;
+                    globalStats.Losses += stats.Losses;
+                    globalStats.Draws += stats.Draws;
+                    globalStats.GoalDifference += stats.GoalDifference;
+                    globalStats.GoalsTaken += stats.GoalsTaken;
+                    globalStats.GoalsGiven += stats.GoalsGiven;
+                    avgGoalsGiven.Add(stats.AverageGoalGiven);
+                    avgGoalsTaken.Add(stats.AverageGoalTaken);
 
-                globalStats.Wins += stats.Wins;
-                globalStats.Losses += stats.Losses;
-                globalStats.Draws += stats.Draws;
-                globalStats.GoalDifference += stats.GoalDifference;
-                globalStats.GoalsTaken += stats.GoalsTaken;
-                globalStats.GoalsGiven += stats.GoalsGiven;
-                avgGoalsGiven.Add(stats.AverageGoalGiven);
-                avgGoalsTaken.Add(stats.AverageGoalTaken);
-
-                platformsStats.Add(stats);
+                    platformsStats.Add(stats);
+                }
             }
 
-            globalStats.AverageGoalGiven = (float)Math.Round((double)avgGoalsGiven.Average(), 2);
-            globalStats.AverageGoalTaken = (float)Math.Round((double)avgGoalsTaken.Average(), 2);
+            if (avgGoalsGiven.Count != 0)
+            {
+                globalStats.AverageGoalGiven = (float)Math.Round((double)avgGoalsGiven.Average(), 2);
+            }
+
+            if (avgGoalsTaken.Count != 0)
+            {
+                globalStats.AverageGoalTaken = (float)Math.Round((double)avgGoalsTaken.Average(), 2);
+            }
 
             var totalGamesPlayed = globalStats.Wins + globalStats.Losses + globalStats.Draws;
 
