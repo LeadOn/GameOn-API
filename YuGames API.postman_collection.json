@@ -31,6 +31,57 @@
 			]
 		},
 		{
+			"name": "Tournament",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test tournament\",\n  \"description\": \"desc\",\n  \"state\": 0,\n  \"logoUrl\": \"https://media.licdn.com/dms/image/C4E0BAQFpaA1IhSqABA/company-logo_200_200/0/1614341145793?e=2147483647&v=beta&t=QCMXDnCeTeRTRitEmTHFLsBr4DMlQjFGUtKVzPjLhf4\",\n  \"plannedFrom\": \"2023-09-14T10:18:20.445Z\",\n  \"plannedTo\": \"2023-09-15T10:18:20.445Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tournament",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tournament",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Season",
 			"item": [
 				{
@@ -476,6 +527,32 @@
 							"path": [
 								"player",
 								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (Admin only)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 19,\r\n  \"keycloakId\": \"8c85f712-db75-4529-80a3-97311dacd535\",\r\n  \"fullName\": \"Pierre Henri Bachelain\",\r\n  \"nickname\": \"PH\",\r\n  \"profilePictureUrl\": \"https://static.wikia.nocookie.net/xbox/images/0/05/1_-_1XzYnhZ.png/revision/latest/scale-to-width-down/1000?cb=20210628044343\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/player",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"player"
 							]
 						}
 					},

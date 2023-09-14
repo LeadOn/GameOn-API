@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "1.3"
+    "version": "1.4"
   },
   "paths": {
     "/v{version}/Admin/dashboard": {
@@ -1092,6 +1092,77 @@
         }
       }
     },
+    "/v{version}/Player": {
+      "patch": {
+        "tags": ["Player"],
+        "summary": "Update user profile (Admin only).",
+        "description": "Updates user profile in database, only for admins.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            },
+            "text/json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            },
+            "application/*+json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/v{version}/Player/{id}": {
       "get": {
         "tags": ["Player"],
@@ -1447,6 +1518,128 @@
           }
         }
       }
+    },
+    "/v{version}/Tournament": {
+      "post": {
+        "tags": ["Tournament"],
+        "summary": "Create tournament in database.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/TournamentDto"
+              }
+            },
+            "text/json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/TournamentDto"
+              }
+            },
+            "application/*+json; ver=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/TournamentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created tournament.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Not enough roles."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "get": {
+        "tags": ["Tournament"],
+        "summary": "Get all tournaments in database.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tournaments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tournament"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1470,6 +1663,14 @@
             "format": "int32"
           },
           "fifaGames": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tournaments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasons": {
             "type": "integer",
             "format": "int32"
           }
@@ -1832,6 +2033,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "keycloakId": {
+            "type": "string",
+            "nullable": true
+          },
           "fullName": {
             "type": "string",
             "nullable": true
@@ -1874,6 +2079,70 @@
           },
           "fifaTeam": {
             "$ref": "#/components/schemas/FifaTeam"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Tournament": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "plannedFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "plannedTo": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TournamentDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "plannedFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "plannedTo": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -1921,6 +2190,15 @@
       "UpdatePlayerDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "keycloakId": {
+            "type": "string",
+            "nullable": true
+          },
           "fullName": {
             "type": "string",
             "nullable": true

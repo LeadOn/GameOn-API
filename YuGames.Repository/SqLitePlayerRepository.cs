@@ -97,6 +97,14 @@ namespace YuGames.Repository
         }
 
         /// <inheritdoc />
+        public async Task<Player> UpdateUserAdmin(Player player)
+        {
+            this.context.Update(player);
+            await this.context.SaveChangesAsync();
+            return player;
+        }
+
+        /// <inheritdoc />
         public async Task<Player?> GetPlayerByKeycloakId(string keycloakId)
         {
             return await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == keycloakId);

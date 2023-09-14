@@ -10,6 +10,16 @@ namespace YuGames.DTOs
     public class UpdatePlayerDto
     {
         /// <summary>
+        /// Gets or sets Id.
+        /// </summary>
+        public int? Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets Keycloak ID.
+        /// </summary>
+        public string? KeycloakId { get; set; }
+
+        /// <summary>
         /// Gets or sets Full Name.
         /// </summary>
         public string FullName { get; set; } = "INVALID NICKNAME";
