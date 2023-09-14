@@ -17,14 +17,23 @@ namespace YuGames.Business
     public class TournamentBusiness : ITournamentBusiness
     {
         private ITournamentRepository tournamentRepository;
+        private IFifaTeamBusiness fifaTeamBusi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TournamentBusiness" /> class.
         /// </summary>
         /// <param name="tournamentRepo">Tournament repository, injected.</param>
-        public TournamentBusiness(ITournamentRepository tournamentRepo)
+        /// <param name="fifaTeamBusi">Fifa Team business, injected.</param>
+        public TournamentBusiness(ITournamentRepository tournamentRepo, IFifaTeamBusiness fifaTeamBusi)
         {
             this.tournamentRepository = tournamentRepo;
+            this.fifaTeamBusi = fifaTeamBusi;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> CheckPlayerSubscription(int tournamentId, int playerId)
+        {
+            return await this.tournamentRepository.CheckPlayerSubscription(tournamentId, playerId);
         }
 
         /// <inheritdoc />
@@ -42,9 +51,74 @@ namespace YuGames.Business
         }
 
         /// <inheritdoc />
+        public async Task<bool> Delete(int tournamentId)
+        {
+            return await this.tournamentRepository.Delete(tournamentId);
+        }
+
+        /// <inheritdoc />
         public async Task<List<Tournament>> GetAll()
         {
             return await this.tournamentRepository.GetAll();
+        }
+
+        /// <inheritdoc />
+        public async Task<TournamentDto?> GetById(int id)
+        {
+            var tournamentInDb = await this.tournamentRepository.GetById(id);
+
+            if (tournamentInDb is null)
+            {
+                return null;
+            }
+            else
+            {
+                var tournament = new TournamentDto(tournamentInDb);
+
+                tournament.Players = await this.tournamentRepository.GetPlayers(id);
+
+                return tournament;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<TournamentPlayer> Subscribe(int tournamentId, int playerId, int fifaTeamId)
+        {
+            var isSubscribed = await this.CheckPlayerSubscription(tournamentId, playerId);
+
+            if (isSubscribed == true)
+            {
+                throw new NotImplementedException();
+            }
+
+            var fifaTeamInDb = await this.fifaTeamBusi.GetById(fifaTeamId);
+
+            if (fifaTeamInDb is null)
+            {
+                throw new NotImplementedException();
+            }
+
+            return await this.tournamentRepository.Subscribe(tournamentId, playerId, fifaTeamId);
+        }
+
+        /// <inheritdoc />
+        public async Task<Tournament> UpdateTournament(int id, TournamentDto tournament)
+        {
+            var tournamentInDb = await this.tournamentRepository.GetById(id);
+
+            if (tournamentInDb is null)
+            {
+                throw new NotImplementedException();
+            }
+
+            tournamentInDb.Name = tournament.Name;
+            tournamentInDb.Description = tournament.Description;
+            tournamentInDb.PlannedFrom = tournament.PlannedFrom;
+            tournamentInDb.PlannedTo = tournament.PlannedTo;
+            tournamentInDb.LogoUrl = tournament.LogoUrl;
+            tournamentInDb.State = tournament.State;
+
+            return await this.tournamentRepository.UpdateTournament(tournamentInDb);
         }
     }
 }
