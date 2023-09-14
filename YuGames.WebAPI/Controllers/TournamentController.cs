@@ -51,6 +51,26 @@ namespace YuGames.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Update tournament in database.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <param name="tournament">Updated tournament.</param>
+        /// <returns>IActionResult Object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{id:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Create tournament in database.")]
+        [SwaggerResponse(201, "Created tournament.", typeof(Tournament))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> Update(int id, [FromBody]TournamentDto tournament)
+        {
+            return this.StatusCode(200, await this.tournamentBusi.UpdateTournament(id, tournament));
+        }
+
+        /// <summary>
         /// Get all tournaments in database.
         /// </summary>
         /// <returns>IActionResult object.</returns>
@@ -63,6 +83,23 @@ namespace YuGames.WebAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             return this.Ok(await this.tournamentBusi.GetAll());
+        }
+
+        /// <summary>
+        /// Get all tournaments in database.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{id:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get tournament by ID in database.")]
+        [SwaggerResponse(200, "Tournament.", typeof(TournamentDto))]
+        [SwaggerResponse(404, "Tournament not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            return this.Ok(await this.tournamentBusi.GetById(id));
         }
     }
 }

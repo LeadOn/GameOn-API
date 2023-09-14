@@ -5,6 +5,7 @@
 namespace YuGames.Repository.Contracts
 {
     using System.Linq.Expressions;
+    using YuGames.DTOs;
     using YuGames.Entities;
 
     /// <summary>
@@ -26,9 +27,30 @@ namespace YuGames.Repository.Contracts
         Task<List<Tournament>> GetAll();
 
         /// <summary>
+        /// Get tournament by ID in database.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <returns><see cref="Tournament"/>.</returns>
+        Task<Tournament?> GetById(int id);
+
+        /// <summary>
         /// Gets count.
         /// </summary>
         /// <returns>Count.</returns>
         Task<int> Count();
+
+        /// <summary>
+        /// Gets tournament players.
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <returns><see cref="List{TournamentPlayerDto}"/> Tournament players.</returns>
+        Task<List<TournamentPlayerDto>> GetPlayers(int tournamentId);
+
+        /// <summary>
+        /// Update tournament in database.
+        /// </summary>
+        /// <param name="tournament">Updated <see cref="Tournament"/>.</param>
+        /// <returns><see cref="Tournament"/>.</returns>
+        Task<Tournament> UpdateTournament(Tournament tournament);
     }
 }

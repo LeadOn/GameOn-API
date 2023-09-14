@@ -46,5 +46,44 @@ namespace YuGames.Business
         {
             return await this.tournamentRepository.GetAll();
         }
+
+        /// <inheritdoc />
+        public async Task<TournamentDto?> GetById(int id)
+        {
+            var tournamentInDb = await this.tournamentRepository.GetById(id);
+
+            if (tournamentInDb is null)
+            {
+                return null;
+            }
+            else
+            {
+                var tournament = new TournamentDto(tournamentInDb);
+
+                tournament.Players = await this.tournamentRepository.GetPlayers(id);
+
+                return tournament;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<Tournament> UpdateTournament(int id, TournamentDto tournament)
+        {
+            var tournamentInDb = await this.tournamentRepository.GetById(id);
+
+            if (tournamentInDb is null)
+            {
+                throw new NotImplementedException();
+            }
+
+            tournamentInDb.Name = tournament.Name;
+            tournamentInDb.Description = tournament.Description;
+            tournamentInDb.PlannedFrom = tournament.PlannedFrom;
+            tournamentInDb.PlannedTo = tournament.PlannedTo;
+            tournamentInDb.LogoUrl = tournament.LogoUrl;
+            tournamentInDb.State = tournament.State;
+
+            return await this.tournamentRepository.UpdateTournament(tournamentInDb);
+        }
     }
 }

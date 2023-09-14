@@ -4,6 +4,8 @@
 
 namespace YuGames.Entities;
 
+using System.Text.Json.Serialization;
+
 /// <summary>
 /// Tournament class.
 /// </summary>
@@ -43,4 +45,10 @@ public class Tournament
     /// Gets or sets Planned To date.
     /// </summary>
     public DateTime PlannedTo { get; set; }
+
+    /// <summary>
+    /// Gets or sets Tournament Players.
+    /// </summary>
+    [JsonIgnore]
+    public virtual List<TournamentPlayer> Players { get; set; } = null!;
 }

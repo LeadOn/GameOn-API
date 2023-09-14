@@ -54,6 +54,12 @@ namespace YuGames.Entities
         public virtual List<Highlight> Highlights { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets TournamentPlayer.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<TournamentPlayer> TournamentPlayed { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets games created.
         /// </summary>
         [JsonIgnore]

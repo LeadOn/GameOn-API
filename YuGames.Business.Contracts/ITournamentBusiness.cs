@@ -24,5 +24,20 @@ namespace YuGames.Business.Contracts
         /// </summary>
         /// <returns>List of Tournaments.</returns>
         Task<List<Tournament>> GetAll();
+
+        /// <summary>
+        /// Get tournament by ID in database.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <returns><see cref="Tournament"/>.</returns>
+        Task<TournamentDto?> GetById(int id);
+
+        /// <summary>
+        /// Update tournament in database.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <param name="tournament">Updated <see cref="Tournament"/>.</param>
+        /// <returns><see cref="Tournament"/>.</returns>
+        Task<Tournament> UpdateTournament(int id, TournamentDto tournament);
     }
 }

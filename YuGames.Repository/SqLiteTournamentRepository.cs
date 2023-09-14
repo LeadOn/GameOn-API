@@ -4,8 +4,8 @@
 
 namespace YuGames.Repository
 {
-    using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
+    using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.EntitiesContext;
     using YuGames.Repository.Contracts;
@@ -44,6 +44,31 @@ namespace YuGames.Repository
         public async Task<int> Count()
         {
             return await this.context.Tournaments.CountAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<Tournament?> GetById(int id)
+        {
+            return await this.context.Tournaments.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<TournamentPlayerDto>> GetPlayers(int tournamentId)
+        {
+            return await this.context.TournamentPlayers.Include(x => x.FifaTeam).Include(x => x.Player).Where(x => x.TournamentId == tournamentId).Select(x => new TournamentPlayerDto
+            {
+                JoinedAt = x.JoinedAt,
+                Player = x.Player,
+                Team = x.FifaTeam,
+            }).ToListAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<Tournament> UpdateTournament(Tournament tournament)
+        {
+            this.context.Tournaments.Update(tournament);
+            await this.context.SaveChangesAsync();
+            return tournament;
         }
     }
 }
