@@ -2,13 +2,12 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using YuGames.DTOs;
-
 namespace YuGames.Business
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using YuGames.Business.Contracts;
+    using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.Repository.Contracts;
 
@@ -22,7 +21,7 @@ namespace YuGames.Business
         /// <summary>
         /// Initializes a new instance of the <see cref="TournamentBusiness" /> class.
         /// </summary>
-        /// <param name="seasonRepo">Tournament repository, injected.</param>
+        /// <param name="tournamentRepo">Tournament repository, injected.</param>
         public TournamentBusiness(ITournamentRepository tournamentRepo)
         {
             this.tournamentRepository = tournamentRepo;

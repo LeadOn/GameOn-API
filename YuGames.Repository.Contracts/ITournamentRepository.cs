@@ -24,7 +24,7 @@ namespace YuGames.Repository.Contracts
         /// </summary>
         /// <returns>List of Tournaments.</returns>
         Task<List<Tournament>> GetAll();
-        
+
         /// <summary>
         /// Gets count.
         /// </summary>

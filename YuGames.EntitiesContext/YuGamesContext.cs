@@ -18,7 +18,7 @@ namespace YuGames.EntitiesContext
         /// </summary>
         public YuGamesContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yugames.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\valentin.virot\\Desktop\\yugames.db";
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace YuGames.EntitiesContext
         /// Gets or sets Seasons.
         /// </summary>
         public DbSet<Season> Seasons { get; set; } = null!;
-        
+
         /// <summary>
         /// Gets or sets Tournaments.
         /// </summary>

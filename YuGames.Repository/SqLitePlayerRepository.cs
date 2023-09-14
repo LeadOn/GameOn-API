@@ -96,6 +96,7 @@ namespace YuGames.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<Player> UpdateUserAdmin(Player player)
         {
             this.context.Update(player);

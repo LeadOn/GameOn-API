@@ -69,6 +69,7 @@ namespace YuGames.Business
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
+        /// <inheritdoc/>
         public async Task<Player> UpdatePlayerAdmin(UpdatePlayerDto update)
         {
             if (update.Id is null)
@@ -79,7 +80,9 @@ namespace YuGames.Business
             // Getting user in database
             var userInDb = await this.playerRepo.GetPlayerById((int)update.Id);
 
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
             userInDb.KeycloakId = update.KeycloakId;
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
             userInDb.Nickname = update.Nickname;
             userInDb.FullName = update.FullName;
             userInDb.ProfilePictureUrl = update.ProfilePictureUrl;

@@ -2,10 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using YuGames.DTOs;
-
 namespace YuGames.Business.Contracts
 {
+    using YuGames.DTOs;
     using YuGames.Entities;
 
     /// <summary>

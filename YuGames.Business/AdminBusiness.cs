@@ -28,6 +28,8 @@ namespace YuGames.Business
         /// <param name="platformRepo">Platform repository, injected.</param>
         /// <param name="highlightRepo">Highlight repository, injected.</param>
         /// <param name="fifaGamePlayedRepo">FifaGamePlayed repository, injected.</param>
+        /// <param name="tournamentRepo">Tournament repository, injected.</param>
+        /// <param name="seasonRepo">SeasonRepo repository, injected.</param>
         public AdminBusiness(IPlayerRepository playerRepo, IPlatformRepository platformRepo, IHighlightRepository highlightRepo, IFifaGamePlayedRepository fifaGamePlayedRepo, ITournamentRepository tournamentRepo, ISeasonRepository seasonRepo)
         {
             this.playerRepo = playerRepo;

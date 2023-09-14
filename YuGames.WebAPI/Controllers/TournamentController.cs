@@ -34,6 +34,7 @@ namespace YuGames.WebAPI.Controllers
         /// <summary>
         /// Create tournament in database.
         /// </summary>
+        /// <param name="tournament">Tournament DTO.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPost]
         [Authorize(Roles = "yugames_admin")]
