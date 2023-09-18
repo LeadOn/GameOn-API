@@ -19,7 +19,7 @@ namespace YuGames.EntitiesContext
         /// </summary>
         public YuGamesContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yugames.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yugames.db";
         }
 
         /// <summary>
@@ -280,8 +280,7 @@ namespace YuGames.EntitiesContext
 
                 entity.Property(e => e.IsPlayed)
                     .HasColumnName("is_played")
-                    .IsRequired()
-                    .HasDefaultValue(true);
+                    .IsRequired();
 
                 entity.HasOne(e => e.Team1)
                     .WithMany(f => f.GamesPlayedTeam1)

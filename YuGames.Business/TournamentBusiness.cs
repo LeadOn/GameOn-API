@@ -7,6 +7,7 @@ namespace YuGames.Business
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using YuGames.Business.Contracts;
+    using YuGames.Common.Collections;
     using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.Repository.Contracts;
@@ -18,16 +19,19 @@ namespace YuGames.Business
     {
         private ITournamentRepository tournamentRepository;
         private IFifaTeamBusiness fifaTeamBusi;
+        private IFifaGamePlayedRepository fifaGameRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TournamentBusiness" /> class.
         /// </summary>
         /// <param name="tournamentRepo">Tournament repository, injected.</param>
         /// <param name="fifaTeamBusi">Fifa Team business, injected.</param>
-        public TournamentBusiness(ITournamentRepository tournamentRepo, IFifaTeamBusiness fifaTeamBusi)
+        /// <param name="fifaGameRepo">Fifa Game repo, injected.</param>
+        public TournamentBusiness(ITournamentRepository tournamentRepo, IFifaTeamBusiness fifaTeamBusi, IFifaGamePlayedRepository fifaGameRepo)
         {
             this.tournamentRepository = tournamentRepo;
             this.fifaTeamBusi = fifaTeamBusi;
+            this.fifaGameRepo = fifaGameRepo;
         }
 
         /// <inheritdoc />
@@ -79,6 +83,65 @@ namespace YuGames.Business
 
                 return tournament;
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> GoToPhase1(int tournamentId)
+        {
+            // Getting tournament
+            var tournamentInDb = await this.tournamentRepository.GetById(tournamentId);
+
+            if (tournamentInDb is null)
+            {
+                throw new NotImplementedException();
+            }
+
+            // Getting players that are registered
+            var tournamentPlayers = await this.tournamentRepository.GetPlayers(tournamentId);
+
+            foreach (var player in tournamentPlayers)
+            {
+                // Looping for every opponent
+                foreach (var player2 in tournamentPlayers)
+                {
+                    if (player.Player.Id != player2.Player.Id)
+                    {
+                        var newGame = new FifaGamePlayed
+                        {
+                            CreatedById = player.Player.Id,
+                            IsPlayed = false,
+                            PlatformId = int.Parse(Environment.GetEnvironmentVariable("DEFAULT_PLATFORM") ?? "1"),
+                            PlayedOn = DateTime.UtcNow,
+                            SeasonId = int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"),
+                            Team1Id = player.Team.Id,
+                            Team2Id = player2.Team.Id,
+                            TeamCode1 = "???",
+                            TeamCode2 = "???",
+                            TeamPlayers = new List<FifaTeamPlayer>
+                                {
+                                    new FifaTeamPlayer
+                                    {
+                                        PlayerId = player.Player.Id,
+                                        Team = 0,
+                                    },
+                                    new FifaTeamPlayer
+                                    {
+                                        PlayerId = player2.Player.Id,
+                                        Team = 1,
+                                    },
+                                },
+                        };
+
+                        await this.fifaGameRepo.Create(newGame);
+                    }
+                }
+            }
+
+            // Updating tournament to Phase 1
+            tournamentInDb.State = TournamentStates.Phase1;
+            await this.tournamentRepository.UpdateTournament(tournamentInDb);
+
+            return true;
         }
 
         /// <inheritdoc />

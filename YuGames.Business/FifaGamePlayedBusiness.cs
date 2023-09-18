@@ -261,7 +261,7 @@ namespace YuGames.Business
             var gamesPlayedDto = new List<FifaGamePlayedDto>();
 
             // First, getting last games (from GamePlayed table)
-            var gamesPlayed = await this.gamePlayedRepo.Search(x => x.TeamPlayers.FirstOrDefault(x => x.PlayerId == playerId) != null, limit);
+            var gamesPlayed = await this.gamePlayedRepo.Search(x => x.TeamPlayers.FirstOrDefault(x => x.PlayerId == playerId) != null && x.IsPlayed == true, limit);
 
             // For each game played, getting player information
             foreach (var game in gamesPlayed)

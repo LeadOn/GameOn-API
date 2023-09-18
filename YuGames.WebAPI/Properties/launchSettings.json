@@ -9,7 +9,8 @@
         "SQLITE_PATH": "/Users/leadon/Desktop/yugames.db",
         "JWT_AUTHORITY": "https://auth.valentinvirot.fr/realms/yufoot",
         "JWT_AUDIENCE": "account",
-        "CURRENT_SEASON": "2"
+        "CURRENT_SEASON": "2",
+        "DEFAULT_PLATFORM": "2"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"
@@ -23,7 +24,8 @@
         "SQLITE_PATH": "C:\\Users\\Valentin\\Desktop\\yugames.db",
         "JWT_AUTHORITY": "https://auth.valentinvirot.fr/realms/yufoot",
         "JWT_AUDIENCE": "account",
-        "CURRENT_SEASON": "2"
+        "CURRENT_SEASON": "2",
+        "DEFAULT_PLATFORM": "2"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"

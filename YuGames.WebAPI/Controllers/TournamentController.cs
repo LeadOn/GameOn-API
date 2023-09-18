@@ -193,5 +193,33 @@ namespace YuGames.WebAPI.Controllers
         {
             return this.Ok(await this.tournamentBusi.Delete(id));
         }
+
+        /// <summary>
+        /// Update tournament to phase 1.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{id:int}/phase1")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Make Tournament to go into phase 1.")]
+        [SwaggerResponse(204, "Updated tournament.", typeof(Tournament))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GoToPhase1(int id)
+        {
+            var result = await this.tournamentBusi.GoToPhase1(id);
+
+            if (result)
+            {
+                return this.NoContent();
+            }
+            else
+            {
+                return this.Problem();
+            }
+        }
     }
 }
