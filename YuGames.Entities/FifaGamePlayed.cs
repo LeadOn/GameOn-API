@@ -67,6 +67,16 @@ namespace YuGames.Entities
         public int SeasonId { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether game is played or planned.
+        /// </summary>
+        public bool IsPlayed { get; set; }
+
+        /// <summary>
+        /// Gets or sets Tournament ID.
+        /// </summary>
+        public int? TournamentId { get; set; }
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
@@ -77,6 +87,12 @@ namespace YuGames.Entities
         /// </summary>
         [JsonIgnore]
         public virtual Player CreatedBy { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Tournament.
+        /// </summary>
+        [JsonIgnore]
+        public virtual Tournament? Tournament { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Platform.

@@ -121,7 +121,7 @@ namespace YuGames.Business
                 var stats = new PlatformStatsDto { AverageGoalGiven = 0, AverageGoalTaken = 0, Draws = 0, GoalDifference = 0, Losses = 0, Platform = platform, Wins = 0, GoalsGiven = 0, GoalsTaken = 0 };
 
                 // Getting games played by platform
-                var teamPlayersInDb = await this.teamPlayerRepo.Search(x => x.FifaGamePlayed.PlatformId == platform.Id && x.PlayerId == playerInDb.Id && x.FifaGamePlayed.SeasonId == seasonId, 1000000);
+                var teamPlayersInDb = await this.teamPlayerRepo.Search(x => x.FifaGamePlayed.PlatformId == platform.Id && x.PlayerId == playerInDb.Id && x.FifaGamePlayed.SeasonId == seasonId && x.FifaGamePlayed.IsPlayed == true, 1000000);
 
                 if (teamPlayersInDb.ToList().Count > 0)
                 {
