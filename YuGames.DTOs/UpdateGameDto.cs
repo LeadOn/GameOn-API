@@ -48,5 +48,10 @@ namespace YuGames.DTOs
         /// Gets or sets Team score 2.
         /// </summary>
         public int TeamScore2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether game is played or not.
+        /// </summary>
+        public bool IsPlayed { get; set; }
     }
 }

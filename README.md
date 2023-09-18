@@ -13,6 +13,7 @@ Here are all of the environment variables currently used :
     <li>SQLITE_PATH: Path to the SQLite database file.</li>
     <li>JWT_AUTHORITY: Token authority (used in the authentication middleware).</li>
     <li>JWT_AUDIENCE: Token audience (used in the authentication middleware).</li>
+    <li>CURRENT_SEASON: Current season ID in database.</li>
 </ul>
 
 ## Can I use it for my own website?

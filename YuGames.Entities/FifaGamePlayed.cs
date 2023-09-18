@@ -67,6 +67,11 @@ namespace YuGames.Entities
         public int SeasonId { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether game is played or planned.
+        /// </summary>
+        public bool IsPlayed { get; set; }
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]

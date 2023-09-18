@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "1.4.1"
+    "version": "1.4.2"
   },
   "paths": {
     "/v{version}/Admin/dashboard": {
@@ -2126,6 +2126,9 @@
           "seasonId": {
             "type": "integer",
             "format": "int32"
+          },
+          "isPlayed": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -2152,6 +2155,9 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "isPlayed": {
+            "type": "boolean"
           },
           "team1": {
             "$ref": "#/components/schemas/FifaTeamDto"
@@ -2527,6 +2533,9 @@
           "teamScore2": {
             "type": "integer",
             "format": "int32"
+          },
+          "isPlayed": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
