@@ -22,5 +22,12 @@ namespace YuGames.Common.Collections
 #pragma warning disable SA1401 // Fields should be private
         public static int Planned = 1;
 #pragma warning restore SA1401 // Fields should be private
+
+        /// <summary>
+        /// Gets Phase 1 state.
+        /// </summary>
+#pragma warning disable SA1401 // Fields should be private
+        public static int Phase1 = 2;
+#pragma warning restore SA1401 // Fields should be private
     }
 }

@@ -63,5 +63,12 @@ namespace YuGames.Business.Contracts
         /// <param name="tournamentId">Tournament ID.</param>
         /// <returns>True if deleted, false if not.</returns>
         Task<bool> Delete(int tournamentId);
+
+        /// <summary>
+        /// Make tournament go to phase 1 (versuses).
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <returns>true if success.</returns>
+        Task<bool> GoToPhase1(int tournamentId);
     }
 }

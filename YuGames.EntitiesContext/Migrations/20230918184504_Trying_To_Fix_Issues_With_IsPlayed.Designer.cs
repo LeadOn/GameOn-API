@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuGames.EntitiesContext;
 
@@ -10,9 +11,11 @@ using YuGames.EntitiesContext;
 namespace YuGames.EntitiesContext.Migrations
 {
     [DbContext(typeof(YuGamesContext))]
-    partial class YuGamesContextModelSnapshot : ModelSnapshot
+    [Migration("20230918184504_Trying_To_Fix_Issues_With_IsPlayed")]
+    partial class Trying_To_Fix_Issues_With_IsPlayed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -39,7 +42,7 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 18, 21, 9, 17, 179, DateTimeKind.Local).AddTicks(8492))
+                        .HasDefaultValue(new DateTime(2023, 9, 18, 20, 45, 4, 853, DateTimeKind.Local).AddTicks(1054))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -78,10 +81,6 @@ namespace YuGames.EntitiesContext.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("team_score_2");
 
-                    b.Property<int?>("TournamentId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("tournament_id");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
@@ -93,8 +92,6 @@ namespace YuGames.EntitiesContext.Migrations
                     b.HasIndex("Team1Id");
 
                     b.HasIndex("Team2Id");
-
-                    b.HasIndex("TournamentId");
 
                     b.ToTable("FifaGamePlayed", (string)null);
                 });
@@ -215,7 +212,7 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 18, 19, 9, 17, 179, DateTimeKind.Utc).AddTicks(7572))
+                        .HasDefaultValue(new DateTime(2023, 9, 18, 18, 45, 4, 853, DateTimeKind.Utc).AddTicks(204))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -288,13 +285,13 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 18, 19, 9, 17, 179, DateTimeKind.Utc).AddTicks(2841))
+                        .HasDefaultValue(new DateTime(2023, 9, 18, 18, 45, 4, 852, DateTimeKind.Utc).AddTicks(5875))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 19, 19, 9, 17, 179, DateTimeKind.Utc).AddTicks(2959))
+                        .HasDefaultValue(new DateTime(2023, 9, 19, 18, 45, 4, 852, DateTimeKind.Utc).AddTicks(5985))
                         .HasColumnName("planned_to");
 
                     b.Property<int>("State")
@@ -322,7 +319,7 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 18, 19, 9, 17, 179, DateTimeKind.Utc).AddTicks(3533))
+                        .HasDefaultValue(new DateTime(2023, 9, 18, 18, 45, 4, 852, DateTimeKind.Utc).AddTicks(6548))
                         .HasColumnName("joined_at");
 
                     b.Property<int>("PlayerId")
@@ -379,12 +376,6 @@ namespace YuGames.EntitiesContext.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK_FifaGamePlayed_FifaTeam2");
 
-                    b.HasOne("YuGames.Entities.Tournament", "Tournament")
-                        .WithMany("Games")
-                        .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("FK_FifaGamePlayed_Tournament");
-
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Platform");
@@ -394,8 +385,6 @@ namespace YuGames.EntitiesContext.Migrations
                     b.Navigation("Team1");
 
                     b.Navigation("Team2");
-
-                    b.Navigation("Tournament");
                 });
 
             modelBuilder.Entity("YuGames.Entities.FifaTeamPlayer", b =>
@@ -509,8 +498,6 @@ namespace YuGames.EntitiesContext.Migrations
 
             modelBuilder.Entity("YuGames.Entities.Tournament", b =>
                 {
-                    b.Navigation("Games");
-
                     b.Navigation("Players");
                 });
 #pragma warning restore 612, 618

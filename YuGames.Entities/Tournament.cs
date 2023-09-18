@@ -51,4 +51,10 @@ public class Tournament
     /// </summary>
     [JsonIgnore]
     public virtual List<TournamentPlayer> Players { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets tournament games.
+    /// </summary>
+    [JsonIgnore]
+    public virtual List<FifaGamePlayed> Games { get; set; } = null!;
 }

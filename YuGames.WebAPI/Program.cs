@@ -69,7 +69,7 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Version = "1.4.1",
+        Version = "1.5.0",
         Title = "LeadOn's Corp - YuGames API",
         Description = "This API goal is to monitor players performance across multiple games.",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact

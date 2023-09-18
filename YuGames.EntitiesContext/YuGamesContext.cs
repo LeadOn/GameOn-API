@@ -278,6 +278,13 @@ namespace YuGames.EntitiesContext
                     .HasColumnName("season_id")
                     .IsRequired();
 
+                entity.Property(e => e.IsPlayed)
+                    .HasColumnName("is_played")
+                    .IsRequired();
+
+                entity.Property(e => e.TournamentId)
+                    .HasColumnName("tournament_id");
+
                 entity.HasOne(e => e.Team1)
                     .WithMany(f => f.GamesPlayedTeam1)
                     .HasForeignKey(e => e.Team1Id)
@@ -307,6 +314,12 @@ namespace YuGames.EntitiesContext
                     .HasForeignKey(e => e.SeasonId)
                     .HasConstraintName("FK_FifaGamePlayed_Season")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Tournament)
+                    .WithMany(f => f.Games)
+                    .HasForeignKey(e => e.TournamentId)
+                    .HasConstraintName("FK_FifaGamePlayed_Tournament")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<Highlight>(entity =>
