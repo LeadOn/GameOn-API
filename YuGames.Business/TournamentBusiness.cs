@@ -84,8 +84,32 @@ namespace YuGames.Business
                 foreach (var player in tournament.Players)
                 {
                     // Getting their wins
-                    // TODO
+                    var gamesPlayed = await this.fifaGameRepo.Search(x => x.TournamentId == id && x.IsPlayed == true && x.TeamPlayers.FirstOrDefault(x => x.PlayerId == player.Player.Id) != null, 1000);
+
+                    foreach (var game in gamesPlayed)
+                    {
+                        var team = 0;
+
+                        foreach (var teamPlayer in game.TeamPlayers)
+                        {
+                            if (teamPlayer.PlayerId == player.Player.Id)
+                            {
+                                team = teamPlayer.Team;
+                            }
+                        }
+
+                        if ((team == 0 && game.TeamScore1 > game.TeamScore2) || (team == 1 && game.TeamScore1 < game.TeamScore2))
+                        {
+                            player.Score += 3;
+                        }
+                        else if (game.TeamScore1 == game.TeamScore2)
+                        {
+                            player.Score += 1;
+                        }
+                    }
                 }
+
+                tournament.Players = tournament.Players.OrderByDescending(x => x.Score).ToList();
 
                 return tournament;
             }

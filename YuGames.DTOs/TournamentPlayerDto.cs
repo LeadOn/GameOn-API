@@ -25,5 +25,10 @@ namespace YuGames.DTOs
         /// Gets or sets Joined At.
         /// </summary>
         public DateTime JoinedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets Score.
+        /// </summary>
+        public int Score { get; set; }
     }
 }
