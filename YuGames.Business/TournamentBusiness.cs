@@ -81,6 +81,12 @@ namespace YuGames.Business
 
                 tournament.Players = await this.tournamentRepository.GetPlayers(id);
 
+                foreach (var player in tournament.Players)
+                {
+                    // Getting their wins
+                    // TODO
+                }
+
                 return tournament;
             }
         }
@@ -117,6 +123,7 @@ namespace YuGames.Business
                             Team2Id = player2.Team.Id,
                             TeamCode1 = "???",
                             TeamCode2 = "???",
+                            TournamentId = tournamentId,
                             TeamPlayers = new List<FifaTeamPlayer>
                                 {
                                     new FifaTeamPlayer

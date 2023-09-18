@@ -10,6 +10,7 @@ namespace YuGames.Business
     using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.Repository.Contracts;
+    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     /// <summary>
     /// Player business.
@@ -348,6 +349,23 @@ namespace YuGames.Business
             return await this.gamePlayedRepo.GetCurrentSeason();
         }
 
+        /// <inheritdoc/>
+        public async Task<IEnumerable<FifaGamePlayedDto>> GetTournamentGames(int tournamentId)
+        {
+            var gamesPlayedDto = new List<FifaGamePlayedDto>();
+
+            // First, getting last games (from GamePlayed table)
+            var gamesPlayed = await this.gamePlayedRepo.Search(x => x.TournamentId == tournamentId, 1000);
+
+            // For each game played, getting player information
+            foreach (var game in gamesPlayed)
+            {
+                gamesPlayedDto.Add(await this.Convert(game));
+            }
+
+            return gamesPlayedDto.OrderByDescending(x => x.PlayedOn).OrderByDescending(x => x.IsPlayed);
+        }
+
         /// <summary>
         /// Converts FifaGamePlayed from Database to FifaGamePlayedDto with embeded entities.
         /// </summary>
@@ -357,6 +375,7 @@ namespace YuGames.Business
         {
             var gamePlayedDto = new FifaGamePlayedDto();
             gamePlayedDto.IsPlayed = game.IsPlayed;
+            gamePlayedDto.TournamentId = game.TournamentId;
             gamePlayedDto.CreatedBy = game.CreatedBy;
             gamePlayedDto.Id = game.Id;
             gamePlayedDto.PlayedOn = game.PlayedOn;

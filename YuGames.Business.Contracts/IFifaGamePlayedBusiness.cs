@@ -20,6 +20,13 @@ namespace YuGames.Business.Contracts
         Task<IEnumerable<FifaGamePlayedDto>> GetLastGamesPlayed(int number);
 
         /// <summary>
+        /// Get tournament games.
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <returns>List of games played.</returns>
+        Task<IEnumerable<FifaGamePlayedDto>> GetTournamentGames(int tournamentId);
+
+        /// <summary>
         /// Creates game in database.
         /// </summary>
         /// <param name="createGameDto"><see cref="CreateFifaGameDto"/>.</param>

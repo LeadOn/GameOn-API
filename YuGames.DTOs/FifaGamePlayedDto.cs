@@ -37,6 +37,11 @@ namespace YuGames.DTOs
         public int? PlatformId { get; set; }
 
         /// <summary>
+        /// Gets or sets Tournament ID.
+        /// </summary>
+        public int? TournamentId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether game is played or not.
         /// </summary>
         public bool IsPlayed { get; set; }

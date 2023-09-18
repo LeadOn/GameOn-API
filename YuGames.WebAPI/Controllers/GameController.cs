@@ -65,6 +65,22 @@ namespace YuGames.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Gets tournament games.
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("tournament/{tournamentId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get games played by tournament.")]
+        [SwaggerResponse(200, "List of games played.", typeof(List<FifaGamePlayedDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetTournamentGames(int tournamentId)
+        {
+            return this.Ok(await this.gamePlayedBusi.GetTournamentGames(tournamentId));
+        }
+
+        /// <summary>
         /// Create game in database.
         /// </summary>
         /// <param name="game">Create game object.</param>
