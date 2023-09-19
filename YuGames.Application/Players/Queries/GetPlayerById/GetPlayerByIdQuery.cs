@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace YuGames.Application.Player.Queries.GetPlayerById
+namespace YuGames.Application.Players.Queries.GetPlayerById
 {
     using MediatR;
     using YuGames.Domain;

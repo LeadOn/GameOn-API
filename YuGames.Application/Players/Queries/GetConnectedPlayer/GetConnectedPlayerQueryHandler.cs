@@ -2,12 +2,12 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace YuGames.Application.Player.Queries.GetConnectedPlayer
+namespace YuGames.Application.Players.Queries.GetConnectedPlayer
 {
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
-    using YuGames.Application.Player.Queries.GetPlayerById;
+    using YuGames.Application.Players.Queries.GetPlayerById;
     using YuGames.Domain;
 
     /// <summary>

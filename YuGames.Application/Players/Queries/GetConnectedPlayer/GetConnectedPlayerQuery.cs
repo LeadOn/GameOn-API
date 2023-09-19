@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace YuGames.Application.Player.Queries.GetConnectedPlayer
+namespace YuGames.Application.Players.Queries.GetConnectedPlayer
 {
     using MediatR;
     using YuGames.Common.DTOs;
