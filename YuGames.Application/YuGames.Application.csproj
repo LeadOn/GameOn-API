@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\YuGames.Common\YuGames.Common.csproj" />
     <ProjectReference Include="..\YuGames.Domain\YuGames.Domain.csproj" />
   </ItemGroup>
 

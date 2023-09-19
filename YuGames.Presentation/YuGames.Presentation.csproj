@@ -33,8 +33,4 @@
     <ProjectReference Include="..\YuGames.Persistence\YuGames.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
