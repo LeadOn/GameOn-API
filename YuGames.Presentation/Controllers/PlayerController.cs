@@ -9,6 +9,7 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Player.Queries.GetConnectedPlayer;
+    using YuGames.Application.Player.Queries.GetPlayerById;
     using YuGames.Domain;
     using YuGames.Presentation.Classes;
 
@@ -45,6 +46,32 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GetConnected()
         {
             return this.Ok(await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() }));
+        }
+
+        /// <summary>
+        /// Get a player by its ID.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <returns>200 OK with Player if found, 404 if not found.</returns>
+        [HttpGet]
+        [Route("{id:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get a player by its ID.", Description = "Get a player by its ID, and retrieve its information.")]
+        [SwaggerResponse(200, "Player is found.", typeof(Player))]
+        [SwaggerResponse(404, "Player not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = id });
+
+            if (playerInDb is not null)
+            {
+                return this.Ok(playerInDb);
+            }
+            else
+            {
+                return this.NotFound();
+            }
         }
     }
 }
