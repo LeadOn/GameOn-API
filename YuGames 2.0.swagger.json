@@ -1,0 +1,422 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "LeadOn's Corp - YuGames API",
+    "description": "This API goal is to monitor players performance across multiple games.",
+    "contact": {
+      "name": "Valentin Virot",
+      "email": "virot.valentin@gmail.com"
+    },
+    "version": "2.0"
+  },
+  "paths": {
+    "/Admin/dashboard": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Gets administrator dashboard.",
+        "responses": {
+          "200": {
+            "description": "Administrator dashboard.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminDashboardDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Not enough roles."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/FifaTeam": {
+      "get": {
+        "tags": ["FifaTeam"],
+        "summary": "Get all FIFA Teams in database.",
+        "responses": {
+          "200": {
+            "description": "FIFA Teams in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FifaTeam"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Highlight": {
+      "get": {
+        "tags": ["Highlight"],
+        "summary": "Get all Highlights in database.",
+        "responses": {
+          "200": {
+            "description": "Highlights in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Highlight"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Platform": {
+      "get": {
+        "tags": ["Platform"],
+        "summary": "Get all gaming platforms in database.",
+        "responses": {
+          "200": {
+            "description": "Platform in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Player"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Platform/{platformId}": {
+      "get": {
+        "tags": ["Platform"],
+        "summary": "Get platform by ID.",
+        "parameters": [
+          {
+            "name": "platformId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Platform"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Player/me": {
+      "get": {
+        "tags": ["Player"],
+        "summary": "Gets current user profile.",
+        "description": "Gets current user profile as stored in database. If the user account doesn't exists, it creates it automatically.",
+        "responses": {
+          "200": {
+            "description": "Current user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Player/{id}": {
+      "get": {
+        "tags": ["Player"],
+        "summary": "Get a player by its ID.",
+        "description": "Get a player by its ID, and retrieve its information.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player is found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Player": {
+      "get": {
+        "tags": ["Player"],
+        "summary": "Get all players in database.",
+        "responses": {
+          "200": {
+            "description": "Players in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Player"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Season": {
+      "get": {
+        "tags": ["Season"],
+        "summary": "Get all seasons.",
+        "responses": {
+          "200": {
+            "description": "List of Season.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Season"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something wrong happened."
+          }
+        }
+      }
+    },
+    "/Season/current": {
+      "get": {
+        "tags": ["Season"],
+        "summary": "Get current season.",
+        "responses": {
+          "200": {
+            "description": "Current Season.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Season"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Current Season not found."
+          },
+          "500": {
+            "description": "Something wrong happened."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdminDashboardDto": {
+        "type": "object",
+        "properties": {
+          "currentUser": {
+            "$ref": "#/components/schemas/Player"
+          },
+          "platforms": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "players": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highlights": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fifaGames": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tournaments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasons": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FifaTeam": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Highlight": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdById": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fifaGameId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "externalUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Platform": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Player": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "keycloakId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "nickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "profilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Season": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
