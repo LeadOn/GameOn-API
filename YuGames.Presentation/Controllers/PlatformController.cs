@@ -5,16 +5,11 @@
 namespace YuGames.Presentation.Controllers
 {
     using MediatR;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Platforms.Queries.GetAllPlatforms;
     using YuGames.Application.Platforms.Queries.GetPlatformById;
-    using YuGames.Application.Players.Queries.GetAllPlayers;
-    using YuGames.Application.Players.Queries.GetConnectedPlayer;
-    using YuGames.Application.Players.Queries.GetPlayerById;
     using YuGames.Domain;
-    using YuGames.Presentation.Classes;
 
     /// <summary>
     /// Platform Controller.

@@ -4,8 +4,8 @@
 
 namespace YuGames.Application
 {
-    using Microsoft.Extensions.DependencyInjection;
     using System.Reflection;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// Dependency Injection class.
