@@ -22,6 +22,7 @@ namespace YuGames.Application.Administration.Queries.GetAdminDashboardStats
         /// Initializes a new instance of the <see cref="GetAdminDashboardStatsQueryHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
+        /// <param name="mediator">Mediator, injected.</param>
         public GetAdminDashboardStatsQueryHandler(IApplicationDbContext context, ISender mediator)
         {
             this.context = context;
@@ -32,7 +33,7 @@ namespace YuGames.Application.Administration.Queries.GetAdminDashboardStats
         public async Task<AdminDashboardDto?> Handle(GetAdminDashboardStatsQuery request, CancellationToken cancellationToken)
         {
             // First getting user
-            var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = request.ConnectedPlayer });
+            var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = request.ConnectedPlayer }, cancellationToken);
 
             if (playerInDb == null)
             {
@@ -45,12 +46,12 @@ namespace YuGames.Application.Administration.Queries.GetAdminDashboardStats
             };
 
             // Getting counts
-            adminDashboard.Platforms = await this.context.Platforms.CountAsync();
-            adminDashboard.Players = await this.context.Players.CountAsync();
-            adminDashboard.Highlights = await this.context.Highlights.CountAsync();
-            adminDashboard.FifaGames = await this.context.FifaGamesPlayed.CountAsync();
-            adminDashboard.Tournaments = await this.context.Tournaments.CountAsync();
-            adminDashboard.Seasons = await this.context.Seasons.CountAsync();
+            adminDashboard.Platforms = await this.context.Platforms.CountAsync(cancellationToken);
+            adminDashboard.Players = await this.context.Players.CountAsync(cancellationToken);
+            adminDashboard.Highlights = await this.context.Highlights.CountAsync(cancellationToken);
+            adminDashboard.FifaGames = await this.context.FifaGamesPlayed.CountAsync(cancellationToken);
+            adminDashboard.Tournaments = await this.context.Tournaments.CountAsync(cancellationToken);
+            adminDashboard.Seasons = await this.context.Seasons.CountAsync(cancellationToken);
 
             return adminDashboard;
         }

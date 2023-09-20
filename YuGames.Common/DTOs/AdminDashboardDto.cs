@@ -2,10 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using YuGames.Domain;
-
 namespace YuGames.Common.DTOs
 {
+    using YuGames.Domain;
+
     /// <summary>
     /// AdminDashboardDto class.
     /// </summary>

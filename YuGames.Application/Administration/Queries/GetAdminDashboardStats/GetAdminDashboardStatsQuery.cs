@@ -12,6 +12,9 @@ namespace YuGames.Application.Administration.Queries.GetAdminDashboardStats
     /// </summary>
     public class GetAdminDashboardStatsQuery : IRequest<AdminDashboardDto?>
     {
-        public ConnectedPlayerDto ConnectedPlayer { get; set; }
+        /// <summary>
+        /// Gets or sets Connected Player.
+        /// </summary>
+        public ConnectedPlayerDto ConnectedPlayer { get; set; } = new ConnectedPlayerDto();
     }
 }
