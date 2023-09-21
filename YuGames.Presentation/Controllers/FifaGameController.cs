@@ -7,6 +7,7 @@ namespace YuGames.Presentation.Controllers
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
+    using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
     using YuGames.Common.DTOs;
 
@@ -42,6 +43,30 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GetTournamentGames(int tournamentId)
         {
             return this.Ok(await this.mediator.Send(new GetFifaGamePlayedByTournamentIdQuery { TournamentId = tournamentId }));
+        }
+
+        /// <summary>
+        /// Get game played by ID.
+        /// </summary>
+        /// <param name="gameId">Game ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{gameId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get game played by ID.", Description = "Get game played by ID with its team players and highlights.")]
+        [SwaggerResponse(200, "Game played.", typeof(FifaGamePlayedDto))]
+        [SwaggerResponse(404, "Game not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetById(int gameId)
+        {
+            var gameInDb = await this.mediator.Send(new GetFifaGamePlayedByIdQuery { FifaGamePlayedId = gameId });
+
+            if (gameInDb is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(gameInDb);
         }
     }
 }
