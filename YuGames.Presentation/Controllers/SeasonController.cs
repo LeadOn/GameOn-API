@@ -7,7 +7,6 @@ namespace YuGames.Presentation.Controllers
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
-    using YuGames.Application.FifaTeams.Queries.GetAllFifaTeams;
     using YuGames.Application.Seasons.Queries.GetAllSeasons;
     using YuGames.Application.Seasons.Queries.GetCurrentSeason;
     using YuGames.Domain;

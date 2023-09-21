@@ -10,7 +10,6 @@ namespace YuGames.Business
     using YuGames.DTOs;
     using YuGames.Entities;
     using YuGames.Repository.Contracts;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     /// <summary>
     /// Player business.

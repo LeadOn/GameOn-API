@@ -8,7 +8,6 @@ namespace YuGames.Application.Tournaments.Queries.GetTournamentById
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
     using YuGames.Common.DTOs;
-    using YuGames.Domain;
 
     /// <summary>
     /// GetTournamentByIdQueryHandler class.

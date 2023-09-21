@@ -8,7 +8,6 @@ namespace YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTourname
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
     using YuGames.Common.DTOs;
-    using YuGames.Domain;
 
     /// <summary>
     /// GetFifaGamePlayedByTournamentIdQueryHandler class.

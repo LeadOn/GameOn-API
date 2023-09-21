@@ -6,7 +6,6 @@ namespace YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTourname
 {
     using MediatR;
     using YuGames.Common.DTOs;
-    using YuGames.Domain;
 
     /// <summary>
     /// GetFifaGamePlayedByTournamentId class.

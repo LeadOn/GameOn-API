@@ -6,7 +6,6 @@ namespace YuGames.EntitiesContext
 {
     using Microsoft.EntityFrameworkCore;
     using YuGames.Common.Collections;
-    using YuGames.Common.Exceptions;
     using YuGames.Entities;
 
     /// <summary>

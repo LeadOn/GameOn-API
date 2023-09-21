@@ -7,8 +7,6 @@ namespace YuGames.Application.Tournaments.Queries.CheckTournamentSubscription
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
-    using YuGames.Common.DTOs;
-    using YuGames.Domain;
 
     /// <summary>
     /// CheckTournamentSubscriptionQueryHandler class.

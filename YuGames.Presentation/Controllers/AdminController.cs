@@ -9,7 +9,6 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Administration.Queries.GetAdminDashboardStats;
-    using YuGames.Application.Players.Queries.GetConnectedPlayer;
     using YuGames.Common.DTOs;
     using YuGames.Presentation.Classes;
 

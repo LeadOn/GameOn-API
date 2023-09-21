@@ -8,7 +8,6 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.FifaTeams.Queries.GetAllFifaTeams;
-    using YuGames.Application.Highlights.Queries.GetAllHighlights;
     using YuGames.Domain;
 
     /// <summary>

@@ -6,7 +6,6 @@ namespace YuGames.Application.TeamPlayers.Queries.SearchTeamPlayer
 {
     using System.Linq.Expressions;
     using MediatR;
-    using YuGames.Common.DTOs;
     using YuGames.Domain;
 
     /// <summary>
