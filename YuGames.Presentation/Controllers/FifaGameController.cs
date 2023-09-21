@@ -9,6 +9,7 @@ namespace YuGames.Presentation.Controllers
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
+    using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed;
     using YuGames.Common.DTOs;
 
     /// <summary>
@@ -67,6 +68,22 @@ namespace YuGames.Presentation.Controllers
             }
 
             return this.Ok(gameInDb);
+        }
+
+        /// <summary>
+        /// Get last games played.
+        /// </summary>
+        /// <param name="number">Number of data to retrieve.</param>
+        /// <returns>200 OK with Game list.</returns>
+        [HttpGet]
+        [Route("last/{number:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get last games played.", Description = "Get last games played with their players.")]
+        [SwaggerResponse(200, "List of games played.", typeof(List<FifaGamePlayedDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetLastGamesPlayed(int number)
+        {
+            return this.Ok(await this.mediator.Send(new GetLastFifaGamesPlayedQuery { Limit = number }));
         }
     }
 }
