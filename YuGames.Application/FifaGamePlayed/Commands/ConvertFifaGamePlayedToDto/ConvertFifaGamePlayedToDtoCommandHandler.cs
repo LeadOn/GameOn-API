@@ -7,6 +7,7 @@ namespace YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
+    using YuGames.Application.Players.Queries.GetPlayerById;
     using YuGames.Common.DTOs;
     using YuGames.Domain;
 
@@ -16,14 +17,17 @@ namespace YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
     public class ConvertFifaGamePlayedToDtoCommandHandler : IRequestHandler<ConvertFifaGamePlayedToDtoCommand, FifaGamePlayedDto>
     {
         private readonly IApplicationDbContext context;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConvertFifaGamePlayedToDtoCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
-        public ConvertFifaGamePlayedToDtoCommandHandler(IApplicationDbContext context)
+        /// <param name="mediator">Mediator, injected.</param>
+        public ConvertFifaGamePlayedToDtoCommandHandler(IApplicationDbContext context, ISender mediator)
         {
             this.context = context;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -54,8 +58,8 @@ namespace YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
 
             if (request.FifaGamePlayed.Platform is not null)
             {
-                gamePlayedDto.Platform = game.Platform.Name;
-                gamePlayedDto.PlatformId = game.PlatformId;
+                gamePlayedDto.Platform = request.FifaGamePlayed.Platform.Name;
+                gamePlayedDto.PlatformId = request.FifaGamePlayed.PlatformId;
             }
 
             gamePlayedDto.Season = request.FifaGamePlayed.Season;
@@ -66,7 +70,7 @@ namespace YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
             {
                 if (teamPlayer.Team == 0)
                 {
-                    var player = await this.context.Platforms.FirstOrDefaultAsync(x => x.Id == teamPlayer.PlayerId, cancellationToken);
+                    var player = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = teamPlayer.PlayerId }, cancellationToken);
                     if (player is not null)
                     {
                         gamePlayedDto.Team1.Players.Add(player);
@@ -74,7 +78,7 @@ namespace YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
                 }
                 else
                 {
-                    var player = await this.playerRepo.GetPlayerById(teamPlayer.PlayerId);
+                    var player = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = teamPlayer.PlayerId }, cancellationToken);
                     if (player is not null)
                     {
                         gamePlayedDto.Team2.Players.Add(player);
@@ -82,7 +86,7 @@ namespace YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
                 }
             }
 
-            gamePlayedDto.Highlights = game.Highlights;
+            gamePlayedDto.Highlights = request.FifaGamePlayed.Highlights;
 
             return gamePlayedDto;
         }

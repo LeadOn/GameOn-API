@@ -5,12 +5,13 @@
 namespace YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId
 {
     using MediatR;
+    using YuGames.Common.DTOs;
     using YuGames.Domain;
 
     /// <summary>
     /// GetFifaGamePlayedByTournamentId class.
     /// </summary>
-    public class GetFifaGamePlayedByTournamentIdQuery : IRequest<IEnumerable<FifaGamePlayed>>
+    public class GetFifaGamePlayedByTournamentIdQuery : IRequest<IEnumerable<FifaGamePlayedDto>>
     {
         /// <summary>
         /// Gets or sets Tournament ID.

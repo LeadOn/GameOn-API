@@ -30,6 +30,21 @@
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"
     },
+    "Windows (Yunit)": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SQLITE_PATH": "C:\\Users\\valentin.virot\\Desktop\\yugames.db",
+        "JWT_AUTHORITY": "https://auth.valentinvirot.fr/realms/yufoot",
+        "JWT_AUDIENCE": "account",
+        "CURRENT_SEASON": "2",
+        "DEFAULT_PLATFORM": "2"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5184"
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
