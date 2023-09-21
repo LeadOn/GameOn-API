@@ -10,6 +10,7 @@ namespace YuGames.Presentation.Controllers
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
     using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed;
+    using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayedByPlayerId;
     using YuGames.Common.DTOs;
 
     /// <summary>
@@ -84,6 +85,23 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GetLastGamesPlayed(int number)
         {
             return this.Ok(await this.mediator.Send(new GetLastFifaGamesPlayedQuery { Limit = number }));
+        }
+
+        /// <summary>
+        /// Gets last games played by player.
+        /// </summary>
+        /// <param name="number">Limit of results.</param>
+        /// <param name="playerId">Player ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("last/{number:int}/player/{playerId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get last games played by player.", Description = "Get last games played by player with their team members.")]
+        [SwaggerResponse(200, "List of games played.", typeof(List<FifaGamePlayedDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetLastGamesPlayedByPlayer(int number, int playerId)
+        {
+            return this.Ok(await this.mediator.Send(new GetLastFifaGamesPlayedByPlayerIdQuery { PlayerId = playerId, Limit = number }));
         }
     }
 }
