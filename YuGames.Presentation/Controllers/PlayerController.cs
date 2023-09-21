@@ -11,6 +11,8 @@ namespace YuGames.Presentation.Controllers
     using YuGames.Application.Players.Queries.GetAllPlayers;
     using YuGames.Application.Players.Queries.GetConnectedPlayer;
     using YuGames.Application.Players.Queries.GetPlayerById;
+    using YuGames.Application.Players.Queries.GetPlayerStats;
+    using YuGames.Common.DTOs;
     using YuGames.Domain;
     using YuGames.Presentation.Classes;
 
@@ -88,6 +90,23 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GetAll()
         {
             return this.Ok(await this.mediator.Send(new GetAllPlayersQuery()));
+        }
+
+        /// <summary>
+        /// Get all player stats.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="seasonId">Season ID.</param>
+        /// <returns>200 OK with Player list.</returns>
+        [HttpGet]
+        [Route("{playerId}/stats")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get all stats of a user.", Description = "Get all statistics for each platform of a user.")]
+        [SwaggerResponse(200, "List of stats.", typeof(FifaPlayerStatsDto))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetPlayerStats(int playerId, int? seasonId)
+        {
+            return this.Ok(await this.mediator.Send(new GetPlayerStatsQuery { PlayerId = playerId, SeasonId = seasonId }));
         }
     }
 }
