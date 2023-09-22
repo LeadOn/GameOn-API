@@ -37,8 +37,8 @@ namespace YuGames.Application.Tournaments.Queries.GetTournamentPlayers
                                 JoinedAt = x.JoinedAt,
                                 Player = x.Player,
                                 Team = x.FifaTeam,
-                            }
-                ).ToListAsync(cancellationToken);
+                            })
+                .ToListAsync(cancellationToken);
         }
     }
 }

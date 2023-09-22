@@ -78,14 +78,15 @@ namespace YuGames.Application.Tournaments.Commands.GoToPhase1
                                 },
                         };
 
-                        await this.mediator.Send(new CreateFifaGamePlayedCommand { NewGame = newGame });
+                        /// TODO
+                        //await this.mediator.Send(new CreateFifaGamePlayedCommand { NewGame = newGame });
                     }
                 }
             }
 
             // Updating tournament to Phase 1
             tournamentInDb.State = TournamentStates.Phase1;
-            await this.tournamentRepository.UpdateTournament(tournamentInDb);
+            //await this.tournamentRepository.UpdateTournament(tournamentInDb);
 
             return true;
         }
