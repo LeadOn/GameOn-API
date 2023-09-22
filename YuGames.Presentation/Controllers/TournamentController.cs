@@ -9,6 +9,7 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Tournaments.Commands.CreateTournament;
+    using YuGames.Application.Tournaments.Commands.UpdateTournament;
     using YuGames.Application.Tournaments.Queries.CheckTournamentSubscription;
     using YuGames.Application.Tournaments.Queries.GetAllTournaments;
     using YuGames.Application.Tournaments.Queries.GetTournamentById;
@@ -118,6 +119,26 @@ namespace YuGames.Presentation.Controllers
             };
 
             return this.StatusCode(201, await this.mediator.Send(new CreateTournamentCommand { Tournament = newTournament }));
+        }
+
+        /// <summary>
+        /// Update tournament in database.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <param name="tournament">Updated tournament.</param>
+        /// <returns>IActionResult Object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{id:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Create tournament in database.")]
+        [SwaggerResponse(201, "Created tournament.", typeof(Tournament))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> Update(int id, [FromBody]TournamentDto tournament)
+        {
+            return this.Ok(await this.mediator.Send(new UpdateTournamentCommand { TournamentId = id, TournamentDto = tournament }));
         }
     }
 }
