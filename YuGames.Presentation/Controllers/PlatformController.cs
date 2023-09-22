@@ -9,6 +9,7 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Platforms.Commands.CreatePlatform;
+    using YuGames.Application.Platforms.Commands.UpdatePlatform;
     using YuGames.Application.Platforms.Queries.GetAllPlatforms;
     using YuGames.Application.Platforms.Queries.GetPlatformById;
     using YuGames.Domain;
@@ -87,6 +88,25 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> Create([FromBody] Platform platform)
         {
             return this.Ok(await this.mediator.Send(new CreatePlatformCommand { Name = platform.Name }));
+        }
+
+        /// <summary>
+        /// Updates platform in database.
+        /// </summary>
+        /// <param name="platform"><see cref="Platform" />.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Updates a platform in database.")]
+        [SwaggerResponse(200, "Updated platform.", typeof(Platform))]
+        [SwaggerResponse(401, "User is not logged in.")]
+        [SwaggerResponse(403, "User isn't admin.")]
+        [SwaggerResponse(500, "Unknown error.")]
+        public async Task<IActionResult> Update([FromBody] Platform platform)
+        {
+            return this.Ok(await this.mediator.Send(new UpdatePlatformCommand { PlatformId = platform.Id, Name = platform.Name }));
         }
     }
 }
