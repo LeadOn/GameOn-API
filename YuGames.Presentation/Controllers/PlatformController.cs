@@ -5,8 +5,10 @@
 namespace YuGames.Presentation.Controllers
 {
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
+    using YuGames.Application.Platforms.Commands.CreatePlatform;
     using YuGames.Application.Platforms.Queries.GetAllPlatforms;
     using YuGames.Application.Platforms.Queries.GetPlatformById;
     using YuGames.Domain;
@@ -66,6 +68,25 @@ namespace YuGames.Presentation.Controllers
             }
 
             return this.Ok(platformInDb);
+        }
+
+        /// <summary>
+        /// Creates platform in database.
+        /// </summary>
+        /// <param name="platform"><see cref="Platform" />.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Creates a platform in database.")]
+        [SwaggerResponse(200, "Created platform.", typeof(Platform))]
+        [SwaggerResponse(401, "User is not logged in.")]
+        [SwaggerResponse(403, "User isn't admin.")]
+        [SwaggerResponse(500, "Unknown error.")]
+        public async Task<IActionResult> Create([FromBody] Platform platform)
+        {
+            return this.Ok(await this.mediator.Send(new CreatePlatformCommand { Name = platform.Name }));
         }
     }
 }
