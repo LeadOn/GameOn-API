@@ -5,8 +5,10 @@
 namespace YuGames.Presentation.Controllers
 {
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
+    using YuGames.Application.FifaGamePlayed.Commands.DeleteFifaGamePlayed;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
     using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed;
@@ -102,6 +104,34 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GetLastGamesPlayedByPlayer(int number, int playerId)
         {
             return this.Ok(await this.mediator.Send(new GetLastFifaGamesPlayedByPlayerIdQuery { PlayerId = playerId, Limit = number }));
+        }
+
+        /// <summary>
+        /// Delete game in database.
+        /// </summary>
+        /// <param name="gameId">Game ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{gameId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Delete game in database.", Description = "Delete game in database (including highlights / team-players). WARNING: it really deletes!")]
+        [SwaggerResponse(204, "Deleted Game.")]
+        [SwaggerResponse(401, "User is not logged in.")]
+        [SwaggerResponse(403, "User isn't admin.")]
+        [SwaggerResponse(500, "Unknown error.")]
+        public async Task<IActionResult> Delete(int gameId)
+        {
+            var deleteStatus = await this.mediator.Send(new DeleteFifaGamePlayedCommand { GameId = gameId });
+
+            if (deleteStatus)
+            {
+                return this.NoContent();
+            }
+            else
+            {
+                return this.Problem();
+            }
         }
     }
 }
