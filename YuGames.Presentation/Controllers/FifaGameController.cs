@@ -8,6 +8,7 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
+    using YuGames.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed;
     using YuGames.Application.FifaGamePlayed.Commands.DeleteFifaGamePlayed;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
@@ -15,6 +16,7 @@ namespace YuGames.Presentation.Controllers
     using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayedByPlayerId;
     using YuGames.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using YuGames.Common.DTOs;
+    using YuGames.Presentation.Classes;
 
     /// <summary>
     /// FifaGame Controller.
@@ -152,6 +154,27 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> Search(int? limit, int? platformId, DateTime? startDate, DateTime? endDate)
         {
             return this.Ok(await this.mediator.Send(new SearchFifaGamesPlayedQuery { Limit = limit, PlatformId = platformId, StartDate = startDate, EndDate = endDate }));
+        }
+
+        /// <summary>
+        /// Create game in database.
+        /// </summary>
+        /// <param name="game">Create game object.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Create game in database.")]
+        [SwaggerResponse(200, "Created game.", typeof(List<FifaGamePlayedDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> Create([FromBody] CreateFifaGameDto game)
+        {
+            game.KeycloakId = this.User.GetConnectedPlayer().KeycloakId;
+
+            var gameInDb = await this.mediator.Send(new CreateFifaGamePlayedCommand { NewGame = game });
+
+            return gameInDb is null ? this.Problem() : this.Ok(gameInDb);
         }
     }
 }
