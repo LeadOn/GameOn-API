@@ -10,6 +10,7 @@ namespace YuGames.Presentation.Controllers
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Players.Queries.GetConnectedPlayer;
     using YuGames.Application.Tournaments.Commands.CreateTournament;
+    using YuGames.Application.Tournaments.Commands.DeleteTournament;
     using YuGames.Application.Tournaments.Commands.GoToPhase1;
     using YuGames.Application.Tournaments.Commands.SubscribeTournament;
     using YuGames.Application.Tournaments.Commands.UpdateTournament;
@@ -191,6 +192,34 @@ namespace YuGames.Presentation.Controllers
             await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
 
             return this.Ok(await this.mediator.Send(new SubscribeTournamentCommand { FifaTeamId = fifaTeamId, TournamentId = tournamentId, Player = this.User.GetConnectedPlayer() }));
+        }
+
+        /// <summary>
+        /// Delete tournament.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{id:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Delete tournament in database.")]
+        [SwaggerResponse(204, "Deleted tournament.")]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await this.mediator.Send(new DeleteTournamentCommand { TournamentId = id });
+
+            if (result == false)
+            {
+                return this.Problem();
+            }
+            else
+            {
+                return this.NoContent();
+            }
         }
     }
 }
