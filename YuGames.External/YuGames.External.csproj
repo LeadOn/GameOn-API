@@ -1,16 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Title>YuGames Common</Title>
-    <Authors>LeadOn's Corp</Authors>
-    <Description>Common utilities used in the YuGames project.</Description>
-    <Copyright>LeadOn's Corp</Copyright>
-    <PackageProjectUrl>https://yugames.valentinvirot.fr</PackageProjectUrl>
-    <Company>LeadOn's Corp</Company>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\YuGames.Domain\YuGames.Domain.csproj" />
+    <ProjectReference Include="..\YuGames.Application\YuGames.Application.csproj" />
   </ItemGroup>
 
 </Project>
