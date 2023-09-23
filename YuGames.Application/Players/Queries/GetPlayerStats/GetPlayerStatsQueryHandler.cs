@@ -7,6 +7,9 @@ namespace YuGames.Application.Players.Queries.GetPlayerStats
     using MediatR;
     using YuGames.Application.Common.Interfaces;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
+    using YuGames.Application.FifaTeams.Queries.GetMostLossesFifaTeamsByPlayer;
+    using YuGames.Application.FifaTeams.Queries.GetMostPlayedFifaTeamsByPlayer;
+    using YuGames.Application.FifaTeams.Queries.GetMostWinsFifaTeamsByPlayer;
     using YuGames.Application.Platforms.Queries.GetAllPlatforms;
     using YuGames.Application.Players.Queries.GetPlayerById;
     using YuGames.Application.TeamPlayers.Queries.SearchTeamPlayer;
@@ -219,9 +222,9 @@ namespace YuGames.Application.Players.Queries.GetPlayerStats
             return new FifaPlayerStatsDto
             {
                 StatsPerPlatform = platformsStats.OrderBy(x => x.Platform.Id).ToList(),
-                MostWinsTeams = null,
-                MostLossesTeams = null,
-                MostPlayedTeams = null,
+                MostWinsTeams = await this.mediator.Send(new GetMostWinsFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }),
+                MostLossesTeams = await this.mediator.Send(new GetMostLossesFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }),
+                MostPlayedTeams = await this.mediator.Send(new GetMostPlayedFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }),
             };
         }
     }
