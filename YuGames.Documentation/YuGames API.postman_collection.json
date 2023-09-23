@@ -83,13 +83,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/player/1",
+							"raw": "{{baseUrl}}/player/19",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"player",
-								"1"
+								"19"
 							]
 						}
 					},
@@ -116,7 +116,7 @@
 					"response": []
 				},
 				{
-					"name": "Get stats by player // MANQUE MOST PLAYED/WIN/LOOSE TEAM",
+					"name": "Get stats by player",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -138,6 +138,59 @@
 									"key": "seasonId",
 									"value": ""
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"FullName\": \"Test update\",\r\n    \"Nickname\": \"The Nickname\",\r\n    \"ProfilePictureUrl\": \"https://kultt.fr/wp-content/uploads/2022/09/RickAstley-ad2022.jpg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/player/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"player",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (Admin only)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 19,\r\n  \"keycloakId\": \"8c85f712-db75-4529-80a3-97311dacd535\",\r\n  \"fullName\": \"Pierre Henri Bachelain\",\r\n  \"nickname\": \"PH\",\r\n  \"profilePictureUrl\": \"https://static.wikia.nocookie.net/xbox/images/0/05/1_-_1XzYnhZ.png/revision/latest/scale-to-width-down/1000?cb=20210628044343\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/player",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"player"
 							]
 						}
 					},
@@ -432,6 +485,31 @@
 					"response": []
 				},
 				{
+					"name": "Subscribe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tournament/4/subscription?fifaTeamId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament",
+								"4",
+								"subscription"
+							],
+							"query": [
+								{
+									"key": "fifaTeamId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update",
 					"request": {
 						"method": "PATCH",
@@ -453,6 +531,25 @@
 							"path": [
 								"tournament",
 								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Go to Phase 1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tournament/4/phase1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament",
+								"4",
+								"phase1"
 							]
 						}
 					},
@@ -547,6 +644,114 @@
 								"5",
 								"player",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search games",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fifagame?limit=10&platformId=1&startDate=2023-06-01T00:00:00&endDate=2023-08-31T00:00:00",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fifagame"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "platformId",
+									"value": "1"
+								},
+								{
+									"key": "startDate",
+									"value": "2023-06-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2023-08-31T00:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"CreatedOn\": \"2023-08-06T14:29:42\",\r\n    \"KeycloakId\": \"zfzef\",\r\n    \"PlatformId\": 1,\r\n    \"Team1\": [\r\n        \"1\", \"2\"\r\n    ],\r\n    \"TeamCode1\": \"FRA\",\r\n    \"TeamScore1\": 42,\r\n    \"Team2\": [\r\n        \"3\", \"4\"\r\n    ],\r\n    \"TeamCode2\": \"POR\",\r\n    \"TeamScore2\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fifagame",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fifagame"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fifagame/248",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fifagame",
+								"248"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 89,\r\n    \"PlatformId\": 2,\r\n    \"TeamCode1\": \"FCB\",\r\n    \"FifaTeam1\": 21,\r\n    \"TeamScore1\": 2,\r\n    \"TeamCode2\": \"MCI\",\r\n    \"FifaTeam2\": 10,\r\n    \"TeamScore2\": 1,\r\n    \"IsPlayed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fifagame",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fifagame"
 							]
 						}
 					},

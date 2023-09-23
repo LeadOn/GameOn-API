@@ -108,6 +108,37 @@
             "description": "Unknown error happened."
           }
         }
+      },
+      "delete": {
+        "tags": ["FifaGame"],
+        "summary": "Delete game in database.",
+        "description": "Delete game in database (including highlights / team-players). WARNING: it really deletes!",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted Game."
+          },
+          "401": {
+            "description": "User is not logged in."
+          },
+          "403": {
+            "description": "User isn't admin."
+          },
+          "500": {
+            "description": "Unknown error."
+          }
+        }
       }
     },
     "/FifaGame/last/{number}": {
@@ -190,6 +221,153 @@
           },
           "500": {
             "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/FifaGame": {
+      "get": {
+        "tags": ["FifaGame"],
+        "summary": "Search games played in database.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "platformId",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Games played.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FifaGamePlayedDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something wrong happened."
+          }
+        }
+      },
+      "post": {
+        "tags": ["FifaGame"],
+        "summary": "Create game in database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFifaGameDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFifaGameDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFifaGameDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created game.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FifaGamePlayedDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "patch": {
+        "tags": ["FifaGame"],
+        "summary": "Updates a game in database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGameDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGameDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGameDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated game.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FifaGamePlayed"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User is not logged in."
+          },
+          "403": {
+            "description": "User isn't admin."
+          },
+          "500": {
+            "description": "Unknown error."
           }
         }
       }
@@ -455,6 +633,48 @@
             "description": "Unknown error happened."
           }
         }
+      },
+      "patch": {
+        "tags": ["Player"],
+        "summary": "Update current user profile.",
+        "description": "Updates current user profile in database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
       }
     },
     "/Player/{id}": {
@@ -511,6 +731,48 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Player"],
+        "summary": "Update user profile (Admin only).",
+        "description": "Updates user profile in database, only for admins.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlayerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
           },
           "500": {
             "description": "Unknown error happened."
@@ -797,6 +1059,83 @@
           }
         }
       }
+    },
+    "/Tournament/{id}/phase1": {
+      "post": {
+        "tags": ["Tournament"],
+        "summary": "Make Tournament to go into phase 1.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated tournament.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Not enough roles."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Tournament/{tournamentId}/subscription": {
+      "post": {
+        "tags": ["Tournament"],
+        "summary": "Check if player is subscribed to a tournament.",
+        "parameters": [
+          {
+            "name": "tournamentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "fifaTeamId",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Player is subscribed."
+          },
+          "404": {
+            "description": "Player not subscribed / tournament not found."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -834,6 +1173,64 @@
         },
         "additionalProperties": false
       },
+      "CreateFifaGameDto": {
+        "type": "object",
+        "properties": {
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "keycloakId": {
+            "type": "string",
+            "nullable": true
+          },
+          "platformId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "team1": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "teamCode1": {
+            "type": "string",
+            "nullable": true
+          },
+          "fifaTeam1": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "team2": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "teamCode2": {
+            "type": "string",
+            "nullable": true
+          },
+          "fifaTeam2": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "teamScore1": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamScore2": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateHighlightDto": {
         "type": "object",
         "properties": {
@@ -851,6 +1248,66 @@
           },
           "externalUrl": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FifaGamePlayed": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "teamCode1": {
+            "type": "string",
+            "nullable": true
+          },
+          "team1Id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "team2Id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "teamCode2": {
+            "type": "string",
+            "nullable": true
+          },
+          "teamScore1": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamScore2": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "platformId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdById": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isPlayed": {
+            "type": "boolean"
+          },
+          "tournamentId": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -1225,6 +1682,76 @@
           "score": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateGameDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "platformId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamCode1": {
+            "type": "string",
+            "nullable": true
+          },
+          "fifaTeam1": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "teamCode2": {
+            "type": "string",
+            "nullable": true
+          },
+          "fifaTeam2": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "teamScore1": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamScore2": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isPlayed": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdatePlayerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "keycloakId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "nickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "profilePictureUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

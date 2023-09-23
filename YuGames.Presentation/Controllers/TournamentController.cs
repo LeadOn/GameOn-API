@@ -8,8 +8,10 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
+    using YuGames.Application.Players.Queries.GetConnectedPlayer;
     using YuGames.Application.Tournaments.Commands.CreateTournament;
     using YuGames.Application.Tournaments.Commands.GoToPhase1;
+    using YuGames.Application.Tournaments.Commands.SubscribeTournament;
     using YuGames.Application.Tournaments.Commands.UpdateTournament;
     using YuGames.Application.Tournaments.Queries.CheckTournamentSubscription;
     using YuGames.Application.Tournaments.Queries.GetAllTournaments;
@@ -168,6 +170,27 @@ namespace YuGames.Presentation.Controllers
             {
                 return this.Problem();
             }
+        }
+
+        /// <summary>
+        /// Subscribe to tournament.
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <param name="fifaTeamId">FIFA Team ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("{tournamentId:int}/subscription")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Check if player is subscribed to a tournament.")]
+        [SwaggerResponse(204, "Player is subscribed.")]
+        [SwaggerResponse(404, "Player not subscribed / tournament not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> Subscribe(int tournamentId, int fifaTeamId)
+        {
+            await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            return this.Ok(await this.mediator.Send(new SubscribeTournamentCommand { FifaTeamId = fifaTeamId, TournamentId = tournamentId, Player = this.User.GetConnectedPlayer() }));
         }
     }
 }
