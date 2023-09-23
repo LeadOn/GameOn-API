@@ -1029,6 +1029,36 @@
             "description": "Unknown error happened."
           }
         }
+      },
+      "delete": {
+        "tags": ["Tournament"],
+        "summary": "Delete tournament in database.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted tournament."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Not enough roles."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
       }
     },
     "/Tournament/{id}/subscription": {
