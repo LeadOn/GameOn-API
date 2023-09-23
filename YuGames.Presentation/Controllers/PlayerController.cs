@@ -8,6 +8,7 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
+    using YuGames.Application.Players.Commands.UpdateConnectedPlayer;
     using YuGames.Application.Players.Queries.GetAllPlayers;
     using YuGames.Application.Players.Queries.GetConnectedPlayer;
     using YuGames.Application.Players.Queries.GetPlayerById;
@@ -107,6 +108,28 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GetPlayerStats(int playerId, int? seasonId)
         {
             return this.Ok(await this.mediator.Send(new GetPlayerStatsQuery { PlayerId = playerId, SeasonId = seasonId }));
+        }
+
+        /// <summary>
+        /// Update user (admin only).
+        /// </summary>
+        /// <param name="update"><see cref="UpdatePlayerDto"/>.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize]
+        [Route("me")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update current user profile.", Description = "Updates current user profile in database.")]
+        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateConnectedUser([FromBody] UpdatePlayerDto update)
+        {
+            await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            update.KeycloakId = this.User.GetConnectedPlayer().KeycloakId;
+
+            return this.Ok(await this.mediator.Send(new UpdateConnectedPlayerCommand { Player = update }));
         }
     }
 }
