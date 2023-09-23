@@ -13,6 +13,7 @@ namespace YuGames.Presentation.Controllers
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
     using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed;
     using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayedByPlayerId;
+    using YuGames.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using YuGames.Common.DTOs;
 
     /// <summary>
@@ -132,6 +133,25 @@ namespace YuGames.Presentation.Controllers
             {
                 return this.Problem();
             }
+        }
+
+        /// <summary>
+        /// Search game in database.
+        /// </summary>
+        /// <param name="limit">Limit (10 by default, 50 max).</param>
+        /// <param name="platformId">Platform ID.</param>
+        /// <param name="startDate">Start Date.</param>
+        /// <param name="endDate">End date.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Search games played in database.")]
+        [SwaggerResponse(200, "Games played.", typeof(List<FifaGamePlayedDto>))]
+        [SwaggerResponse(500, "Something wrong happened.")]
+        public async Task<IActionResult> Search(int? limit, int? platformId, DateTime? startDate, DateTime? endDate)
+        {
+            return this.Ok(await this.mediator.Send(new SearchFifaGamesPlayedQuery { Limit = limit, PlatformId = platformId, StartDate = startDate, EndDate = endDate }));
         }
     }
 }
