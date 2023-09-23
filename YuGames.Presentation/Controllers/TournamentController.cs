@@ -9,6 +9,7 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Tournaments.Commands.CreateTournament;
+    using YuGames.Application.Tournaments.Commands.GoToPhase1;
     using YuGames.Application.Tournaments.Commands.UpdateTournament;
     using YuGames.Application.Tournaments.Queries.CheckTournamentSubscription;
     using YuGames.Application.Tournaments.Queries.GetAllTournaments;
@@ -139,6 +140,34 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> Update(int id, [FromBody]TournamentDto tournament)
         {
             return this.Ok(await this.mediator.Send(new UpdateTournamentCommand { TournamentId = id, TournamentDto = tournament }));
+        }
+
+        /// <summary>
+        /// Update tournament to phase 1.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{id:int}/phase1")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Make Tournament to go into phase 1.")]
+        [SwaggerResponse(204, "Updated tournament.", typeof(Tournament))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GoToPhase1(int id)
+        {
+            var result = await this.mediator.Send(new GoToPhase1Command { TournamentId = id });
+
+            if (result)
+            {
+                return this.NoContent();
+            }
+            else
+            {
+                return this.Problem();
+            }
         }
     }
 }

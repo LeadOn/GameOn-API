@@ -5,6 +5,7 @@
 namespace YuGames.Application.Tournaments.Commands.GoToPhase1
 {
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
     using YuGames.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed;
     using YuGames.Application.Tournaments.Queries.GetTournamentById;
@@ -34,7 +35,7 @@ namespace YuGames.Application.Tournaments.Commands.GoToPhase1
         public async Task<bool> Handle(GoToPhase1Command request, CancellationToken cancellationToken)
         {
             // Getting tournament
-            var tournamentInDb = await this.mediator.Send(new GetTournamentByIdQuery { TournamentId = request.TournamentId });
+            var tournamentInDb = await this.context.Tournaments.FirstOrDefaultAsync(x => x.Id == request.TournamentId, cancellationToken);
 
             if (tournamentInDb is null)
             {
@@ -78,15 +79,16 @@ namespace YuGames.Application.Tournaments.Commands.GoToPhase1
                                 },
                         };
 
-                        /// TODO
-                        //await this.mediator.Send(new CreateFifaGamePlayedCommand { NewGame = newGame });
+                        this.context.FifaGamesPlayed.Add(newGame);
+                        await this.context.SaveChangesAsync(cancellationToken);
                     }
                 }
             }
 
             // Updating tournament to Phase 1
             tournamentInDb.State = TournamentStates.Phase1;
-            //await this.tournamentRepository.UpdateTournament(tournamentInDb);
+            this.context.Tournaments.Update(tournamentInDb);
+            await this.context.SaveChangesAsync(cancellationToken);
 
             return true;
         }

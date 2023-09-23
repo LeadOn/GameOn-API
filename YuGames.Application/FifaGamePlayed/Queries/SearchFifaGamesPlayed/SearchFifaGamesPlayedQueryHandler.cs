@@ -4,10 +4,10 @@
 
 namespace YuGames.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed
 {
-    using MediatR;
-    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
+    using MediatR;
+    using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
     using YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto;
     using YuGames.Application.Platforms.Queries.GetPlatformById;
