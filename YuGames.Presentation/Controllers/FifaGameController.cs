@@ -10,12 +10,14 @@ namespace YuGames.Presentation.Controllers
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed;
     using YuGames.Application.FifaGamePlayed.Commands.DeleteFifaGamePlayed;
+    using YuGames.Application.FifaGamePlayed.Commands.UpdateFifaGamePlayed;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
     using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed;
     using YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayedByPlayerId;
     using YuGames.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using YuGames.Common.DTOs;
+    using YuGames.Domain;
     using YuGames.Presentation.Classes;
 
     /// <summary>
@@ -175,6 +177,34 @@ namespace YuGames.Presentation.Controllers
             var gameInDb = await this.mediator.Send(new CreateFifaGamePlayedCommand { NewGame = game });
 
             return gameInDb is null ? this.Problem() : this.Ok(gameInDb);
+        }
+
+        /// <summary>
+        /// Updates game in database.
+        /// </summary>
+        /// <param name="game"><see cref="UpdateGameDto" />.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Updates a game in database.")]
+        [SwaggerResponse(200, "Updated game.", typeof(FifaGamePlayed))]
+        [SwaggerResponse(401, "User is not logged in.")]
+        [SwaggerResponse(403, "User isn't admin.")]
+        [SwaggerResponse(500, "Unknown error.")]
+        public async Task<IActionResult> Update([FromBody] UpdateGameDto game)
+        {
+            var updatedGame = await this.mediator.Send(new UpdateFifaGamePlayedCommand { Game = game });
+
+            if (updatedGame is null)
+            {
+                return this.Problem();
+            }
+            else
+            {
+                return this.Ok(updatedGame);
+            }
         }
     }
 }
