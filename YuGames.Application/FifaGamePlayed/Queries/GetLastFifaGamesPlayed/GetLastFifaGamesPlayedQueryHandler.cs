@@ -39,6 +39,7 @@ namespace YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed
                 .Include(x => x.TeamPlayers)
                 .Include(x => x.Platform)
                 .Include(x => x.Highlights)
+                .OrderByDescending(x => x.PlayedOn)
                 .Take(request.Limit)
                 .ToListAsync(cancellationToken);
 
@@ -49,7 +50,7 @@ namespace YuGames.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed
                 dtos.Add(await this.mediator.Send(new ConvertFifaGamePlayedToDtoCommand { FifaGamePlayed = game }));
             }
 
-            return dtos.OrderByDescending(x => x.PlayedOn).ToList();
+            return dtos;
         }
     }
 }
