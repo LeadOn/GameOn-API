@@ -587,7 +587,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/fifagame/tournament/4",
+							"raw": "{{baseUrl}}/fifagame/tournament/4?isPlayed=true",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -595,6 +595,12 @@
 								"fifagame",
 								"tournament",
 								"4"
+							],
+							"query": [
+								{
+									"key": "isPlayed",
+									"value": "true"
+								}
 							]
 						}
 					},
