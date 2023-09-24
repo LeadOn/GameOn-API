@@ -39,7 +39,7 @@ namespace YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTourname
                 .Include(x => x.Season)
                 .Include(x => x.Highlights)
                 .Include(x => x.Platform)
-                .Where(x => x.TournamentId == request.TournamentId)
+                .Where(x => x.TournamentId == request.TournamentId && x.IsPlayed == request.IsPlayed)
                 .ToListAsync(cancellationToken);
 
             // For each game played, getting player information

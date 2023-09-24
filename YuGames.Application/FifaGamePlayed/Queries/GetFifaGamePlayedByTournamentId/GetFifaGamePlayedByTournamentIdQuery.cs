@@ -16,5 +16,10 @@ namespace YuGames.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTourname
         /// Gets or sets Tournament ID.
         /// </summary>
         public int TournamentId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether you get planned games or not.
+        /// </summary>
+        public bool IsPlayed { get; set; }
     }
 }
