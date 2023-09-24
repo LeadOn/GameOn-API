@@ -42,6 +42,7 @@ namespace YuGames.Presentation.Controllers
         /// Gets tournament games.
         /// </summary>
         /// <param name="tournamentId">Tournament ID.</param>
+        /// <param name="isPlayed">Get planned games or not.</param>
         /// <returns>IActionResult object.</returns>
         [HttpGet]
         [Route("tournament/{tournamentId:int}")]
@@ -49,9 +50,9 @@ namespace YuGames.Presentation.Controllers
         [SwaggerOperation(Summary = "Get games played by tournament.")]
         [SwaggerResponse(200, "List of games played.", typeof(List<FifaGamePlayedDto>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetTournamentGames(int tournamentId)
+        public async Task<IActionResult> GetTournamentGames(int tournamentId, bool isPlayed)
         {
-            return this.Ok(await this.mediator.Send(new GetFifaGamePlayedByTournamentIdQuery { TournamentId = tournamentId }));
+            return this.Ok(await this.mediator.Send(new GetFifaGamePlayedByTournamentIdQuery { TournamentId = tournamentId, IsPlayed = isPlayed }));
         }
 
         /// <summary>
