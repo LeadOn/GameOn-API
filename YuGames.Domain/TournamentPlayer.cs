@@ -4,6 +4,8 @@
 
 namespace YuGames.Domain
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
     /// TournamentPlayer class.
     /// </summary>
@@ -37,16 +39,19 @@ namespace YuGames.Domain
         /// <summary>
         /// Gets or sets Player.
         /// </summary>
+        [JsonIgnore]
         public virtual Player Player { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Tournament.
         /// </summary>
+        [JsonIgnore]
         public virtual Tournament Tournament { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets GamePlayed.
         /// </summary>
+        [JsonIgnore]
         public virtual FifaTeam FifaTeam { get; set; } = null!;
     }
 }

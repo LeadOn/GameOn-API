@@ -1086,8 +1086,15 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Player is subscribed."
+          "200": {
+            "description": "Player is subscribed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentPlayer"
+                }
+              }
+            }
           },
           "404": {
             "description": "Player not subscribed / tournament not found."
@@ -1140,7 +1147,7 @@
     "/Tournament/{tournamentId}/subscription": {
       "post": {
         "tags": ["Tournament"],
-        "summary": "Check if player is subscribed to a tournament.",
+        "summary": "Subscribe to tournament.",
         "parameters": [
           {
             "name": "tournamentId",
@@ -1168,6 +1175,46 @@
           },
           "404": {
             "description": "Player not subscribed / tournament not found."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Tournament"],
+        "summary": "Update tournament subscription.",
+        "parameters": [
+          {
+            "name": "tournamentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "fifaTeamId",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player subscription updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentPlayer"
+                }
+              }
+            }
           },
           "500": {
             "description": "Unknown error happened."
@@ -1704,6 +1751,32 @@
         },
         "additionalProperties": false
       },
+      "TournamentPlayer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fifaTeamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tournamentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "joinedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "TournamentPlayerDto": {
         "type": "object",
         "properties": {
@@ -1712,6 +1785,9 @@
           },
           "team": {
             "$ref": "#/components/schemas/FifaTeam"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/PlatformStatsDto"
           },
           "joinedAt": {
             "type": "string",

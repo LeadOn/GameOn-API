@@ -6,11 +6,12 @@ namespace YuGames.Application.Tournaments.Queries.CheckTournamentSubscription
 {
     using MediatR;
     using YuGames.Common.DTOs;
+    using YuGames.Domain;
 
     /// <summary>
     /// CheckTournamentSubscriptionQuery class.
     /// </summary>
-    public class CheckTournamentSubscriptionQuery : IRequest<bool>
+    public class CheckTournamentSubscriptionQuery : IRequest<TournamentPlayer?>
     {
         /// <summary>
         /// Gets or sets Connected player.

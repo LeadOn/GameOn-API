@@ -7,9 +7,7 @@ namespace YuGames.Application.Tournaments.Commands.GoToPhase1
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
-    using YuGames.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed;
-    using YuGames.Application.Tournaments.Queries.GetTournamentById;
-    using YuGames.Application.Tournaments.Queries.GetTournamentPlayers;
+    using YuGames.Application.TournamentPlayers.Queries.GetTournamentPlayers;
     using YuGames.Domain;
 
     /// <summary>
