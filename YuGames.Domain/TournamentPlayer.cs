@@ -2,10 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using System.Text.Json.Serialization;
-
 namespace YuGames.Domain
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
     /// TournamentPlayer class.
     /// </summary>

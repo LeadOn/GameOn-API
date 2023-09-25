@@ -2,8 +2,6 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using YuGames.Application.TournamentPlayers.Commands.UpdateTournamentSubscription;
-
 namespace YuGames.Presentation.Controllers
 {
     using MediatR;
@@ -11,6 +9,7 @@ namespace YuGames.Presentation.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using YuGames.Application.Players.Queries.GetConnectedPlayer;
+    using YuGames.Application.TournamentPlayers.Commands.UpdateTournamentSubscription;
     using YuGames.Application.Tournaments.Commands.CreateTournament;
     using YuGames.Application.Tournaments.Commands.DeleteTournament;
     using YuGames.Application.Tournaments.Commands.GoToPhase1;

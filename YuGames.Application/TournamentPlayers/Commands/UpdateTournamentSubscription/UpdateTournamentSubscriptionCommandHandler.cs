@@ -2,11 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using Microsoft.EntityFrameworkCore;
-
 namespace YuGames.Application.TournamentPlayers.Commands.UpdateTournamentSubscription
 {
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
     using YuGames.Application.FifaTeams.Queries.GetFifaTeamById;
     using YuGames.Application.Players.Queries.GetPlayerById;

@@ -510,6 +510,31 @@
 					"response": []
 				},
 				{
+					"name": "Update subscription",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tournament/6/subscription?fifaTeamId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament",
+								"6",
+								"subscription"
+							],
+							"query": [
+								{
+									"key": "fifaTeamId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update",
 					"request": {
 						"method": "PATCH",
