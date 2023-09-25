@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace YuGames.Application.Tournaments.Queries.GetTournamentPlayers
+namespace YuGames.Application.TournamentPlayers.Queries.GetTournamentPlayers
 {
     using MediatR;
     using Microsoft.EntityFrameworkCore;

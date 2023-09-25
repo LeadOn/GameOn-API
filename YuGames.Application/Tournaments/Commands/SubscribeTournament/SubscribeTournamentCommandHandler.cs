@@ -36,19 +36,19 @@ namespace YuGames.Application.Tournaments.Commands.SubscribeTournament
         {
             var isSubscribed = await this.mediator.Send(new CheckTournamentSubscriptionQuery { TournamentId = request.TournamentId, ConnectedPlayer = request.Player });
 
-            if (isSubscribed == true)
+            if (isSubscribed is not null)
             {
                 throw new NotImplementedException();
             }
 
-            var fifaTeamInDb = await this.mediator.Send(new GetFifaTeamByIdQuery { Id = request.FifaTeamId });
+            var fifaTeamInDb = await this.mediator.Send(new GetFifaTeamByIdQuery { Id = request.FifaTeamId }, cancellationToken);
 
             if (fifaTeamInDb is null)
             {
                 throw new NotImplementedException();
             }
 
-            var playerInDb = await this.mediator.Send(new GetPlayerByKeycloakIdQuery { KeycloakId = request.Player.KeycloakId });
+            var playerInDb = await this.mediator.Send(new GetPlayerByKeycloakIdQuery { KeycloakId = request.Player.KeycloakId }, cancellationToken);
 
             if (playerInDb is null)
             {

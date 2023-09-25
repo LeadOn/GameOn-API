@@ -7,6 +7,7 @@ namespace YuGames.Application.Tournaments.Queries.GetTournamentById
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
+    using YuGames.Application.TournamentPlayers.Queries.GetTournamentPlayerStats;
     using YuGames.Common.DTOs;
 
     /// <summary>
@@ -15,14 +16,17 @@ namespace YuGames.Application.Tournaments.Queries.GetTournamentById
     public class GetTournamentByIdQueryHandler : IRequestHandler<GetTournamentByIdQuery, TournamentDto?>
     {
         private readonly IApplicationDbContext context;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetTournamentByIdQueryHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
-        public GetTournamentByIdQueryHandler(IApplicationDbContext context)
+        /// <param name="mediator">Mediator, injected.</param>
+        public GetTournamentByIdQueryHandler(IApplicationDbContext context, ISender mediator)
         {
             this.context = context;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -76,6 +80,10 @@ namespace YuGames.Application.Tournaments.Queries.GetTournamentById
                         player.Score += 1;
                     }
                 }
+
+                player.Stats = await this.mediator.Send(
+                    new GetTournamentPlayerStatsQuery
+                    { PlayerId = player.Player.Id, TournamentId = request.TournamentId }, cancellationToken);
             }
 
             tournament.Players = tournament.Players.OrderByDescending(x => x.Score).ToList();

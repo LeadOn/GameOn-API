@@ -7,11 +7,12 @@ namespace YuGames.Application.Tournaments.Queries.CheckTournamentSubscription
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
+    using YuGames.Domain;
 
     /// <summary>
     /// CheckTournamentSubscriptionQueryHandler class.
     /// </summary>
-    public class CheckTournamentSubscriptionQueryHandler : IRequestHandler<CheckTournamentSubscriptionQuery, bool>
+    public class CheckTournamentSubscriptionQueryHandler : IRequestHandler<CheckTournamentSubscriptionQuery, TournamentPlayer?>
     {
         private readonly IApplicationDbContext context;
 
@@ -25,7 +26,7 @@ namespace YuGames.Application.Tournaments.Queries.CheckTournamentSubscription
         }
 
         /// <inheritdoc />
-        public async Task<bool> Handle(CheckTournamentSubscriptionQuery request, CancellationToken cancellationToken)
+        public async Task<TournamentPlayer?> Handle(CheckTournamentSubscriptionQuery request, CancellationToken cancellationToken)
         {
             // Getting player
             var playerInDb =
@@ -33,17 +34,17 @@ namespace YuGames.Application.Tournaments.Queries.CheckTournamentSubscription
 
             if (playerInDb is null)
             {
-                return false;
+                return null;
             }
 
             var playerSubscription = await this.context.TournamentPlayers.FirstOrDefaultAsync(x => x.TournamentId == request.TournamentId && x.PlayerId == playerInDb.Id, cancellationToken);
 
             if (playerSubscription is not null)
             {
-                return true;
+                return playerSubscription;
             }
 
-            return false;
+            return null;
         }
     }
 }

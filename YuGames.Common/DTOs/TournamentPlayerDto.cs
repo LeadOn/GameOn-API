@@ -22,6 +22,11 @@ namespace YuGames.Common.DTOs
         public FifaTeam Team { get; set; } = new FifaTeam();
 
         /// <summary>
+        /// Gets or sets stats.
+        /// </summary>
+        public PlatformStatsDto Stats { get; set; } = new PlatformStatsDto();
+
+        /// <summary>
         /// Gets or sets Joined At.
         /// </summary>
         public DateTime JoinedAt { get; set; }
