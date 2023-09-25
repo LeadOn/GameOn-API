@@ -1713,6 +1713,9 @@
           "team": {
             "$ref": "#/components/schemas/FifaTeam"
           },
+          "stats": {
+            "$ref": "#/components/schemas/PlatformStatsDto"
+          },
           "joinedAt": {
             "type": "string",
             "format": "date-time"
