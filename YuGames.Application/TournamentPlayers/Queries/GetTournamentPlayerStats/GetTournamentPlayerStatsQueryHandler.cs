@@ -58,6 +58,27 @@ namespace YuGames.Application.TournamentPlayers.Queries.GetTournamentPlayerStats
                     Limit = 1000000,
                 }, cancellationToken);
 
+            var gamesNotPlayed = await this.mediator.Send(
+                new SearchTeamPlayerQuery
+                {
+                    Query = x => x.FifaGamePlayed.TournamentId == request.TournamentId
+                                 && x.PlayerId == playerInDb.Id
+                                 && x.FifaGamePlayed.IsPlayed == false,
+                    Limit = 1000000,
+                }, cancellationToken);
+
+            stats.MatchPlayed = teamPlayersInDb.Count();
+            stats.MatchNotPlayed = gamesNotPlayed.Count();
+            stats.TotalMatch = stats.MatchPlayed + stats.MatchNotPlayed;
+            if (stats.TotalMatch == 0)
+            {
+                stats.Progression = 0;
+            }
+            else
+            {
+                stats.Progression = (float)Math.Round((double)((stats.MatchPlayed * 100) / (float)stats.TotalMatch), 2);
+            }
+
             if (teamPlayersInDb.ToList().Count > 0)
             {
                 // For each game played, getting that stats

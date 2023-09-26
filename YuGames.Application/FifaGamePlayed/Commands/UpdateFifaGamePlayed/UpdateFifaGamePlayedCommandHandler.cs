@@ -46,6 +46,11 @@ namespace YuGames.Application.FifaGamePlayed.Commands.UpdateFifaGamePlayed
                 return null;
             }
 
+            if (gameInDb.IsPlayed != request.Game.IsPlayed)
+            {
+                gameInDb.PlayedOn = DateTime.UtcNow;
+            }
+
             // Updating game data
             gameInDb.TeamCode1 = request.Game.TeamCode1;
             gameInDb.TeamCode2 = request.Game.TeamCode2;

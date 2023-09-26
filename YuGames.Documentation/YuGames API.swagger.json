@@ -1619,6 +1619,26 @@
           "drawRate": {
             "type": "number",
             "format": "float"
+          },
+          "matchPlayed": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "matchNotPlayed": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "totalMatch": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "progression": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
           }
         },
         "additionalProperties": false
