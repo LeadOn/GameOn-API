@@ -70,5 +70,25 @@ namespace YuGames.Common.DTOs
         /// Gets or sets draw rate.
         /// </summary>
         public float DrawRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets number of Match played.
+        /// </summary>
+        public int? MatchPlayed { get; set; }
+
+        /// <summary>
+        /// Gets or sets number of Match not played.
+        /// </summary>
+        public int? MatchNotPlayed { get; set; }
+
+        /// <summary>
+        /// Gets or sets number of Total Match.
+        /// </summary>
+        public int? TotalMatch { get; set; }
+
+        /// <summary>
+        /// Gets or sets progression.
+        /// </summary>
+        public float? Progression { get; set; }
     }
 }
