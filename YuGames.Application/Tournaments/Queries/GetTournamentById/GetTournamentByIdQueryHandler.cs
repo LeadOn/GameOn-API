@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using YuGames.Common.Collections;
+
 namespace YuGames.Application.Tournaments.Queries.GetTournamentById
 {
     using MediatR;
@@ -46,39 +48,49 @@ namespace YuGames.Application.Tournaments.Queries.GetTournamentById
                 JoinedAt = x.JoinedAt,
                 Player = x.Player,
                 Team = x.FifaTeam,
+                Score = tournamentInDb.State == TournamentStates.Phase1 ? x.Phase1Score : null,
             }).ToListAsync(cancellationToken);
 
             foreach (var player in tournament.Players)
             {
-                // Getting their wins
-                var gamesPlayed = await this.context.FifaGamesPlayed
-                    .Include(x => x.TeamPlayers)
-                    .Where(
-                        x => x.TournamentId == request.TournamentId
-                                          && x.IsPlayed == true
-                                          && x.TeamPlayers.FirstOrDefault(y => y.PlayerId == player.Player.Id) != null)
-                    .ToListAsync(cancellationToken);
-
-                foreach (var game in gamesPlayed)
+                if (player.Score is null && tournamentInDb.State == TournamentStates.Phase1)
                 {
-                    var team = 0;
+                    player.Score = 0;
 
-                    foreach (var teamPlayer in game.TeamPlayers)
+                    // Getting their wins
+                    var gamesPlayed = await this.context.FifaGamesPlayed
+                        .Include(x => x.TeamPlayers)
+                        .Where(
+                            x => x.TournamentId == request.TournamentId
+                                 && x.IsPlayed == true
+                                 && x.TeamPlayers.FirstOrDefault(y => y.PlayerId == player.Player.Id) != null)
+                        .ToListAsync(cancellationToken);
+
+                    foreach (var game in gamesPlayed)
                     {
-                        if (teamPlayer.PlayerId == player.Player.Id)
+                        var team = 0;
+
+                        foreach (var teamPlayer in game.TeamPlayers)
                         {
-                            team = teamPlayer.Team;
+                            if (teamPlayer.PlayerId == player.Player.Id)
+                            {
+                                team = teamPlayer.Team;
+                            }
+                        }
+
+                        if ((team == 0 && game.TeamScore1 > game.TeamScore2) || (team == 1 && game.TeamScore1 < game.TeamScore2))
+                        {
+                            player.Score += 3;
+                        }
+                        else if (game.TeamScore1 == game.TeamScore2)
+                        {
+                            player.Score += 1;
                         }
                     }
-
-                    if ((team == 0 && game.TeamScore1 > game.TeamScore2) || (team == 1 && game.TeamScore1 < game.TeamScore2))
-                    {
-                        player.Score += 3;
-                    }
-                    else if (game.TeamScore1 == game.TeamScore2)
-                    {
-                        player.Score += 1;
-                    }
+                }
+                else if (player.Score == null)
+                {
+                    player.Score = 0;
                 }
 
                 player.Stats = await this.mediator.Send(

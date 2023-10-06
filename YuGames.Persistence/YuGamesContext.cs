@@ -19,7 +19,7 @@ namespace YuGames.Persistence
         /// </summary>
         public YuGamesContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yugames.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yugames.db";
         }
 
         /// <summary>
@@ -149,6 +149,9 @@ namespace YuGames.Persistence
                     .HasColumnName("joined_at")
                     .IsRequired()
                     .HasDefaultValue(DateTime.UtcNow);
+
+                entity.Property(e => e.Phase1Score)
+                    .HasColumnName("phase_1_score");
 
                 entity.HasOne(e => e.Player)
                       .WithMany(f => f.TournamentPlayed)

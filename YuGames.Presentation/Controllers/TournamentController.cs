@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using YuGames.Application.Tournaments.Commands.SavePhase1Score;
+
 namespace YuGames.Presentation.Controllers
 {
     using MediatR;
@@ -163,6 +165,34 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GoToPhase1(int id)
         {
             var result = await this.mediator.Send(new GoToPhase1Command { TournamentId = id });
+
+            if (result)
+            {
+                return this.NoContent();
+            }
+            else
+            {
+                return this.Problem();
+            }
+        }
+
+        /// <summary>
+        /// Save phase 1 score.
+        /// </summary>
+        /// <param name="id">Tournament ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize(Roles = "yugames_admin")]
+        [Route("{id:int}/phase1/score")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Save phase 1 score.")]
+        [SwaggerResponse(204, "Update successfully.")]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> SavePhase1Score(int id)
+        {
+            var result = await this.mediator.Send(new SavePhase1ScoreCommand() { TournamentId = id });
 
             if (result)
             {
