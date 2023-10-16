@@ -56,6 +56,7 @@ namespace YuGames.Application.Tournaments.Commands.SavePhase1Score
                     .Include(x => x.TeamPlayers)
                     .Where(
                         x => x.TournamentId == request.TournamentId
+                             && x.Phase == 1
                              && x.IsPlayed == true
                              && x.TeamPlayers.FirstOrDefault(y => y.PlayerId == player.Player.Id) != null)
                     .ToListAsync(cancellationToken);

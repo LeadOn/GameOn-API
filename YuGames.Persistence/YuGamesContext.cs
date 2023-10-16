@@ -114,6 +114,10 @@ namespace YuGames.Persistence
                     .HasColumnName("logo_url")
                     .HasMaxLength(3000);
 
+                entity.Property(e => e.Phase2ChallongeUrl)
+                    .HasColumnName("phase2_challonge_url")
+                    .HasMaxLength(3000);
+
                 entity.Property(e => e.PlannedFrom)
                     .HasColumnName("planned_from")
                     .IsRequired()
@@ -282,6 +286,9 @@ namespace YuGames.Persistence
 
                 entity.Property(e => e.PlatformId)
                     .HasColumnName("platform_id");
+
+                entity.Property(e => e.Phase)
+                    .HasColumnName("phase");
 
                 entity.Property(e => e.CreatedById)
                     .HasColumnName("created_by_id");

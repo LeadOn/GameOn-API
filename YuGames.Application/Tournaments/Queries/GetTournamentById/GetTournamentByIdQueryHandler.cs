@@ -48,7 +48,7 @@ namespace YuGames.Application.Tournaments.Queries.GetTournamentById
                 JoinedAt = x.JoinedAt,
                 Player = x.Player,
                 Team = x.FifaTeam,
-                Score = tournamentInDb.State == TournamentStates.Phase1 ? x.Phase1Score : null,
+                Score = x.Phase1Score,
             }).ToListAsync(cancellationToken);
 
             foreach (var player in tournament.Players)

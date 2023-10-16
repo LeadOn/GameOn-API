@@ -61,6 +61,7 @@ namespace YuGames.Application.Tournaments.Commands.GoToPhase1
                             Team2Id = player2.Team.Id,
                             TeamCode1 = "???",
                             TeamCode2 = "???",
+                            Phase = 1,
                             TournamentId = request.TournamentId,
                             TeamPlayers = new List<FifaTeamPlayer>
                                 {

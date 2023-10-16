@@ -37,6 +37,11 @@ public class Tournament
     public string? LogoUrl { get; set; }
 
     /// <summary>
+    /// Gets or sets Phase 2 challonge URL.
+    /// </summary>
+    public string? Phase2ChallongeUrl { get; set; }
+
+    /// <summary>
     /// Gets or sets Planned From date.
     /// </summary>
     public DateTime PlannedFrom { get; set; }

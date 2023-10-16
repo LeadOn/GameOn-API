@@ -77,6 +77,11 @@ namespace YuGames.Domain
         public int? TournamentId { get; set; }
 
         /// <summary>
+        /// Gets or sets phase.
+        /// </summary>
+        public int? Phase { get; set; }
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
