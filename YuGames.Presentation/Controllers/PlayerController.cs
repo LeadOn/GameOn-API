@@ -14,6 +14,7 @@ namespace YuGames.Presentation.Controllers
     using YuGames.Application.Players.Queries.GetConnectedPlayer;
     using YuGames.Application.Players.Queries.GetPlayerById;
     using YuGames.Application.Players.Queries.GetPlayerStats;
+    using YuGames.Application.Stats.Queries.GetGlobalStats;
     using YuGames.Common.DTOs;
     using YuGames.Domain;
     using YuGames.Presentation.Classes;
@@ -109,6 +110,21 @@ namespace YuGames.Presentation.Controllers
         public async Task<IActionResult> GetPlayerStats(int playerId, int? seasonId)
         {
             return this.Ok(await this.mediator.Send(new GetPlayerStatsQuery { PlayerId = playerId, SeasonId = seasonId }));
+        }
+
+        /// <summary>
+        /// Get global stats.
+        /// </summary>
+        /// <returns>200 OK with Global stats.</returns>
+        [HttpGet]
+        [Route("global/stats")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get global stats.", Description = "Get global stats.")]
+        [SwaggerResponse(200, "Global Stats.", typeof(GlobalStatsDto))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetGlobalStats()
+        {
+            return this.Ok(await this.mediator.Send(new GetGlobalStatsQuery()));
         }
 
         /// <summary>

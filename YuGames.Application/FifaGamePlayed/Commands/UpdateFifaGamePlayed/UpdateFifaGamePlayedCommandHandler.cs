@@ -57,6 +57,8 @@ namespace YuGames.Application.FifaGamePlayed.Commands.UpdateFifaGamePlayed
             gameInDb.TeamScore1 = request.Game.TeamScore1;
             gameInDb.TeamScore2 = request.Game.TeamScore2;
             gameInDb.IsPlayed = request.Game.IsPlayed;
+            gameInDb.Phase = request.Game.Phase;
+            gameInDb.TournamentId = request.Game.TournamentId;
 
             if (gameInDb.TeamScore1 < 0 || gameInDb.TeamScore2 < 0)
             {

@@ -19,7 +19,7 @@ namespace YuGames.Persistence
         /// </summary>
         public YuGamesContext()
         {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "C:\\Users\\Valentin\\Desktop\\yugames.db";
+            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/yugames.db";
         }
 
         /// <summary>
@@ -114,6 +114,10 @@ namespace YuGames.Persistence
                     .HasColumnName("logo_url")
                     .HasMaxLength(3000);
 
+                entity.Property(e => e.Phase2ChallongeUrl)
+                    .HasColumnName("phase2_challonge_url")
+                    .HasMaxLength(3000);
+
                 entity.Property(e => e.PlannedFrom)
                     .HasColumnName("planned_from")
                     .IsRequired()
@@ -149,6 +153,9 @@ namespace YuGames.Persistence
                     .HasColumnName("joined_at")
                     .IsRequired()
                     .HasDefaultValue(DateTime.UtcNow);
+
+                entity.Property(e => e.Phase1Score)
+                    .HasColumnName("phase_1_score");
 
                 entity.HasOne(e => e.Player)
                       .WithMany(f => f.TournamentPlayed)
@@ -279,6 +286,9 @@ namespace YuGames.Persistence
 
                 entity.Property(e => e.PlatformId)
                     .HasColumnName("platform_id");
+
+                entity.Property(e => e.Phase)
+                    .HasColumnName("phase");
 
                 entity.Property(e => e.CreatedById)
                     .HasColumnName("created_by_id");

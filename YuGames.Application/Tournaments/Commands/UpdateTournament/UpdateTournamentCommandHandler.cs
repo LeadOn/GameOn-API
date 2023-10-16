@@ -44,6 +44,7 @@ namespace YuGames.Application.Tournaments.Commands.UpdateTournament
             tournamentInDb.PlannedTo = request.TournamentDto.PlannedTo;
             tournamentInDb.LogoUrl = request.TournamentDto.LogoUrl;
             tournamentInDb.State = request.TournamentDto.State;
+            tournamentInDb.Phase2ChallongeUrl = request.TournamentDto.Phase2ChallongeUrl;
 
             this.context.Tournaments.Update(tournamentInDb);
             await this.context.SaveChangesAsync(cancellationToken);
