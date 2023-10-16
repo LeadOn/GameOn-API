@@ -53,5 +53,15 @@ namespace YuGames.Common.DTOs
         /// Gets or sets a value indicating whether game is played or not.
         /// </summary>
         public bool IsPlayed { get; set; }
+
+        /// <summary>
+        /// Gets or sets Tournament ID.
+        /// </summary>
+        public int? TournamentId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Phase.
+        /// </summary>
+        public int? Phase { get; set; }
     }
 }

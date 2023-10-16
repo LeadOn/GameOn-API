@@ -32,6 +32,11 @@ namespace YuGames.Domain
         public int TournamentId { get; set; }
 
         /// <summary>
+        /// Gets or sets Phase 1 score.
+        /// </summary>
+        public int? Phase1Score { get; set; }
+
+        /// <summary>
         /// Gets or sets Join date.
         /// </summary>
         public DateTime JoinedAt { get; set; }

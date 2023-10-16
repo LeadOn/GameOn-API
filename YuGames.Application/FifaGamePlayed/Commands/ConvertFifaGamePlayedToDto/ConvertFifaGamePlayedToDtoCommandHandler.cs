@@ -39,6 +39,7 @@ namespace YuGames.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
             gamePlayedDto.CreatedBy = request.FifaGamePlayed.CreatedBy;
             gamePlayedDto.Id = request.FifaGamePlayed.Id;
             gamePlayedDto.PlayedOn = request.FifaGamePlayed.PlayedOn;
+            gamePlayedDto.Phase = request.FifaGamePlayed.Phase;
             gamePlayedDto.Team1 = new FifaTeamDto
             {
                 Id = 0,

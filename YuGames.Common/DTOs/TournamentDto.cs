@@ -31,6 +31,7 @@ namespace YuGames.Common.DTOs
             this.LogoUrl = tour.LogoUrl;
             this.PlannedFrom = tour.PlannedFrom;
             this.PlannedTo = tour.PlannedTo;
+            this.Phase2ChallongeUrl = tour.Phase2ChallongeUrl;
             this.Players = new List<TournamentPlayerDto>();
         }
 
@@ -53,6 +54,11 @@ namespace YuGames.Common.DTOs
         /// Gets or sets Logo URL.
         /// </summary>
         public string? LogoUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets Phase 2 challonge URL.
+        /// </summary>
+        public string? Phase2ChallongeUrl { get; set; }
 
         /// <summary>
         /// Gets or sets PlannedFrom.

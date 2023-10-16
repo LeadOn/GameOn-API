@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YuGames.Persistence;
 
@@ -10,12 +11,14 @@ using YuGames.Persistence;
 namespace YuGames.Persistence.Migrations
 {
     [DbContext(typeof(YuGamesContext))]
-    partial class YuGamesContextModelSnapshot : ModelSnapshot
+    [Migration("20231005114314_Added_Phase1_Score")]
+    partial class Added_Phase1_Score
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
             modelBuilder.Entity("YuGames.Domain.FifaGamePlayed", b =>
                 {
@@ -32,10 +35,6 @@ namespace YuGames.Persistence.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("is_played");
 
-                    b.Property<int?>("Phase")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("phase");
-
                     b.Property<int>("PlatformId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("platform_id");
@@ -43,7 +42,7 @@ namespace YuGames.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 10, 15, 19, 19, 46, 740, DateTimeKind.Local).AddTicks(7720))
+                        .HasDefaultValue(new DateTime(2023, 10, 5, 13, 43, 14, 561, DateTimeKind.Local).AddTicks(1220))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -219,7 +218,7 @@ namespace YuGames.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 10, 15, 17, 19, 46, 740, DateTimeKind.Utc).AddTicks(7140))
+                        .HasDefaultValue(new DateTime(2023, 10, 5, 11, 43, 14, 561, DateTimeKind.Utc).AddTicks(580))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -289,21 +288,16 @@ namespace YuGames.Persistence.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("name");
 
-                    b.Property<string>("Phase2ChallongeUrl")
-                        .HasMaxLength(3000)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("phase2_challonge_url");
-
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 10, 15, 17, 19, 46, 740, DateTimeKind.Utc).AddTicks(4580))
+                        .HasDefaultValue(new DateTime(2023, 10, 5, 11, 43, 14, 560, DateTimeKind.Utc).AddTicks(8000))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 10, 16, 17, 19, 46, 740, DateTimeKind.Utc).AddTicks(4660))
+                        .HasDefaultValue(new DateTime(2023, 10, 6, 11, 43, 14, 560, DateTimeKind.Utc).AddTicks(8080))
                         .HasColumnName("planned_to");
 
                     b.Property<int>("State")
@@ -331,7 +325,7 @@ namespace YuGames.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 10, 15, 17, 19, 46, 740, DateTimeKind.Utc).AddTicks(4990))
+                        .HasDefaultValue(new DateTime(2023, 10, 5, 11, 43, 14, 560, DateTimeKind.Utc).AddTicks(8400))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")

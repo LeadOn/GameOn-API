@@ -34,6 +34,6 @@ namespace YuGames.Common.DTOs
         /// <summary>
         /// Gets or sets Score.
         /// </summary>
-        public int Score { get; set; }
+        public int? Score { get; set; }
     }
 }
