@@ -2,14 +2,13 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using YuGames.Common.Collections;
-
 namespace YuGames.Application.Tournaments.Queries.GetTournamentById
 {
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using YuGames.Application.Common.Interfaces;
     using YuGames.Application.TournamentPlayers.Queries.GetTournamentPlayerStats;
+    using YuGames.Common.Collections;
     using YuGames.Common.DTOs;
 
     /// <summary>

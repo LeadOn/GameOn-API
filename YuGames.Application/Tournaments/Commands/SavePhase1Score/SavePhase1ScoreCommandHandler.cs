@@ -33,7 +33,8 @@ namespace YuGames.Application.Tournaments.Commands.SavePhase1Score
         public async Task<bool> Handle(SavePhase1ScoreCommand request, CancellationToken cancellationToken)
         {
             var tournamentInDb =
-                await this.context.Tournaments.FirstOrDefaultAsync(x => x.Id == request.TournamentId,
+                await this.context.Tournaments.FirstOrDefaultAsync(
+                    x => x.Id == request.TournamentId,
                     cancellationToken);
 
             if (tournamentInDb is null)
