@@ -2,8 +2,6 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using YuGames.Application.Tournaments.Commands.SavePhase1Score;
-
 namespace YuGames.Presentation.Controllers
 {
     using MediatR;
@@ -15,6 +13,7 @@ namespace YuGames.Presentation.Controllers
     using YuGames.Application.Tournaments.Commands.CreateTournament;
     using YuGames.Application.Tournaments.Commands.DeleteTournament;
     using YuGames.Application.Tournaments.Commands.GoToPhase1;
+    using YuGames.Application.Tournaments.Commands.SavePhase1Score;
     using YuGames.Application.Tournaments.Commands.SubscribeTournament;
     using YuGames.Application.Tournaments.Commands.UpdateTournament;
     using YuGames.Application.Tournaments.Queries.CheckTournamentSubscription;
