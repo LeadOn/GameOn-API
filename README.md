@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="yugames-logo.png" width="128" />
+    <img src="./images/yugames-logo.png" width="128" />
 </p>
 
 <h1 align="center">YuGames API</h1>

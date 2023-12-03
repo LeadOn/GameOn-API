@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "2.0"
+    "version": "2.2"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -831,6 +831,28 @@
         }
       }
     },
+    "/Player/global/stats": {
+      "get": {
+        "tags": ["Player"],
+        "summary": "Get global stats.",
+        "description": "Get global stats.",
+        "responses": {
+          "200": {
+            "description": "Global Stats.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalStatsDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/Season": {
       "get": {
         "tags": ["Season"],
@@ -1144,6 +1166,38 @@
         }
       }
     },
+    "/Tournament/{id}/phase1/score": {
+      "post": {
+        "tags": ["Tournament"],
+        "summary": "Save phase 1 score.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Update successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Not enough roles."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/Tournament/{tournamentId}/subscription": {
       "post": {
         "tags": ["Tournament"],
@@ -1394,6 +1448,11 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "phase": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1422,6 +1481,11 @@
             "nullable": true
           },
           "tournamentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "phase": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -1522,6 +1586,28 @@
               "$ref": "#/components/schemas/Player"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GlobalStatsDto": {
+        "type": "object",
+        "properties": {
+          "numberOfGames": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bestPlayer": {
+            "$ref": "#/components/schemas/Player"
+          },
+          "bestPlayerStats": {
+            "$ref": "#/components/schemas/FifaPlayerStatsDto"
+          },
+          "worstPlayer": {
+            "$ref": "#/components/schemas/Player"
+          },
+          "worstPlayerStats": {
+            "$ref": "#/components/schemas/FifaPlayerStatsDto"
           }
         },
         "additionalProperties": false
@@ -1723,6 +1809,10 @@
             "type": "string",
             "nullable": true
           },
+          "phase2ChallongeUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "plannedFrom": {
             "type": "string",
             "format": "date-time"
@@ -1750,6 +1840,10 @@
             "format": "int32"
           },
           "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "phase2ChallongeUrl": {
             "type": "string",
             "nullable": true
           },
@@ -1790,6 +1884,11 @@
             "type": "integer",
             "format": "int32"
           },
+          "phase1Score": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "joinedAt": {
             "type": "string",
             "format": "date-time"
@@ -1815,7 +1914,8 @@
           },
           "score": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1859,6 +1959,16 @@
           },
           "isPlayed": {
             "type": "boolean"
+          },
+          "tournamentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "phase": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
