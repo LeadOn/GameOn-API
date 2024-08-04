@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<ApplicationIcon>gameon-icon.ico</ApplicationIcon>
+	<Title>GameOn! API</Title>
+	<Authors>LeadOn</Authors>
+	<Company>LeadOn's Corp</Company>
+	<Description>Back-end of the GameOn! project.</Description>
+	<Copyright>LeadOn's Corp</Copyright>
+	<PackageProjectUrl>https://www.valentinvirot.fr</PackageProjectUrl>
+	<PackageIcon>gameon-icon.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="gameon-icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\images\gameon-icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameOn.Application\GameOn.Application.csproj" />
+    <ProjectReference Include="..\GameOn.Common\GameOn.Common.csproj" />
+    <ProjectReference Include="..\GameOn.External\GameOn.External.csproj" />
+    <ProjectReference Include="..\GameOn.Persistence\GameOn.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
