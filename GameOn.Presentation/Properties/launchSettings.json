@@ -7,8 +7,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SQLITE_PATH": "C:\\Users\\Valentin\\Desktop\\gameon.db",
-        "JWT_AUTHORITY": "https://auth.valentinvirot.fr/realms/gameon",
-        "JWT_AUDIENCE": "account",
+        "JWT_ISSUER": "testissuer",
+        "JWT_AUDIENCE": "testaudience",
+        "JWT_SECRETKEY": "ku%Ua*FP!MmIj@tm5gKLH6F2$pRln#Dw",
         "CURRENT_SEASON": "2",
         "DEFAULT_PLATFORM": "2"
       },
