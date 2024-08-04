@@ -1,12 +1,12 @@
 <p align="center">
-    <img src="./images/yugames-logo.png" width="128" />
+    <img src="./images/gameon-logo.png" width="128" />
 </p>
 
-<h1 align="center">YuGames API</h1>
+<h1 align="center">GameOn! API</h1>
 
 # Description
 
-This project is a back-end for the YuGames project, done using ASP.NET on the .NET 7 framework, and will be running live on [this site](https://yugames-api.valentinvirot.fr/).
+This project is a back-end for the GameOn! project, done using ASP.NET on the .NET 8 framework, and will be running live on [this site](https://gameon-api.valentinvirot.fr/).
 
 First, the project was built around the N-Layer architecture (you can find it in the archive/n-layer branch).
 Now, the project is using the Clean Architecture + CQRS design patterns, that suits better in this use case.

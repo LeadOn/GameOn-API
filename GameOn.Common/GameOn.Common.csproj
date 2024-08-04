@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Title>GameOn! Common</Title>
+    <Authors>LeadOn's Corp</Authors>
+    <Description>Common utilities used in the GameOn! project.</Description>
+    <Copyright>LeadOn's Corp</Copyright>
+    <PackageProjectUrl>https://www.valentinvirot.fr</PackageProjectUrl>
+    <Company>LeadOn's Corp</Company>
+    <PackageIcon>gameon-icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="gameon-icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\images\gameon-icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameOn.Domain\GameOn.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
