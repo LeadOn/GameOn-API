@@ -5,6 +5,7 @@
 namespace GameOn.Persistence
 {
     using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Exceptions;
     using GameOn.Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -14,14 +15,6 @@ namespace GameOn.Persistence
     /// </summary>
     public class GameOnContext : DbContext, IApplicationDbContext
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameOnContext"/> class.
-        /// </summary>
-        public GameOnContext()
-        {
-            this.DbPath = Environment.GetEnvironmentVariable("SQLITE_PATH") ?? "/Users/leadon/Desktop/GameOn.db";
-        }
-
         /// <summary>
         /// Gets or sets Players.
         /// </summary>
@@ -68,11 +61,6 @@ namespace GameOn.Persistence
         public DbSet<TournamentPlayer> TournamentPlayers { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the path of the SQLite file.
-        /// </summary>
-        public string DbPath { get; set; }
-
-        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -83,7 +71,7 @@ namespace GameOn.Persistence
 
         /// <inheritdoc />
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={this.DbPath}");
+            => options.UseMySql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING")));
 
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
