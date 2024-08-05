@@ -12,16 +12,13 @@ namespace GameOn.Common.DTOs
     public class UserLoginDto
     {
         /// <summary>
-        /// Gets or sets Username.
+        /// Gets or sets Email.
         /// </summary>
-        [Required(ErrorMessage = "Username is required.")]
-        public string Username { get; set; } = "Default user";
+        public string Email { get; set; } = "test@exemple.com";
 
         /// <summary>
         /// Gets or sets Password.
         /// </summary>
-        [Required(ErrorMessage = "Password is required.")]
-        [DataType(DataType.Password)]
         public string Password { get; set; } = "Default password";
     }
 }

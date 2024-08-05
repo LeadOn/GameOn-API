@@ -10,6 +10,8 @@
         "JWT_ISSUER": "testissuer",
         "JWT_AUDIENCE": "testaudience",
         "JWT_SECRETKEY": "ku%Ua*FP!MmIj@tm5gKLH6F2$pRln#Dw",
+        "PASSWORD_PEPPER": "testPepper",
+        "PASSWORD_ITERATIONS": "3",
         "CURRENT_SEASON": "2",
         "DEFAULT_PLATFORM": "2"
       },

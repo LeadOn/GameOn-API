@@ -7,10 +7,16 @@ namespace GameOn.Presentation.Controllers
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Text;
+    using GameOn.Application.Players.Commands.RegisterPlayer;
+    using GameOn.Application.Players.Queries.GetPlayerByEmail;
     using GameOn.Common.DTOs;
     using GameOn.Common.Exceptions;
+    using GameOn.Domain;
+    using GameOn.Presentation.Classes;
+    using MediatR;
     using Microsoft.AspNetCore.Identity.Data;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
 
     /// <summary>
@@ -23,6 +29,9 @@ namespace GameOn.Presentation.Controllers
         // Configuration interface.
         private readonly IConfiguration configuration;
 
+        // Mediator interface.
+        private readonly ISender mediator;
+
         // dictionary to store refresh tokens.
 #pragma warning disable SA1204 // Static elements should appear before instance elements
         private static Dictionary<string, string> refreshTokens = new Dictionary<string, string>();
@@ -32,9 +41,40 @@ namespace GameOn.Presentation.Controllers
         /// Initializes a new instance of the <see cref="AuthController"/> class.
         /// </summary>
         /// <param name="config">Configuration interface, injected.</param>
-        public AuthController(IConfiguration config)
+        /// <param name="mediator">Mediator interface, injected.</param>
+        public AuthController(IConfiguration config, ISender mediator)
         {
             this.configuration = config;
+            this.mediator = mediator;
+        }
+
+        /// <summary>
+        /// Register new user in database.
+        /// </summary>
+        /// <param name="newPlayer">New player.</param>
+        /// <returns>New player in database.</returns>
+        /// <exception cref="MissingEnvironmentVariableException">When some env variables are missing.</exception>
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto newPlayer)
+        {
+            var player = new Player
+            {
+                Email = newPlayer.Email,
+                Nickname = newPlayer.Nickname,
+                PasswordSalt = AuthService.GenerateSalt(),
+            };
+
+            player.PasswordHash = AuthService.ComputeHash(newPlayer.Password, player.PasswordSalt, Environment.GetEnvironmentVariable("PASSWORD_PEPPER") ?? throw new MissingEnvironmentVariableException("PASSWORD_PEPPER"), int.Parse(Environment.GetEnvironmentVariable("PASSWORD_ITERATIONS") ?? throw new MissingEnvironmentVariableException("PASSWORD_ITERATIONS")));
+
+            // Checking if user already exists
+            var playerInDb = await this.mediator.Send(new GetPlayerByEmailQuery { Email = newPlayer.Email });
+
+            if (playerInDb is not null)
+            {
+                return this.Conflict();
+            }
+
+            return this.Ok(await this.mediator.Send(new RegisterPlayerCommand { Player = player }));
         }
 
         /// <summary>
@@ -43,63 +83,47 @@ namespace GameOn.Presentation.Controllers
         /// <param name="model"><see cref="UserLoginDto"/>.</param>
         /// <returns><see cref="IActionResult" />.</returns>
         [HttpPost("login")]
-        public IActionResult Login([FromBody] UserLoginDto model)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto model)
         {
-            // Check user credentials (in a real application, you'd authenticate against a database)
-            if (model is { Username: "demo", Password: "password" })
+            // Getting user from email
+            var userInDb = await this.mediator.Send(new GetPlayerByEmailQuery { Email = model.Email });
+
+            if (userInDb is null)
             {
-                var token = this.GenerateAccessToken(model.Username);
+                return this.Unauthorized();
+            }
 
-                // Generate refresh token
-                var refreshToken = Guid.NewGuid().ToString();
+            // Calculating password hash
+            var passwordHash = AuthService.ComputeHash(model.Password, userInDb.PasswordSalt, Environment.GetEnvironmentVariable("PASSWORD_PEPPER") ?? throw new MissingEnvironmentVariableException("PASSWORD_PEPPER"), int.Parse(Environment.GetEnvironmentVariable("PASSWORD_ITERATIONS") ?? throw new MissingEnvironmentVariableException("PASSWORD_ITERATIONS")));
 
-                // Store the refresh token (in-memory for simplicity)
-                refreshTokens[refreshToken] = model.Username;
+            if (userInDb.PasswordHash != passwordHash)
+            {
+                return this.Unauthorized();
+            }
+            else
+            {
+                var token = this.GenerateAccessToken(model.Email);
 
                 // return access token and refresh token
                 return this.Ok(new
                 {
                     AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-                    RefreshToken = refreshToken,
                 });
             }
-
-            // unauthorized user
-            return this.Unauthorized("Invalid credentials!");
-        }
-
-        /// <summary>
-        /// Refreshes the access token.
-        /// </summary>
-        /// <param name="request"><see cref="RefreshRequestDto" />.</param>
-        /// <returns><see cref="IActionResult"/>.</returns>
-        [HttpPost("refresh")]
-        public IActionResult Refresh([FromBody] RefreshRequestDto request)
-        {
-            if (refreshTokens.TryGetValue(request.RefreshToken, out var userId))
-            {
-                // Generate a new access token
-                var token = this.GenerateAccessToken(userId);
-
-                // Return the new access token to the client
-                return this.Ok(new { AccessToken = new JwtSecurityTokenHandler().WriteToken(token) });
-            }
-
-            return this.BadRequest("Invalid refresh token");
         }
 
         /// <summary>
         /// Generates an Access token for given user.
         /// </summary>
-        /// <param name="userName">User name.</param>
+        /// <param name="email">User email.</param>
         /// <returns><see cref="JwtSecurityToken"/>.</returns>
         /// <exception cref="MissingEnvironmentVariableException"><see cref="MissingEnvironmentVariableException"/>.</exception>
-        private JwtSecurityToken GenerateAccessToken(string userName)
+        private JwtSecurityToken GenerateAccessToken(string email)
         {
             // Create user claims
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Email, email),
             };
 
             // Create a JWT

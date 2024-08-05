@@ -5,7 +5,6 @@
 namespace GameOn.Persistence
 {
     using GameOn.Application.Common.Interfaces;
-    using GameOn.Common.Exceptions;
     using GameOn.Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -70,19 +69,68 @@ namespace GameOn.Persistence
         }
 
         /// <inheritdoc />
+        /// TODO
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseMySql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING")));
+            => options.UseMySql("Server=192.168.1.42;Port=3307;User=leadon;Password=9I%k#gV7@x7&XML#vnv4j1LjltQNUVEd;Database=gameon", ServerVersion.AutoDetect("Server=192.168.1.42;Port=3307;User=leadon;Password=9I%k#gV7@x7&XML#vnv4j1LjltQNUVEd;Database=gameon"));
 
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Player>(entity =>
+            {
+                entity.ToTable("Player");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(200)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.PasswordHash)
+                    .HasMaxLength(500)
+                    .HasColumnName("password_hash");
+
+                entity.Property(e => e.PasswordSalt)
+                    .HasMaxLength(500)
+                    .HasColumnName("password_salt");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(200)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.FullName)
+                    .HasColumnName("full_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Nickname)
+                    .HasColumnName("nickname")
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ProfilePictureUrl)
+                    .HasColumnName("profile_picture_url")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.CreatedOn)
+                    .HasDefaultValue(DateTime.UtcNow)
+                    .HasColumnName("created_on");
+            });
+
             modelBuilder.Entity<Tournament>(entity =>
             {
                 entity.ToTable("Tournament");
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -123,7 +171,10 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.PlayerId)
                     .HasColumnName("player_id")
@@ -170,42 +221,15 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
                     .HasMaxLength(50)
                     .IsRequired();
-            });
-
-            modelBuilder.Entity<Player>(entity =>
-            {
-                entity.ToTable("Player");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.KeycloakId)
-                    .HasMaxLength(50)
-                    .HasColumnName("keycloak_id");
-
-                entity.Property(e => e.FullName)
-                    .HasColumnName("full_name")
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Nickname)
-                    .HasColumnName("nickname")
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.ProfilePictureUrl)
-                    .HasColumnName("profile_picture_url")
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.CreatedOn)
-                    .HasDefaultValue(DateTime.UtcNow)
-                    .HasColumnName("created_on");
             });
 
             modelBuilder.Entity<Platform>(entity =>
@@ -214,7 +238,10 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -228,7 +255,10 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -242,7 +272,10 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.PlayedOn)
                     .HasColumnName("played_on")
@@ -335,7 +368,10 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -377,7 +413,10 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.PlayerId)
                     .IsRequired()
