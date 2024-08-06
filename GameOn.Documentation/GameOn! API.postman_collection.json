@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "d3517676-4d0b-4b15-8d93-5569d489a8c7",
-		"name": "YuGames 2.0",
+		"_postman_id": "3f4ab28e-3ce1-4e43-91c4-933bb2c0d210",
+		"name": "GameOn! 3.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25561894"
+		"_exporter_id": "6882080"
 	},
 	"item": [
 		{
@@ -427,13 +427,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/tournament/4",
+							"raw": "{{baseUrl}}/tournament/6",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"tournament",
-								"4"
+								"6"
 							]
 						}
 					},
@@ -597,6 +597,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Save phase 1 score",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tournament/6/phase1/score",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament",
+								"6",
+								"phase1",
+								"score"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -612,14 +632,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/fifagame/tournament/4?isPlayed=true",
+							"raw": "{{baseUrl}}/fifagame/tournament/6?isPlayed=true",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"fifagame",
 								"tournament",
-								"4"
+								"6"
 							],
 							"query": [
 								{
@@ -837,6 +857,18 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5184",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZGVtbyIsImV4cCI6MTcyMjgwNDUwMywiaXNzIjoidGVzdGlzc3VlciIsImF1ZCI6InRlc3RhdWRpZW5jZSJ9.UFSULGrfp_v49dxvHlt4dHEwq-mwY3TWkBfTvakh08M",
+			"type": "string"
 		}
 	]
 }

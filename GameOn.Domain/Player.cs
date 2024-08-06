@@ -5,6 +5,7 @@
 namespace GameOn.Domain
 {
     using System.Text.Json.Serialization;
+    using GameOn.Domain;
 
     /// <summary>
     /// Player class.
@@ -19,26 +20,7 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets player's Keycloak ID.
         /// </summary>
-        [JsonIgnore]
         public string? KeycloakId { get; set; }
-
-        /// <summary>
-        /// Gets or sets player's email.
-        /// </summary>
-        [JsonIgnore]
-        public string Email { get; set; } = "user@example.com";
-
-        /// <summary>
-        /// Gets or sets player's password salt.
-        /// </summary>
-        [JsonIgnore]
-        public string PasswordSalt { get; set; } = "Salt";
-
-        /// <summary>
-        /// Gets or sets player's password hash.
-        /// </summary>
-        [JsonIgnore]
-        public string PasswordHash { get; set; } = "Hash";
 
         /// <summary>
         /// Gets or sets player's full name.

@@ -87,21 +87,9 @@ namespace GameOn.Persistence
 
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Email)
+                entity.Property(e => e.KeycloakId)
                     .HasMaxLength(200)
-                    .HasColumnName("email");
-
-                entity.Property(e => e.PasswordHash)
-                    .HasMaxLength(500)
-                    .HasColumnName("password_hash");
-
-                entity.Property(e => e.PasswordSalt)
-                    .HasMaxLength(500)
-                    .HasColumnName("password_salt");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(200)
-                    .HasColumnName("email");
+                    .HasColumnName("keycloak_id");
 
                 entity.Property(e => e.FullName)
                     .HasColumnName("full_name")

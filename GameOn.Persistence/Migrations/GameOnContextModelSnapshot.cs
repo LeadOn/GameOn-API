@@ -50,7 +50,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 5, 10, 57, 16, 328, DateTimeKind.Local).AddTicks(5822))
+                        .HasDefaultValue(new DateTime(2024, 8, 6, 11, 21, 58, 290, DateTimeKind.Local).AddTicks(9680))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -236,14 +236,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 5, 8, 57, 16, 328, DateTimeKind.Utc).AddTicks(1244))
+                        .HasDefaultValue(new DateTime(2024, 8, 6, 9, 21, 58, 290, DateTimeKind.Utc).AddTicks(3899))
                         .HasColumnName("created_on");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("email");
 
                     b.Property<string>("FullName")
                         .HasMaxLength(100)
@@ -251,25 +245,15 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnName("full_name");
 
                     b.Property<string>("KeycloakId")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("keycloak_id");
 
                     b.Property<string>("Nickname")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("nickname");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("password_hash");
-
-                    b.Property<string>("PasswordSalt")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("password_salt");
 
                     b.Property<string>("ProfilePictureUrl")
                         .HasMaxLength(500)
@@ -334,13 +318,13 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 5, 8, 57, 16, 328, DateTimeKind.Utc).AddTicks(2008))
+                        .HasDefaultValue(new DateTime(2024, 8, 6, 9, 21, 58, 290, DateTimeKind.Utc).AddTicks(4888))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 6, 8, 57, 16, 328, DateTimeKind.Utc).AddTicks(2177))
+                        .HasDefaultValue(new DateTime(2024, 8, 7, 9, 21, 58, 290, DateTimeKind.Utc).AddTicks(5106))
                         .HasColumnName("planned_to");
 
                     b.Property<int>("State")
@@ -370,7 +354,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 5, 8, 57, 16, 328, DateTimeKind.Utc).AddTicks(2722))
+                        .HasDefaultValue(new DateTime(2024, 8, 6, 9, 21, 58, 290, DateTimeKind.Utc).AddTicks(5755))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")

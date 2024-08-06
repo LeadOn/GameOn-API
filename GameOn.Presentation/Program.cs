@@ -51,15 +51,19 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(o =>
 {
-    o.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    o.Authority = Environment.GetEnvironmentVariable("JWT_AUTHORITY") ?? throw new MissingEnvironmentVariableException("JWT_AUTHORITY");
+    o.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new MissingEnvironmentVariableException("JWT_AUDIENCE");
+    o.RequireHttpsMetadata = false;
+    o.Events = new JwtBearerEvents()
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new MissingEnvironmentVariableException("JWT_ISSUER"),
-        ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new MissingEnvironmentVariableException("JWT_AUDIENCE"),
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRETKEY") ?? throw new MissingEnvironmentVariableException("JWT_SECRETKEY"))),
+        OnAuthenticationFailed = c =>
+        {
+            c.NoResult();
+
+            c.Response.StatusCode = 401;
+            c.Response.ContentType = "application/json";
+            return c.Response.WriteAsJsonAsync(new { Error = "Unable to authenticate. Maybe your token is expired?" });
+        },
     };
 });
 
@@ -67,7 +71,10 @@ var app = builder.Build();
 
 // Configuring SwaggerGen
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+});
 
 // Using CORS
 app.UseCors();
