@@ -5,6 +5,7 @@
 namespace GameOn.Domain
 {
     using System.Text.Json.Serialization;
+    using GameOn.Domain;
 
     /// <summary>
     /// Player class.

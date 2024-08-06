@@ -3,11 +3,13 @@
 // </copyright>
 
 #pragma warning disable SA1200 // Using directives should be placed correctly
+using System.Text;
 using GameOn.Application;
 using GameOn.Common.Exceptions;
 using GameOn.External;
 using GameOn.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 #pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +27,7 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Version = "2.2",
+        Version = "3.0",
         Title = "LeadOn's Corp - GameOn! API",
         Description = "This API goal is to monitor players performance across multiple games.",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact
@@ -69,7 +71,10 @@ var app = builder.Build();
 
 // Configuring SwaggerGen
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+});
 
 // Using CORS
 app.UseCors();
