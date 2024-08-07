@@ -5,22 +5,22 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["YuGames.Application/YuGames.Application.csproj", "YuGames.Application/"]
-COPY ["YuGames.Common/YuGames.Common.csproj", "YuGames.Common/"]
-COPY ["YuGames.Domain/YuGames.Domain.csproj", "YuGames.Domain/"]
-COPY ["YuGames.External/YuGames.External.csproj", "YuGames.External/"]
-COPY ["YuGames.Persistence/YuGames.Persistence.csproj", "YuGames.Persistence/"]
-COPY ["YuGames.Presentation/YuGames.Presentation.csproj", "YuGames.Presentation/"]
+COPY ["GameOn.Application/GameOn.Application.csproj", "GameOn.Application/"]
+COPY ["GameOn.Common/GameOn.Common.csproj", "GameOn.Common/"]
+COPY ["GameOn.Domain/GameOn.Domain.csproj", "GameOn.Domain/"]
+COPY ["GameOn.External/GameOn.External.csproj", "GameOn.External/"]
+COPY ["GameOn.Persistence/GameOn.Persistence.csproj", "GameOn.Persistence/"]
+COPY ["GameOn.Presentation/GameOn.Presentation.csproj", "GameOn.Presentation/"]
 
-RUN dotnet restore "YuGames.Presentation/YuGames.Presentation.csproj"
+RUN dotnet restore "GameOn.Presentation/GameOn.Presentation.csproj"
 COPY . .
-WORKDIR "/src/YuGames.Presentation"
-RUN dotnet build "YuGames.Presentation.csproj" -c Release -o /app/build
+WORKDIR "/src/GameOn.Presentation"
+RUN dotnet build "GameOn.Presentation.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "YuGames.Presentation.csproj" -c Release -o /app/publish
+RUN dotnet publish "GameOn.Presentation.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "YuGames.Presentation.dll"]
+ENTRYPOINT ["dotnet", "GameOn.Presentation.dll"]
