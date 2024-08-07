@@ -9,7 +9,7 @@
         "DB_CONNECTION_STRING": "Server=192.168.1.42;Port=3307;User=leadon;Password=9I%k#gV7@x7&XML#vnv4j1LjltQNUVEd;Database=gameon",
         "JWT_AUTHORITY": "http://192.168.1.42:8080/realms/gameon",
         "JWT_AUDIENCE": "account",
-        "CURRENT_SEASON": "2",
+        "CURRENT_SEASON": "4",
         "DEFAULT_PLATFORM": "2"
       },
       "dotnetRunMessages": true,

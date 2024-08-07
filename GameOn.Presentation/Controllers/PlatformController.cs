@@ -77,7 +77,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="platform"><see cref="Platform" />.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPost]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Creates a platform in database.")]
@@ -96,7 +96,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="platform"><see cref="Platform" />.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPatch]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Updates a platform in database.")]

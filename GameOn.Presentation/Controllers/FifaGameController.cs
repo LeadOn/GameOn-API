@@ -118,7 +118,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="gameId">Game ID.</param>
         /// <returns>IActionResult object.</returns>
         [HttpDelete]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("{gameId:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Delete game in database.", Description = "Delete game in database (including highlights / team-players). WARNING: it really deletes!")]
@@ -186,7 +186,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="game"><see cref="UpdateGameDto" />.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPatch]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Updates a game in database.")]
