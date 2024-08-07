@@ -65,6 +65,7 @@ namespace GameOn.Application.Players.Queries.GetConnectedPlayer
 
                 this.context.Players.Add(user);
                 await this.context.SaveChangesAsync(cancellationToken);
+                userInDb = await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == request.ConnectedPlayer.KeycloakId);
             }
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
