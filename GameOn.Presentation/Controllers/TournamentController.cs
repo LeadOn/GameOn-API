@@ -104,7 +104,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="tournament">Tournament DTO.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPost]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Create tournament in database.")]
@@ -134,7 +134,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="tournament">Updated tournament.</param>
         /// <returns>IActionResult Object.</returns>
         [HttpPatch]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("{id:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Create tournament in database.")]
@@ -153,7 +153,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="id">Tournament ID.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPost]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("{id:int}/phase1")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Make Tournament to go into phase 1.")]
@@ -181,7 +181,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="id">Tournament ID.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPost]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("{id:int}/phase1/score")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Save phase 1 score.")]
@@ -262,7 +262,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="id">Tournament ID.</param>
         /// <returns>IActionResult object.</returns>
         [HttpDelete]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("{id:int}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Delete tournament in database.")]

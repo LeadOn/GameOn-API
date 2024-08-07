@@ -155,7 +155,7 @@ namespace GameOn.Presentation.Controllers
         /// <param name="update"><see cref="UpdatePlayerDto"/>.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPatch]
-        [Authorize(Roles = "GameOn_admin")]
+        [Authorize(Roles = "gameon_admin")]
         [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Update user profile (Admin only).", Description = "Updates user profile in database, only for admins.")]

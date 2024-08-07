@@ -16,7 +16,7 @@ namespace GameOn.Presentation.Controllers
     /// Admin Controller.
     /// </summary>
     [ApiController]
-    [Authorize(Roles = "GameOn_admin")]
+    [Authorize(Roles = "gameon_admin")]
     [Route("[controller]")]
     public class AdminController : ControllerBase
     {
@@ -45,9 +45,7 @@ namespace GameOn.Presentation.Controllers
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetAdminDashboard()
         {
-#pragma warning disable CS8604 // Possible null reference argument.
             var adminDashboard = await this.mediator.Send(new GetAdminDashboardStatsQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
-#pragma warning restore CS8604 // Possible null reference argument.
 
             if (adminDashboard is null)
             {

@@ -4,7 +4,6 @@
 
 namespace GameOn.Application.Players.Queries.GetPlayerStats
 {
-    using GameOn.Application.Common.Interfaces;
     using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using GameOn.Application.FifaTeams.Queries.GetMostLossesFifaTeamsByPlayer;
     using GameOn.Application.FifaTeams.Queries.GetMostPlayedFifaTeamsByPlayer;
@@ -21,17 +20,14 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
     /// </summary>
     public class GetPlayerStatsQueryHandler : IRequestHandler<GetPlayerStatsQuery, FifaPlayerStatsDto?>
     {
-        private readonly IApplicationDbContext context;
         private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetPlayerStatsQueryHandler"/> class.
         /// </summary>
-        /// <param name="context">DbContext, injected.</param>
         /// <param name="mediator">Mediator, injected.</param>
-        public GetPlayerStatsQueryHandler(IApplicationDbContext context, ISender mediator)
+        public GetPlayerStatsQueryHandler(ISender mediator)
         {
-            this.context = context;
             this.mediator = mediator;
         }
 
@@ -53,8 +49,10 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
 
             var platformsInDb = await this.mediator.Send(new GetAllPlatformsQuery(), cancellationToken);
 
-            var globalStats = new PlatformStatsDto();
-            globalStats.Platform = new Platform { Id = 0, Name = "Global" };
+            var globalStats = new PlatformStatsDto
+            {
+                Platform = new Platform { Id = 0, Name = "Global" },
+            };
             var avgGoalsTaken = new List<float>();
             var avgGoalsGiven = new List<float>();
 
@@ -79,12 +77,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
                     foreach (var teamPlayer in teamPlayersInDb)
                     {
                         // Getting game
-                        var gameInDb = await this.mediator.Send(new GetFifaGamePlayedByIdQuery { FifaGamePlayedId = teamPlayer.FifaGameId }, cancellationToken);
-
-                        if (gameInDb is null)
-                        {
-                            throw new NotImplementedException();
-                        }
+                        var gameInDb = await this.mediator.Send(new GetFifaGamePlayedByIdQuery { FifaGamePlayedId = teamPlayer.FifaGameId }, cancellationToken) ?? throw new NotImplementedException();
 
                         if (gameInDb.Team1.Score == gameInDb.Team2.Score)
                         {
@@ -222,9 +215,9 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
             return new FifaPlayerStatsDto
             {
                 StatsPerPlatform = platformsStats.OrderBy(x => x.Platform.Id).ToList(),
-                MostWinsTeams = await this.mediator.Send(new GetMostWinsFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }),
-                MostLossesTeams = await this.mediator.Send(new GetMostLossesFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }),
-                MostPlayedTeams = await this.mediator.Send(new GetMostPlayedFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }),
+                MostWinsTeams = await this.mediator.Send(new GetMostWinsFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }, cancellationToken),
+                MostLossesTeams = await this.mediator.Send(new GetMostLossesFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }, cancellationToken),
+                MostPlayedTeams = await this.mediator.Send(new GetMostPlayedFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }, cancellationToken),
             };
         }
     }
