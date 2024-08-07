@@ -5,6 +5,7 @@
 namespace GameOn.Persistence
 {
     using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Exceptions;
     using GameOn.Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -71,7 +72,7 @@ namespace GameOn.Persistence
         /// <inheritdoc />
         /// TODO
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseMySql("Server=192.168.1.42;Port=3307;User=leadon;Password=9I%k#gV7@x7&XML#vnv4j1LjltQNUVEd;Database=gameon", ServerVersion.AutoDetect("Server=192.168.1.42;Port=3307;User=leadon;Password=9I%k#gV7@x7&XML#vnv4j1LjltQNUVEd;Database=gameon"));
+            => options.UseMySql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING")));
 
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
