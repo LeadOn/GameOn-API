@@ -70,7 +70,6 @@ namespace GameOn.Persistence
         }
 
         /// <inheritdoc />
-        /// TODO
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseMySql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING")));
 
@@ -108,6 +107,10 @@ namespace GameOn.Persistence
                 entity.Property(e => e.CreatedOn)
                     .HasDefaultValue(DateTime.UtcNow)
                     .HasColumnName("created_on");
+
+                entity.Property(e => e.Archived)
+                    .HasDefaultValue(false)
+                    .HasColumnName("archived");
             });
 
             modelBuilder.Entity<Tournament>(entity =>
