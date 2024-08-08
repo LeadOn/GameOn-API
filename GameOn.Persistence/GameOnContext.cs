@@ -15,6 +15,9 @@ namespace GameOn.Persistence
     /// </summary>
     public class GameOnContext : DbContext, IApplicationDbContext
     {
+        // SQL Connection string
+        private readonly string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING");
+
         /// <summary>
         /// Gets or sets Players.
         /// </summary>
@@ -70,9 +73,8 @@ namespace GameOn.Persistence
         }
 
         /// <inheritdoc />
-        /// TODO
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseMySql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING")));
+            => options.UseMySql(this.connectionString, ServerVersion.AutoDetect(this.connectionString));
 
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -108,6 +110,10 @@ namespace GameOn.Persistence
                 entity.Property(e => e.CreatedOn)
                     .HasDefaultValue(DateTime.UtcNow)
                     .HasColumnName("created_on");
+
+                entity.Property(e => e.Archived)
+                    .HasDefaultValue(false)
+                    .HasColumnName("archived");
             });
 
             modelBuilder.Entity<Tournament>(entity =>
@@ -152,6 +158,15 @@ namespace GameOn.Persistence
                     .HasColumnName("planned_to")
                     .IsRequired()
                     .HasDefaultValue(DateTime.UtcNow.AddDays(1));
+
+                entity.Property(e => e.WinnerId)
+                    .HasColumnName("winner_id");
+
+                entity.HasOne(e => e.Winner)
+                    .WithMany(f => f.TournamentsWon)
+                    .HasForeignKey(e => e.WinnerId)
+                    .HasConstraintName("FK_Tournament_Player_Winner")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<TournamentPlayer>(entity =>

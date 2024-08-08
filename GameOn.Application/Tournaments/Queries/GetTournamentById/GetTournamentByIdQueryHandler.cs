@@ -33,7 +33,7 @@ namespace GameOn.Application.Tournaments.Queries.GetTournamentById
         /// <inheritdoc />
         public async Task<TournamentDto?> Handle(GetTournamentByIdQuery request, CancellationToken cancellationToken)
         {
-            var tournamentInDb = await this.context.Tournaments.FirstOrDefaultAsync(x => x.Id == request.TournamentId, cancellationToken);
+            var tournamentInDb = await this.context.Tournaments.Include(x => x.Winner).FirstOrDefaultAsync(x => x.Id == request.TournamentId, cancellationToken);
 
             if (tournamentInDb is null)
             {

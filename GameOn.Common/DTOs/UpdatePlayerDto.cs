@@ -33,5 +33,10 @@ namespace GameOn.Common.DTOs
         /// Gets or sets Profile Picture URL.
         /// </summary>
         public string ProfilePictureUrl { get; set; } = "INVALID URL";
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player is archived.
+        /// </summary>
+        public bool Archived { get; set; } = false;
     }
 }

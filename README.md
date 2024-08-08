@@ -17,7 +17,7 @@ You can use the associated Dockerfile to build an image, or directly build it.
 Here are all of the environment variables currently used :
 
 <ul>
-    <li>SQLITE_PATH: Path to the SQLite database file.</li>
+    <li>DB_CONNECTION_STRING: MySQL connexion string.</li>
     <li>JWT_AUTHORITY: Token authority (used in the authentication middleware).</li>
     <li>JWT_AUDIENCE: Token audience (used in the authentication middleware).</li>
     <li>CURRENT_SEASON: Current season ID in database.</li>

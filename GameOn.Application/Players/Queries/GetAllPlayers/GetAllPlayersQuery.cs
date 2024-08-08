@@ -12,5 +12,9 @@ namespace GameOn.Application.Players.Queries.GetAllPlayers
     /// </summary>
     public class GetAllPlayersQuery : IRequest<IEnumerable<Player>>
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether a player is archived or not.
+        /// </summary>
+        public bool Archived { get; set; } = false;
     }
 }

@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20240807154929_Added_Archived_field_on_Players_table")]
+    partial class Added_Archived_field_on_Players_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 8, 16, 16, 35, 8, DateTimeKind.Local).AddTicks(1145))
+                        .HasDefaultValue(new DateTime(2024, 8, 7, 17, 49, 28, 652, DateTimeKind.Local).AddTicks(6713))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -242,7 +245,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 8, 14, 16, 35, 7, DateTimeKind.Utc).AddTicks(2896))
+                        .HasDefaultValue(new DateTime(2024, 8, 7, 15, 49, 28, 651, DateTimeKind.Utc).AddTicks(6385))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -324,13 +327,13 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 8, 14, 16, 35, 7, DateTimeKind.Utc).AddTicks(4007))
+                        .HasDefaultValue(new DateTime(2024, 8, 7, 15, 49, 28, 651, DateTimeKind.Utc).AddTicks(8501))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 9, 14, 16, 35, 7, DateTimeKind.Utc).AddTicks(4212))
+                        .HasDefaultValue(new DateTime(2024, 8, 8, 15, 49, 28, 651, DateTimeKind.Utc).AddTicks(8925))
                         .HasColumnName("planned_to");
 
                     b.Property<int>("State")
@@ -339,13 +342,7 @@ namespace GameOn.Persistence.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("state");
 
-                    b.Property<int?>("WinnerId")
-                        .HasColumnType("int")
-                        .HasColumnName("winner_id");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("WinnerId");
 
                     b.ToTable("Tournament", (string)null);
                 });
@@ -366,7 +363,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 8, 14, 16, 35, 7, DateTimeKind.Utc).AddTicks(5740))
+                        .HasDefaultValue(new DateTime(2024, 8, 7, 15, 49, 28, 651, DateTimeKind.Utc).AddTicks(9591))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")
@@ -488,17 +485,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("FifaGame");
                 });
 
-            modelBuilder.Entity("GameOn.Domain.Tournament", b =>
-                {
-                    b.HasOne("GameOn.Domain.Player", "Winner")
-                        .WithMany("TournamentsWon")
-                        .HasForeignKey("WinnerId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("FK_Tournament_Player_Winner");
-
-                    b.Navigation("Winner");
-                });
-
             modelBuilder.Entity("GameOn.Domain.TournamentPlayer", b =>
                 {
                     b.HasOne("GameOn.Domain.FifaTeam", "FifaTeam")
@@ -559,8 +545,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Highlights");
 
                     b.Navigation("TournamentPlayed");
-
-                    b.Navigation("TournamentsWon");
                 });
 
             modelBuilder.Entity("GameOn.Domain.Season", b =>

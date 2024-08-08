@@ -83,6 +83,7 @@ namespace GameOn.Presentation.Controllers
         /// <summary>
         /// Get all players in database.
         /// </summary>
+        /// <param name="archived">If true, get archived players.</param>
         /// <returns>200 OK with Player list.</returns>
         [HttpGet]
         [Route("")]
@@ -90,9 +91,9 @@ namespace GameOn.Presentation.Controllers
         [SwaggerOperation(Summary = "Get all players in database.")]
         [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(bool? archived)
         {
-            return this.Ok(await this.mediator.Send(new GetAllPlayersQuery()));
+            return this.Ok(await this.mediator.Send(new GetAllPlayersQuery { Archived = archived ?? false }));
         }
 
         /// <summary>

@@ -33,6 +33,8 @@ namespace GameOn.Common.DTOs
             this.PlannedTo = tour.PlannedTo;
             this.Phase2ChallongeUrl = tour.Phase2ChallongeUrl;
             this.Players = new List<TournamentPlayerDto>();
+            this.WinnerId = tour.WinnerId;
+            this.Winner = tour.Winner;
         }
 
         /// <summary>
@@ -74,5 +76,15 @@ namespace GameOn.Common.DTOs
         /// Gets or sets Players.
         /// </summary>
         public List<TournamentPlayerDto>? Players { get; set; }
+
+        /// <summary>
+        /// Gets or sets Winner ID.
+        /// </summary>
+        public int? WinnerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Winner.
+        /// </summary>
+        public Player? Winner { get; set; }
     }
 }

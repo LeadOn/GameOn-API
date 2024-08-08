@@ -39,6 +39,7 @@ namespace GameOn.Application.Players.Commands.UpdatePlayer
             playerInDb.Nickname = request.Player.Nickname;
             playerInDb.ProfilePictureUrl = request.Player.ProfilePictureUrl;
             playerInDb.KeycloakId = request.Player.KeycloakId;
+            playerInDb.Archived = request.Player.Archived;
 
             this.context.Players.Update(playerInDb);
             await this.context.SaveChangesAsync(cancellationToken);

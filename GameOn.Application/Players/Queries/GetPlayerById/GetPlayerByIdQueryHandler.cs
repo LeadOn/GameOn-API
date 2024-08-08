@@ -28,7 +28,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerById
         /// <inheritdoc />
         public async Task<Player?> Handle(GetPlayerByIdQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Players.FirstOrDefaultAsync(x => x.Id == request.PlayerId);
+            return await this.context.Players.Include(x => x.TournamentsWon).FirstOrDefaultAsync(x => x.Id == request.PlayerId);
         }
     }
 }

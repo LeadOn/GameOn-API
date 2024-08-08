@@ -45,6 +45,7 @@ namespace GameOn.Application.Tournaments.Commands.UpdateTournament
             tournamentInDb.LogoUrl = request.TournamentDto.LogoUrl;
             tournamentInDb.State = request.TournamentDto.State;
             tournamentInDb.Phase2ChallongeUrl = request.TournamentDto.Phase2ChallongeUrl;
+            tournamentInDb.WinnerId = request.TournamentDto.WinnerId;
 
             this.context.Tournaments.Update(tournamentInDb);
             await this.context.SaveChangesAsync(cancellationToken);
