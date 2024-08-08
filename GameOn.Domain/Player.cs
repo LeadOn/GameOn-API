@@ -43,6 +43,11 @@ namespace GameOn.Domain
         public DateTime CreatedOn { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// Gets or sets a value indicating whether gets or sets whether a player is archived or not.
+        /// </summary>
+        public bool Archived { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
