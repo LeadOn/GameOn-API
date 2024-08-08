@@ -22,6 +22,11 @@ namespace GameOn.Domain
         public string Name { get; set; } = "UNKNOWN NAME";
 
         /// <summary>
+        /// Gets or sets FifaTeam type (1 is club, 2 is nation).
+        /// </summary>
+        public int Type { get; set; }
+
+        /// <summary>
         /// Gets or sets Games played Team 1.
         /// </summary>
         [JsonIgnore]
