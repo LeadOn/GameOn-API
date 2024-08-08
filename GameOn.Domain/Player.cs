@@ -48,6 +48,11 @@ namespace GameOn.Domain
         public bool Archived { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets Tournaments won.
+        /// </summary>
+        public virtual List<Tournament> TournamentsWon { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets TeamPlayers.
         /// </summary>
         [JsonIgnore]
