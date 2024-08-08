@@ -268,6 +268,11 @@ namespace GameOn.Persistence
                     .HasColumnName("name")
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.Property(e => e.Type)
+                    .HasColumnName("type")
+                    .IsRequired()
+                    .HasDefaultValue(0);
             });
 
             modelBuilder.Entity<FifaGamePlayed>(entity =>

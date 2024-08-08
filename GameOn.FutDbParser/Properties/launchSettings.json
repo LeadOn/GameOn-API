@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "GameOn.FutDbParser": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DB_CONNECTION_STRING": "Server=xxx;Port=xxx;User=xxx;Password=xxx;Database=xxx"
+      }
+    }
+  }
+}
