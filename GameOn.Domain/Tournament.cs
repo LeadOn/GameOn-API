@@ -52,6 +52,17 @@ public class Tournament
     public DateTime PlannedTo { get; set; }
 
     /// <summary>
+    /// Gets or sets Tournament winner's ID.
+    /// </summary>
+    public int? WinnerId { get; set; }
+
+    /// <summary>
+    /// Gets or sets Tournament winner.
+    /// </summary>
+    [JsonIgnore]
+    public virtual Player? Winner { get; set; }
+
+    /// <summary>
     /// Gets or sets Tournament Players.
     /// </summary>
     [JsonIgnore]

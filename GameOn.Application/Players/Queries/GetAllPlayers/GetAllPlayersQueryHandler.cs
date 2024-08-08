@@ -28,7 +28,7 @@ namespace GameOn.Application.Players.Queries.GetAllPlayers
         /// <inheritdoc />
         public async Task<IEnumerable<Player>> Handle(GetAllPlayersQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Players.Where(x => x.Archived == request.Archived).ToListAsync(cancellationToken);
+            return await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived).ToListAsync(cancellationToken);
         }
     }
 }
