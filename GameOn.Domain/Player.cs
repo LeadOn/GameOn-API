@@ -75,5 +75,17 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual List<FifaGamePlayed> FifaGameCreated { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets five created.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<SoccerFive> SoccerFivesCreated { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets five created.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<SoccerFiveVoteAnswer> SoccerFiveVoteAnswers { get; set; } = null!;
     }
 }

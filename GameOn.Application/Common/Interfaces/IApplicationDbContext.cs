@@ -59,6 +59,11 @@ namespace GameOn.Application.Common.Interfaces
         DbSet<TournamentPlayer> TournamentPlayers { get; set; }
 
         /// <summary>
+        /// Gets or sets SoccerFives.
+        /// </summary>
+        DbSet<SoccerFive> SoccerFives { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>
