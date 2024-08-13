@@ -15,6 +15,7 @@ namespace GameOn.Presentation.Controllers
     using GameOn.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.SoccerFives.Commands.CreateSoccerFive;
+    using GameOn.Application.SoccerFives.Commands.DeleteSoccerFive;
     using GameOn.Application.SoccerFives.Commands.UpdateSoccerFive;
     using GameOn.Application.SoccerFives.Commands.UpdateSoccerFiveSurvey;
     using GameOn.Application.SoccerFives.Commands.VoteSoccerFive;
@@ -239,6 +240,32 @@ namespace GameOn.Presentation.Controllers
             {
                 return this.Problem();
             }
+        }
+
+        /// <summary>
+        /// Delete soccer five.
+        /// </summary>
+        /// <param name="id">Soccer five ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("{id}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Delete soccer five.")]
+        [SwaggerResponse(204, "Successfully deleted.", typeof(SoccerFiveDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var currentUser = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            if (currentUser is null)
+            {
+                return this.Problem();
+            }
+
+            await this.mediator.Send(new DeleteSoccerFiveCommand { SoccerFiveId = id, CurrentPlayerId = currentUser.Id });
+            return this.Accepted();
         }
     }
 }
