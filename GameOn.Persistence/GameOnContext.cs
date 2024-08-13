@@ -64,6 +64,21 @@ namespace GameOn.Persistence
         public DbSet<TournamentPlayer> TournamentPlayers { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets SoccerFives.
+        /// </summary>
+        public DbSet<SoccerFive> SoccerFives { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets SoccerFiveVoteChoices.
+        /// </summary>
+        public DbSet<SoccerFiveVoteChoice> SoccerFiveVoteChoices { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets SoccerFiveVoteAnswers.
+        /// </summary>
+        public DbSet<SoccerFiveVoteAnswer> SoccerFiveVoteAnswers { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -450,6 +465,106 @@ namespace GameOn.Persistence
                     .WithMany(f => f.TeamPlayers)
                     .HasForeignKey(e => e.FifaGameId)
                     .HasConstraintName("FK_FifaTeamPlayer_FifaGamePlayed");
+            });
+
+            modelBuilder.Entity<SoccerFive>(entity =>
+            {
+                entity.ToTable("SoccerFive");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.CreatedById)
+                    .HasColumnName("created_by_id")
+                    .IsRequired();
+
+                entity.Property(e => e.PlannedOn)
+                    .HasColumnName("planned_on");
+
+                entity.Property(e => e.State)
+                    .HasColumnName("state")
+                    .IsRequired()
+                    .HasDefaultValue(SoccerFiveStates.Draft);
+
+                entity.Property(e => e.VoteQuestion)
+                    .HasColumnName("vote_question")
+                    .HasMaxLength(500);
+
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany(f => f.SoccerFivesCreated)
+                    .HasForeignKey(e => e.CreatedById)
+                    .HasConstraintName("FK_SoccerFive_Player_Created_By")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<SoccerFiveVoteChoice>(entity =>
+            {
+                entity.ToTable("SoccerFiveVoteChoice");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.Property(e => e.SoccerFiveId)
+                    .HasColumnName("soccer_five_id")
+                    .IsRequired();
+
+                entity.Property(e => e.Label)
+                    .HasColumnName("label")
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(e => e.Order)
+                    .HasColumnName("order")
+                    .IsRequired()
+                    .HasDefaultValue(1);
+
+                entity.HasOne(e => e.SoccerFive)
+                    .WithMany(f => f.VotesChoices)
+                    .HasForeignKey(e => e.SoccerFiveId)
+                    .HasConstraintName("FK_SoccerFive_VoteChoice")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<SoccerFiveVoteAnswer>(entity =>
+            {
+                entity.ToTable("SoccerFiveVoteAnswer");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.Property(e => e.VoteChoiceId)
+                    .HasColumnName("vote_choice_id")
+                    .IsRequired();
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id")
+                    .IsRequired();
+
+                entity.HasOne(e => e.VoteChoice)
+                    .WithMany(f => f.Answers)
+                    .HasForeignKey(e => e.VoteChoiceId)
+                    .HasConstraintName("FK_VoteChoice_VoteAnswer")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.SoccerFiveVoteAnswers)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_Player_VoteAnswer")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

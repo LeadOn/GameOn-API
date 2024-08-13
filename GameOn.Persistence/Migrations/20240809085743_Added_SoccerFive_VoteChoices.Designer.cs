@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20240809085743_Added_SoccerFive_VoteChoices")]
+    partial class Added_SoccerFive_VoteChoices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 9, 17, 25, 12, 33, DateTimeKind.Local).AddTicks(7450))
+                        .HasDefaultValue(new DateTime(2024, 8, 9, 10, 57, 42, 801, DateTimeKind.Local).AddTicks(1247))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -248,7 +251,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 9, 15, 25, 12, 33, DateTimeKind.Utc).AddTicks(66))
+                        .HasDefaultValue(new DateTime(2024, 8, 9, 8, 57, 42, 800, DateTimeKind.Utc).AddTicks(2094))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -330,42 +333,11 @@ namespace GameOn.Persistence.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("state");
 
-                    b.Property<string>("VoteQuestion")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("vote_question");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
 
                     b.ToTable("SoccerFive", (string)null);
-                });
-
-            modelBuilder.Entity("GameOn.Domain.SoccerFiveVoteAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int")
-                        .HasColumnName("player_id");
-
-                    b.Property<int>("VoteChoiceId")
-                        .HasColumnType("int")
-                        .HasColumnName("vote_choice_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayerId");
-
-                    b.HasIndex("VoteChoiceId");
-
-                    b.ToTable("SoccerFiveVoteAnswer", (string)null);
                 });
 
             modelBuilder.Entity("GameOn.Domain.SoccerFiveVoteChoice", b =>
@@ -433,13 +405,13 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 9, 15, 25, 12, 33, DateTimeKind.Utc).AddTicks(1251))
+                        .HasDefaultValue(new DateTime(2024, 8, 9, 8, 57, 42, 800, DateTimeKind.Utc).AddTicks(4239))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 10, 15, 25, 12, 33, DateTimeKind.Utc).AddTicks(1471))
+                        .HasDefaultValue(new DateTime(2024, 8, 10, 8, 57, 42, 800, DateTimeKind.Utc).AddTicks(4577))
                         .HasColumnName("planned_to");
 
                     b.Property<int>("State")
@@ -475,7 +447,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 8, 9, 15, 25, 12, 33, DateTimeKind.Utc).AddTicks(3400))
+                        .HasDefaultValue(new DateTime(2024, 8, 9, 8, 57, 42, 800, DateTimeKind.Utc).AddTicks(6147))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")
@@ -609,27 +581,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("CreatedBy");
                 });
 
-            modelBuilder.Entity("GameOn.Domain.SoccerFiveVoteAnswer", b =>
-                {
-                    b.HasOne("GameOn.Domain.Player", "Player")
-                        .WithMany("SoccerFiveVoteAnswers")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Player_VoteAnswer");
-
-                    b.HasOne("GameOn.Domain.SoccerFiveVoteChoice", "VoteChoice")
-                        .WithMany("Answers")
-                        .HasForeignKey("VoteChoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_VoteChoice_VoteAnswer");
-
-                    b.Navigation("Player");
-
-                    b.Navigation("VoteChoice");
-                });
-
             modelBuilder.Entity("GameOn.Domain.SoccerFiveVoteChoice", b =>
                 {
                     b.HasOne("GameOn.Domain.SoccerFive", "SoccerFive")
@@ -712,8 +663,6 @@ namespace GameOn.Persistence.Migrations
 
                     b.Navigation("Highlights");
 
-                    b.Navigation("SoccerFiveVoteAnswers");
-
                     b.Navigation("SoccerFivesCreated");
 
                     b.Navigation("TournamentPlayed");
@@ -729,11 +678,6 @@ namespace GameOn.Persistence.Migrations
             modelBuilder.Entity("GameOn.Domain.SoccerFive", b =>
                 {
                     b.Navigation("VotesChoices");
-                });
-
-            modelBuilder.Entity("GameOn.Domain.SoccerFiveVoteChoice", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("GameOn.Domain.Tournament", b =>

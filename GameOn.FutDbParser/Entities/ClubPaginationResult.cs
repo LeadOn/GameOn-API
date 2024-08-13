@@ -4,7 +4,14 @@ namespace GameOn.FutDbParser.Entities
 {
     public class ClubPaginationResult
     {
-        public Pagination Pagination { get; set; }
-        public List<FifaTeam> Items { get; set; }
+        /// <summary>
+        /// Gets or sets Pagination.
+        /// </summary>
+        public Pagination Pagination { get; set; } = new Pagination();
+
+        /// <summary>
+        /// Gets or sets Items.
+        /// </summary>
+        public List<FifaTeam> Items { get; set; } = new List<FifaTeam>();
     }
 }
