@@ -15,6 +15,7 @@ namespace GameOn.Presentation.Controllers
     using GameOn.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.SoccerFives.Commands.CreateSoccerFive;
+    using GameOn.Application.SoccerFives.Commands.UpdateSoccerFive;
     using GameOn.Application.SoccerFives.Commands.UpdateSoccerFiveSurvey;
     using GameOn.Application.SoccerFives.Commands.VoteSoccerFive;
     using GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById;
@@ -119,6 +120,62 @@ namespace GameOn.Presentation.Controllers
             };
 
             return this.StatusCode(201, await this.mediator.Send(new CreateSoccerFiveCommand { SoccerFive = newFive }));
+        }
+
+        /// <summary>
+        /// Update soccer five in database.
+        /// </summary>
+        /// <param name="five">Soccer five.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update Soccer five in database.")]
+        [SwaggerResponse(201, "Updated soccer five.", typeof(SoccerFiveDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> Update(UpdateSoccerFiveDto five)
+        {
+            var name = five.Name == null || five.Name == string.Empty ? null : five.Name;
+            var description = five.Description == null || five.Description == string.Empty ? null : five.Description;
+            var state = five.State == null ? null : five.State;
+            var plannedOn = five.PlannedOn == null ? null : five.PlannedOn;
+
+            var currentUser = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            if (currentUser is null)
+            {
+                return this.Problem();
+            }
+
+            var soccerFiveInDb = await this.mediator.Send(new GetSoccerFiveByIdQuery { SoccerFiveId = five.Id });
+
+            if (soccerFiveInDb is null)
+            {
+                return this.NotFound();
+            }
+
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
+            if (soccerFiveInDb.CreatedBy.Id != currentUser.Id)
+            {
+                return this.Forbid();
+            }
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
+
+            soccerFiveInDb.Name = name;
+            soccerFiveInDb.Description = description;
+
+            if (state != null && (state == SoccerFiveStates.Draft || state == SoccerFiveStates.Planned || state == SoccerFiveStates.Done))
+            {
+                soccerFiveInDb.State = (int)state;
+            }
+
+            soccerFiveInDb.PlannedOn = plannedOn;
+
+            var updatedFive = await this.mediator.Send(new UpdateSoccerFiveCommand { Name = soccerFiveInDb.Name, Description = soccerFiveInDb.Description, State = soccerFiveInDb.State, PlannedOn = soccerFiveInDb.PlannedOn, SoccerFiveId = soccerFiveInDb.Id });
+
+            return this.StatusCode(201, await this.mediator.Send(new GetSoccerFiveByIdQuery { SoccerFiveId = soccerFiveInDb.Id }));
         }
 
         /// <summary>
