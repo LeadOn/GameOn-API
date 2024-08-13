@@ -4,6 +4,7 @@
 
 namespace GameOn.Presentation.Controllers
 {
+    using AutoMapper.Configuration.Annotations;
     using GameOn.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed;
     using GameOn.Application.FifaGamePlayed.Commands.DeleteFifaGamePlayed;
     using GameOn.Application.FifaGamePlayed.Commands.UpdateFifaGamePlayed;
@@ -14,6 +15,8 @@ namespace GameOn.Presentation.Controllers
     using GameOn.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.SoccerFives.Commands.CreateSoccerFive;
+    using GameOn.Application.SoccerFives.Commands.UpdateSoccerFiveSurvey;
+    using GameOn.Application.SoccerFives.Commands.VoteSoccerFive;
     using GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById;
     using GameOn.Application.TournamentPlayers.Queries.GetSoccerFives;
     using GameOn.Application.Tournaments.Commands.CreateTournament;
@@ -91,10 +94,10 @@ namespace GameOn.Presentation.Controllers
         [Route("")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Create Soccer five in database.")]
-        [SwaggerResponse(201, "Created soccer five.", typeof(SoccerFiveDto))]
+        [SwaggerResponse(201, "Created soccer five.", typeof(CreateSoccerFiveDto))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> Create(SoccerFiveDto five)
+        public async Task<IActionResult> Create(CreateSoccerFiveDto five)
         {
             var name = five.Name == null || five.Name == string.Empty ? null : five.Name;
             var description = five.Description == null || five.Description == string.Empty ? null : five.Description;
@@ -116,6 +119,69 @@ namespace GameOn.Presentation.Controllers
             };
 
             return this.StatusCode(201, await this.mediator.Send(new CreateSoccerFiveCommand { SoccerFive = newFive }));
+        }
+
+        /// <summary>
+        /// Update soccer five survey.
+        /// </summary>
+        /// <param name="id">Soccer five ID.</param>
+        /// <param name="survey"><see cref="UpdateSoccerFiveSurvey"/>.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize]
+        [Route("{id}/survey")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update five survey.")]
+        [SwaggerResponse(201, "Updated soccer five.", typeof(SoccerFiveDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateSurvey(int id, [FromBody] UpdateSoccerFiveSurvey survey)
+        {
+            var currentUser = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            if (currentUser is null)
+            {
+                return this.Problem();
+            }
+
+            return this.StatusCode(201, await this.mediator.Send(new UpdateSoccerFiveSurveyCommand { CurrentPlayerId = currentUser.Id, Survey = survey }));
+        }
+
+        /// <summary>
+        /// Vote soccer five survey.
+        /// </summary>
+        /// <param name="id">Soccer five ID.</param>
+        /// <param name="vote"><see cref="VoteSoccerFiveDto"/>.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("{id}/survey/vote")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Vote five survey.")]
+        [SwaggerResponse(204, "Vote succesfully posted.", typeof(SoccerFiveDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> VoteFive(int id, [FromBody] VoteSoccerFiveDto vote)
+        {
+            var currentUser = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            if (currentUser is null)
+            {
+                return this.Problem();
+            }
+
+            vote.PlayerId = currentUser.Id;
+
+            var voteResult = await this.mediator.Send(new VoteSoccerFiveCommand { Vote = vote });
+
+            if (voteResult)
+            {
+                return this.NoContent();
+            }
+            else
+            {
+                return this.Problem();
+            }
         }
     }
 }

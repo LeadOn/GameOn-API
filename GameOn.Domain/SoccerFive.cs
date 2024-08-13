@@ -35,6 +35,11 @@ namespace GameOn.Domain
         public DateTime? PlannedOn { get; set; }
 
         /// <summary>
+        /// Gets or sets vote question.
+        /// </summary>
+        public string? VoteQuestion { get; set; }
+
+        /// <summary>
         /// Gets or sets State.
         /// </summary>
         public int State { get; set; }

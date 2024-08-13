@@ -64,6 +64,16 @@ namespace GameOn.Application.Common.Interfaces
         DbSet<SoccerFive> SoccerFives { get; set; }
 
         /// <summary>
+        /// Gets or sets SoccerFiveVoteChoices.
+        /// </summary>
+        DbSet<SoccerFiveVoteChoice> SoccerFiveVoteChoices { get; set; }
+
+        /// <summary>
+        /// Gets or sets SoccerFiveVoteAnswers.
+        /// </summary>
+        DbSet<SoccerFiveVoteAnswer> SoccerFiveVoteAnswers { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>

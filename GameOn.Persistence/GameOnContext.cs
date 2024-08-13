@@ -496,6 +496,10 @@ namespace GameOn.Persistence
                     .IsRequired()
                     .HasDefaultValue(SoccerFiveStates.Draft);
 
+                entity.Property(e => e.VoteQuestion)
+                    .HasColumnName("vote_question")
+                    .HasMaxLength(500);
+
                 entity.HasOne(e => e.CreatedBy)
                     .WithMany(f => f.SoccerFivesCreated)
                     .HasForeignKey(e => e.CreatedById)

@@ -5,13 +5,12 @@
 namespace GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById
 {
     using GameOn.Common.DTOs;
-    using GameOn.Domain;
     using MediatR;
 
     /// <summary>
     /// GetSoccerFiveByIdQuery class.
     /// </summary>
-    public class GetSoccerFiveByIdQuery : IRequest<SoccerFive?>
+    public class GetSoccerFiveByIdQuery : IRequest<SoccerFiveDto?>
     {
         /// <summary>
         /// Gets or sets Soccer Five ID.

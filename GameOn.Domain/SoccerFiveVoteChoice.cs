@@ -35,11 +35,11 @@ namespace GameOn.Domain
         /// Gets or sets Created By.
         /// </summary>
         [JsonIgnore]
-        public virtual SoccerFive SoccerFive { get; set; } = null!;
+        public virtual SoccerFive? SoccerFive { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Answers.
         /// </summary>
-        public virtual List<SoccerFiveVoteAnswer> Answers { get; set; } = null!;
+        public virtual List<SoccerFiveVoteAnswer>? Answers { get; set; } = null!;
     }
 }
