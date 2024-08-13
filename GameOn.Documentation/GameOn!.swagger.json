@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "3.0"
+    "version": "3.1"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -713,6 +713,15 @@
       "get": {
         "tags": ["Player"],
         "summary": "Get all players in database.",
+        "parameters": [
+          {
+            "name": "archived",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Players in database.",
@@ -882,6 +891,288 @@
           },
           "500": {
             "description": "Something wrong happened."
+          }
+        }
+      }
+    },
+    "/SoccerFive": {
+      "get": {
+        "tags": ["SoccerFive"],
+        "summary": "Get all soccer fives created.",
+        "responses": {
+          "200": {
+            "description": "List of soccer five played.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SoccerFive"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "post": {
+        "tags": ["SoccerFive"],
+        "summary": "Create Soccer five in database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSoccerFiveDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSoccerFiveDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSoccerFiveDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created soccer five.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSoccerFiveDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "patch": {
+        "tags": ["SoccerFive"],
+        "summary": "Update Soccer five in database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSoccerFiveDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSoccerFiveDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSoccerFiveDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated soccer five.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoccerFiveDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/SoccerFive/{id}": {
+      "get": {
+        "tags": ["SoccerFive"],
+        "summary": "Get all soccer fives created.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of soccer five played.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SoccerFive"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["SoccerFive"],
+        "summary": "Delete soccer five.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoccerFiveDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/SoccerFive/{id}/survey": {
+      "patch": {
+        "tags": ["SoccerFive"],
+        "summary": "Update five survey.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSoccerFiveSurvey"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSoccerFiveSurvey"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSoccerFiveSurvey"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated soccer five.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoccerFiveDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/SoccerFive/{id}/survey/vote": {
+      "post": {
+        "tags": ["SoccerFive"],
+        "summary": "Vote five survey.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteSoccerFiveDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteSoccerFiveDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteSoccerFiveDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Vote succesfully posted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoccerFiveDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
           }
         }
       }
@@ -1367,6 +1658,25 @@
         },
         "additionalProperties": false
       },
+      "CreateSoccerFiveDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "plannedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "FifaGamePlayed": {
         "type": "object",
         "properties": {
@@ -1531,6 +1841,10 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "type": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -1730,6 +2044,16 @@
           "createdOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "tournamentsWon": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tournament"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1743,6 +2067,142 @@
           },
           "name": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SoccerFive": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdById": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "plannedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "voteQuestion": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Player"
+          },
+          "votesChoices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SoccerFiveVoteChoice"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SoccerFiveDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "plannedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "voteQuestion": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/Player"
+          },
+          "state": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "votesChoices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SoccerFiveVoteChoice"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SoccerFiveVoteAnswer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voteChoiceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "player": {
+            "$ref": "#/components/schemas/Player"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SoccerFiveVoteChoice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soccerFiveId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SoccerFiveVoteAnswer"
+            },
             "nullable": true
           }
         },
@@ -1795,6 +2255,11 @@
           "plannedTo": {
             "type": "string",
             "format": "date-time"
+          },
+          "winnerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1836,6 +2301,14 @@
               "$ref": "#/components/schemas/TournamentPlayerDto"
             },
             "nullable": true
+          },
+          "winnerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "winner": {
+            "$ref": "#/components/schemas/Player"
           }
         },
         "additionalProperties": false
@@ -1970,6 +2443,81 @@
           },
           "profilePictureUrl": {
             "type": "string",
+            "nullable": true
+          },
+          "archived": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateSoccerFiveDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "plannedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateSoccerFiveSurvey": {
+        "type": "object",
+        "properties": {
+          "soccerFiveId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voteQuestion": {
+            "type": "string",
+            "nullable": true
+          },
+          "votesChoices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SoccerFiveVoteChoice"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VoteSoccerFiveDto": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "soccerFiveId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "choiceIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           }
         },
