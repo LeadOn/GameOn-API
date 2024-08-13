@@ -7,7 +7,9 @@ using RestSharp;
 
 internal partial class Program
 {
+#pragma warning disable IDE0060 // Supprimer le paramètre inutilisé
     private static async Task Main(string[] args)
+#pragma warning restore IDE0060 // Supprimer le paramètre inutilisé
     {
         Console.WriteLine("GameOn! - FutDB Parser 2.0");
         Console.WriteLine("==================================================\n");
@@ -167,7 +169,9 @@ internal partial class Program
             {
                 clubs = JsonConvert.DeserializeObject<List<FifaTeam>>(fileContent);
 
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine($"{clubs.Count} clubs parsed from file.");
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
 
                 var clubsImgPath = Directory.GetCurrentDirectory() + "\\clubs";
 
@@ -189,7 +193,9 @@ internal partial class Program
                         try
                         {
                             var result = await client.DownloadDataAsync(request);
+#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
                             await File.WriteAllBytesAsync(clubsImgPath + "\\" + club.Id + ".png", result);
+#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
                             Console.WriteLine($"Image for {club.Name} downloaded.");
                         }
                         catch
@@ -220,7 +226,9 @@ internal partial class Program
             {
                 clubs = JsonConvert.DeserializeObject<List<FifaTeam>>(fileContent);
 
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine($"{clubs.Count} clubs parsed from file.");
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine("Instantiating DbContext...");
 
                 var gameOnContext = new GameOnContext();
@@ -379,7 +387,9 @@ internal partial class Program
             {
                 nations = JsonConvert.DeserializeObject<List<FifaTeam>>(fileContent);
 
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine($"{nations.Count} clubs parsed from file.");
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
 
                 var nationsImgPath = Directory.GetCurrentDirectory() + "\\nations";
 
@@ -401,7 +411,9 @@ internal partial class Program
                         try
                         {
                             var result = await client.DownloadDataAsync(request);
+#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
                             await File.WriteAllBytesAsync(nationsImgPath + "\\" + nation.Name + ".png", result);
+#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
                             Console.WriteLine($"Image for {nation.Name} downloaded.");
                         }
                         catch
@@ -432,7 +444,9 @@ internal partial class Program
             {
                 nations = JsonConvert.DeserializeObject<List<FifaTeam>>(fileContent);
 
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine($"{nations.Count} nations parsed from file.");
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine("Instantiating DbContext...");
 
                 var gameOnContext = new GameOnContext();
@@ -483,7 +497,9 @@ internal partial class Program
             {
                 nations = JsonConvert.DeserializeObject<List<FifaTeam>>(fileContent);
 
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine($"{nations.Count} nations parsed from file.");
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 Console.WriteLine("Instantiating DbContext...");
 
                 var gameOnContext = new GameOnContext();
