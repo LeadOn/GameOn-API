@@ -9,7 +9,7 @@
         "DB_CONNECTION_STRING": "Server=xxx;Port=xxx;User=xxx;Password=xxx;Database=xxx",
         "JWT_AUTHORITY": "https://auth.valentinvirot.fr/realms/gameon",
         "JWT_AUDIENCE": "account",
-        "CURRENT_SEASON": "4",
+        "CURRENT_SEASON": "5",
         "DEFAULT_PLATFORM": "2"
       },
       "dotnetRunMessages": true,
