@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "3f4ab28e-3ce1-4e43-91c4-933bb2c0d210",
-		"name": "GameOn! 3.1",
+		"name": "GameOn! 3.1.1",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -574,6 +574,26 @@
 							"path": [
 								"tournament",
 								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tournament User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tournament/7/player/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament",
+								"7",
+								"player",
+								"1"
 							]
 						}
 					},
