@@ -5,6 +5,7 @@
 namespace GameOn.Presentation.Controllers
 {
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
+    using GameOn.Application.TournamentPlayers.Commands.RemoveTournamentSubscription;
     using GameOn.Application.TournamentPlayers.Commands.UpdateTournamentSubscription;
     using GameOn.Application.Tournaments.Commands.CreateTournament;
     using GameOn.Application.Tournaments.Commands.DeleteTournament;
@@ -164,6 +165,37 @@ namespace GameOn.Presentation.Controllers
         public async Task<IActionResult> GoToPhase1(int id)
         {
             var result = await this.mediator.Send(new GoToPhase1Command { TournamentId = id });
+
+            if (result)
+            {
+                return this.NoContent();
+            }
+            else
+            {
+                return this.Problem();
+            }
+        }
+
+        /// <summary>
+        /// Remove player from tournament.
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <param name="playerId">Player ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{tournamentId:int}/player/{playerId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Remove player from tournament.")]
+        [SwaggerResponse(204, "Removed player.")]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> RemovePlayer(int tournamentId, int playerId)
+        {
+            var connectedPlayer = this.User.GetConnectedPlayer();
+
+            var result = await this.mediator.Send(new RemoveTournamentSubscriptionCommand { TournamentId = tournamentId, Player = connectedPlayer, PlayerId = playerId });
 
             if (result)
             {
