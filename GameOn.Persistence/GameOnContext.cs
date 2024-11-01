@@ -79,6 +79,11 @@ namespace GameOn.Persistence
         public DbSet<SoccerFiveVoteAnswer> SoccerFiveVoteAnswers { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets Changelog.
+        /// </summary>
+        public DbSet<Changelog> Changelogs { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -565,6 +570,50 @@ namespace GameOn.Persistence
                     .HasForeignKey(e => e.PlayerId)
                     .HasConstraintName("FK_Player_VoteAnswer")
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Changelog>(entity =>
+            {
+                entity.ToTable("Changelog");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.PublicationDate)
+                    .HasColumnName("publication_date")
+                    .HasDefaultValue(DateTime.Now);
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Type)
+                    .HasColumnName("type")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.Version)
+                    .HasColumnName("version")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Context)
+                    .HasColumnName("context")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.NewFeatures)
+                    .HasColumnName("new_features")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.UpdatedFeatures)
+                    .HasColumnName("updated_features")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.RemovedFeatures)
+                    .HasColumnName("removed_features")
+                    .HasMaxLength(500);
             });
         }
     }
