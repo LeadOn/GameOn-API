@@ -74,6 +74,11 @@ namespace GameOn.Application.Common.Interfaces
         DbSet<SoccerFiveVoteAnswer> SoccerFiveVoteAnswers { get; set; }
 
         /// <summary>
+        /// Gets or sets Changelogs.
+        /// </summary>
+        DbSet<Changelog> Changelogs { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>

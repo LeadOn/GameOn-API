@@ -174,7 +174,7 @@ namespace GameOn.Presentation.Controllers
 
             soccerFiveInDb.PlannedOn = plannedOn;
 
-            var updatedFive = await this.mediator.Send(new UpdateSoccerFiveCommand { Name = soccerFiveInDb.Name, Description = soccerFiveInDb.Description, State = soccerFiveInDb.State, PlannedOn = soccerFiveInDb.PlannedOn, SoccerFiveId = soccerFiveInDb.Id });
+            await this.mediator.Send(new UpdateSoccerFiveCommand { Name = soccerFiveInDb.Name, Description = soccerFiveInDb.Description, State = soccerFiveInDb.State, PlannedOn = soccerFiveInDb.PlannedOn, SoccerFiveId = soccerFiveInDb.Id });
 
             return this.StatusCode(201, await this.mediator.Send(new GetSoccerFiveByIdQuery { SoccerFiveId = soccerFiveInDb.Id }));
         }
