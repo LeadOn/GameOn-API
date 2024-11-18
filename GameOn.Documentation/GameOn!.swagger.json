@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "3.1.1"
+    "version": "3.3.0"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -30,6 +30,68 @@
           },
           "403": {
             "description": "Not enough roles."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Changelog": {
+      "get": {
+        "tags": ["Changelog"],
+        "summary": "Get all changelogs in database.",
+        "responses": {
+          "200": {
+            "description": "List of changelogs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Changelog"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "post": {
+        "tags": ["Changelog"],
+        "summary": "Create changelog in database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Changelog"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Changelog"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Changelog"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created changelog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Changelog"
+                }
+              }
+            }
           },
           "500": {
             "description": "Unknown error happened."
@@ -1618,6 +1680,57 @@
         },
         "additionalProperties": false
       },
+      "Changelog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "publicationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "context": {
+            "type": "string",
+            "nullable": true
+          },
+          "newFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "updatedFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "removedFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateFifaGameDto": {
         "type": "object",
         "properties": {
@@ -2300,6 +2413,22 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "rules": {
+            "type": "string",
+            "nullable": true
+          },
+          "winPoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loosePoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "drawPoints": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2346,6 +2475,22 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "rules": {
+            "type": "string",
+            "nullable": true
+          },
+          "winPoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loosePoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "drawPoints": {
+            "type": "integer",
+            "format": "int32"
           },
           "winner": {
             "$ref": "#/components/schemas/Player"

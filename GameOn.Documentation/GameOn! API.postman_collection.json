@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "3f4ab28e-3ce1-4e43-91c4-933bb2c0d210",
-		"name": "GameOn! 3.1.1",
+		"name": "GameOn! 3.3.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -427,13 +427,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/tournament/4",
+							"raw": "{{baseUrl}}/tournament/7",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"tournament",
-								"4"
+								"7"
 							]
 						}
 					},
@@ -996,6 +996,66 @@
 								"1",
 								"survey",
 								"vote"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Changelog",
+			"item": [
+				{
+					"name": "Create changelog",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 0,\r\n    \"PublicationDate\": \"2024-11-01T00:00:00\",\r\n    \"Type\": 0,\r\n    \"Version\": \"1.0.0\",\r\n    \"Context\": \"oui\",\r\n    \"NewFeatures\": [\r\n        \"feat1\",\r\n        \"feat2\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/changelog",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"changelog"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"ChoiceIds\": [18, 20]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/changelog",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"changelog"
 							]
 						}
 					},

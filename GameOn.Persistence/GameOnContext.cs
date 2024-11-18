@@ -182,6 +182,22 @@ namespace GameOn.Persistence
                 entity.Property(e => e.WinnerId)
                     .HasColumnName("winner_id");
 
+                entity.Property(e => e.Rules)
+                    .HasColumnName("rules")
+                    .HasMaxLength(5000);
+
+                entity.Property(e => e.WinPoints)
+                    .HasColumnName("win_points")
+                    .HasDefaultValue(3);
+
+                entity.Property(e => e.LoosePoints)
+                    .HasColumnName("loose_points")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.DrawPoints)
+                    .HasColumnName("draw_points")
+                    .HasDefaultValue(1);
+
                 entity.HasOne(e => e.Winner)
                     .WithMany(f => f.TournamentsWon)
                     .HasForeignKey(e => e.WinnerId)

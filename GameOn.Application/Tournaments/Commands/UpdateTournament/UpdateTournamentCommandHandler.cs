@@ -46,6 +46,10 @@ namespace GameOn.Application.Tournaments.Commands.UpdateTournament
             tournamentInDb.State = request.TournamentDto.State;
             tournamentInDb.Phase2ChallongeUrl = request.TournamentDto.Phase2ChallongeUrl;
             tournamentInDb.WinnerId = request.TournamentDto.WinnerId;
+            tournamentInDb.WinPoints = request.TournamentDto.WinPoints;
+            tournamentInDb.DrawPoints = request.TournamentDto.DrawPoints;
+            tournamentInDb.LoosePoints = request.TournamentDto.LoosePoints;
+            tournamentInDb.Rules = request.TournamentDto.Rules;
 
             this.context.Tournaments.Update(tournamentInDb);
             await this.context.SaveChangesAsync(cancellationToken);

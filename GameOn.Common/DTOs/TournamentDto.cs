@@ -35,6 +35,10 @@ namespace GameOn.Common.DTOs
             this.Players = new List<TournamentPlayerDto>();
             this.WinnerId = tour.WinnerId;
             this.Winner = tour.Winner;
+            this.Rules = tour.Rules;
+            this.WinPoints = tour.WinPoints;
+            this.LoosePoints = tour.LoosePoints;
+            this.DrawPoints = tour.DrawPoints;
         }
 
         /// <summary>
@@ -81,6 +85,26 @@ namespace GameOn.Common.DTOs
         /// Gets or sets Winner ID.
         /// </summary>
         public int? WinnerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Tournament Rules.
+        /// </summary>
+        public string? Rules { get; set; }
+
+        /// <summary>
+        /// Gets or sets Tournament Win Points.
+        /// </summary>
+        public int WinPoints { get; set; }
+
+        /// <summary>
+        /// Gets or sets Loose Win Points.
+        /// </summary>
+        public int LoosePoints { get; set; }
+
+        /// <summary>
+        /// Gets or sets Draw Win Points.
+        /// </summary>
+        public int DrawPoints { get; set; }
 
         /// <summary>
         /// Gets or sets Winner.
