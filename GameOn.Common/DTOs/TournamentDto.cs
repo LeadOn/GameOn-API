@@ -86,12 +86,24 @@ namespace GameOn.Common.DTOs
         /// </summary>
         public int? WinnerId { get; set; }
 
+        /// <summary>
+        /// Gets or sets Tournament Rules.
+        /// </summary>
         public string? Rules { get; set; }
 
+        /// <summary>
+        /// Gets or sets Tournament Win Points.
+        /// </summary>
         public int WinPoints { get; set; }
 
+        /// <summary>
+        /// Gets or sets Loose Win Points.
+        /// </summary>
         public int LoosePoints { get; set; }
 
+        /// <summary>
+        /// Gets or sets Draw Win Points.
+        /// </summary>
         public int DrawPoints { get; set; }
 
         /// <summary>

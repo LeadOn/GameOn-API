@@ -50,7 +50,6 @@ namespace GameOn.Persistence
 
         /// <summary>
         /// Gets or sets Seasons.
-        /// 
         /// </summary>
         public DbSet<Season> Seasons { get; set; } = null!;
 
