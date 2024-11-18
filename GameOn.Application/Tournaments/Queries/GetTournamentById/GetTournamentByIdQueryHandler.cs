@@ -79,11 +79,15 @@ namespace GameOn.Application.Tournaments.Queries.GetTournamentById
 
                         if ((team == 0 && game.TeamScore1 > game.TeamScore2) || (team == 1 && game.TeamScore1 < game.TeamScore2))
                         {
-                            player.Score += 3;
+                            player.Score += tournamentInDb.WinPoints;
                         }
                         else if (game.TeamScore1 == game.TeamScore2)
                         {
-                            player.Score += 1;
+                            player.Score += tournamentInDb.DrawPoints;
+                        }
+                        else
+                        {
+                            player.Score += tournamentInDb.LoosePoints;
                         }
                     }
                 }

@@ -56,6 +56,14 @@ public class Tournament
     /// </summary>
     public int? WinnerId { get; set; }
 
+    public string? Rules { get; set; }
+
+    public int WinPoints { get; set; }
+
+    public int LoosePoints { get; set; }
+
+    public int DrawPoints { get; set; }
+
     /// <summary>
     /// Gets or sets Tournament winner.
     /// </summary>
