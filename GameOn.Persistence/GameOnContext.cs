@@ -326,19 +326,13 @@ namespace GameOn.Persistence
                     .HasColumnName("played_on")
                     .HasDefaultValue(DateTime.Now);
 
-                entity.Property(e => e.TeamCode1)
-                    .HasColumnName("team_code_1")
-                    .HasMaxLength(10);
-
                 entity.Property(e => e.Team1Id)
-                    .HasColumnName("team_1_id");
+                    .HasColumnName("team_1_id")
+                    .HasDefaultValue(1);
 
                 entity.Property(e => e.Team2Id)
-                    .HasColumnName("team_2_id");
-
-                entity.Property(e => e.TeamCode2)
-                    .HasColumnName("team_code_2")
-                    .HasMaxLength(10);
+                    .HasColumnName("team_2_id")
+                    .HasDefaultValue(1);
 
                 entity.Property(e => e.TeamScore1)
                     .HasColumnName("team_score_1")

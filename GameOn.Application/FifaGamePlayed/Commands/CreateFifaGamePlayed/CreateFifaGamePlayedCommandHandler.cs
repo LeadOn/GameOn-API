@@ -75,8 +75,6 @@ namespace GameOn.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed
             {
                 PlatformId = platformInDb.Id,
                 PlayedOn = request.NewGame.CreatedOn,
-                TeamCode1 = request.NewGame.TeamCode1,
-                TeamCode2 = request.NewGame.TeamCode2,
                 TeamScore1 = request.NewGame.TeamScore1,
                 TeamScore2 = request.NewGame.TeamScore2,
                 CreatedById = creatorInDb.Id,
