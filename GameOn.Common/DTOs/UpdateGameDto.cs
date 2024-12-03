@@ -20,19 +20,9 @@ namespace GameOn.Common.DTOs
         public int PlatformId { get; set; }
 
         /// <summary>
-        /// Gets or sets Team Code 1.
-        /// </summary>
-        public string TeamCode1 { get; set; } = "????";
-
-        /// <summary>
         /// Gets or sets FifaTeam 1.
         /// </summary>
         public int? FifaTeam1 { get; set; }
-
-        /// <summary>
-        /// Gets or sets Team Code 2.
-        /// </summary>
-        public string TeamCode2 { get; set; } = "????";
 
         /// <summary>
         /// Gets or sets FifaTeam 2.

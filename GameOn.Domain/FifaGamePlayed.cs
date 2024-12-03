@@ -22,24 +22,14 @@ namespace GameOn.Domain
         public DateTime PlayedOn { get; set; } = DateTime.UtcNow;
 
         /// <summary>
-        /// Gets or sets Team Code 1.
-        /// </summary>
-        public string? TeamCode1 { get; set; }
-
-        /// <summary>
         /// Gets or sets Team 1 ID.
         /// </summary>
-        public int? Team1Id { get; set; }
+        public int Team1Id { get; set; }
 
         /// <summary>
         /// Gets or sets Team 2 ID.
         /// </summary>
-        public int? Team2Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets Team Code 2.
-        /// </summary>
-        public string? TeamCode2 { get; set; }
+        public int Team2Id { get; set; }
 
         /// <summary>
         /// Gets or sets team 1 score.
@@ -109,13 +99,13 @@ namespace GameOn.Domain
         /// Gets or sets Team 1.
         /// </summary>
         [JsonIgnore]
-        public virtual FifaTeam? Team1 { get; set; } = null!;
+        public virtual FifaTeam Team1 { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Team 2.
         /// </summary>
         [JsonIgnore]
-        public virtual FifaTeam? Team2 { get; set; } = null!;
+        public virtual FifaTeam Team2 { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Highlights.
