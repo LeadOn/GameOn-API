@@ -59,8 +59,6 @@ namespace GameOn.Application.Tournaments.Commands.GoToPhase1
                             SeasonId = int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"),
                             Team1Id = player.Team.Id,
                             Team2Id = player2.Team.Id,
-                            TeamCode1 = "???",
-                            TeamCode2 = "???",
                             Phase = 1,
                             TournamentId = request.TournamentId,
                             TeamPlayers = new List<FifaTeamPlayer>

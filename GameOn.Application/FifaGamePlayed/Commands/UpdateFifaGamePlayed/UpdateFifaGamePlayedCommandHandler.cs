@@ -47,8 +47,6 @@ namespace GameOn.Application.FifaGamePlayed.Commands.UpdateFifaGamePlayed
             }
 
             // Updating game data
-            gameInDb.TeamCode1 = request.Game.TeamCode1;
-            gameInDb.TeamCode2 = request.Game.TeamCode2;
             gameInDb.TeamScore1 = request.Game.TeamScore1;
             gameInDb.TeamScore2 = request.Game.TeamScore2;
             gameInDb.IsPlayed = request.Game.IsPlayed;

@@ -44,7 +44,6 @@ namespace GameOn.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
             {
                 Id = 0,
                 FifaTeamId = request.FifaGamePlayed.Team1Id,
-                Code = request.FifaGamePlayed.TeamCode1 ?? "Unknown",
                 Players = new List<Player>(),
                 Score = request.FifaGamePlayed.TeamScore1,
             };
@@ -52,7 +51,6 @@ namespace GameOn.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
             {
                 Id = 1,
                 FifaTeamId = request.FifaGamePlayed.Team2Id,
-                Code = request.FifaGamePlayed.TeamCode2 ?? "Unknown",
                 Players = new List<Player>(),
                 Score = request.FifaGamePlayed.TeamScore2,
             };

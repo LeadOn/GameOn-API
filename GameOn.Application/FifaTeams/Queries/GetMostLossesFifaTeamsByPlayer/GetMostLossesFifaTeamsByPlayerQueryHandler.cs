@@ -50,11 +50,6 @@ namespace GameOn.Application.FifaTeams.Queries.GetMostLossesFifaTeamsByPlayer
                 {
                     var id = x.TeamId;
 
-                    if (id is null)
-                    {
-                        id = 0;
-                    }
-
                     if (teamIdsCount.ContainsKey((int)id))
                     {
                         teamIdsCount[(int)id] = teamIdsCount[(int)id] + x.GamesPlayed;
@@ -67,11 +62,6 @@ namespace GameOn.Application.FifaTeams.Queries.GetMostLossesFifaTeamsByPlayer
                 team2IdsCount.ForEach(x =>
                 {
                     var id = x.TeamId;
-
-                    if (id is null)
-                    {
-                        id = 0;
-                    }
 
                     if (teamIdsCount.ContainsKey((int)id))
                     {
