@@ -29,5 +29,19 @@ namespace GameOn.Domain
 #pragma warning disable SA1401 // Fields should be private
         public static int Phase1 = 2;
 #pragma warning restore SA1401 // Fields should be private
+
+        /// <summary>
+        /// Gets Phase 2 state.
+        /// </summary>
+#pragma warning disable SA1401 // Fields should be private
+        public static int Phase2 = 3;
+#pragma warning restore SA1401 // Fields should be private
+
+        /// <summary>
+        /// Gets Closed state.
+        /// </summary>
+#pragma warning disable SA1401 // Fields should be private
+        public static int Closed = 4;
+#pragma warning restore SA1401 // Fields should be private
     }
 }

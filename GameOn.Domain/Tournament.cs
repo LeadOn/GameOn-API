@@ -77,6 +77,11 @@ public class Tournament
     public int DrawPoints { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether tournament is featured or not.
+    /// </summary>
+    public bool Featured { get; set; }
+
+    /// <summary>
     /// Gets or sets Tournament winner.
     /// </summary>
     [JsonIgnore]
