@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "3f4ab28e-3ce1-4e43-91c4-933bb2c0d210",
-		"name": "GameOn! 3.3.0",
+		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
+		"name": "GameOn! 4.0.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -124,7 +124,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/player/1/stats?seasonId=",
+							"raw": "{{baseUrl}}/player/1/stats",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -136,7 +136,8 @@
 							"query": [
 								{
 									"key": "seasonId",
-									"value": ""
+									"value": "",
+									"disabled": true
 								}
 							]
 						}
@@ -413,6 +414,27 @@
 							],
 							"path": [
 								"tournament"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get featured",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tournament/featured",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tournament",
+								"featured"
 							]
 						}
 					},
