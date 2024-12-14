@@ -15,6 +15,7 @@ namespace GameOn.Presentation.Controllers
     using GameOn.Application.Tournaments.Commands.UpdateTournament;
     using GameOn.Application.Tournaments.Queries.CheckTournamentSubscription;
     using GameOn.Application.Tournaments.Queries.GetAllTournaments;
+    using GameOn.Application.Tournaments.Queries.GetFeaturedTournaments;
     using GameOn.Application.Tournaments.Queries.GetTournamentById;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
@@ -55,6 +56,21 @@ namespace GameOn.Presentation.Controllers
         public async Task<IActionResult> GetAll()
         {
             return this.Ok(await this.mediator.Send(new GetAllTournamentsQuery()));
+        }
+
+        /// <summary>
+        /// Get all featured tournaments in database.
+        /// </summary>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("featured")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get all featured tournaments in database.")]
+        [SwaggerResponse(200, "Featured Tournaments.", typeof(List<TournamentDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetFeatured()
+        {
+            return this.Ok(await this.mediator.Send(new GetFeaturedTournamentsQuery()));
         }
 
         /// <summary>

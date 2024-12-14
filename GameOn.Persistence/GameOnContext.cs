@@ -198,6 +198,10 @@ namespace GameOn.Persistence
                     .HasColumnName("draw_points")
                     .HasDefaultValue(1);
 
+                entity.Property(e => e.Featured)
+                    .HasColumnName("featured")
+                    .HasDefaultValue(false);
+
                 entity.HasOne(e => e.Winner)
                     .WithMany(f => f.TournamentsWon)
                     .HasForeignKey(e => e.WinnerId)
