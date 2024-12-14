@@ -25,6 +25,7 @@ namespace GameOn.Common.DTOs
         /// <param name="tour">Tournament entity.</param>
         public TournamentDto(Tournament tour)
         {
+            this.Id = tour.Id;
             this.Name = tour.Name;
             this.Description = tour.Description;
             this.State = tour.State;
@@ -39,7 +40,13 @@ namespace GameOn.Common.DTOs
             this.WinPoints = tour.WinPoints;
             this.LoosePoints = tour.LoosePoints;
             this.DrawPoints = tour.DrawPoints;
+            this.Featured = tour.Featured;
         }
+
+        /// <summary>
+        /// Gets or sets Tournament ID.
+        /// </summary>
+        public int Id { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets Name.
@@ -110,5 +117,10 @@ namespace GameOn.Common.DTOs
         /// Gets or sets Winner.
         /// </summary>
         public Player? Winner { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a tournament is featured or not.
+        /// </summary>
+        public bool Featured { get; set; }
     }
 }

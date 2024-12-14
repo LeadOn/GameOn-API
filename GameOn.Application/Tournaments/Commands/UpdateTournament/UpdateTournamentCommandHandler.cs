@@ -50,6 +50,7 @@ namespace GameOn.Application.Tournaments.Commands.UpdateTournament
             tournamentInDb.DrawPoints = request.TournamentDto.DrawPoints;
             tournamentInDb.LoosePoints = request.TournamentDto.LoosePoints;
             tournamentInDb.Rules = request.TournamentDto.Rules;
+            tournamentInDb.Featured = request.TournamentDto.Featured;
 
             this.context.Tournaments.Update(tournamentInDb);
             await this.context.SaveChangesAsync(cancellationToken);
