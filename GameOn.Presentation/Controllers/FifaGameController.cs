@@ -11,6 +11,7 @@ namespace GameOn.Presentation.Controllers
     using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
     using GameOn.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed;
     using GameOn.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayedByPlayerId;
+    using GameOn.Application.FifaGamePlayed.Queries.GetUserNextPlannedMatchs;
     using GameOn.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
@@ -77,6 +78,27 @@ namespace GameOn.Presentation.Controllers
             }
 
             return this.Ok(gameInDb);
+        }
+
+        /// <summary>
+        /// Get user planned games.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="limit">Limit.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("planned/{playerId}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get users planned games.", Description = "Get future gamses to be played by user.")]
+        [SwaggerResponse(200, "Games planned.", typeof(FifaGamePlayedDto))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetNextGames(int playerId, int? limit)
+        {
+            var limitToApply = limit != null ? (int)limit : 50;
+
+            var plannedGames = await this.mediator.Send(new GetUserNextPlannedMatchsQuery { PlayerId = playerId, Limit = limitToApply });
+
+            return this.Ok(plannedGames);
         }
 
         /// <summary>

@@ -56,7 +56,7 @@ namespace GameOn.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed
 
             if (request.StartDate is null)
             {
-                request.StartDate = DateTime.UtcNow.AddYears(-1);
+                request.StartDate = DateTime.UtcNow.AddYears(-5);
             }
 
             if (request.EndDate is null)
