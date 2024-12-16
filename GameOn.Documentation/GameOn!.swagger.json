@@ -207,6 +207,47 @@
         }
       }
     },
+    "/FifaGame/planned/{playerId}": {
+      "get": {
+        "tags": ["FifaGame"],
+        "summary": "Get users planned games.",
+        "description": "Get future gamses to be played by user.",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Games planned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FifaGamePlayedDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/FifaGame/last/{number}": {
       "get": {
         "tags": ["FifaGame"],
