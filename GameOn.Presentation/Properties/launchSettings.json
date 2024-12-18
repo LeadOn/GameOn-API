@@ -6,11 +6,13 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION_STRING": "Server=xxx;Port=xxx;User=xxx;Password=xxx;Database=xxx",
+        "DB_CONNECTION_STRING": "Server=192.168.1.42;Port=3306;User=gameondev;Password=dPis$L%T3Jv34VbP;Database=gameondev",
         "JWT_AUTHORITY": "https://auth.valentinvirot.fr/realms/gameon",
         "JWT_AUDIENCE": "account",
         "CURRENT_SEASON": "5",
-        "DEFAULT_PLATFORM": "2"
+        "DEFAULT_PLATFORM": "2",
+        "RIOT_GAMES_ACCOUNT_API_ROUTE": "europe.api.riotgames.com",
+        "RIOT_GAMES_API_KEY": "RGAPI-9f99324f-bb33-4a71-8202-abf98f0187cd"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"

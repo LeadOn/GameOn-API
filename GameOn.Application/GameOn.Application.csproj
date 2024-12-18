@@ -54,6 +54,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GameOn.Common\GameOn.Common.csproj" />
     <ProjectReference Include="..\GameOn.Domain\GameOn.Domain.csproj" />
+    <ProjectReference Include="..\GameOn.External\GameOn.External.csproj" />
   </ItemGroup>
 
 </Project>

@@ -134,6 +134,18 @@ namespace GameOn.Persistence
                 entity.Property(e => e.Archived)
                     .HasDefaultValue(false)
                     .HasColumnName("archived");
+
+                entity.Property(e => e.RiotGamesNickname)
+                    .HasColumnName("riot_games_nickname")
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.RiotGamesTagLine)
+                    .HasColumnName("riot_games_tag_line")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.RiotGamesPUUID)
+                    .HasColumnName("riot_games_puuid")
+                    .HasMaxLength(150);
             });
 
             modelBuilder.Entity<Tournament>(entity =>
