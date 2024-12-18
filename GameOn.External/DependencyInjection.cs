@@ -21,6 +21,7 @@ namespace GameOn.External
         public static IServiceCollection AddExternal(this IServiceCollection services)
         {
             services.AddScoped<IAccountService, AccountV1Service>();
+            services.AddScoped<ISummonerService, SummonerV4Service>();
             return services;
         }
     }

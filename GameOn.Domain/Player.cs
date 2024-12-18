@@ -53,6 +53,11 @@ namespace GameOn.Domain
         public string? RiotGamesPUUID { get; set; }
 
         /// <summary>
+        /// Gets or sets player's LOL Summoner ID.
+        /// </summary>
+        public string? LolSummonerId { get; set; }
+
+        /// <summary>
         /// Gets or sets player's creation date.
         /// </summary>
         public DateTime CreatedOn { get; set; } = DateTime.Now;

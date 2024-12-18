@@ -17,16 +17,19 @@ namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
     {
         private readonly IApplicationDbContext context;
         private readonly IAccountService accountService;
+        private readonly ISummonerService summonerService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateConnectedPlayerCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
         /// <param name="accountService">Riot Games Account Service, injected.</param>
-        public UpdateConnectedPlayerCommandHandler(IApplicationDbContext context, IAccountService accountService)
+        /// <param name="summonerService">League of Legends Summoner Service, injected.</param>
+        public UpdateConnectedPlayerCommandHandler(IApplicationDbContext context, IAccountService accountService, ISummonerService summonerService)
         {
             this.context = context;
             this.accountService = accountService;
+            this.summonerService = summonerService;
         }
 
         /// <inheritdoc />
@@ -62,6 +65,14 @@ namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
                         playerInDb.RiotGamesNickname = puuidFromRiot.GameName;
                         playerInDb.RiotGamesTagLine = puuidFromRiot.TagLine;
                         playerInDb.RiotGamesPUUID = puuidFromRiot.Puuid;
+
+                        // Now, getting its league summoners ID
+                        var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(puuidFromRiot.Puuid);
+
+                        if (summonerIdFromRiot is not null)
+                        {
+                            playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
+                        }
                     }
                 }
             }
