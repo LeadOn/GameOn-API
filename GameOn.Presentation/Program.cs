@@ -3,20 +3,16 @@
 // </copyright>
 
 #pragma warning disable SA1200 // Using directives should be placed correctly
-using System.Text;
 using GameOn.Application;
 using GameOn.Common.Exceptions;
-using GameOn.External;
 using GameOn.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 #pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adding all layers
 builder.Services.AddPersistence();
-builder.Services.AddExternal();
 builder.Services.AddApplication();
 
 // Setting up ASP.NET

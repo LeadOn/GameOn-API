@@ -4,6 +4,8 @@
 
 namespace GameOn.External
 {
+    using GameOn.External.RiotGames.Implementations;
+    using GameOn.External.RiotGames.Interfaces;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -18,6 +20,8 @@ namespace GameOn.External
         /// <returns>IServiceCollection.</returns>
         public static IServiceCollection AddExternal(this IServiceCollection services)
         {
+            services.AddScoped<IAccountService, AccountV1Service>();
+            services.AddScoped<ISummonerService, SummonerV4Service>();
             return services;
         }
     }

@@ -6,6 +6,7 @@ namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
 {
     using GameOn.Application.Common.Interfaces;
     using GameOn.Domain;
+    using GameOn.External.RiotGames.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
@@ -15,14 +16,20 @@ namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
     public class UpdateConnectedPlayerCommandHandler : IRequestHandler<UpdateConnectedPlayerCommand, Player>
     {
         private readonly IApplicationDbContext context;
+        private readonly IAccountService accountService;
+        private readonly ISummonerService summonerService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateConnectedPlayerCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
-        public UpdateConnectedPlayerCommandHandler(IApplicationDbContext context)
+        /// <param name="accountService">Riot Games Account Service, injected.</param>
+        /// <param name="summonerService">League of Legends Summoner Service, injected.</param>
+        public UpdateConnectedPlayerCommandHandler(IApplicationDbContext context, IAccountService accountService, ISummonerService summonerService)
         {
             this.context = context;
+            this.accountService = accountService;
+            this.summonerService = summonerService;
         }
 
         /// <inheritdoc />
@@ -38,6 +45,37 @@ namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
             playerInDb.FullName = request.Player.FullName;
             playerInDb.Nickname = request.Player.Nickname;
             playerInDb.ProfilePictureUrl = request.Player.ProfilePictureUrl;
+
+            if (request.Player.RiotGamesNickname is not null && request.Player.RiotGamesTagLine is not null)
+            {
+                // First, checking if player isn't already present in DB
+                var playersWithRiotCombo = await this.context.Players.FirstOrDefaultAsync(x => x.RiotGamesNickname == request.Player.RiotGamesNickname && x.RiotGamesTagLine == request.Player.RiotGamesTagLine, cancellationToken);
+
+                if (playersWithRiotCombo is not null)
+                {
+                    return playerInDb;
+                }
+                else
+                {
+                    // Calling Riot Games API to get PUUID
+                    var puuidFromRiot = await this.accountService.GetAccountPuuid(request.Player.RiotGamesTagLine, request.Player.RiotGamesNickname);
+
+                    if (puuidFromRiot is not null)
+                    {
+                        playerInDb.RiotGamesNickname = puuidFromRiot.GameName;
+                        playerInDb.RiotGamesTagLine = puuidFromRiot.TagLine;
+                        playerInDb.RiotGamesPUUID = puuidFromRiot.Puuid;
+
+                        // Now, getting its league summoners ID
+                        var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(puuidFromRiot.Puuid);
+
+                        if (summonerIdFromRiot is not null)
+                        {
+                            playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
+                        }
+                    }
+                }
+            }
 
             this.context.Players.Update(playerInDb);
             await this.context.SaveChangesAsync(cancellationToken);
