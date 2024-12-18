@@ -5,6 +5,7 @@
 namespace GameOn.Application
 {
     using System.Reflection;
+    using GameOn.External;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -20,7 +21,7 @@ namespace GameOn.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
+            services.AddExternal();
             return services;
         }
     }

@@ -4,6 +4,7 @@
 
 namespace GameOn.Presentation.Controllers
 {
+    using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Application.Players.Commands.UpdateConnectedPlayer;
     using GameOn.Application.Players.Commands.UpdatePlayer;
     using GameOn.Application.Players.Queries.GetAllPlayers;
@@ -148,6 +149,27 @@ namespace GameOn.Presentation.Controllers
             update.KeycloakId = this.User.GetConnectedPlayer().KeycloakId;
 
             return this.Ok(await this.mediator.Send(new UpdateConnectedPlayerCommand { Player = update }));
+        }
+
+        /// <summary>
+        /// Update summoner of connected player.
+        /// </summary>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize]
+        [Route("me/summoner")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update current user League of Legends summoner.")]
+        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> RefreshUserLoLSummoner()
+        {
+            var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+            return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
+#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
         }
 
         /// <summary>

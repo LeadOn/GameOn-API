@@ -38,6 +38,36 @@ namespace GameOn.Domain
         public string? ProfilePictureUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets player's Riot Games nickname.
+        /// </summary>
+        public string? RiotGamesNickname { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Riot Games tag line.
+        /// </summary>
+        public string? RiotGamesTagLine { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Riot Games PUUID.
+        /// </summary>
+        public string? RiotGamesPUUID { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's LOL Summoner ID.
+        /// </summary>
+        public string? LolSummonerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's LOL Summoner's level.
+        /// </summary>
+        public long? LolSummonerLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's LOL refreshed on datetime.
+        /// </summary>
+        public DateTime? LolRefreshedOn { get; set; }
+
+        /// <summary>
         /// Gets or sets player's creation date.
         /// </summary>
         public DateTime CreatedOn { get; set; } = DateTime.Now;

@@ -20,6 +20,16 @@ namespace GameOn.Common.DTOs
         public string? KeycloakId { get; set; }
 
         /// <summary>
+        /// Gets or sets Riot Games Nickname.
+        /// </summary>
+        public string? RiotGamesNickname { get; set; }
+
+        /// <summary>
+        /// Gets or sets Riot Games Tag Line.
+        /// </summary>
+        public string? RiotGamesTagLine { get; set; }
+
+        /// <summary>
         /// Gets or sets Full Name.
         /// </summary>
         public string FullName { get; set; } = "INVALID NICKNAME";
