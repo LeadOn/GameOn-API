@@ -150,6 +150,9 @@ namespace GameOn.Persistence
                 entity.Property(e => e.LolSummonerId)
                     .HasColumnName("lol_summoner_id")
                     .HasMaxLength(150);
+
+                entity.Property(e => e.LolRefreshedOn)
+                    .HasColumnName("lol_refreshed_on");
             });
 
             modelBuilder.Entity<Tournament>(entity =>

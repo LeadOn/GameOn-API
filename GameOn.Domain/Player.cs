@@ -58,6 +58,16 @@ namespace GameOn.Domain
         public string? LolSummonerId { get; set; }
 
         /// <summary>
+        /// Gets or sets player's LOL Summoner's level.
+        /// </summary>
+        public long? LolSummonerLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's LOL refreshed on datetime.
+        /// </summary>
+        public DateTime? LolRefreshedOn { get; set; }
+
+        /// <summary>
         /// Gets or sets player's creation date.
         /// </summary>
         public DateTime CreatedOn { get; set; } = DateTime.Now;

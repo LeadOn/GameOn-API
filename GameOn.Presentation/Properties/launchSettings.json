@@ -6,7 +6,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION_STRING": "Server=;Port=;User=;Password=;Database=",
+        "DB_CONNECTION_STRING": "",
         "JWT_AUTHORITY": "https://auth.valentinvirot.fr/realms/gameon",
         "JWT_AUDIENCE": "account",
         "CURRENT_SEASON": "5",
