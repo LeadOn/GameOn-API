@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20241219174823_Added_LoL_Rank_History")]
+    partial class Added_LoL_Rank_History
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PublicationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 19, 18, 55, 15, 364, DateTimeKind.Local).AddTicks(1498))
+                        .HasDefaultValue(new DateTime(2024, 12, 19, 18, 48, 22, 832, DateTimeKind.Local).AddTicks(3577))
                         .HasColumnName("publication_date");
 
                     b.Property<string>("RemovedFeatures")
@@ -107,7 +110,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 19, 18, 55, 15, 360, DateTimeKind.Local).AddTicks(2588))
+                        .HasDefaultValue(new DateTime(2024, 12, 19, 18, 48, 22, 828, DateTimeKind.Local).AddTicks(4816))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -273,7 +276,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 19, 18, 55, 15, 364, DateTimeKind.Local).AddTicks(2454))
+                        .HasDefaultValue(new DateTime(2024, 12, 19, 18, 48, 22, 832, DateTimeKind.Local).AddTicks(4492))
                         .HasColumnName("created_on");
 
                     b.Property<bool>("FreshBlood")
@@ -297,8 +300,7 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnName("losses");
 
                     b.Property<int>("PlayerId")
-                        .HasColumnType("int")
-                        .HasColumnName("player_id");
+                        .HasColumnType("int");
 
                     b.Property<string>("QueueType")
                         .IsRequired()
@@ -371,7 +373,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 19, 17, 55, 15, 359, DateTimeKind.Utc).AddTicks(3805))
+                        .HasDefaultValue(new DateTime(2024, 12, 19, 17, 48, 22, 827, DateTimeKind.Utc).AddTicks(5488))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -601,13 +603,13 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 19, 17, 55, 15, 359, DateTimeKind.Utc).AddTicks(5445))
+                        .HasDefaultValue(new DateTime(2024, 12, 19, 17, 48, 22, 827, DateTimeKind.Utc).AddTicks(7049))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 20, 17, 55, 15, 359, DateTimeKind.Utc).AddTicks(5697))
+                        .HasDefaultValue(new DateTime(2024, 12, 20, 17, 48, 22, 827, DateTimeKind.Utc).AddTicks(7290))
                         .HasColumnName("planned_to");
 
                     b.Property<string>("Rules")
@@ -654,7 +656,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 19, 17, 55, 15, 359, DateTimeKind.Utc).AddTicks(8449))
+                        .HasDefaultValue(new DateTime(2024, 12, 19, 17, 48, 22, 828, DateTimeKind.Utc).AddTicks(363))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")

@@ -79,6 +79,11 @@ namespace GameOn.Application.Common.Interfaces
         DbSet<Changelog> Changelogs { get; set; }
 
         /// <summary>
+        /// Gets or sets Changelogs.
+        /// </summary>
+        DbSet<LeagueOfLegendsRankHistory> LeagueOfLegendsRankHistory { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>
