@@ -22,6 +22,7 @@ namespace GameOn.External
         {
             services.AddScoped<IAccountService, AccountV1Service>();
             services.AddScoped<ISummonerService, SummonerV4Service>();
+            services.AddScoped<ILeagueService, LeagueV4Service>();
             return services;
         }
     }

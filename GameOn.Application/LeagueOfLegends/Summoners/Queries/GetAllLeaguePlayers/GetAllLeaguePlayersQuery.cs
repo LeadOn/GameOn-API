@@ -4,13 +4,14 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers
 {
+    using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
 
     /// <summary>
     /// GetAllLeaguePlayersQuery class.
     /// </summary>
-    public class GetAllLeaguePlayersQuery : IRequest<IEnumerable<Player>>
+    public class GetAllLeaguePlayersQuery : IRequest<IEnumerable<PlayerDto>>
     {
         /// <summary>
         /// Gets or sets a value indicating whether a player is archived or not.

@@ -5,14 +5,14 @@
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers
 {
     using GameOn.Application.Common.Interfaces;
-    using GameOn.Domain;
+    using GameOn.Common.DTOs;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// GetAllLeaguePlayersQueryHandler class.
     /// </summary>
-    public class GetAllLeaguePlayersQueryHandler : IRequestHandler<GetAllLeaguePlayersQuery, IEnumerable<Player>>
+    public class GetAllLeaguePlayersQueryHandler : IRequestHandler<GetAllLeaguePlayersQuery, IEnumerable<PlayerDto>>
     {
         private readonly IApplicationDbContext context;
 
@@ -26,9 +26,22 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<Player>> Handle(GetAllLeaguePlayersQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PlayerDto>> Handle(GetAllLeaguePlayersQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived && x.LolSummonerId != null).ToListAsync(cancellationToken);
+            var playersInDb = await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived && x.LolSummonerId != null).Select(x => new PlayerDto(x)).ToListAsync(cancellationToken);
+
+            foreach (var player in playersInDb)
+            {
+                var soloRank = await this.context.LeagueOfLegendsRankHistory.OrderByDescending(x => x.CreatedOn).FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.QueueType == "RANKED_SOLO_5x5", cancellationToken);
+
+                player.LeagueOfLegendsSoloRank = soloRank;
+
+                var flexRank = await this.context.LeagueOfLegendsRankHistory.OrderByDescending(x => x.CreatedOn).FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.QueueType == "RANKED_FLEX_SR", cancellationToken);
+
+                player.LeagueOfLegendsFlexRank = flexRank;
+            }
+
+            return playersInDb;
         }
     }
 }

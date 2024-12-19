@@ -1,17 +1,45 @@
-﻿// <copyright file="Player.cs" company="LeadOn's Corp'">
+﻿// <copyright file="PlayerDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Domain
+namespace GameOn.Common.DTOs
 {
     using System.Text.Json.Serialization;
     using GameOn.Domain;
 
     /// <summary>
-    /// Player class.
+    /// PlayerDto class.
     /// </summary>
-    public class Player
+    public class PlayerDto
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerDto"/> class.
+        /// </summary>
+        public PlayerDto()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerDto"/> class.
+        /// </summary>
+        /// <param name="player"><see cref="Player" />.</param>
+        public PlayerDto(Player player)
+        {
+            this.Id = player.Id;
+            this.KeycloakId = player.KeycloakId;
+            this.FullName = player.FullName;
+            this.Nickname = player.Nickname;
+            this.ProfilePictureUrl = player.ProfilePictureUrl;
+            this.RiotGamesNickname = player.RiotGamesNickname;
+            this.RiotGamesPUUID = player.RiotGamesPUUID;
+            this.RiotGamesTagLine = player.RiotGamesTagLine;
+            this.LolSummonerId = player.LolSummonerId;
+            this.LolSummonerLevel = player.LolSummonerLevel;
+            this.LolRefreshedOn = player.LolRefreshedOn;
+            this.CreatedOn = player.CreatedOn;
+            this.Archived = player.Archived;
+        }
+
         /// <summary>
         /// Gets or sets player's ID.
         /// </summary>
@@ -83,45 +111,13 @@ namespace GameOn.Domain
         public virtual List<Tournament> TournamentsWon { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets TeamPlayers.
+        /// Gets or sets current player's League of Legends solo queue rank.
         /// </summary>
-        [JsonIgnore]
-        public virtual List<FifaTeamPlayer> FifaTeamPlayers { get; set; } = null!;
+        public LeagueOfLegendsRankHistory? LeagueOfLegendsSoloRank { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets Highlights.
+        /// Gets or sets current player's League of Legends Flex rank.
         /// </summary>
-        [JsonIgnore]
-        public virtual List<Highlight> Highlights { get; set; } = null!;
-
-        /// <summary>
-        /// Gets or sets TournamentPlayer.
-        /// </summary>
-        [JsonIgnore]
-        public virtual List<TournamentPlayer> TournamentPlayed { get; set; } = null!;
-
-        /// <summary>
-        /// Gets or sets games created.
-        /// </summary>
-        [JsonIgnore]
-        public virtual List<FifaGamePlayed> FifaGameCreated { get; set; } = null!;
-
-        /// <summary>
-        /// Gets or sets five created.
-        /// </summary>
-        [JsonIgnore]
-        public virtual List<SoccerFive> SoccerFivesCreated { get; set; } = null!;
-
-        /// <summary>
-        /// Gets or sets five created.
-        /// </summary>
-        [JsonIgnore]
-        public virtual List<SoccerFiveVoteAnswer> SoccerFiveVoteAnswers { get; set; } = null!;
-
-        /// <summary>
-        /// Gets or sets League of Legends Rank History.
-        /// </summary>
-        [JsonIgnore]
-        public virtual List<LeagueOfLegendsRankHistory> LeagueOfLegendsRankHistory { get; set; } = null!;
+        public LeagueOfLegendsRankHistory? LeagueOfLegendsFlexRank { get; set; } = null!;
     }
 }
