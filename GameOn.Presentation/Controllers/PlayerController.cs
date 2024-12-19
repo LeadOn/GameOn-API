@@ -5,6 +5,7 @@
 namespace GameOn.Presentation.Controllers
 {
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
+    using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
     using GameOn.Application.Players.Commands.UpdateConnectedPlayer;
     using GameOn.Application.Players.Commands.UpdatePlayer;
     using GameOn.Application.Players.Queries.GetAllPlayers;
@@ -95,6 +96,22 @@ namespace GameOn.Presentation.Controllers
         public async Task<IActionResult> GetAll(bool? archived)
         {
             return this.Ok(await this.mediator.Send(new GetAllPlayersQuery { Archived = archived ?? false }));
+        }
+
+        /// <summary>
+        /// Get all league of legends players in database.
+        /// </summary>
+        /// <param name="archived">If true, get archived players.</param>
+        /// <returns>200 OK with Player list.</returns>
+        [HttpGet]
+        [Route("lol")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get all League of Legends players in database.")]
+        [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetAllLeaguePlayers(bool? archived)
+        {
+            return this.Ok(await this.mediator.Send(new GetAllLeaguePlayersQuery { Archived = archived ?? false }));
         }
 
         /// <summary>
