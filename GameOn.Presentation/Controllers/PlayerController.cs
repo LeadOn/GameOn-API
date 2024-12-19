@@ -6,6 +6,7 @@ namespace GameOn.Presentation.Controllers
 {
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
+    using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
     using GameOn.Application.Players.Commands.UpdateConnectedPlayer;
     using GameOn.Application.Players.Commands.UpdatePlayer;
     using GameOn.Application.Players.Queries.GetAllPlayers;
@@ -71,6 +72,32 @@ namespace GameOn.Presentation.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = id });
+
+            if (playerInDb is not null)
+            {
+                return this.Ok(playerInDb);
+            }
+            else
+            {
+                return this.NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Get a player by its ID.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <returns>200 OK with Player if found, 404 if not found.</returns>
+        [HttpGet]
+        [Route("{id:int}/lol")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get a summoner by its ID.", Description = "Get a summoner by its ID, and retrieve its information.")]
+        [SwaggerResponse(200, "Summoner is found.", typeof(PlayerDto))]
+        [SwaggerResponse(404, "Player not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetSummonerById(int id)
+        {
+            var playerInDb = await this.mediator.Send(new GetLeaguePlayerByIdQuery { PlayerId = id });
 
             if (playerInDb is not null)
             {
@@ -183,6 +210,28 @@ namespace GameOn.Presentation.Controllers
         public async Task<IActionResult> RefreshUserLoLSummoner()
         {
             var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+            return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
+#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+        }
+
+        /// <summary>
+        /// Update summoner of connected player.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize]
+        [Route("{id:int}/summoner")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update user League of Legends summoner.")]
+        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> RefreshUserLoLSummonerById(int id)
+        {
+            var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = id });
 
 #pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));

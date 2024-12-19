@@ -17,16 +17,19 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
     {
         private readonly IApplicationDbContext context;
         private readonly ISummonerService summonerService;
+        private readonly ILeagueService leagueService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdatePlayerSummonerCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
         /// <param name="summonerService">League of Legends Summoner Service, injected.</param>
-        public UpdatePlayerSummonerCommandHandler(IApplicationDbContext context, ISummonerService summonerService)
+        /// <param name="leagueService">League of Legends League Service, injected.</param>
+        public UpdatePlayerSummonerCommandHandler(IApplicationDbContext context, ISummonerService summonerService, ILeagueService leagueService)
         {
             this.context = context;
             this.summonerService = summonerService;
+            this.leagueService = leagueService;
         }
 
         /// <inheritdoc />
@@ -49,6 +52,33 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
                 playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
                 playerInDb.LolSummonerLevel = summonerIdFromRiot.SummonerLevel;
                 playerInDb.LolRefreshedOn = DateTime.Now;
+
+                // Updating player Rank
+                var playerRank = await this.leagueService.GetLeagueEntries(summonerIdFromRiot.SummonerId);
+
+                if (playerRank is not null)
+                {
+                    foreach (var entry in playerRank)
+                    {
+                        var playRank = new LeagueOfLegendsRankHistory
+                        {
+                            CreatedOn = DateTime.Now,
+                            FreshBlood = entry.FreshBlood,
+                            HotStreak = entry.HotStreak,
+                            Inactive = entry.Inactive,
+                            LeaguePoints = entry.LeaguePoints,
+                            Losses = entry.Losses,
+                            QueueType = entry.QueueType,
+                            PlayerId = playerInDb.Id,
+                            Rank = entry.Rank,
+                            Tier = entry.Tier,
+                            Veteran = entry.Veteran,
+                            Wins = entry.Wins,
+                        };
+
+                        this.context.LeagueOfLegendsRankHistory.Add(playRank);
+                    }
+                }
             }
 
             this.context.Players.Update(playerInDb);

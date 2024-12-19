@@ -84,6 +84,11 @@ namespace GameOn.Persistence
         public DbSet<Changelog> Changelogs { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Rank History.
+        /// </summary>
+        public DbSet<LeagueOfLegendsRankHistory> LeagueOfLegendsRankHistory { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -647,6 +652,64 @@ namespace GameOn.Persistence
                 entity.Property(e => e.RemovedFeatures)
                     .HasColumnName("removed_features")
                     .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<LeagueOfLegendsRankHistory>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsRankHistory");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnName("created_on")
+                    .HasDefaultValue(DateTime.Now);
+
+                entity.Property(e => e.QueueType)
+                    .HasColumnName("queue_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Tier)
+                    .HasColumnName("tier")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Rank)
+                    .HasColumnName("rank")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.LeaguePoints)
+                    .HasColumnName("league_points");
+
+                entity.Property(e => e.Wins)
+                    .HasColumnName("wins");
+
+                entity.Property(e => e.Losses)
+                    .HasColumnName("losses");
+
+                entity.Property(e => e.HotStreak)
+                    .HasColumnName("hot_streak");
+
+                entity.Property(e => e.Veteran)
+                    .HasColumnName("veteran");
+
+                entity.Property(e => e.FreshBlood)
+                    .HasColumnName("fresh_blood");
+
+                entity.Property(e => e.Inactive)
+                    .HasColumnName("inactive");
+
+                entity.HasOne(e => e.Player)
+                      .WithMany(f => f.LeagueOfLegendsRankHistory)
+                      .HasConstraintName("FK_Player_LoLRankHistory")
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
