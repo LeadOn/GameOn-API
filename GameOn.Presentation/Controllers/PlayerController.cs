@@ -7,6 +7,7 @@ namespace GameOn.Presentation.Controllers
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
+    using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
     using GameOn.Application.Players.Commands.UpdateConnectedPlayer;
     using GameOn.Application.Players.Commands.UpdatePlayer;
     using GameOn.Application.Players.Queries.GetAllPlayers;
@@ -222,7 +223,6 @@ namespace GameOn.Presentation.Controllers
         /// <param name="id">Player ID.</param>
         /// <returns>IActionResult object.</returns>
         [HttpPatch]
-        [Authorize]
         [Route("{id:int}/summoner")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Update user League of Legends summoner.")]
@@ -235,6 +235,26 @@ namespace GameOn.Presentation.Controllers
 
 #pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
+#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+        }
+
+        /// <summary>
+        /// Get player rank history.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <param name="limit">Limit.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{id:int}/summoner/rank")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get user League of Legends history.")]
+        [SwaggerResponse(200, "List of rank history.", typeof(List<LeagueOfLegendsRankHistory>))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetRankHistory(int id, int? limit)
+        {
+#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+            return this.Ok(await this.mediator.Send(new GetSummonerRankHistoryQuery { PlayerId = id, Limit = limit }));
 #pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
         }
 
