@@ -57,7 +57,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
                     {
                         soloHistoryToRetrieve.Add(item);
                     }
-                    else if (lastItem.Wins != item.Wins && lastItem.Losses != item.Losses)
+                    else if (lastItem.Wins != item.Wins || lastItem.Losses != item.Losses)
                     {
                         soloHistoryToRetrieve.Add(item);
                     }
