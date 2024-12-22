@@ -8,6 +8,8 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Storage;
+    using Microsoft.Extensions.Options;
 
     /// <summary>
     /// GetSummonerRankHistoryQueryHandler class.
@@ -28,11 +30,62 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
         /// <inheritdoc />
         public async Task<IEnumerable<LeagueOfLegendsRankHistory>> Handle(GetSummonerRankHistoryQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.LeagueOfLegendsRankHistory
-                .Where(x => x.PlayerId == request.PlayerId)
-                .OrderBy(x => x.CreatedOn)
-                .Take(request.Limit is not null ? (int)request.Limit : 50)
+            var historySoloQueue = await this.context.LeagueOfLegendsRankHistory
+                .Where(x => x.PlayerId == request.PlayerId && x.QueueType == "RANKED_SOLO_5x5")
+                .OrderByDescending(x => x.CreatedOn)
                 .ToListAsync(cancellationToken);
+
+            var historyFlexQueue = await this.context.LeagueOfLegendsRankHistory
+                .Where(x => x.PlayerId == request.PlayerId && x.QueueType == "RANKED_FLEX_SR")
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync(cancellationToken);
+
+            var soloHistoryToRetrieve = new List<LeagueOfLegendsRankHistory>();
+            var flexHistoryToRetrieve = new List<LeagueOfLegendsRankHistory>();
+
+            foreach (var item in historySoloQueue)
+            {
+                if (soloHistoryToRetrieve.Count == 0)
+                {
+                    soloHistoryToRetrieve.Add(item);
+                }
+                else
+                {
+                    var lastItem = soloHistoryToRetrieve.LastOrDefault();
+
+                    if (lastItem is null)
+                    {
+                        soloHistoryToRetrieve.Add(item);
+                    }
+                    else if (lastItem.Wins != item.Wins && lastItem.Losses != item.Losses)
+                    {
+                        soloHistoryToRetrieve.Add(item);
+                    }
+                }
+            }
+
+            foreach (var item in historyFlexQueue)
+            {
+                if (flexHistoryToRetrieve.Count == 0)
+                {
+                    flexHistoryToRetrieve.Add(item);
+                }
+                else
+                {
+                    var lastItem = flexHistoryToRetrieve.LastOrDefault();
+
+                    if (lastItem is null)
+                    {
+                        flexHistoryToRetrieve.Add(item);
+                    }
+                    else if (lastItem.Wins != item.Wins && lastItem.Losses != item.Losses)
+                    {
+                        flexHistoryToRetrieve.Add(item);
+                    }
+                }
+            }
+
+            return soloHistoryToRetrieve.Concat(flexHistoryToRetrieve).OrderBy(x => x.CreatedOn).Take(request.Limit is not null ? (int)request.Limit : 50);
         }
     }
 }
