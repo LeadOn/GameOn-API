@@ -4,6 +4,7 @@
 
 namespace GameOn.External.RiotGames.Interfaces
 {
+    using System.Threading;
     using GameOn.External.RiotGames.Models.DTOs;
 
     /// <summary>
@@ -15,7 +16,8 @@ namespace GameOn.External.RiotGames.Interfaces
         /// Gets Riot Games summoner via PUUID.
         /// </summary>
         /// <param name="puuid">PUUID of the player.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
         /// <returns><see cref="AccountDto"/>.</returns>
-        Task<SummonerDto> GetSummonerByPuuid(string puuid);
+        Task<SummonerDto> GetSummonerByPuuid(string puuid, CancellationToken cancellationToken);
     }
 }

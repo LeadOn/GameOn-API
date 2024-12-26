@@ -57,7 +57,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
                     {
                         soloHistoryToRetrieve.Add(item);
                     }
-                    else if (lastItem.Wins != item.Wins && lastItem.Losses != item.Losses)
+                    else if (lastItem.Wins != item.Wins || lastItem.Losses != item.Losses)
                     {
                         soloHistoryToRetrieve.Add(item);
                     }
@@ -85,7 +85,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
                 }
             }
 
-            return soloHistoryToRetrieve.Concat(flexHistoryToRetrieve).OrderBy(x => x.CreatedOn).Take(request.Limit is not null ? (int)request.Limit : 50);
+            return soloHistoryToRetrieve.Concat(flexHistoryToRetrieve).Take(request.Limit is not null ? (int)request.Limit : 50).OrderBy(x => x.CreatedOn);
         }
     }
 }

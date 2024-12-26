@@ -4,49 +4,34 @@
 
 namespace GameOn.External.RiotGames.Implementations
 {
+    using GameOn.External.Common;
     using GameOn.External.RiotGames.Interfaces;
     using GameOn.External.RiotGames.Models.DTOs;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// LeagueV4Service class.
     /// </summary>
     public class LeagueV4Service : ILeagueService
     {
-        private HttpClient httpClient;
+        private HttpClient client;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LeagueV4Service"/> class.
         /// </summary>
+        /// <param name="client"><see cref="HttpClient"/>.</param>
         public LeagueV4Service()
         {
-            this.httpClient = new HttpClient();
+            this.client = new HttpClient();
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string summonerId)
+        public async Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string summonerId, CancellationToken cancellationToken)
         {
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/league/v4/entries/by-summoner/{summonerId}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-                var response = await this.httpClient.SendAsync(request);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseBody = await response.Content.ReadAsStringAsync();
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
-                    return JsonConvert.DeserializeObject<IEnumerable<LeagueEntryDto>>(responseBody);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
+            return new List<LeagueEntryDto>();
+//            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/league/v4/entries/by-summoner/{summonerId}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
+//#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+//            return await RunRequest<IEnumerable<LeagueEntryDto>>(this.client, request, cancellationToken);
+//#pragma warning restore CS8603 // Existence possible d'un retour de référence null
         }
     }
 }
