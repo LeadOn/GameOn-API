@@ -15,7 +15,8 @@ namespace GameOn.External.RiotGames.Interfaces
         /// Gets League Entries by Summoner's ID.
         /// </summary>
         /// <param name="summonerId">Summoner ID.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
         /// <returns><see cref="IEnumerable{LeagueEntryDto}"/>.</returns>
-        Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string summonerId);
+        Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string summonerId, CancellationToken cancellationToken);
     }
 }

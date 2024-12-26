@@ -44,7 +44,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
 
             // Getting its league summoners ID
 #pragma warning disable CS8604 // Existence possible d'un argument de référence null.
-            var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(playerInDb.RiotGamesPUUID);
+            var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(playerInDb.RiotGamesPUUID, cancellationToken);
 #pragma warning restore CS8604 // Existence possible d'un argument de référence null.
 
             if (summonerIdFromRiot is not null)
@@ -54,7 +54,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
                 playerInDb.LolRefreshedOn = DateTime.Now;
 
                 // Updating player Rank
-                var playerRank = await this.leagueService.GetLeagueEntries(summonerIdFromRiot.SummonerId);
+                var playerRank = await this.leagueService.GetLeagueEntries(summonerIdFromRiot.SummonerId, cancellationToken);
 
                 if (playerRank is not null)
                 {

@@ -58,7 +58,7 @@ namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
                 else
                 {
                     // Calling Riot Games API to get PUUID
-                    var puuidFromRiot = await this.accountService.GetAccountPuuid(request.Player.RiotGamesTagLine, request.Player.RiotGamesNickname);
+                    var puuidFromRiot = await this.accountService.GetAccountPuuid(request.Player.RiotGamesTagLine, request.Player.RiotGamesNickname, cancellationToken);
 
                     if (puuidFromRiot is not null)
                     {
@@ -67,7 +67,7 @@ namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
                         playerInDb.RiotGamesPUUID = puuidFromRiot.Puuid;
 
                         // Now, getting its league summoners ID
-                        var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(puuidFromRiot.Puuid);
+                        var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(puuidFromRiot.Puuid, cancellationToken);
 
                         if (summonerIdFromRiot is not null)
                         {

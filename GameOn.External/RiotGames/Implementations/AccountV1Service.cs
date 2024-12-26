@@ -4,6 +4,7 @@
 
 namespace GameOn.External.RiotGames.Implementations
 {
+    using GameOn.External.Common;
     using GameOn.External.RiotGames.Interfaces;
     using GameOn.External.RiotGames.Models.DTOs;
     using Newtonsoft.Json;
@@ -11,42 +12,26 @@ namespace GameOn.External.RiotGames.Implementations
     /// <summary>
     /// AccountV1Service class.
     /// </summary>
-    public class AccountV1Service : IAccountService
+    public class AccountV1Service : HttpServiceBase, IAccountService
     {
-        private HttpClient httpClient;
+        private readonly HttpClient client;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountV1Service"/> class.
         /// </summary>
-        public AccountV1Service()
+        /// <param name="client"><see cref="HttpClient"/>.</param>
+        public AccountV1Service(HttpClient client)
         {
-            this.httpClient = new HttpClient();
+            this.client = client;
         }
 
         /// <inheritdoc/>
-        public async Task<AccountDto> GetAccountPuuid(string tagLine, string nickname)
+        public async Task<AccountDto> GetAccountPuuid(string tagLine, string nickname, CancellationToken cancellationToken)
         {
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/riot/account/v1/accounts/by-riot-id/{nickname}/{tagLine}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-                var response = await this.httpClient.SendAsync(request);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseBody = await response.Content.ReadAsStringAsync();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/riot/account/v1/accounts/by-riot-id/{nickname}/{tagLine}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
 #pragma warning disable CS8603 // Existence possible d'un retour de référence null.
-                    return JsonConvert.DeserializeObject<AccountDto>(responseBody);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
+            return await RunRequest<AccountDto>(this.client, request, cancellationToken);
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null
         }
     }
 }
