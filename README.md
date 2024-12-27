@@ -20,8 +20,11 @@ Here are all of the environment variables currently used :
     <li>DB_CONNECTION_STRING: MySQL connexion string.</li>
     <li>JWT_AUTHORITY: Token authority (used in the authentication middleware).</li>
     <li>JWT_AUDIENCE: Token audience (used in the authentication middleware).</li>
-    <li>CURRENT_SEASON: Current season ID in database.</li>
-    <li>DEFAULT_PLATFORM: Default platform to be used.</li>
+    <li>CURRENT_SEASON: Current season ID (used for FIFA/Soccer stats management).</li>
+    <li>DEFAULT_PLATFORM: Default platform to be used (used for FIFA/Soccer stats management).</li>
+    <li>RIOT_GAMES_ACCOUNT_API_ROUTE: Riot Games API route to be used for Account management (exemple: europe.api.riotgames.com).</li>
+    <li>RIOT_GAMES_SUMMONER_API_ROUTE: Riot Games API route to be used for Summoner management (exemple: euw1.api.riotgames.com).</li>
+    <li>RIOT_GAMES_API_KEY: Riot Games API Key (can be obtained via Riot's official developer website).</li>
 </ul>
 
 ## Can I use it for my own?

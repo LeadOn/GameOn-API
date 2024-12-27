@@ -85,32 +85,6 @@ namespace GameOn.Presentation.Controllers
         }
 
         /// <summary>
-        /// Get a player by its ID.
-        /// </summary>
-        /// <param name="id">Player ID.</param>
-        /// <returns>200 OK with Player if found, 404 if not found.</returns>
-        [HttpGet]
-        [Route("{id:int}/lol")]
-        [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get a summoner by its ID.", Description = "Get a summoner by its ID, and retrieve its information.")]
-        [SwaggerResponse(200, "Summoner is found.", typeof(PlayerDto))]
-        [SwaggerResponse(404, "Player not found.")]
-        [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetSummonerById(int id)
-        {
-            var playerInDb = await this.mediator.Send(new GetLeaguePlayerByIdQuery { PlayerId = id });
-
-            if (playerInDb is not null)
-            {
-                return this.Ok(playerInDb);
-            }
-            else
-            {
-                return this.NotFound();
-            }
-        }
-
-        /// <summary>
         /// Get all players in database.
         /// </summary>
         /// <param name="archived">If true, get archived players.</param>
@@ -124,22 +98,6 @@ namespace GameOn.Presentation.Controllers
         public async Task<IActionResult> GetAll(bool? archived)
         {
             return this.Ok(await this.mediator.Send(new GetAllPlayersQuery { Archived = archived ?? false }));
-        }
-
-        /// <summary>
-        /// Get all league of legends players in database.
-        /// </summary>
-        /// <param name="archived">If true, get archived players.</param>
-        /// <returns>200 OK with Player list.</returns>
-        [HttpGet]
-        [Route("lol")]
-        [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get all League of Legends players in database.")]
-        [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
-        [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetAllLeaguePlayers(bool? archived)
-        {
-            return this.Ok(await this.mediator.Send(new GetAllLeaguePlayersQuery { Archived = archived ?? false }));
         }
 
         /// <summary>
@@ -194,68 +152,6 @@ namespace GameOn.Presentation.Controllers
             update.KeycloakId = this.User.GetConnectedPlayer().KeycloakId;
 
             return this.Ok(await this.mediator.Send(new UpdateConnectedPlayerCommand { Player = update }));
-        }
-
-        /// <summary>
-        /// Update summoner of connected player.
-        /// </summary>
-        /// <returns>IActionResult object.</returns>
-        [HttpPatch]
-        [Authorize]
-        [Route("me/summoner")]
-        [Produces("application/json")]
-        [SwaggerOperation(Summary = "Update current user League of Legends summoner.")]
-        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
-        [SwaggerResponse(401, "Unauthorized.")]
-        [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> RefreshUserLoLSummoner()
-        {
-            var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
-
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
-            return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
-        }
-
-        /// <summary>
-        /// Update summoner of connected player.
-        /// </summary>
-        /// <param name="id">Player ID.</param>
-        /// <returns>IActionResult object.</returns>
-        [HttpPatch]
-        [Route("{id:int}/summoner")]
-        [Produces("application/json")]
-        [SwaggerOperation(Summary = "Update user League of Legends summoner.")]
-        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
-        [SwaggerResponse(401, "Unauthorized.")]
-        [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> RefreshUserLoLSummonerById(int id)
-        {
-            var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = id });
-
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
-            return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
-        }
-
-        /// <summary>
-        /// Get player rank history.
-        /// </summary>
-        /// <param name="id">Player ID.</param>
-        /// <param name="limit">Limit.</param>
-        /// <returns>IActionResult object.</returns>
-        [HttpGet]
-        [Route("{id:int}/summoner/rank")]
-        [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get user League of Legends history.")]
-        [SwaggerResponse(200, "List of rank history.", typeof(List<LeagueOfLegendsRankHistory>))]
-        [SwaggerResponse(401, "Unauthorized.")]
-        [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetRankHistory(int id, int? limit)
-        {
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
-            return this.Ok(await this.mediator.Send(new GetSummonerRankHistoryQuery { PlayerId = id, Limit = limit }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
         }
 
         /// <summary>
