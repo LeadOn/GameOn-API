@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "4.0.0"
+    "version": "4.1.0"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -558,6 +558,79 @@
           },
           "500": {
             "description": "Something wrong happened."
+          }
+        }
+      }
+    },
+    "/lol/Match/player/{playerId}": {
+      "get": {
+        "tags": ["Match"],
+        "summary": "Get last games played by summoner (directly from Riot API).",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Riot Games game IDs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found / no Riot Games PUUID found."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Match/{gameId}": {
+      "get": {
+        "tags": ["Match"],
+        "summary": "Get Match by ID.",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Match.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoLGame"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Match not found"
+          },
+          "500": {
+            "description": "Unknown error happened."
           }
         }
       }
@@ -1267,6 +1340,178 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SoccerFiveDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Summoner": {
+      "get": {
+        "tags": ["Summoner"],
+        "summary": "Get all League of Legends players in database.",
+        "parameters": [
+          {
+            "name": "archived",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Players in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Player"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Summoner/{id}": {
+      "get": {
+        "tags": ["Summoner"],
+        "summary": "Get a summoner by its ID.",
+        "description": "Get a summoner by its ID, and retrieve its information.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Summoner is found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Summoner"],
+        "summary": "Update user League of Legends summoner.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Summoner/{id}/rank": {
+      "get": {
+        "tags": ["Summoner"],
+        "summary": "Get summoner League of Legends history.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of rank history.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeagueOfLegendsRankHistory"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Summoner/me": {
+      "patch": {
+        "tags": ["Summoner"],
+        "summary": "Update current user League of Legends summoner.",
+        "responses": {
+          "200": {
+            "description": "Updated user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
                 }
               }
             }
@@ -2131,6 +2376,85 @@
         },
         "additionalProperties": false
       },
+      "LeagueOfLegendsRankHistory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "queueType": {
+            "type": "string",
+            "nullable": true
+          },
+          "tier": {
+            "type": "string",
+            "nullable": true
+          },
+          "rank": {
+            "type": "string",
+            "nullable": true
+          },
+          "leaguePoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wins": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "losses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hotStreak": {
+            "type": "boolean"
+          },
+          "veteran": {
+            "type": "boolean"
+          },
+          "freshBlood": {
+            "type": "boolean"
+          },
+          "inactive": {
+            "type": "boolean"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "player": {
+            "$ref": "#/components/schemas/Player"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGame": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "endOfGameResult": {
+            "type": "string",
+            "nullable": true
+          },
+          "gameVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Platform": {
         "type": "object",
         "properties": {
@@ -2241,6 +2565,32 @@
             "type": "string",
             "nullable": true
           },
+          "riotGamesNickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotGamesTagLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotGamesPUUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "lolSummonerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "lolSummonerLevel": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "lolRefreshedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "createdOn": {
             "type": "string",
             "format": "date-time"
@@ -2254,6 +2604,78 @@
               "$ref": "#/components/schemas/Tournament"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PlayerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "keycloakId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "nickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "profilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotGamesNickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotGamesTagLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotGamesPUUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "lolSummonerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "lolSummonerLevel": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "lolRefreshedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "tournamentsWon": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tournament"
+            },
+            "nullable": true
+          },
+          "leagueOfLegendsSoloRank": {
+            "$ref": "#/components/schemas/LeagueOfLegendsRankHistory"
+          },
+          "leagueOfLegendsFlexRank": {
+            "$ref": "#/components/schemas/LeagueOfLegendsRankHistory"
           }
         },
         "additionalProperties": false
@@ -2664,6 +3086,14 @@
             "nullable": true
           },
           "keycloakId": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotGamesNickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotGamesTagLine": {
             "type": "string",
             "nullable": true
           },

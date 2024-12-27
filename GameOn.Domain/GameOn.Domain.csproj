@@ -48,4 +48,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameOn.External\GameOn.External.csproj" />
+  </ItemGroup>
+
 </Project>

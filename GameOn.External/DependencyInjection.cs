@@ -20,9 +20,11 @@ namespace GameOn.External
         /// <returns>IServiceCollection.</returns>
         public static IServiceCollection AddExternal(this IServiceCollection services)
         {
+            services.AddScoped<HttpClient>();
             services.AddScoped<IAccountService, AccountV1Service>();
             services.AddScoped<ISummonerService, SummonerV4Service>();
             services.AddScoped<ILeagueService, LeagueV4Service>();
+            services.AddScoped<IMatchService, MatchV5Service>();
             return services;
         }
     }

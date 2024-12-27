@@ -4,15 +4,6 @@
 
 namespace GameOn.Presentation.Controllers
 {
-    using AutoMapper.Configuration.Annotations;
-    using GameOn.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed;
-    using GameOn.Application.FifaGamePlayed.Commands.DeleteFifaGamePlayed;
-    using GameOn.Application.FifaGamePlayed.Commands.UpdateFifaGamePlayed;
-    using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
-    using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedByTournamentId;
-    using GameOn.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed;
-    using GameOn.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayedByPlayerId;
-    using GameOn.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.SoccerFives.Commands.CreateSoccerFive;
     using GameOn.Application.SoccerFives.Commands.DeleteSoccerFive;
@@ -21,7 +12,6 @@ namespace GameOn.Presentation.Controllers
     using GameOn.Application.SoccerFives.Commands.VoteSoccerFive;
     using GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById;
     using GameOn.Application.TournamentPlayers.Queries.GetSoccerFives;
-    using GameOn.Application.Tournaments.Commands.CreateTournament;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;

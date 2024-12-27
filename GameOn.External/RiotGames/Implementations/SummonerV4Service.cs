@@ -4,49 +4,33 @@
 
 namespace GameOn.External.RiotGames.Implementations
 {
+    using GameOn.External.Common;
     using GameOn.External.RiotGames.Interfaces;
     using GameOn.External.RiotGames.Models.DTOs;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// SummonerV4Service class.
     /// </summary>
-    public class SummonerV4Service : ISummonerService
+    public class SummonerV4Service : HttpServiceBase, ISummonerService
     {
-        private HttpClient httpClient;
+        private readonly HttpClient client;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SummonerV4Service"/> class.
         /// </summary>
-        public SummonerV4Service()
+        /// <param name="client">HTTP Client.</param>
+        public SummonerV4Service(HttpClient client)
         {
-            this.httpClient = new HttpClient();
+            this.client = client;
         }
 
         /// <inheritdoc/>
-        public async Task<SummonerDto> GetSummonerByPuuid(string puuid)
+        public async Task<SummonerDto> GetSummonerByPuuid(string puuid, CancellationToken cancellationToken)
         {
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/summoner/v4/summoners/by-puuid/{puuid}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-                var response = await this.httpClient.SendAsync(request);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseBody = await response.Content.ReadAsStringAsync();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/summoner/v4/summoners/by-puuid/{puuid}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
 #pragma warning disable CS8603 // Existence possible d'un retour de référence null.
-                    return JsonConvert.DeserializeObject<SummonerDto>(responseBody);
+            return await RunRequest<SummonerDto>(this.client, request, cancellationToken);
 #pragma warning restore CS8603 // Existence possible d'un retour de référence null.
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

@@ -16,7 +16,8 @@ namespace GameOn.External.RiotGames.Interfaces
         /// </summary>
         /// <param name="tagLine">Tag line (example: EUW).</param>
         /// <param name="nickname">Nickname.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
         /// <returns><see cref="AccountDto"/>.</returns>
-        Task<AccountDto> GetAccountPuuid(string tagLine, string nickname);
+        Task<AccountDto> GetAccountPuuid(string tagLine, string nickname, CancellationToken cancellationToken);
     }
 }
