@@ -22,7 +22,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     /// Summoner Controller.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("lol/[controller]")]
     public class SummonerController : ControllerBase
     {
         private readonly ISender mediator;
