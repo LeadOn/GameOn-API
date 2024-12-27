@@ -123,5 +123,11 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual List<LeagueOfLegendsRankHistory> LeagueOfLegendsRankHistory { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets League of Legends Game Participants.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
     }
 }

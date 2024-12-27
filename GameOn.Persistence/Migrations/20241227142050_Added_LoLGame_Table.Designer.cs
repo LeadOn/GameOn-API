@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20241227142050_Added_LoLGame_Table")]
+    partial class Added_LoLGame_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PublicationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 16, 19, 30, 593, DateTimeKind.Local).AddTicks(6578))
+                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 20, 50, 86, DateTimeKind.Local).AddTicks(234))
                         .HasColumnName("publication_date");
 
                     b.Property<string>("RemovedFeatures")
@@ -107,7 +110,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 16, 19, 30, 588, DateTimeKind.Local).AddTicks(9069))
+                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 20, 50, 82, DateTimeKind.Local).AddTicks(1328))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -273,7 +276,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 16, 19, 30, 593, DateTimeKind.Local).AddTicks(7963))
+                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 20, 50, 86, DateTimeKind.Local).AddTicks(1157))
                         .HasColumnName("created_on");
 
                     b.Property<bool>("FreshBlood")
@@ -335,12 +338,12 @@ namespace GameOn.Persistence.Migrations
 
             modelBuilder.Entity("GameOn.Domain.LoLGame", b =>
                 {
-                    b.Property<long>("GameId")
+                    b.Property<int>("GameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasColumnName("game_id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("GameId"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("GameId"));
 
                     b.Property<string>("EndOfGameResult")
                         .IsRequired()
@@ -362,68 +365,6 @@ namespace GameOn.Persistence.Migrations
                     b.HasKey("GameId");
 
                     b.ToTable("LeagueOfLegendsGame", (string)null);
-                });
-
-            modelBuilder.Entity("GameOn.Domain.LoLGameParticipant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AllInPings")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AssistMePings")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Assists")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BaronKills")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BountyLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChampExperience")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChampLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChampionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ChampionName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ChampionTransform")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommandPings")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConsumablesPurchased")
-                        .HasColumnType("int");
-
-                    b.Property<long>("GameId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int")
-                        .HasColumnName("player_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("LeagueOfLegendsGameParticipant", (string)null);
                 });
 
             modelBuilder.Entity("GameOn.Domain.Platform", b =>
@@ -464,7 +405,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(266))
+                        .HasDefaultValue(new DateTime(2024, 12, 27, 14, 20, 50, 80, DateTimeKind.Utc).AddTicks(7839))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -694,13 +635,13 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(1944))
+                        .HasDefaultValue(new DateTime(2024, 12, 27, 14, 20, 50, 80, DateTimeKind.Utc).AddTicks(9241))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 28, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(2163))
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 14, 20, 50, 80, DateTimeKind.Utc).AddTicks(9425))
                         .HasColumnName("planned_to");
 
                     b.Property<string>("Rules")
@@ -747,7 +688,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(4721))
+                        .HasDefaultValue(new DateTime(2024, 12, 27, 14, 20, 50, 81, DateTimeKind.Utc).AddTicks(1902))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")
@@ -883,27 +824,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("GameOn.Domain.LoLGameParticipant", b =>
-                {
-                    b.HasOne("GameOn.Domain.LoLGame", "Game")
-                        .WithMany("LeagueOfLegendsGameParticipants")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_LoL_Game_Participants");
-
-                    b.HasOne("GameOn.Domain.Player", "Player")
-                        .WithMany("LeagueOfLegendsGameParticipants")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Player_LoL_Game_Participant");
-
-                    b.Navigation("Game");
-
-                    b.Navigation("Player");
-                });
-
             modelBuilder.Entity("GameOn.Domain.SoccerFive", b =>
                 {
                     b.HasOne("GameOn.Domain.Player", "CreatedBy")
@@ -1006,11 +926,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("TournamentPlayers");
                 });
 
-            modelBuilder.Entity("GameOn.Domain.LoLGame", b =>
-                {
-                    b.Navigation("LeagueOfLegendsGameParticipants");
-                });
-
             modelBuilder.Entity("GameOn.Domain.Platform", b =>
                 {
                     b.Navigation("GamesPlayed");
@@ -1023,8 +938,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("FifaTeamPlayers");
 
                     b.Navigation("Highlights");
-
-                    b.Navigation("LeagueOfLegendsGameParticipants");
 
                     b.Navigation("LeagueOfLegendsRankHistory");
 

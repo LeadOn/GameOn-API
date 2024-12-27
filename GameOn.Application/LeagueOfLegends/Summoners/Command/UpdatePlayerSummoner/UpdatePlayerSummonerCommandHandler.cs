@@ -5,6 +5,7 @@
 namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner
 {
     using GameOn.Application.Common.Interfaces;
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
     using MediatR;
@@ -18,6 +19,8 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
         private readonly IApplicationDbContext context;
         private readonly ISummonerService summonerService;
         private readonly ILeagueService leagueService;
+        private readonly IMatchService matchService;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdatePlayerSummonerCommandHandler"/> class.
@@ -25,11 +28,20 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
         /// <param name="context">DbContext, injected.</param>
         /// <param name="summonerService">League of Legends Summoner Service, injected.</param>
         /// <param name="leagueService">League of Legends League Service, injected.</param>
-        public UpdatePlayerSummonerCommandHandler(IApplicationDbContext context, ISummonerService summonerService, ILeagueService leagueService)
+        /// <param name="matchService">Match Service, injected.</param>
+        /// <param name="mediator">Mediator interface, injected.</param>
+        public UpdatePlayerSummonerCommandHandler(
+            IApplicationDbContext context,
+            ISummonerService summonerService,
+            ILeagueService leagueService,
+            IMatchService matchService,
+            ISender mediator)
         {
             this.context = context;
             this.summonerService = summonerService;
             this.leagueService = leagueService;
+            this.matchService = matchService;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -78,6 +90,15 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
 
                         this.context.LeagueOfLegendsRankHistory.Add(playRank);
                     }
+                }
+
+                // Now that we have rank history, let's get thoses last games
+                var gamesFromRiot = await this.matchService.GetLastGamesPlayed(playerInDb.RiotGamesPUUID, cancellationToken);
+
+                if (gamesFromRiot is not null && gamesFromRiot.Count() > 0)
+                {
+                    // For each games found, importing them
+                    await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = gamesFromRiot.ToList() });
                 }
             }
 
