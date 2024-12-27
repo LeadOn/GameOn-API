@@ -89,6 +89,11 @@ namespace GameOn.Application.Common.Interfaces
         DbSet<LoLGame> LeagueOfLegendsGames { get; set; }
 
         /// <summary>
+        /// Gets or sets League of Legends game participants.
+        /// </summary>
+        DbSet<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>

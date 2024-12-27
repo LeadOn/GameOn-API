@@ -4,6 +4,8 @@
 
 namespace GameOn.Domain
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
     /// LoLGame class.
     /// </summary>
@@ -28,5 +30,11 @@ namespace GameOn.Domain
         /// Gets or sets game version.
         /// </summary>
         public string GameVersion { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets League of Legends Game Participants.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
     }
 }

@@ -37,21 +37,43 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
                 // Only executing if match isn't already in database
                 var matchInDb = await this.context.LeagueOfLegendsGames.FirstOrDefaultAsync(x => x.MatchId == matchId);
 
+                // Getting game from Riot Games API
+                var gameFromRiot = await this.matchService.GetGameById(matchId, cancellationToken);
+
                 if (matchInDb is null)
                 {
-                    // Getting game from Riot Games API
-                    var gameFromRiot = await this.matchService.GetGameById(matchId, cancellationToken);
-
-                    // Inserting game in database
+                    // Creating game in database
                     matchInDb = new LoLGame
                     {
                         GameId = gameFromRiot.Info.GameId,
                         MatchId = matchId,
                         EndOfGameResult = gameFromRiot.Info.EndOfGameResult,
                         GameVersion = gameFromRiot.Info.GameVersion,
+                        LeagueOfLegendsGameParticipants = new List<LoLGameParticipant>(),
                     };
 
+                    // Creating game participants
+                    foreach (var participant in gameFromRiot.Metadata.Participants)
+                    {
+                        // Finding player in database
+                        var playerInDb = await this.context.Players.FirstOrDefaultAsync(x => x.RiotGamesPUUID == participant);
+
+                        if (playerInDb is not null)
+                        {
+                            var participantInDb = new LoLGameParticipant
+                            {
+                                PlayerId = playerInDb.Id,
+                            };
+
+                            matchInDb.LeagueOfLegendsGameParticipants.Add(participantInDb);
+                        }
+                    }
+
                     this.context.LeagueOfLegendsGames.Add(matchInDb);
+                }
+                else
+                {
+                    // TODO
                 }
             }
 
