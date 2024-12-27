@@ -39,8 +39,8 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [HttpGet]
         [Route("player/{playerId:int}")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get last games played by summoner (directly from Riot API).")]
-        [SwaggerResponse(200, "Riot Games game IDs.", typeof(List<string>))]
+        [SwaggerOperation(Summary = "Get last games played by summoner.")]
+        [SwaggerResponse(200, "Games played.", typeof(List<LoLGame>))]
         [SwaggerResponse(404, "Player not found / no Riot Games PUUID found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetLastGamesForUser(int playerId)

@@ -37,11 +37,11 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
                 // Only executing if match isn't already in database
                 var matchInDb = await this.context.LeagueOfLegendsGames.FirstOrDefaultAsync(x => x.MatchId == matchId);
 
-                // Getting game from Riot Games API
-                var gameFromRiot = await this.matchService.GetGameById(matchId, cancellationToken);
-
                 if (matchInDb is null)
                 {
+                    // Getting game from Riot Games API
+                    var gameFromRiot = await this.matchService.GetGameById(matchId, cancellationToken);
+
                     // Creating game in database
                     matchInDb = new LoLGame
                     {
