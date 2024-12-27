@@ -5,6 +5,7 @@
 namespace GameOn.External.RiotGames.Interfaces
 {
     using System.Threading;
+    using GameOn.External.RiotGames.Models.DTOs;
 
     /// <summary>
     /// IMatchService interface.
@@ -18,5 +19,13 @@ namespace GameOn.External.RiotGames.Interfaces
         /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
         /// <returns>List of game IDs.</returns>
         Task<IEnumerable<string>> GetLastGamesPlayed(string puuid, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets game by it's Riot Games ID.
+        /// </summary>
+        /// <param name="matchId">ID of the game.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+        /// <returns><see cref="MatchDto"/>Match DTO.</returns>
+        Task<MatchDto> GetGameById(string matchId, CancellationToken cancellationToken);
     }
 }

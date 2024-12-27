@@ -1265,6 +1265,57 @@
 						}
 					],
 					"description": "Related to summoner's profile."
+				},
+				{
+					"name": "Matches",
+					"item": [
+						{
+							"name": "Get last games played (from Riot)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/lol/match/player/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"lol",
+										"match",
+										"player",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get game from Riot",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/lol/match/7238846436",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"lol",
+										"match",
+										"7238846436"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "All matches played by Summoner."
 				}
 			]
 		}

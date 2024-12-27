@@ -5,7 +5,7 @@
 namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 {
     using GameOn.Application.Common.Interfaces;
-    using GameOn.Domain;
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
     using GameOn.External.RiotGames.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
@@ -17,16 +17,19 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
     {
         private readonly IApplicationDbContext context;
         private readonly IMatchService matchService;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetLastGamesPlayedQueryHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
         /// <param name="matchService">IMatchService, injected.</param>
-        public GetLastGamesPlayedQueryHandler(IApplicationDbContext context, IMatchService matchService)
+        /// <param name="mediator">Mediator, injected.</param>
+        public GetLastGamesPlayedQueryHandler(IApplicationDbContext context, IMatchService matchService, ISender mediator)
         {
             this.context = context;
             this.matchService = matchService;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -43,6 +46,9 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
             {
                 // Getting IDs from Riot Games API
                 var matchesFromRiot = await this.matchService.GetLastGamesPlayed(playerInDb.RiotGamesPUUID ?? throw new NotImplementedException(), cancellationToken);
+
+                // Updating those games in database
+                await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = matchesFromRiot.ToList() });
 
                 return matchesFromRiot;
             }

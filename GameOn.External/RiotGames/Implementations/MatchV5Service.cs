@@ -4,11 +4,13 @@
 
 namespace GameOn.External.RiotGames.Implementations
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using GameOn.External.Common;
     using GameOn.External.RiotGames.Interfaces;
+    using GameOn.External.RiotGames.Models.DTOs;
 
     /// <summary>
     /// MatchV5Service class.
@@ -32,6 +34,15 @@ namespace GameOn.External.RiotGames.Implementations
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/lol/match/v5/matches/by-puuid/{puuid}/ids?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
 #pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return await RunRequest<IEnumerable<string>>(this.client, request, cancellationToken);
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+        }
+
+        /// <inheritdoc />
+        public async Task<MatchDto> GetGameById(string matchId, CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/lol/match/v5/matches/{matchId}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+            return await RunRequest<MatchDto>(this.client, request, cancellationToken);
 #pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
     }
