@@ -10,7 +10,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
     /// <summary>
     /// GetLastGamesPlayedQuery class.
     /// </summary>
-    public class GetLastGamesPlayedQuery : IRequest<IEnumerable<string>?>
+    public class GetLastGamesPlayedQuery : IRequest<IEnumerable<LoLGame>>
     {
         /// <summary>
         /// Gets or sets player Id.

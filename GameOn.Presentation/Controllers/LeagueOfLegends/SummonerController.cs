@@ -8,13 +8,8 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
-    using GameOn.Application.Players.Commands.UpdateConnectedPlayer;
-    using GameOn.Application.Players.Commands.UpdatePlayer;
-    using GameOn.Application.Players.Queries.GetAllPlayers;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Players.Queries.GetPlayerById;
-    using GameOn.Application.Players.Queries.GetPlayerStats;
-    using GameOn.Application.Stats.Queries.GetGlobalStats;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
@@ -27,7 +22,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     /// Summoner Controller.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("lol/[controller]")]
     public class SummonerController : ControllerBase
     {
         private readonly ISender mediator;
@@ -104,7 +99,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         }
 
         /// <summary>
-        /// Update summoner of connected player.
+        /// Refresh summoner by ID.
         /// </summary>
         /// <param name="id">Player ID.</param>
         /// <returns>IActionResult object.</returns>

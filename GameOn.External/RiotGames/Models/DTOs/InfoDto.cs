@@ -94,5 +94,11 @@ namespace GameOn.External.RiotGames.Models.DTOs
         /// </summary>
         [JsonProperty("tournamentCode")]
         public string TournamentCode { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets teams.
+        /// </summary>
+        [JsonProperty("teams")]
+        public List<TeamDto> Teams { get; set; } = new List<TeamDto>();
     }
 }

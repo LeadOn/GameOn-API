@@ -562,6 +562,79 @@
         }
       }
     },
+    "/lol/Match/player/{playerId}": {
+      "get": {
+        "tags": ["Match"],
+        "summary": "Get last games played by summoner (directly from Riot API).",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Riot Games game IDs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found / no Riot Games PUUID found."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Match/{gameId}": {
+      "get": {
+        "tags": ["Match"],
+        "summary": "Get Match by ID.",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Match.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoLGame"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Match not found"
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/Platform": {
       "get": {
         "tags": ["Platform"],
@@ -1280,7 +1353,7 @@
         }
       }
     },
-    "/Summoner": {
+    "/lol/Summoner": {
       "get": {
         "tags": ["Summoner"],
         "summary": "Get all League of Legends players in database.",
@@ -1313,7 +1386,7 @@
         }
       }
     },
-    "/Summoner/{id}": {
+    "/lol/Summoner/{id}": {
       "get": {
         "tags": ["Summoner"],
         "summary": "Get a summoner by its ID.",
@@ -1382,7 +1455,7 @@
         }
       }
     },
-    "/Summoner/{id}/rank": {
+    "/lol/Summoner/{id}/rank": {
       "get": {
         "tags": ["Summoner"],
         "summary": "Get summoner League of Legends history.",
@@ -1428,7 +1501,7 @@
         }
       }
     },
-    "/Summoner/me": {
+    "/lol/Summoner/me": {
       "patch": {
         "tags": ["Summoner"],
         "summary": "Update current user League of Legends summoner.",
@@ -2356,6 +2429,28 @@
           },
           "player": {
             "$ref": "#/components/schemas/Player"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGame": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "endOfGameResult": {
+            "type": "string",
+            "nullable": true
+          },
+          "gameVersion": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
