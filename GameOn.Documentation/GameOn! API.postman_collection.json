@@ -1,380 +1,14 @@
 {
 	"info": {
 		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
-		"name": "GameOn! 4.0.0",
+		"name": "GameOn! 4.1.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
 	},
 	"item": [
 		{
-			"name": "Season",
-			"item": [
-				{
-					"name": "Get current season",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/season/current",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"season",
-								"current"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get all",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/season",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"season"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Player",
-			"item": [
-				{
-					"name": "Get connected player",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/player/me",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"player",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get by ID",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/player/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"player",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get all",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/player",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"player"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get stats by player",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/player/1/stats",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"player",
-								"1",
-								"stats"
-							],
-							"query": [
-								{
-									"key": "seasonId",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"FullName\": \"Test update\",\r\n    \"Nickname\": \"The Nickname\",\r\n    \"ProfilePictureUrl\": \"https://kultt.fr/wp-content/uploads/2022/09/RickAstley-ad2022.jpg\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/player/me",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"player",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update (Admin only)",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"id\": 19,\r\n  \"keycloakId\": \"8c85f712-db75-4529-80a3-97311dacd535\",\r\n  \"fullName\": \"Pierre Henri Bachelain\",\r\n  \"nickname\": \"PH\",\r\n  \"profilePictureUrl\": \"https://static.wikia.nocookie.net/xbox/images/0/05/1_-_1XzYnhZ.png/revision/latest/scale-to-width-down/1000?cb=20210628044343\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/player",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"player"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Platform",
-			"item": [
-				{
-					"name": "Get all",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/platform",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"platform"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get by ID",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/platform/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"platform",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"ezefezfezf\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/platform",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"platform"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 4,\n    \"name\": \"Oui\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/platform",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"platform"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Highlight",
-			"item": [
-				{
-					"name": "Create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Test create with desc and URL\",\r\n    \"fifaGameId\": 248,\r\n    \"description\": \"this is a desc\",\r\n    \"externalUrl\": \"https://www.google.fr\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/highlight",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"highlight"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get all",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/highlight",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"highlight"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "FifaTeam",
-			"item": [
-				{
-					"name": "Get all",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifateam",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifateam"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Admin",
+			"name": "Administration",
 			"item": [
 				{
 					"name": "Get dashboard stats",
@@ -394,716 +28,1240 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Specific routes only used by Admins."
 		},
 		{
-			"name": "Tournament",
+			"name": "Common",
 			"item": [
 				{
-					"name": "Get All",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get featured",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/featured",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"featured"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get by ID",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/7",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Check subscription",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/4/subscription",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"4",
-								"subscription"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Test tournament\",\n  \"description\": \"desc\",\n  \"state\": 0,\n  \"logoUrl\": \"https://media.licdn.com/dms/image/C4E0BAQFpaA1IhSqABA/company-logo_200_200/0/1614341145793?e=2147483647&v=beta&t=QCMXDnCeTeRTRitEmTHFLsBr4DMlQjFGUtKVzPjLhf4\",\n  \"plannedFrom\": \"2023-09-14T10:18:20.445Z\",\n  \"plannedTo\": \"2023-09-15T10:18:20.445Z\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/tournament",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Subscribe",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/4/subscription?fifaTeamId=1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"4",
-								"subscription"
-							],
-							"query": [
-								{
-									"key": "fifaTeamId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update subscription",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/6/subscription?fifaTeamId=1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"6",
-								"subscription"
-							],
-							"query": [
-								{
-									"key": "fifaTeamId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Test tournament2\",\n  \"description\": null,\n  \"state\": 0,\n  \"logoUrl\": \"https://media.licdn.com/dms/image/C4E0BAQFpaA1IhSqABA/company-logo_200_200/0/1614341145793?e=2147483647&v=beta&t=QCMXDnCeTeRTRitEmTHFLsBr4DMlQjFGUtKVzPjLhf4\",\n  \"plannedFrom\": \"2023-09-14T10:18:20.445Z\",\n  \"plannedTo\": \"2023-09-15T10:18:20.445Z\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/tournament/7",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/7",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Tournament User",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/7/player/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"7",
-								"player",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Go to Phase 1",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/4/phase1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"4",
-								"phase1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Save phase 1 score",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/tournament/6/phase1/score",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"tournament",
-								"6",
-								"phase1",
-								"score"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "FifaGamePlayed",
-			"item": [
-				{
-					"name": "Get tournament games",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifagame/tournament/6?isPlayed=true",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame",
-								"tournament",
-								"6"
-							],
-							"query": [
-								{
-									"key": "isPlayed",
-									"value": "true"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get by ID",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifagame/248",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame",
-								"248"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get last X played",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifagame/last/5",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame",
-								"last",
-								"5"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get user planned games",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifagame/planned/7",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame",
-								"planned",
-								"7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get last X played by player",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifagame/last/5/player/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame",
-								"last",
-								"5",
-								"player",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search games",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifagame?limit=10&platformId=1&startDate=2023-06-01T00:00:00&endDate=2023-08-31T00:00:00",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "10"
+					"name": "Changelog",
+					"item": [
+						{
+							"name": "Create changelog",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Id\": 0,\r\n    \"PublicationDate\": \"2024-11-01T00:00:00\",\r\n    \"Type\": 0,\r\n    \"Version\": \"1.0.0\",\r\n    \"Context\": \"oui\",\r\n    \"NewFeatures\": [\r\n        \"feat1\",\r\n        \"feat2\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
-								{
-									"key": "platformId",
-									"value": "1"
-								},
-								{
-									"key": "startDate",
-									"value": "2023-06-01T00:00:00"
-								},
-								{
-									"key": "endDate",
-									"value": "2023-08-31T00:00:00"
+								"url": {
+									"raw": "{{baseUrl}}/changelog",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"changelog"
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"CreatedOn\": \"2023-08-06T14:29:42\",\r\n    \"KeycloakId\": \"zfzef\",\r\n    \"PlatformId\": 1,\r\n    \"Team1\": [\r\n        \"1\", \"2\"\r\n    ],\r\n    \"TeamCode1\": \"FRA\",\r\n    \"TeamScore1\": 42,\r\n    \"Team2\": [\r\n        \"3\", \"4\"\r\n    ],\r\n    \"TeamCode2\": \"POR\",\r\n    \"TeamScore2\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/fifagame",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/fifagame/458",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame",
-								"458"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"Id\": 89,\r\n    \"PlatformId\": 2,\r\n    \"TeamCode1\": \"FCB\",\r\n    \"FifaTeam1\": 21,\r\n    \"TeamScore1\": 2,\r\n    \"TeamCode2\": \"MCI\",\r\n    \"FifaTeam2\": 10,\r\n    \"TeamScore2\": 1,\r\n    \"IsPlayed\": false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/changelog",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"changelog"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/fifagame",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"fifagame"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"description": "Lists all release changelog stored in database."
+				},
+				{
+					"name": "Platform",
+					"item": [
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/platform",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"platform"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/platform/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"platform",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ezefezfezf\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/platform",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"platform"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 4,\n    \"name\": \"Oui\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/platform",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"platform"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Player",
+					"item": [
+						{
+							"name": "Get connected player",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/player/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/player/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/player",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get stats by player",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/player/1/stats",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"1",
+										"stats"
+									],
+									"query": [
+										{
+											"key": "seasonId",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get global stats",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/player/global/stats",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"global",
+										"stats"
+									],
+									"query": [
+										{
+											"key": "seasonId",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"FullName\": \"Test update\",\r\n    \"Nickname\": \"The Nickname\",\r\n    \"ProfilePictureUrl\": \"https://kultt.fr/wp-content/uploads/2022/09/RickAstley-ad2022.jpg\",\r\n    \"RiotGamesNickname\": \"LeadOn\",\r\n    \"RiotGamesTagLine\": \"EUW\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/player/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update (Admin only)",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 19,\r\n  \"keycloakId\": \"8c85f712-db75-4529-80a3-97311dacd535\",\r\n  \"fullName\": \"Pierre Henri Bachelain\",\r\n  \"nickname\": \"PH\",\r\n  \"profilePictureUrl\": \"https://static.wikia.nocookie.net/xbox/images/0/05/1_-_1XzYnhZ.png/revision/latest/scale-to-width-down/1000?cb=20210628044343\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/player",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Season",
+					"item": [
+						{
+							"name": "Get current season",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/season/current",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"season",
+										"current"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/season",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"season"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
-			]
+			],
+			"description": "Contains every part of the API that is cross-games."
 		},
 		{
-			"name": "SoccerFive",
+			"name": "Soccer / FIFA",
 			"item": [
 				{
-					"name": "Get all",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/soccerfive",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"soccerfive"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get by ID",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/soccerfive/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"soccerfive",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"PlannedOn\": null,\r\n    \"Name\": \"Test name\",\r\n    \"Description\": \"oui\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "FifaGamePlayed",
+					"item": [
+						{
+							"name": "Get tournament games",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifagame/tournament/6?isPlayed=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame",
+										"tournament",
+										"6"
+									],
+									"query": [
+										{
+											"key": "isPlayed",
+											"value": "true"
+										}
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/soccerfive",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"soccerfive"
-							]
+						{
+							"name": "Get by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifagame/248",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame",
+										"248"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get last X played",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifagame/last/5",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame",
+										"last",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user planned games",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifagame/planned/7",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame",
+										"planned",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get last X played by player",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifagame/last/5/player/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame",
+										"last",
+										"5",
+										"player",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search games",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifagame?limit=10&platformId=1&startDate=2023-06-01T00:00:00&endDate=2023-08-31T00:00:00",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "platformId",
+											"value": "1"
+										},
+										{
+											"key": "startDate",
+											"value": "2023-06-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2023-08-31T00:00:00"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"CreatedOn\": \"2023-08-06T14:29:42\",\r\n    \"KeycloakId\": \"zfzef\",\r\n    \"PlatformId\": 1,\r\n    \"Team1\": [\r\n        \"1\", \"2\"\r\n    ],\r\n    \"TeamCode1\": \"FRA\",\r\n    \"TeamScore1\": 42,\r\n    \"Team2\": [\r\n        \"3\", \"4\"\r\n    ],\r\n    \"TeamCode2\": \"POR\",\r\n    \"TeamScore2\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fifagame",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifagame/460",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame",
+										"460"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Id\": 89,\r\n    \"PlatformId\": 2,\r\n    \"TeamCode1\": \"FCB\",\r\n    \"FifaTeam1\": 21,\r\n    \"TeamScore1\": 2,\r\n    \"TeamCode2\": \"MCI\",\r\n    \"FifaTeam2\": 10,\r\n    \"TeamScore2\": 1,\r\n    \"IsPlayed\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fifagame",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifagame"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Update game",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"Id\": 1,\r\n    \"PlannedOn\": \"2024-08-15T12:30:00\",\r\n    \"Name\": \"Five septembre #1\",\r\n    \"Description\": \"oui\",\r\n    \"State\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "FifaTeam",
+					"item": [
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifateam",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifateam"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/soccerfive",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"soccerfive"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Update survey",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"VoteQuestion\": \"New question?\",\r\n    \"VotesChoices\": [\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 1\",\r\n            \"Order\": 1\r\n        },\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 2\",\r\n            \"Order\": 2\r\n        },\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 3\",\r\n            \"Order\": 3\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Highlight",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test create with desc and URL\",\r\n    \"fifaGameId\": 248,\r\n    \"description\": \"this is a desc\",\r\n    \"externalUrl\": \"https://www.google.fr\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/highlight",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"highlight"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/soccerfive/1/survey",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"soccerfive",
-								"1",
-								"survey"
-							]
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/highlight",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"highlight"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Vote five",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"ChoiceIds\": [18, 20]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "SoccerFive",
+					"item": [
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/soccerfive",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"soccerfive"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/soccerfive/1/survey/vote",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"soccerfive",
-								"1",
-								"survey",
-								"vote"
-							]
+						{
+							"name": "Get by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/soccerfive/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"soccerfive",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"PlannedOn\": null,\r\n    \"Name\": \"Test name\",\r\n    \"Description\": \"oui\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/soccerfive",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"soccerfive"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update game",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Id\": 1,\r\n    \"PlannedOn\": \"2024-08-15T12:30:00\",\r\n    \"Name\": \"Five septembre #1\",\r\n    \"Description\": \"oui\",\r\n    \"State\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/soccerfive",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"soccerfive"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update survey",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"VoteQuestion\": \"New question?\",\r\n    \"VotesChoices\": [\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 1\",\r\n            \"Order\": 1\r\n        },\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 2\",\r\n            \"Order\": 2\r\n        },\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 3\",\r\n            \"Order\": 3\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/soccerfive/1/survey",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"soccerfive",
+										"1",
+										"survey"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Vote five",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"ChoiceIds\": [18, 20]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/soccerfive/1/survey/vote",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"soccerfive",
+										"1",
+										"survey",
+										"vote"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "Tournament",
+					"item": [
+						{
+							"name": "Get All",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get featured",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/featured",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"featured"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/7",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check subscription",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/4/subscription",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"4",
+										"subscription"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Test tournament\",\n  \"description\": \"desc\",\n  \"state\": 0,\n  \"logoUrl\": \"https://media.licdn.com/dms/image/C4E0BAQFpaA1IhSqABA/company-logo_200_200/0/1614341145793?e=2147483647&v=beta&t=QCMXDnCeTeRTRitEmTHFLsBr4DMlQjFGUtKVzPjLhf4\",\n  \"plannedFrom\": \"2023-09-14T10:18:20.445Z\",\n  \"plannedTo\": \"2023-09-15T10:18:20.445Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tournament",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Subscribe",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/4/subscription?fifaTeamId=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"4",
+										"subscription"
+									],
+									"query": [
+										{
+											"key": "fifaTeamId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update subscription",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/6/subscription?fifaTeamId=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"6",
+										"subscription"
+									],
+									"query": [
+										{
+											"key": "fifaTeamId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Test tournament2\",\n  \"description\": null,\n  \"state\": 0,\n  \"logoUrl\": \"https://media.licdn.com/dms/image/C4E0BAQFpaA1IhSqABA/company-logo_200_200/0/1614341145793?e=2147483647&v=beta&t=QCMXDnCeTeRTRitEmTHFLsBr4DMlQjFGUtKVzPjLhf4\",\n  \"plannedFrom\": \"2023-09-14T10:18:20.445Z\",\n  \"plannedTo\": \"2023-09-15T10:18:20.445Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tournament/7",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/7",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Tournament User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/7/player/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"7",
+										"player",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Go to Phase 1",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/4/phase1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"4",
+										"phase1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Save phase 1 score",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/tournament/6/phase1/score",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tournament",
+										"6",
+										"phase1",
+										"score"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
-			]
+			],
+			"description": "All routes related to soccer / FIFA."
 		},
 		{
-			"name": "Changelog",
+			"name": "League of Legends",
 			"item": [
 				{
-					"name": "Create changelog",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"Id\": 0,\r\n    \"PublicationDate\": \"2024-11-01T00:00:00\",\r\n    \"Type\": 0,\r\n    \"Version\": \"1.0.0\",\r\n    \"Context\": \"oui\",\r\n    \"NewFeatures\": [\r\n        \"feat1\",\r\n        \"feat2\"\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Summoner",
+					"item": [
+						{
+							"name": "Get by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/summoner/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"summoner",
+										"1"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/changelog",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"changelog"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get all",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"ChoiceIds\": [18, 20]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Get player rank history",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/summoner/1/rank",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"summoner",
+										"1",
+										"rank"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/changelog",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"changelog"
-							]
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/summoner",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"summoner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update summoner",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"FullName\": \"Test update\",\r\n    \"Nickname\": \"The Nickname\",\r\n    \"ProfilePictureUrl\": \"https://kultt.fr/wp-content/uploads/2022/09/RickAstley-ad2022.jpg\",\r\n    \"RiotGamesNickname\": \"LeadOn\",\r\n    \"RiotGamesTagLine\": \"EUW\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/player/me/summoner",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"me",
+										"summoner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh summoner",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/player/1/summoner",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"1",
+										"summoner"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"description": "Related to summoner's profile."
 				}
 			]
 		}
@@ -1146,6 +1304,11 @@
 		},
 		{
 			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "riotGamesApiKey",
 			"value": "",
 			"type": "string"
 		}

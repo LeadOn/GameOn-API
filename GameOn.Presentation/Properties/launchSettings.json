@@ -13,7 +13,7 @@
         "DEFAULT_PLATFORM": "2",
         "RIOT_GAMES_ACCOUNT_API_ROUTE": "europe.api.riotgames.com",
         "RIOT_GAMES_SUMMONER_API_ROUTE": "euw1.api.riotgames.com",
-        "RIOT_GAMES_API_KEY": "RGAPI-212213b2-d821-4f8b-83d7-8c548ae3eb89"
+        "RIOT_GAMES_API_KEY": "RGAPI-a415ebef-3890-4f11-b8db-a0181d79717b"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"
