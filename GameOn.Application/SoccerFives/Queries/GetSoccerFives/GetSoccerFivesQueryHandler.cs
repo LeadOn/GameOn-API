@@ -4,8 +4,7 @@
 
 namespace GameOn.Application.TournamentPlayers.Queries.GetSoccerFives
 {
-    using GameOn.Application.Common.Interfaces;
-    using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

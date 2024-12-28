@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
     using MediatR;
@@ -16,17 +16,14 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
     public class ImportLoLGamesCommandHandler : IRequestHandler<ImportLoLGamesCommand, bool>
     {
         private readonly IApplicationDbContext context;
-        private readonly IMatchService matchService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImportLoLGamesCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
-        /// <param name="matchService">Match service, injected.</param>
-        public ImportLoLGamesCommandHandler(IApplicationDbContext context, IMatchService matchService)
+        public ImportLoLGamesCommandHandler(IApplicationDbContext context)
         {
             this.context = context;
-            this.matchService = matchService;
         }
 
         /// <inheritdoc />
@@ -39,41 +36,20 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
 
                 if (matchInDb is null)
                 {
-                    // Getting game from Riot Games API
-                    var gameFromRiot = await this.matchService.GetGameById(matchId, cancellationToken);
-
                     // Creating game in database
                     matchInDb = new LoLGame
                     {
-                        GameId = gameFromRiot.Info.GameId,
                         MatchId = matchId,
-                        EndOfGameResult = gameFromRiot.Info.EndOfGameResult,
-                        GameVersion = gameFromRiot.Info.GameVersion,
-                        LeagueOfLegendsGameParticipants = new List<LoLGameParticipant>(),
+                        LeagueOfLegendsGameParticipants = new List<LoLGameParticipant>
+                        {
+                            new LoLGameParticipant
+                            {
+                                PlayerId = request.Player.Id,
+                            },
+                        },
                     };
 
-                    // Creating game participants
-                    foreach (var participant in gameFromRiot.Metadata.Participants)
-                    {
-                        // Finding player in database
-                        var playerInDb = await this.context.Players.FirstOrDefaultAsync(x => x.RiotGamesPUUID == participant);
-
-                        if (playerInDb is not null)
-                        {
-                            var participantInDb = new LoLGameParticipant
-                            {
-                                PlayerId = playerInDb.Id,
-                            };
-
-                            matchInDb.LeagueOfLegendsGameParticipants.Add(participantInDb);
-                        }
-                    }
-
                     this.context.LeagueOfLegendsGames.Add(matchInDb);
-                }
-                else
-                {
-                    // TODO
                 }
             }
 

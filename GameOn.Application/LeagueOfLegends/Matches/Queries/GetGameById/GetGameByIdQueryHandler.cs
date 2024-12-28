@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
@@ -28,7 +28,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById
         /// <inheritdoc />
         public async Task<LoLGame?> Handle(GetGameByIdQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.LeagueOfLegendsGames.FirstOrDefaultAsync(x => x.GameId == request.GameId);
+            return await this.context.LeagueOfLegendsGames
+                .Include(x => x.LeagueOfLegendsGameParticipants)
+                .ThenInclude(y => y.Player)
+                .FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
         }
     }
 }

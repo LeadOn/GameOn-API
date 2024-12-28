@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "4.1.0"
+    "version": "4.2.1"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -89,6 +89,48 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Changelog"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Common/home": {
+      "get": {
+        "tags": ["Common"],
+        "summary": "Get data used in home page of GameOn! front-end.",
+        "responses": {
+          "200": {
+            "description": "Home data, dynamicaly calculated depending on connected user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeDataDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Common/global/stats": {
+      "get": {
+        "tags": ["Common"],
+        "summary": "Get global GameOn! stats.",
+        "responses": {
+          "200": {
+            "description": "Global Stats.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalStatsDto"
                 }
               }
             }
@@ -565,7 +607,7 @@
     "/lol/Match/player/{playerId}": {
       "get": {
         "tags": ["Match"],
-        "summary": "Get last games played by summoner (directly from Riot API).",
+        "summary": "Get last games played by summoner.",
         "parameters": [
           {
             "name": "playerId",
@@ -579,13 +621,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Riot Games game IDs.",
+            "description": "Games played.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "$ref": "#/components/schemas/LoLGame"
                   }
                 }
               }
@@ -600,18 +642,17 @@
         }
       }
     },
-    "/lol/Match/{gameId}": {
+    "/lol/Match/{matchId}": {
       "get": {
         "tags": ["Match"],
         "summary": "Get Match by ID.",
         "parameters": [
           {
-            "name": "gameId",
+            "name": "matchId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
@@ -625,6 +666,33 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Match not found"
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Match/{matchId}/update": {
+      "post": {
+        "tags": ["Match"],
+        "summary": "Update Match information (retrieve data from Riot Games).",
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
           },
           "404": {
             "description": "Match not found"
@@ -991,28 +1059,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FifaPlayerStatsDto"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unknown error happened."
-          }
-        }
-      }
-    },
-    "/Player/global/stats": {
-      "get": {
-        "tags": ["Player"],
-        "summary": "Get global stats.",
-        "description": "Get global stats.",
-        "responses": {
-          "200": {
-            "description": "Global Stats.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GlobalStatsDto"
                 }
               }
             }
@@ -2376,6 +2422,25 @@
         },
         "additionalProperties": false
       },
+      "HomeDataDto": {
+        "type": "object",
+        "properties": {
+          "latestChangelog": {
+            "$ref": "#/components/schemas/Changelog"
+          },
+          "currentSeason": {
+            "$ref": "#/components/schemas/Season"
+          },
+          "featuredTournaments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TournamentDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LeagueOfLegendsRankHistory": {
         "type": "object",
         "properties": {
@@ -2438,7 +2503,8 @@
         "properties": {
           "gameId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "nullable": true
           },
           "matchId": {
             "type": "string",
@@ -2451,6 +2517,108 @@
           "gameVersion": {
             "type": "string",
             "nullable": true
+          },
+          "retrievedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "winningTeamId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "leagueOfLegendsGameParticipants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLGameParticipant"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameParticipant": {
+        "type": "object",
+        "properties": {
+          "allInPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assistMePings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assists": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "baronKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bountyLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "champExperience": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "champLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "championId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "championName": {
+            "type": "string",
+            "nullable": true
+          },
+          "commandPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "championTransform": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "consumablesPurchased": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "puuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotIdGameName": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotIdTagLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "teamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "player": {
+            "$ref": "#/components/schemas/Player"
           }
         },
         "additionalProperties": false

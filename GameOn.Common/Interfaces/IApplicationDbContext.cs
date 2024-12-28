@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Interfaces
+namespace GameOn.Common.Interfaces
 {
     using GameOn.Domain;
     using Microsoft.EntityFrameworkCore;

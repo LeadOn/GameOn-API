@@ -4,7 +4,7 @@
 
 namespace GameOn.Persistence
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>

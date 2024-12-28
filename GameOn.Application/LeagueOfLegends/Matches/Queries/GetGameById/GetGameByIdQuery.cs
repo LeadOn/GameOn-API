@@ -13,8 +13,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById
     public class GetGameByIdQuery : IRequest<LoLGame?>
     {
         /// <summary>
-        /// Gets or sets Game ID.
+        /// Gets or sets ID.
         /// </summary>
-        public long GameId { get; set; }
+        public string MatchId { get; set; } = string.Empty;
     }
 }

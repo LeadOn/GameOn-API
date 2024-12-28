@@ -4,8 +4,8 @@
 
 namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 {
-    using GameOn.Application.Common.Interfaces;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
     using MediatR;
@@ -49,12 +49,12 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 var matchesFromRiot = await this.matchService.GetLastGamesPlayed(playerInDb.RiotGamesPUUID ?? throw new NotImplementedException(), cancellationToken);
 
                 // Updating those games in database
-                await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = matchesFromRiot.ToList() });
+                await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = matchesFromRiot.ToList(), Player = playerInDb });
 
                 return await this.context.LeagueOfLegendsGameParticipants
                     .Include(x => x.Game)
                     .Where(x => x.PlayerId == playerInDb.Id)
-                    .OrderByDescending(x => x.GameId)
+                    .OrderByDescending(x => x.MatchId)
                     .Take(5)
                     .Select(x => x.Game)
                     .ToListAsync(cancellationToken);

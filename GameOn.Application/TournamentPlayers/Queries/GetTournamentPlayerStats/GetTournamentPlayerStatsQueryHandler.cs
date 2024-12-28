@@ -4,11 +4,11 @@
 
 namespace GameOn.Application.TournamentPlayers.Queries.GetTournamentPlayerStats
 {
-    using GameOn.Application.Common.Interfaces;
     using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using GameOn.Application.Players.Queries.GetPlayerById;
     using GameOn.Application.TeamPlayers.Queries.SearchTeamPlayer;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
 
     /// <summary>

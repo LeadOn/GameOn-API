@@ -49,7 +49,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PublicationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 16, 19, 30, 593, DateTimeKind.Local).AddTicks(6578))
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 19, 33, 44, 155, DateTimeKind.Local).AddTicks(2158))
                         .HasColumnName("publication_date");
 
                     b.Property<string>("RemovedFeatures")
@@ -107,7 +107,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 16, 19, 30, 588, DateTimeKind.Local).AddTicks(9069))
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 19, 33, 44, 151, DateTimeKind.Local).AddTicks(2033))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -273,7 +273,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 16, 19, 30, 593, DateTimeKind.Local).AddTicks(7963))
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 19, 33, 44, 155, DateTimeKind.Local).AddTicks(3163))
                         .HasColumnName("created_on");
 
                     b.Property<bool>("FreshBlood")
@@ -335,31 +335,36 @@ namespace GameOn.Persistence.Migrations
 
             modelBuilder.Entity("GameOn.Domain.LoLGame", b =>
                 {
-                    b.Property<long>("GameId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("game_id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("GameId"));
-
-                    b.Property<string>("EndOfGameResult")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("end_of_game_result");
-
-                    b.Property<string>("GameVersion")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("game_version");
-
                     b.Property<string>("MatchId")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("match_id");
 
-                    b.HasKey("GameId");
+                    b.Property<string>("EndOfGameResult")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("end_of_game_result");
+
+                    b.Property<long?>("GameId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("game_id");
+
+                    b.Property<string>("GameVersion")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("game_version");
+
+                    b.Property<DateTime>("RetrievedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 19, 33, 44, 155, DateTimeKind.Local).AddTicks(8691))
+                        .HasColumnName("retrieved_on");
+
+                    b.Property<int?>("WinningTeamId")
+                        .HasColumnType("int")
+                        .HasColumnName("winning_team_id");
+
+                    b.HasKey("MatchId");
 
                     b.ToTable("LeagueOfLegendsGame", (string)null);
                 });
@@ -395,11 +400,14 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ChampionId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("champion_id");
 
                     b.Property<string>("ChampionName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("champion_name");
 
                     b.Property<int>("ChampionTransform")
                         .HasColumnType("int");
@@ -410,16 +418,39 @@ namespace GameOn.Persistence.Migrations
                     b.Property<int>("ConsumablesPurchased")
                         .HasColumnType("int");
 
-                    b.Property<long>("GameId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("MatchId")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("int")
                         .HasColumnName("player_id");
 
+                    b.Property<string>("Puuid")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("puuid");
+
+                    b.Property<string>("RiotIdGameName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("riot_id_game_name");
+
+                    b.Property<string>("RiotIdTagLine")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("riot_id_tagline");
+
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int")
+                        .HasColumnName("team_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("GameId");
+                    b.HasIndex("MatchId");
 
                     b.HasIndex("PlayerId");
 
@@ -464,7 +495,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(266))
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 18, 33, 44, 150, DateTimeKind.Utc).AddTicks(2450))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -694,13 +725,13 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(1944))
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 18, 33, 44, 150, DateTimeKind.Utc).AddTicks(4527))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 28, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(2163))
+                        .HasDefaultValue(new DateTime(2024, 12, 29, 18, 33, 44, 150, DateTimeKind.Utc).AddTicks(4825))
                         .HasColumnName("planned_to");
 
                     b.Property<string>("Rules")
@@ -747,7 +778,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2024, 12, 27, 15, 19, 30, 588, DateTimeKind.Utc).AddTicks(4721))
+                        .HasDefaultValue(new DateTime(2024, 12, 28, 18, 33, 44, 150, DateTimeKind.Utc).AddTicks(8369))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")
@@ -887,16 +918,15 @@ namespace GameOn.Persistence.Migrations
                 {
                     b.HasOne("GameOn.Domain.LoLGame", "Game")
                         .WithMany("LeagueOfLegendsGameParticipants")
-                        .HasForeignKey("GameId")
+                        .HasForeignKey("MatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_LoL_Game_Participants");
+                        .HasConstraintName("FK_LoL_Games_Participants");
 
                     b.HasOne("GameOn.Domain.Player", "Player")
                         .WithMany("LeagueOfLegendsGameParticipants")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_Player_LoL_Game_Participant");
 
                     b.Navigation("Game");
