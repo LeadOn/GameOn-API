@@ -4,9 +4,9 @@
 
 namespace GameOn.Application.FifaGamePlayed.Commands.UpdateFifaGamePlayed
 {
-    using GameOn.Application.Common.Interfaces;
     using GameOn.Application.FifaTeams.Queries.GetFifaTeamById;
     using GameOn.Application.Platforms.Queries.GetPlatformById;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

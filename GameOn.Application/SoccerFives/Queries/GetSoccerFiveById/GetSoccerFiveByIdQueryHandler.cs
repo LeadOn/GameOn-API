@@ -4,8 +4,8 @@
 
 namespace GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById
 {
-    using GameOn.Application.Common.Interfaces;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

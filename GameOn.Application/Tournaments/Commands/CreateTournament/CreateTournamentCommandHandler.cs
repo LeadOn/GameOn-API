@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.Tournaments.Commands.CreateTournament
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
 

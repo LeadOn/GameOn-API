@@ -4,9 +4,9 @@
 
 namespace GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById
 {
-    using GameOn.Application.Common.Interfaces;
     using GameOn.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

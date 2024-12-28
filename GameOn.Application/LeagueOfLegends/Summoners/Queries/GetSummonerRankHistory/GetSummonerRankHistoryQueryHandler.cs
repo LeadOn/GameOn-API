@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

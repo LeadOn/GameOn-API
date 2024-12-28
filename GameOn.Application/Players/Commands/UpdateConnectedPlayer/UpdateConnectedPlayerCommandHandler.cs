@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
     using MediatR;

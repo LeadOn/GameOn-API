@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetMatchFromRiot
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.External.RiotGames.Interfaces;
     using GameOn.External.RiotGames.Models.DTOs;
     using MediatR;

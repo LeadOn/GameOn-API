@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.FifaGamePlayed.Commands.DeleteFifaGamePlayed
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

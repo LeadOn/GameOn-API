@@ -4,8 +4,8 @@
 
 namespace GameOn.Persistence
 {
-    using GameOn.Application.Common.Interfaces;
     using GameOn.Common.Exceptions;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;

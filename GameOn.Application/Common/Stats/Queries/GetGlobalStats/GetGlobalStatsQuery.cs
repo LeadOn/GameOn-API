@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Stats.Queries.GetGlobalStats
+namespace GameOn.Application.Common.Stats.Queries.GetGlobalStats
 {
     using GameOn.Common.DTOs;
     using MediatR;
