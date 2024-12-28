@@ -82,5 +82,29 @@ namespace GameOn.External.RiotGames.Models.DTOs
         /// </summary>
         [JsonProperty("consumablesPurshased")]
         public int ConsumablesPurchased { get; set; }
+
+        /// <summary>
+        /// Gets or sets Participant PUUID.
+        /// </summary>
+        [JsonProperty("puuid")]
+        public string Puuid { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets Riot ID Game Name.
+        /// </summary>
+        [JsonProperty("riotIdGameName")]
+        public string RiotIdGameName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets Riot ID Tag Line.
+        /// </summary>
+        [JsonProperty("riotIdTagline")]
+        public string RiotIdTagLine { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets Team ID.
+        /// </summary>
+        [JsonProperty("teamId")]
+        public int TeamId { get; set; }
     }
 }

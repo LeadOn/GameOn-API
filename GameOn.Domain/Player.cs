@@ -5,7 +5,6 @@
 namespace GameOn.Domain
 {
     using System.Text.Json.Serialization;
-    using GameOn.Domain;
 
     /// <summary>
     /// Player class.
@@ -61,6 +60,11 @@ namespace GameOn.Domain
         /// Gets or sets player's LOL Summoner's level.
         /// </summary>
         public long? LolSummonerLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets Lol Icon ID.
+        /// </summary>
+        public int? LolIconId { get; set; }
 
         /// <summary>
         /// Gets or sets player's LOL refreshed on datetime.

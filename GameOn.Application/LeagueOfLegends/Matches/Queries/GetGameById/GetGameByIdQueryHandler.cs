@@ -28,7 +28,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById
         /// <inheritdoc />
         public async Task<LoLGame?> Handle(GetGameByIdQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.LeagueOfLegendsGames.FirstOrDefaultAsync(x => x.GameId == request.GameId);
+            return await this.context.LeagueOfLegendsGames
+                .Include(x => x.LeagueOfLegendsGameParticipants)
+                .ThenInclude(y => y.Player)
+                .FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
         }
     }
 }

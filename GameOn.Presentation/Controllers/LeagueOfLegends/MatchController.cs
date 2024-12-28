@@ -4,11 +4,10 @@
 
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed;
-    using GameOn.Application.LeagueOfLegends.Matches.Queries.GetMatchFromRiot;
     using GameOn.Domain;
-    using GameOn.External.RiotGames.Models.DTOs;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
@@ -60,18 +59,37 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <summary>
         /// Get match by ID.
         /// </summary>
-        /// <param name="gameId">Game ID.</param>
+        /// <param name="matchId">Match ID.</param>
         /// <returns>200 OK with Match.</returns>
         [HttpGet]
-        [Route("{gameId:long}")]
+        [Route("{matchId}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get Match by ID.")]
         [SwaggerResponse(200, "Match.", typeof(LoLGame))]
         [SwaggerResponse(404, "Match not found")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetById(long gameId)
+        public async Task<IActionResult> GetById(string matchId)
         {
-            return this.Ok(await this.mediator.Send(new GetGameByIdQuery { GameId = gameId }));
+            return this.Ok(await this.mediator.Send(new GetGameByIdQuery { MatchId = matchId }));
+        }
+
+        /// <summary>
+        /// Update match by ID.
+        /// </summary>
+        /// <param name="matchId">Match ID.</param>
+        /// <returns>200 OK with Match.</returns>
+        [HttpPost]
+        [Route("{matchId}/update")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update Match information (retrieve data from Riot Games).")]
+        [SwaggerResponse(204, "Success.")]
+        [SwaggerResponse(404, "Match not found")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateMatch(string matchId)
+        {
+            await this.mediator.Send(new UpdateLoLGameCommand { MatchId = matchId });
+
+            return this.NoContent();
         }
     }
 }
