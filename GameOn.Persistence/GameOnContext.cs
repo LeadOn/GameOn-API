@@ -166,6 +166,9 @@ namespace GameOn.Persistence
                     .HasColumnName("lol_summoner_id")
                     .HasMaxLength(150);
 
+                entity.Property(e => e.LolIconId)
+                    .HasColumnName("lol_icon_id");
+
                 entity.Property(e => e.LolRefreshedOn)
                     .HasColumnName("lol_refreshed_on");
             });

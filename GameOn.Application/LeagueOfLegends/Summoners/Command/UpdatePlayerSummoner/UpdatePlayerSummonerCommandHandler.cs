@@ -63,6 +63,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
             {
                 playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
                 playerInDb.LolSummonerLevel = summonerIdFromRiot.SummonerLevel;
+                playerInDb.LolIconId = summonerIdFromRiot.ProfileIconId;
                 playerInDb.LolRefreshedOn = DateTime.Now;
 
                 // Updating player Rank
