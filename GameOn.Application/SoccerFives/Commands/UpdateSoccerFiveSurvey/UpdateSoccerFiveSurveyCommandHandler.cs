@@ -4,9 +4,9 @@
 
 namespace GameOn.Application.SoccerFives.Commands.UpdateSoccerFiveSurvey
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

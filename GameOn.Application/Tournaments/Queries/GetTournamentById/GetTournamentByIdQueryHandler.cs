@@ -4,10 +4,10 @@
 
 namespace GameOn.Application.Tournaments.Queries.GetTournamentById
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.TournamentPlayers.Queries.GetTournamentPlayerStats;
     using GameOn.Common.Collections;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

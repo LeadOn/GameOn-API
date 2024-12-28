@@ -4,13 +4,13 @@
 
 namespace GameOn.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.FifaTeams.Queries.GetFifaTeamById;
     using GameOn.Application.Platforms.Queries.GetPlatformById;
     using GameOn.Application.Players.Queries.GetPlayerById;
     using GameOn.Application.Players.Queries.GetPlayerByKeycloakId;
     using GameOn.Application.TeamPlayers.Commands.CreateTeamPlayer;
     using GameOn.Common.Exceptions;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
 

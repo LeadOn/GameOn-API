@@ -4,9 +4,9 @@
 
 namespace GameOn.Application.Highlights.Commands.CreateHighlight
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using GameOn.Application.Players.Queries.GetPlayerById;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
 

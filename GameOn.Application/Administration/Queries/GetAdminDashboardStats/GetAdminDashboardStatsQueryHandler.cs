@@ -4,9 +4,9 @@
 
 namespace GameOn.Application.Administration.Queries.GetAdminDashboardStats
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

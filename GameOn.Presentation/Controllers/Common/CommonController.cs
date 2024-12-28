@@ -5,8 +5,9 @@
 namespace GameOn.Presentation.Controllers.Common
 {
     using GameOn.Application.Common.Home.Queries.GetHomeData;
+    using GameOn.Application.Common.Stats.Queries.GetGlobalStats;
+    using GameOn.Common.DTOs;
     using GameOn.Common.DTOs.Common;
-    using GameOn.Presentation.Classes;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
@@ -42,6 +43,21 @@ namespace GameOn.Presentation.Controllers.Common
         public async Task<IActionResult> GetHomeData()
         {
             return this.Ok(await this.mediator.Send(new GetHomeDataQuery()));
+        }
+
+        /// <summary>
+        /// Get global GameOn! stats.
+        /// </summary>
+        /// <returns>200 OK with Global stats.</returns>
+        [HttpGet]
+        [Route("global/stats")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get global GameOn! stats.")]
+        [SwaggerResponse(200, "Global Stats.", typeof(GlobalStatsDto))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetGlobalStats()
+        {
+            return this.Ok(await this.mediator.Send(new GetGlobalStatsQuery()));
         }
     }
 }

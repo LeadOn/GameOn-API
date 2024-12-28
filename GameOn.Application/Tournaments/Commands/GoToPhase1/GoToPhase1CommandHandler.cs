@@ -4,8 +4,8 @@
 
 namespace GameOn.Application.Tournaments.Commands.GoToPhase1
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.TournamentPlayers.Queries.GetTournamentPlayers;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

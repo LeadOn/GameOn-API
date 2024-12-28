@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
-		"name": "GameOn! 4.1.0",
+		"name": "GameOn! 4.2.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -276,35 +276,6 @@
 							"response": []
 						},
 						{
-							"name": "Get global stats",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/player/global/stats",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"player",
-										"global",
-										"stats"
-									],
-									"query": [
-										{
-											"key": "seasonId",
-											"value": "",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Update",
 							"request": {
 								"method": "PATCH",
@@ -404,6 +375,56 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Get home data",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/common/home",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"common",
+								"home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get global stats",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/common/global/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"common",
+								"global",
+								"stats"
+							],
+							"query": [
+								{
+									"key": "seasonId",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "Contains every part of the API that is cross-games."
@@ -1270,7 +1291,7 @@
 					"name": "Matches",
 					"item": [
 						{
-							"name": "Get last games played (from Riot)",
+							"name": "Get last games played",
 							"request": {
 								"auth": {
 									"type": "noauth"

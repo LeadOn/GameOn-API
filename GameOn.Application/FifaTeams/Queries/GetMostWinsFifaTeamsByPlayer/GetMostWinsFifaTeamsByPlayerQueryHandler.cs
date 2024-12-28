@@ -4,8 +4,8 @@
 
 namespace GameOn.Application.FifaTeams.Queries.GetMostWinsFifaTeamsByPlayer
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

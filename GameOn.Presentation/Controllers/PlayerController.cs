@@ -4,17 +4,12 @@
 
 namespace GameOn.Presentation.Controllers
 {
-    using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
-    using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
-    using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
-    using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
     using GameOn.Application.Players.Commands.UpdateConnectedPlayer;
     using GameOn.Application.Players.Commands.UpdatePlayer;
     using GameOn.Application.Players.Queries.GetAllPlayers;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Players.Queries.GetPlayerById;
     using GameOn.Application.Players.Queries.GetPlayerStats;
-    using GameOn.Application.Stats.Queries.GetGlobalStats;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
@@ -115,21 +110,6 @@ namespace GameOn.Presentation.Controllers
         public async Task<IActionResult> GetPlayerStats(int playerId, int? seasonId)
         {
             return this.Ok(await this.mediator.Send(new GetPlayerStatsQuery { PlayerId = playerId, SeasonId = seasonId }));
-        }
-
-        /// <summary>
-        /// Get global stats.
-        /// </summary>
-        /// <returns>200 OK with Global stats.</returns>
-        [HttpGet]
-        [Route("global/stats")]
-        [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get global stats.", Description = "Get global stats.")]
-        [SwaggerResponse(200, "Global Stats.", typeof(GlobalStatsDto))]
-        [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetGlobalStats()
-        {
-            return this.Ok(await this.mediator.Send(new GetGlobalStatsQuery()));
         }
 
         /// <summary>
