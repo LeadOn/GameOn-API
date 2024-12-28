@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.FifaGamePlayed.Commands.CreateFifaGamePlayed
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.FifaTeams.Queries.GetFifaTeamById;
     using GameOn.Application.Platforms.Queries.GetPlatformById;
     using GameOn.Application.Players.Queries.GetPlayerById;

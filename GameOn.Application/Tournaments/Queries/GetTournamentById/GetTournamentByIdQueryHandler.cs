@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.Tournaments.Queries.GetTournamentById
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.TournamentPlayers.Queries.GetTournamentPlayerStats;
     using GameOn.Common.Collections;
     using GameOn.Common.DTOs;

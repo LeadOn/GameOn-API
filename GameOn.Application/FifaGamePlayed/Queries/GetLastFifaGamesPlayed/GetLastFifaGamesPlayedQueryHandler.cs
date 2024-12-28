@@ -5,7 +5,7 @@
 namespace GameOn.Application.FifaGamePlayed.Queries.GetLastFifaGamesPlayed
 {
     using System.Collections.Generic;
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto;
     using GameOn.Common.DTOs;
     using MediatR;

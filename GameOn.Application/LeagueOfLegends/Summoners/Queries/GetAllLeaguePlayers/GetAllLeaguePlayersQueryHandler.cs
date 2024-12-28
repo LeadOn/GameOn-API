@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Common.DTOs;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
