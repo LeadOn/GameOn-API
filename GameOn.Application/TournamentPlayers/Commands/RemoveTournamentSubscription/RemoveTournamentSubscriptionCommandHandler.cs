@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.TournamentPlayers.Commands.RemoveTournamentSubscription
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.Players.Queries.GetPlayerById;
     using GameOn.Application.Players.Queries.GetPlayerByKeycloakId;
     using MediatR;

@@ -6,7 +6,7 @@ namespace GameOn.Application.FifaGamePlayed.Queries.SearchFifaGamesPlayed
 {
     using System;
     using System.Collections.Generic;
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto;
     using GameOn.Application.Platforms.Queries.GetPlatformById;
     using GameOn.Common.DTOs;

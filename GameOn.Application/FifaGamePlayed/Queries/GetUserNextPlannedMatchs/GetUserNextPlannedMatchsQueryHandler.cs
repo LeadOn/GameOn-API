@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto;
     using GameOn.Application.FifaGamePlayed.Queries.GetUserNextPlannedMatchs;
     using GameOn.Common.DTOs;

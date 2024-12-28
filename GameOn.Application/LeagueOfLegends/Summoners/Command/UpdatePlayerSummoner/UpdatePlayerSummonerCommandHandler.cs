@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;

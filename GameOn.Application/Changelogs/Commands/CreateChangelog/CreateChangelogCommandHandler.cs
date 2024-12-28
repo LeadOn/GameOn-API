@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.Changelogs.Commands.CreateChangelog
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
 

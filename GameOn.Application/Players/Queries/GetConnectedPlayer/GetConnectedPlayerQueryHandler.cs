@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.Players.Queries.GetConnectedPlayer
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.Players.Queries.GetPlayerById;
     using GameOn.Domain;
     using MediatR;

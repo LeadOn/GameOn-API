@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.Administration.Queries.GetAdminDashboardStats
 {
-    using GameOn.Application.Common.Interfaces;
+    using GameOn.Common.Interfaces;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Common.DTOs;
     using MediatR;
