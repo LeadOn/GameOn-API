@@ -85,7 +85,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     matchInDb.WinningTeamId = team.TeamId;
                 }
             }
- 
+
             await this.context.SaveChangesAsync(cancellationToken);
             return true;
         }

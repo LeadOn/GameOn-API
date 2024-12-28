@@ -4,7 +4,6 @@
 
 namespace GameOn.Common.DTOs
 {
-    using System.Text.Json.Serialization;
     using GameOn.Domain;
 
     /// <summary>
@@ -38,6 +37,7 @@ namespace GameOn.Common.DTOs
             this.LolRefreshedOn = player.LolRefreshedOn;
             this.CreatedOn = player.CreatedOn;
             this.Archived = player.Archived;
+            this.LolIconId = player.LolIconId;
         }
 
         /// <summary>
@@ -89,6 +89,11 @@ namespace GameOn.Common.DTOs
         /// Gets or sets player's LOL Summoner's level.
         /// </summary>
         public long? LolSummonerLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets Lol Icon ID.
+        /// </summary>
+        public int? LolIconId { get; set; }
 
         /// <summary>
         /// Gets or sets player's LOL refreshed on datetime.
