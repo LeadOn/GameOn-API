@@ -2,11 +2,11 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Stats.Queries.GetGlobalStats
+namespace GameOn.Application.Common.Stats.Queries.GetGlobalStats
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.Players.Queries.GetPlayerStats;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

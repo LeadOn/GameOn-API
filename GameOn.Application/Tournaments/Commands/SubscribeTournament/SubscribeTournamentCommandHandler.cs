@@ -4,10 +4,10 @@
 
 namespace GameOn.Application.Tournaments.Commands.SubscribeTournament
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Application.FifaTeams.Queries.GetFifaTeamById;
     using GameOn.Application.Players.Queries.GetPlayerByKeycloakId;
     using GameOn.Application.Tournaments.Queries.CheckTournamentSubscription;
+    using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
 

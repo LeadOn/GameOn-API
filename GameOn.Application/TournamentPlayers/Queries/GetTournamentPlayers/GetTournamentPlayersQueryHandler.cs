@@ -4,8 +4,8 @@
 
 namespace GameOn.Application.TournamentPlayers.Queries.GetTournamentPlayers
 {
-    using GameOn.Common.Interfaces;
     using GameOn.Common.DTOs;
+    using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

@@ -5,8 +5,6 @@
 namespace GameOn.Application.SoccerFives.Commands.VoteSoccerFive
 {
     using GameOn.Common.Interfaces;
-    using GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById;
-    using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
