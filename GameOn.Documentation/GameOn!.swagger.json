@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "4.2.0"
+    "version": "4.2.1"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -642,18 +642,17 @@
         }
       }
     },
-    "/lol/Match/{gameId}": {
+    "/lol/Match/{matchId}": {
       "get": {
         "tags": ["Match"],
         "summary": "Get Match by ID.",
         "parameters": [
           {
-            "name": "gameId",
+            "name": "matchId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
@@ -667,6 +666,33 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Match not found"
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Match/{matchId}/update": {
+      "post": {
+        "tags": ["Match"],
+        "summary": "Update Match information (retrieve data from Riot Games).",
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
           },
           "404": {
             "description": "Match not found"
@@ -2477,7 +2503,8 @@
         "properties": {
           "gameId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "nullable": true
           },
           "matchId": {
             "type": "string",
@@ -2490,6 +2517,108 @@
           "gameVersion": {
             "type": "string",
             "nullable": true
+          },
+          "retrievedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "winningTeamId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "leagueOfLegendsGameParticipants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLGameParticipant"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameParticipant": {
+        "type": "object",
+        "properties": {
+          "allInPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assistMePings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assists": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "baronKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bountyLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "champExperience": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "champLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "championId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "championName": {
+            "type": "string",
+            "nullable": true
+          },
+          "commandPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "championTransform": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "consumablesPurchased": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "puuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotIdGameName": {
+            "type": "string",
+            "nullable": true
+          },
+          "riotIdTagLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "teamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "player": {
+            "$ref": "#/components/schemas/Player"
           }
         },
         "additionalProperties": false

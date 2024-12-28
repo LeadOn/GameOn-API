@@ -20,17 +20,16 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets Player ID.
         /// </summary>
-        public int PlayerId { get; set; }
+        public int? PlayerId { get; set; }
 
         /// <summary>
-        /// Gets or sets Game ID.
+        /// Gets or sets Match ID.
         /// </summary>
-        public long GameId { get; set; }
+        public string MatchId { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets Player.
         /// </summary>
-        [JsonIgnore]
         public virtual Player Player { get; set; } = null!;
 
         /// <summary>

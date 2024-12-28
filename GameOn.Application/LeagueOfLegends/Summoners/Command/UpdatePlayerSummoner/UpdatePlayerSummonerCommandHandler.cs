@@ -98,7 +98,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
                 if (gamesFromRiot is not null && gamesFromRiot.Count() > 0)
                 {
                     // For each games found, importing them
-                    await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = gamesFromRiot.ToList() });
+                    await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = gamesFromRiot.ToList(), Player = playerInDb });
                 }
             }
 

@@ -14,7 +14,7 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets Match ID.
         /// </summary>
-        public long GameId { get; set; }
+        public long? GameId { get; set; }
 
         /// <summary>
         /// Gets or sets Match ID.
@@ -24,17 +24,26 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets End of Game Result.
         /// </summary>
-        public string EndOfGameResult { get; set; } = string.Empty;
+        public string? EndOfGameResult { get; set; }
 
         /// <summary>
         /// Gets or sets game version.
         /// </summary>
-        public string GameVersion { get; set; } = string.Empty;
+        public string? GameVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets Retrieved on Date.
+        /// </summary>
+        public DateTime RetrievedOn { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Gets or sets Winning team ID.
+        /// </summary>
+        public int? WinningTeamId { get; set; }
 
         /// <summary>
         /// Gets or sets League of Legends Game Participants.
         /// </summary>
-        [JsonIgnore]
         public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
     }
 }

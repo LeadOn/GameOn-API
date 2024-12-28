@@ -727,30 +727,35 @@ namespace GameOn.Persistence
                 entity.ToTable("LeagueOfLegendsGame");
 
                 entity.Property(e => e.GameId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("game_id")
-                    .IsRequired();
-
-                entity.HasKey(e => e.GameId);
+                    .HasColumnName("game_id");
 
                 entity.Property(e => e.MatchId)
                     .HasColumnName("match_id")
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.HasKey(e => e.MatchId);
+
                 entity.Property(e => e.EndOfGameResult)
-                    .HasColumnName("end_of_game_result");
+                    .HasColumnName("end_of_game_result")
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.GameVersion)
                     .HasColumnName("game_version")
-                    .HasMaxLength(100)
-                    .IsRequired();
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RetrievedOn)
+                    .HasColumnName("retrieved_on")
+                    .HasDefaultValue(DateTime.Now);
 
                 entity.HasMany(e => e.LeagueOfLegendsGameParticipants)
                     .WithOne(f => f.Game)
-                    .HasForeignKey(f => f.GameId)
-                    .HasConstraintName("FK_LoL_Game_Participants")
+                    .HasForeignKey(f => f.MatchId)
+                    .HasConstraintName("FK_LoL_Games_Participants")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.WinningTeamId)
+                    .HasColumnName("winning_team_id");
             });
 
             modelBuilder.Entity<LoLGameParticipant>(entity =>
@@ -765,14 +770,35 @@ namespace GameOn.Persistence
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.PlayerId)
-                    .HasColumnName("player_id")
-                    .IsRequired();
+                    .HasColumnName("player_id");
 
                 entity.HasOne(e => e.Player)
                     .WithMany(f => f.LeagueOfLegendsGameParticipants)
                     .HasForeignKey(e => e.PlayerId)
                     .HasConstraintName("FK_Player_LoL_Game_Participant")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.Puuid)
+                    .HasColumnName("puuid")
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.RiotIdTagLine)
+                    .HasColumnName("riot_id_tagline")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.RiotIdGameName)
+                    .HasColumnName("riot_id_game_name")
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.ChampionId)
+                    .HasColumnName("champion_id");
+
+                entity.Property(e => e.ChampionName)
+                    .HasColumnName("champion_name")
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.TeamId)
+                    .HasColumnName("team_id");
             });
         }
     }
