@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["GameOn.Application/GameOn.Application.csproj", "GameOn.Application/"]
 COPY ["GameOn.Common/GameOn.Common.csproj", "GameOn.Common/"]

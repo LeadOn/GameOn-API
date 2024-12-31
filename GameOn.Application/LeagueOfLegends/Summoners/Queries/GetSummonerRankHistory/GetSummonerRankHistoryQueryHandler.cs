@@ -85,7 +85,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
                 }
             }
 
-            return soloHistoryToRetrieve.Concat(flexHistoryToRetrieve).Take(request.Limit is not null ? (int)request.Limit : 50).OrderBy(x => x.CreatedOn);
+            return soloHistoryToRetrieve.Take(50).ToList().Concat(flexHistoryToRetrieve.Take(50).ToList()).OrderBy(x => x.CreatedOn).ToList();
         }
     }
 }
