@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Presentation.Controllers
+namespace GameOn.Presentation.Controllers.Common
 {
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.TournamentPlayers.Commands.RemoveTournamentSubscription;
@@ -159,7 +159,7 @@ namespace GameOn.Presentation.Controllers
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(403, "Not enough roles.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> Update(int id, [FromBody]TournamentDto tournament)
+        public async Task<IActionResult> Update(int id, [FromBody] TournamentDto tournament)
         {
             return this.Ok(await this.mediator.Send(new UpdateTournamentCommand { TournamentId = id, TournamentDto = tournament }));
         }
