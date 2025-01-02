@@ -2754,6 +2754,11 @@
             "format": "int64",
             "nullable": true
           },
+          "lolIconId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "lolRefreshedOn": {
             "type": "string",
             "format": "date-time",
@@ -2818,6 +2823,11 @@
           "lolSummonerLevel": {
             "type": "integer",
             "format": "int64",
+            "nullable": true
+          },
+          "lolIconId": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "lolRefreshedOn": {
