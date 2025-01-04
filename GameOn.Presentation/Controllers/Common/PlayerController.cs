@@ -2,14 +2,14 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Presentation.Controllers
+namespace GameOn.Presentation.Controllers.Common
 {
-    using GameOn.Application.Players.Commands.UpdateConnectedPlayer;
-    using GameOn.Application.Players.Commands.UpdatePlayer;
-    using GameOn.Application.Players.Queries.GetAllPlayers;
-    using GameOn.Application.Players.Queries.GetConnectedPlayer;
-    using GameOn.Application.Players.Queries.GetPlayerById;
-    using GameOn.Application.Players.Queries.GetPlayerStats;
+    using GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer;
+    using GameOn.Application.Common.Players.Commands.UpdatePlayer;
+    using GameOn.Application.Common.Players.Queries.GetAllPlayers;
+    using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
+    using GameOn.Application.Common.Players.Queries.GetPlayerById;
+    using GameOn.Application.Common.Players.Queries.GetPlayerStats;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;

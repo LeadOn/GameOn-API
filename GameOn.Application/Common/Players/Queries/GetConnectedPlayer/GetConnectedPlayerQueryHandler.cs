@@ -2,9 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Players.Queries.GetConnectedPlayer
+namespace GameOn.Application.Common.Players.Queries.GetConnectedPlayer
 {
-    using GameOn.Application.Players.Queries.GetPlayerById;
+    using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;

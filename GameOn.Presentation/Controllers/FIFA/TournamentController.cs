@@ -4,6 +4,7 @@
 
 namespace GameOn.Presentation.Controllers.FIFA
 {
+    using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.FIFA.TournamentPlayers.Commands.RemoveTournamentSubscription;
     using GameOn.Application.FIFA.TournamentPlayers.Commands.UpdateTournamentSubscription;
     using GameOn.Application.FIFA.Tournaments.Commands.CreateTournament;
@@ -16,7 +17,6 @@ namespace GameOn.Presentation.Controllers.FIFA
     using GameOn.Application.FIFA.Tournaments.Queries.GetAllTournaments;
     using GameOn.Application.FIFA.Tournaments.Queries.GetFeaturedTournaments;
     using GameOn.Application.FIFA.Tournaments.Queries.GetTournamentById;
-    using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;

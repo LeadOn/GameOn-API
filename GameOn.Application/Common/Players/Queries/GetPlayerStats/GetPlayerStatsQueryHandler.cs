@@ -2,14 +2,14 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Players.Queries.GetPlayerStats
+namespace GameOn.Application.Common.Players.Queries.GetPlayerStats
 {
+    using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using GameOn.Application.FifaTeams.Queries.GetMostLossesFifaTeamsByPlayer;
     using GameOn.Application.FifaTeams.Queries.GetMostPlayedFifaTeamsByPlayer;
     using GameOn.Application.FifaTeams.Queries.GetMostWinsFifaTeamsByPlayer;
     using GameOn.Application.Platforms.Queries.GetAllPlatforms;
-    using GameOn.Application.Players.Queries.GetPlayerById;
     using GameOn.Application.TeamPlayers.Queries.SearchTeamPlayer;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
@@ -63,13 +63,13 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
                 // Getting games played by platform
                 var teamPlayersInDb = await this.mediator.Send(
                     new SearchTeamPlayerQuery
-                {
-                    Query = x => x.FifaGamePlayed.PlatformId == platform.Id
-                                 && x.PlayerId == playerInDb.Id
-                                 && x.FifaGamePlayed.SeasonId == request.SeasonId
-                                 && x.FifaGamePlayed.IsPlayed == true,
-                    Limit = 1000000,
-                }, cancellationToken);
+                    {
+                        Query = x => x.FifaGamePlayed.PlatformId == platform.Id
+                                     && x.PlayerId == playerInDb.Id
+                                     && x.FifaGamePlayed.SeasonId == request.SeasonId
+                                     && x.FifaGamePlayed.IsPlayed == true,
+                        Limit = 1000000,
+                    }, cancellationToken);
 
                 if (teamPlayersInDb.ToList().Count > 0)
                 {
@@ -105,7 +105,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
                     }
 
                     stats.GoalDifference = stats.GoalsGiven - stats.GoalsTaken;
-                    if (stats.GoalsGiven == 0 || (stats.Wins + stats.Losses + stats.Draws) == 0)
+                    if (stats.GoalsGiven == 0 || stats.Wins + stats.Losses + stats.Draws == 0)
                     {
                         stats.AverageGoalGiven = 0;
                     }
@@ -114,7 +114,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
                         stats.AverageGoalGiven = (float)Math.Round((double)(stats.GoalsGiven / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
                     }
 
-                    if (stats.GoalsTaken == 0 || (stats.Wins + stats.Losses + stats.Draws) == 0)
+                    if (stats.GoalsTaken == 0 || stats.Wins + stats.Losses + stats.Draws == 0)
                     {
                         stats.AverageGoalTaken = 0;
                     }
@@ -132,7 +132,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
                     }
                     else
                     {
-                        stats.WinRate = (float)Math.Round((double)((stats.Wins * 100) / (float)gamesPlayed), 2);
+                        stats.WinRate = (float)Math.Round((double)(stats.Wins * 100 / (float)gamesPlayed), 2);
                     }
 
                     // Calculating loose rate
@@ -142,7 +142,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
                     }
                     else
                     {
-                        stats.LooseRate = (float)Math.Round((double)((stats.Losses * 100) / (float)gamesPlayed), 2);
+                        stats.LooseRate = (float)Math.Round((double)(stats.Losses * 100 / (float)gamesPlayed), 2);
                     }
 
                     // Calculating draw rate
@@ -152,7 +152,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
                     }
                     else
                     {
-                        stats.DrawRate = (float)Math.Round((double)((stats.Draws * 100) / (float)gamesPlayed), 2);
+                        stats.DrawRate = (float)Math.Round((double)(stats.Draws * 100 / (float)gamesPlayed), 2);
                     }
 
                     globalStats.Wins += stats.Wins;
@@ -187,7 +187,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
             }
             else
             {
-                globalStats.WinRate = (float)Math.Round((double)((globalStats.Wins * 100) / (float)totalGamesPlayed), 2);
+                globalStats.WinRate = (float)Math.Round((double)(globalStats.Wins * 100 / (float)totalGamesPlayed), 2);
             }
 
             // Calculating loose rate
@@ -197,7 +197,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
             }
             else
             {
-                globalStats.LooseRate = (float)Math.Round((double)((globalStats.Losses * 100) / (float)totalGamesPlayed), 2);
+                globalStats.LooseRate = (float)Math.Round((double)(globalStats.Losses * 100 / (float)totalGamesPlayed), 2);
             }
 
             // Calculating draw rate
@@ -207,7 +207,7 @@ namespace GameOn.Application.Players.Queries.GetPlayerStats
             }
             else
             {
-                globalStats.DrawRate = (float)Math.Round((double)((globalStats.Draws * 100) / (float)totalGamesPlayed), 2);
+                globalStats.DrawRate = (float)Math.Round((double)(globalStats.Draws * 100 / (float)totalGamesPlayed), 2);
             }
 
             platformsStats.Add(globalStats);

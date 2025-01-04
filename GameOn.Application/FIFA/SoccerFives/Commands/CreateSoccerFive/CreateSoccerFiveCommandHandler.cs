@@ -27,8 +27,8 @@ namespace GameOn.Application.FIFA.SoccerFives.Commands.CreateSoccerFive
         /// <inheritdoc />
         public async Task<SoccerFive> Handle(CreateSoccerFiveCommand request, CancellationToken cancellationToken)
         {
-            context.SoccerFives.Add(request.SoccerFive);
-            await context.SaveChangesAsync(cancellationToken);
+            this.context.SoccerFives.Add(request.SoccerFive);
+            await this.context.SaveChangesAsync(cancellationToken);
             return request.SoccerFive;
         }
     }

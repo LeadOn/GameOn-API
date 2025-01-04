@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.Common.Stats.Queries.GetGlobalStats
 {
-    using GameOn.Application.Players.Queries.GetPlayerStats;
+    using GameOn.Application.Common.Players.Queries.GetPlayerStats;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
     using MediatR;

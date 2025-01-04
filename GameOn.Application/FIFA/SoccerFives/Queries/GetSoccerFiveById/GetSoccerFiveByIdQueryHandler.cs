@@ -29,7 +29,7 @@ namespace GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFiveById
         public async Task<SoccerFiveDto?> Handle(GetSoccerFiveByIdQuery request, CancellationToken cancellationToken)
         {
 #pragma warning disable CS8620 // Impossible d'utiliser l'argument pour le paramètre, car il existe des différences dans l'acceptation des valeurs null par les types référence.
-            var five = await context.SoccerFives.Include(x => x.CreatedBy).Include(x => x.VotesChoices).ThenInclude(x => x.Answers).ThenInclude(x => x.Player).FirstOrDefaultAsync(x => x.Id == request.SoccerFiveId, cancellationToken);
+            var five = await this.context.SoccerFives.Include(x => x.CreatedBy).Include(x => x.VotesChoices).ThenInclude(x => x.Answers).ThenInclude(x => x.Player).FirstOrDefaultAsync(x => x.Id == request.SoccerFiveId, cancellationToken);
 #pragma warning restore CS8620 // Impossible d'utiliser l'argument pour le paramètre, car il existe des différences dans l'acceptation des valeurs null par les types référence.
 
             if (five == null)

@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.FifaGamePlayed.Commands.ConvertFifaGamePlayedToDto
 {
-    using GameOn.Application.Players.Queries.GetPlayerById;
+    using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
