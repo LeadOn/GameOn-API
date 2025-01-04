@@ -4,12 +4,12 @@
 
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
+    using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
+    using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
-    using GameOn.Application.Players.Queries.GetConnectedPlayer;
-    using GameOn.Application.Players.Queries.GetPlayerById;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;

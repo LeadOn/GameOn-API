@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "4.2.1"
+    "version": "4.3.0"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -141,7 +141,7 @@
         }
       }
     },
-    "/FifaGame/tournament/{tournamentId}": {
+    "/fifa/FifaGame/tournament/{tournamentId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get games played by tournament.",
@@ -183,7 +183,7 @@
         }
       }
     },
-    "/FifaGame/{gameId}": {
+    "/fifa/FifaGame/{gameId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get game played by ID.",
@@ -249,7 +249,7 @@
         }
       }
     },
-    "/FifaGame/planned/{playerId}": {
+    "/fifa/FifaGame/planned/{playerId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get users planned games.",
@@ -290,7 +290,7 @@
         }
       }
     },
-    "/FifaGame/last/{number}": {
+    "/fifa/FifaGame/last/{number}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get last games played.",
@@ -326,7 +326,7 @@
         }
       }
     },
-    "/FifaGame/last/{number}/player/{playerId}": {
+    "/fifa/FifaGame/last/{number}/player/{playerId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get last games played by player.",
@@ -371,7 +371,7 @@
         }
       }
     },
-    "/FifaGame": {
+    "/fifa/FifaGame": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Search games played in database.",
@@ -514,7 +514,7 @@
         }
       }
     },
-    "/FifaTeam": {
+    "/fifa/FifaTeam": {
       "get": {
         "tags": ["FifaTeam"],
         "summary": "Get all FIFA Teams in database.",
@@ -1069,7 +1069,7 @@
         }
       }
     },
-    "/Season": {
+    "/fifa/Season": {
       "get": {
         "tags": ["Season"],
         "summary": "Get all seasons.",
@@ -1093,7 +1093,7 @@
         }
       }
     },
-    "/Season/current": {
+    "/fifa/Season/current": {
       "get": {
         "tags": ["Season"],
         "summary": "Get current season.",
@@ -1117,7 +1117,7 @@
         }
       }
     },
-    "/SoccerFive": {
+    "/fifa/SoccerFive": {
       "get": {
         "tags": ["SoccerFive"],
         "summary": "Get all soccer fives created.",
@@ -1223,7 +1223,7 @@
         }
       }
     },
-    "/SoccerFive/{id}": {
+    "/fifa/SoccerFive/{id}": {
       "get": {
         "tags": ["SoccerFive"],
         "summary": "Get all soccer fives created.",
@@ -1291,7 +1291,7 @@
         }
       }
     },
-    "/SoccerFive/{id}/survey": {
+    "/fifa/SoccerFive/{id}/survey": {
       "patch": {
         "tags": ["SoccerFive"],
         "summary": "Update five survey.",
@@ -1345,7 +1345,7 @@
         }
       }
     },
-    "/SoccerFive/{id}/survey/vote": {
+    "/fifa/SoccerFive/{id}/survey/vote": {
       "post": {
         "tags": ["SoccerFive"],
         "summary": "Vote five survey.",
@@ -1571,7 +1571,7 @@
         }
       }
     },
-    "/Tournament": {
+    "/fifa/Tournament": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Get all tournaments in database.",
@@ -1639,7 +1639,7 @@
         }
       }
     },
-    "/Tournament/featured": {
+    "/fifa/Tournament/featured": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Get all featured tournaments in database.",
@@ -1663,7 +1663,7 @@
         }
       }
     },
-    "/Tournament/{id}": {
+    "/fifa/Tournament/{id}": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Get tournament by ID in database.",
@@ -1782,7 +1782,7 @@
         }
       }
     },
-    "/Tournament/{id}/subscription": {
+    "/fifa/Tournament/{id}/subscription": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Check if player is subscribed to a tournament.",
@@ -1817,7 +1817,7 @@
         }
       }
     },
-    "/Tournament/{id}/phase1": {
+    "/fifa/Tournament/{id}/phase1": {
       "post": {
         "tags": ["Tournament"],
         "summary": "Make Tournament to go into phase 1.",
@@ -1855,7 +1855,7 @@
         }
       }
     },
-    "/Tournament/{tournamentId}/player/{playerId}": {
+    "/fifa/Tournament/{tournamentId}/player/{playerId}": {
       "delete": {
         "tags": ["Tournament"],
         "summary": "Remove player from tournament.",
@@ -1895,7 +1895,7 @@
         }
       }
     },
-    "/Tournament/{id}/phase1/score": {
+    "/fifa/Tournament/{id}/phase1/score": {
       "post": {
         "tags": ["Tournament"],
         "summary": "Save phase 1 score.",
@@ -1926,7 +1926,7 @@
         }
       }
     },
-    "/Tournament/{tournamentId}/subscription": {
+    "/fifa/Tournament/{tournamentId}/subscription": {
       "post": {
         "tags": ["Tournament"],
         "summary": "Subscribe to tournament.",
@@ -2754,6 +2754,11 @@
             "format": "int64",
             "nullable": true
           },
+          "lolIconId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "lolRefreshedOn": {
             "type": "string",
             "format": "date-time",
@@ -2818,6 +2823,11 @@
           "lolSummonerLevel": {
             "type": "integer",
             "format": "int64",
+            "nullable": true
+          },
+          "lolIconId": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "lolRefreshedOn": {
