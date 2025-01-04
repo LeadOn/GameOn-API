@@ -31,7 +31,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.SavePhase1Score
         public async Task<bool> Handle(SavePhase1ScoreCommand request, CancellationToken cancellationToken)
         {
             var tournamentInDb =
-                await context.Tournaments.FirstOrDefaultAsync(
+                await this.context.Tournaments.FirstOrDefaultAsync(
                     x => x.Id == request.TournamentId,
                     cancellationToken);
 
@@ -40,7 +40,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.SavePhase1Score
                 return false;
             }
 
-            var tournamentPlayers = await context.TournamentPlayers
+            var tournamentPlayers = await this.context.TournamentPlayers
                 .Include(x => x.FifaTeam)
                 .Include(x => x.Player)
                 .Where(x => x.TournamentId == request.TournamentId)
@@ -51,7 +51,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.SavePhase1Score
                 player.Phase1Score = 0;
 
                 // Getting their wins
-                var gamesPlayed = await context.FifaGamesPlayed
+                var gamesPlayed = await this.context.FifaGamesPlayed
                     .Include(x => x.TeamPlayers)
                     .Where(
                         x => x.TournamentId == request.TournamentId
@@ -72,8 +72,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.SavePhase1Score
                         }
                     }
 
-                    if (team == 0 && game.TeamScore1 > game.TeamScore2 ||
-                        team == 1 && game.TeamScore1 < game.TeamScore2)
+                    if ((team == 0 && game.TeamScore1 > game.TeamScore2) || (team == 1 && game.TeamScore1 < game.TeamScore2))
                     {
                         player.Phase1Score += 3;
                     }
@@ -84,8 +83,8 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.SavePhase1Score
                 }
             }
 
-            context.TournamentPlayers.UpdateRange(tournamentPlayers);
-            await context.SaveChangesAsync(cancellationToken);
+            this.context.TournamentPlayers.UpdateRange(tournamentPlayers);
+            await this.context.SaveChangesAsync(cancellationToken);
 
             return true;
         }

@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Changelogs.Commands.CreateChangelog
+namespace GameOn.Application.Common.Changelogs.Commands.CreateChangelog
 {
     using GameOn.Domain;
     using MediatR;

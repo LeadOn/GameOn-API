@@ -31,7 +31,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.UpdateTournament
         /// <inheritdoc />
         public async Task<Tournament> Handle(UpdateTournamentCommand request, CancellationToken cancellationToken)
         {
-            var tournamentInDb = await context.Tournaments.FirstOrDefaultAsync(x => x.Id == request.TournamentId, cancellationToken);
+            var tournamentInDb = await this.context.Tournaments.FirstOrDefaultAsync(x => x.Id == request.TournamentId, cancellationToken);
 
             if (tournamentInDb is null)
             {
@@ -52,8 +52,8 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.UpdateTournament
             tournamentInDb.Rules = request.TournamentDto.Rules;
             tournamentInDb.Featured = request.TournamentDto.Featured;
 
-            context.Tournaments.Update(tournamentInDb);
-            await context.SaveChangesAsync(cancellationToken);
+            this.context.Tournaments.Update(tournamentInDb);
+            await this.context.SaveChangesAsync(cancellationToken);
             return tournamentInDb;
         }
     }

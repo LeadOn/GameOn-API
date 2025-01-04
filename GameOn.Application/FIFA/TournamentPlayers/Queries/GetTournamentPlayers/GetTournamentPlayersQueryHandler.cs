@@ -28,7 +28,7 @@ namespace GameOn.Application.FIFA.TournamentPlayers.Queries.GetTournamentPlayers
         /// <inheritdoc />
         public async Task<List<TournamentPlayerDto>> Handle(GetTournamentPlayersQuery request, CancellationToken cancellationToken)
         {
-            return await context.TournamentPlayers
+            return await this.context.TournamentPlayers
                 .Include(x => x.FifaTeam)
                 .Include(x => x.Player)
                 .Where(x => x.TournamentId == request.TournamentId)

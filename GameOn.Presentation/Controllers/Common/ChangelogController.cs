@@ -2,10 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Presentation.Controllers
+namespace GameOn.Presentation.Controllers.Common
 {
-    using GameOn.Application.Changelogs.Commands.CreateChangelog;
-    using GameOn.Application.Changelogs.Queries.GetAllChangelogs;
+    using GameOn.Application.Common.Changelogs.Commands.CreateChangelog;
+    using GameOn.Application.Common.Changelogs.Queries.GetAllChangelogs;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;

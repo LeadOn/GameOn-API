@@ -29,7 +29,7 @@ namespace GameOn.Application.FIFA.Tournaments.Queries.GetFeaturedTournaments
         /// <inheritdoc />
         public async Task<IEnumerable<TournamentDto>> Handle(GetFeaturedTournamentsQuery request, CancellationToken cancellationToken)
         {
-            return await context.Tournaments
+            return await this.context.Tournaments
                 .Where(x => x.Featured == true && (x.State == TournamentStates.Phase1 || x.State == TournamentStates.Phase2))
                 .OrderBy(x => x.PlannedFrom)
                 .Select(x => new TournamentDto(x))
