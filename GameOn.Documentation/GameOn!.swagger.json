@@ -1571,6 +1571,55 @@
         }
       }
     },
+    "/lol/Summoner/{playerId}/admin": {
+      "patch": {
+        "tags": ["Summoner"],
+        "summary": "Update user League of Legends profile.",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "riotGamesNickname",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "riotGamesTagLine",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/fifa/Tournament": {
       "get": {
         "tags": ["Tournament"],
