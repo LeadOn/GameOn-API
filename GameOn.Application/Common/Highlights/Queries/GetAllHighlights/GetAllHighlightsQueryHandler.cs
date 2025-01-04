@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Highlights.Queries.GetAllHighlights
+namespace GameOn.Application.Common.Highlights.Queries.GetAllHighlights
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;

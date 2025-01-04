@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Highlights.Commands.CreateHighlight
+namespace GameOn.Application.Common.Highlights.Commands.CreateHighlight
 {
     using GameOn.Domain;
     using MediatR;
