@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "4.2.1"
+    "version": "4.3.0"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -1571,7 +1571,7 @@
         }
       }
     },
-    "/Tournament": {
+    "/fifa/Tournament": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Get all tournaments in database.",
@@ -1639,7 +1639,7 @@
         }
       }
     },
-    "/Tournament/featured": {
+    "/fifa/Tournament/featured": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Get all featured tournaments in database.",
@@ -1663,7 +1663,7 @@
         }
       }
     },
-    "/Tournament/{id}": {
+    "/fifa/Tournament/{id}": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Get tournament by ID in database.",
@@ -1782,7 +1782,7 @@
         }
       }
     },
-    "/Tournament/{id}/subscription": {
+    "/fifa/Tournament/{id}/subscription": {
       "get": {
         "tags": ["Tournament"],
         "summary": "Check if player is subscribed to a tournament.",
@@ -1817,7 +1817,7 @@
         }
       }
     },
-    "/Tournament/{id}/phase1": {
+    "/fifa/Tournament/{id}/phase1": {
       "post": {
         "tags": ["Tournament"],
         "summary": "Make Tournament to go into phase 1.",
@@ -1855,7 +1855,7 @@
         }
       }
     },
-    "/Tournament/{tournamentId}/player/{playerId}": {
+    "/fifa/Tournament/{tournamentId}/player/{playerId}": {
       "delete": {
         "tags": ["Tournament"],
         "summary": "Remove player from tournament.",
@@ -1895,7 +1895,7 @@
         }
       }
     },
-    "/Tournament/{id}/phase1/score": {
+    "/fifa/Tournament/{id}/phase1/score": {
       "post": {
         "tags": ["Tournament"],
         "summary": "Save phase 1 score.",
@@ -1926,7 +1926,7 @@
         }
       }
     },
-    "/Tournament/{tournamentId}/subscription": {
+    "/fifa/Tournament/{tournamentId}/subscription": {
       "post": {
         "tags": ["Tournament"],
         "summary": "Subscribe to tournament.",

@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
-		"name": "GameOn! 4.2.2",
+		"name": "GameOn! 4.3.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -905,11 +905,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament",
+									"raw": "{{baseUrl}}/fifa/tournament",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament"
 									]
 								}
@@ -925,11 +926,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/featured",
+									"raw": "{{baseUrl}}/fifa/tournament/featured",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"featured"
 									]
@@ -946,11 +948,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/7",
+									"raw": "{{baseUrl}}/fifa/tournament/7",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"7"
 									]
@@ -964,11 +967,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/4/subscription",
+									"raw": "{{baseUrl}}/fifa/tournament/4/subscription",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"4",
 										"subscription"
@@ -992,11 +996,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/tournament",
+									"raw": "{{baseUrl}}/fifa/tournament",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament"
 									]
 								}
@@ -1009,11 +1014,12 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/4/subscription?fifaTeamId=1",
+									"raw": "{{baseUrl}}/fifa/tournament/4/subscription?fifaTeamId=1",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"4",
 										"subscription"
@@ -1034,11 +1040,12 @@
 								"method": "PATCH",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/6/subscription?fifaTeamId=1",
+									"raw": "{{baseUrl}}/fifa/tournament/6/subscription?fifaTeamId=1",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"6",
 										"subscription"
@@ -1068,11 +1075,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/tournament/7",
+									"raw": "{{baseUrl}}/fifa/tournament/7",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"7"
 									]
@@ -1086,11 +1094,12 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/7",
+									"raw": "{{baseUrl}}/fifa/tournament/7",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"7"
 									]
@@ -1104,11 +1113,12 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/7/player/1",
+									"raw": "{{baseUrl}}/fifa/tournament/7/player/1",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"7",
 										"player",
@@ -1124,11 +1134,12 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/4/phase1",
+									"raw": "{{baseUrl}}/fifa/tournament/4/phase1",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"4",
 										"phase1"
@@ -1143,11 +1154,12 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/tournament/6/phase1/score",
+									"raw": "{{baseUrl}}/fifa/tournament/6/phase1/score",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"tournament",
 										"6",
 										"phase1",
