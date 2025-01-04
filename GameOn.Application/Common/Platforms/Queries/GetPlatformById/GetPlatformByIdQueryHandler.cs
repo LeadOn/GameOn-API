@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Platforms.Queries.GetPlatformById
+namespace GameOn.Application.Common.Platforms.Queries.GetPlatformById
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -28,7 +28,7 @@ namespace GameOn.Application.Platforms.Queries.GetPlatformById
         /// <inheritdoc />
         public async Task<Platform?> Handle(GetPlatformByIdQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Platforms.FirstOrDefaultAsync(x => x.Id == request.PlatformId);
+            return await context.Platforms.FirstOrDefaultAsync(x => x.Id == request.PlatformId);
         }
     }
 }

@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Platforms.Queries.GetAllPlatforms
+namespace GameOn.Application.Common.Platforms.Queries.GetAllPlatforms
 {
     using GameOn.Domain;
     using MediatR;

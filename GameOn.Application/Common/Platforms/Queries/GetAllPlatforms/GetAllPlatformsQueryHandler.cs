@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Platforms.Queries.GetAllPlatforms
+namespace GameOn.Application.Common.Platforms.Queries.GetAllPlatforms
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -28,7 +28,7 @@ namespace GameOn.Application.Platforms.Queries.GetAllPlatforms
         /// <inheritdoc />
         public async Task<IEnumerable<Platform>> Handle(GetAllPlatformsQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Platforms.ToListAsync();
+            return await context.Platforms.ToListAsync();
         }
     }
 }
