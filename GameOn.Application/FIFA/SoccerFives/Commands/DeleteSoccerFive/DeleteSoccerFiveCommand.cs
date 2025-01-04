@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.SoccerFives.Commands.DeleteSoccerFive
+namespace GameOn.Application.FIFA.SoccerFives.Commands.DeleteSoccerFive
 {
     using GameOn.Domain;
     using MediatR;

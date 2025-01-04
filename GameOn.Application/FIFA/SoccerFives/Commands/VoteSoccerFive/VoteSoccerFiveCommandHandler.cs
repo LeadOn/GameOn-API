@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.SoccerFives.Commands.VoteSoccerFive
+namespace GameOn.Application.FIFA.SoccerFives.Commands.VoteSoccerFive
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -25,14 +25,14 @@ namespace GameOn.Application.SoccerFives.Commands.VoteSoccerFive
         public VoteSoccerFiveCommandHandler(IApplicationDbContext context, ISender mediatr)
         {
             this.context = context;
-            this.mediator = mediatr;
+            mediator = mediatr;
         }
 
         /// <inheritdoc />
         public async Task<bool> Handle(VoteSoccerFiveCommand request, CancellationToken cancellationToken)
         {
             // First, cleaning old votes
-            var oldVotes = await this.context.SoccerFiveVoteAnswers.Where(x => x.PlayerId == request.Vote.PlayerId && x.VoteChoice.SoccerFiveId == request.Vote.SoccerFiveId).ToListAsync(cancellationToken);
+            var oldVotes = await context.SoccerFiveVoteAnswers.Where(x => x.PlayerId == request.Vote.PlayerId && x.VoteChoice.SoccerFiveId == request.Vote.SoccerFiveId).ToListAsync(cancellationToken);
 
             var newVotesToSkip = new List<int>();
 
@@ -40,7 +40,7 @@ namespace GameOn.Application.SoccerFives.Commands.VoteSoccerFive
             {
                 if (!request.Vote.ChoiceIds.Contains(oldVote.VoteChoiceId))
                 {
-                    this.context.SoccerFiveVoteAnswers.Remove(oldVote);
+                    context.SoccerFiveVoteAnswers.Remove(oldVote);
                 }
                 else
                 {
@@ -53,7 +53,7 @@ namespace GameOn.Application.SoccerFives.Commands.VoteSoccerFive
             {
                 if (!newVotesToSkip.Contains(choiceId))
                 {
-                    this.context.SoccerFiveVoteAnswers.Add(new SoccerFiveVoteAnswer
+                    context.SoccerFiveVoteAnswers.Add(new SoccerFiveVoteAnswer
                     {
                         PlayerId = request.Vote.PlayerId ?? throw new NotImplementedException(),
                         VoteChoiceId = choiceId,
@@ -61,7 +61,7 @@ namespace GameOn.Application.SoccerFives.Commands.VoteSoccerFive
                 }
             });
 
-            await this.context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return true;
         }

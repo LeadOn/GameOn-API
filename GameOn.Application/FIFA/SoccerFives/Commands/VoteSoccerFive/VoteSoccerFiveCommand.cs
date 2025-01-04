@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.SoccerFives.Commands.VoteSoccerFive
+namespace GameOn.Application.FIFA.SoccerFives.Commands.VoteSoccerFive
 {
     using GameOn.Common.DTOs;
     using MediatR;

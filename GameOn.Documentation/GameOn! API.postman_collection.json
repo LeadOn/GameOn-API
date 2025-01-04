@@ -750,11 +750,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/soccerfive",
+									"raw": "{{baseUrl}}/fifa/soccerfive",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"soccerfive"
 									]
 								}
@@ -770,11 +771,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/soccerfive/1",
+									"raw": "{{baseUrl}}/fifa/soccerfive/1",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"soccerfive",
 										"1"
 									]
@@ -797,11 +799,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/soccerfive",
+									"raw": "{{baseUrl}}/fifa/soccerfive",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"soccerfive"
 									]
 								}
@@ -823,11 +826,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/soccerfive",
+									"raw": "{{baseUrl}}/fifa/soccerfive",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"soccerfive"
 									]
 								}
@@ -849,11 +853,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/soccerfive/1/survey",
+									"raw": "{{baseUrl}}/fifa/soccerfive/1/survey",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"soccerfive",
 										"1",
 										"survey"
@@ -877,11 +882,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/soccerfive/1/survey/vote",
+									"raw": "{{baseUrl}}/fifa/soccerfive/1/survey/vote",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
+										"fifa",
 										"soccerfive",
 										"1",
 										"survey",

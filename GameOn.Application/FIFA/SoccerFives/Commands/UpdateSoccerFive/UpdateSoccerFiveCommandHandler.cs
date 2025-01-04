@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.SoccerFives.Commands.UpdateSoccerFive
+namespace GameOn.Application.FIFA.SoccerFives.Commands.UpdateSoccerFive
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -28,7 +28,7 @@ namespace GameOn.Application.SoccerFives.Commands.UpdateSoccerFive
         /// <inheritdoc />
         public async Task<SoccerFive> Handle(UpdateSoccerFiveCommand request, CancellationToken cancellationToken)
         {
-            var soccerFiveInDb = await this.context.SoccerFives.FirstOrDefaultAsync(x => x.Id == request.SoccerFiveId, cancellationToken);
+            var soccerFiveInDb = await context.SoccerFives.FirstOrDefaultAsync(x => x.Id == request.SoccerFiveId, cancellationToken);
 
             if (soccerFiveInDb is null)
             {
@@ -44,8 +44,8 @@ namespace GameOn.Application.SoccerFives.Commands.UpdateSoccerFive
                 soccerFiveInDb.State = (int)request.State;
             }
 
-            this.context.SoccerFives.Update(soccerFiveInDb);
-            await this.context.SaveChangesAsync(cancellationToken);
+            context.SoccerFives.Update(soccerFiveInDb);
+            await context.SaveChangesAsync(cancellationToken);
             return soccerFiveInDb;
         }
     }

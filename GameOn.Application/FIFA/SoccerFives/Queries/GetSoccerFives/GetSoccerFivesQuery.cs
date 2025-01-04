@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.TournamentPlayers.Queries.GetSoccerFives
+namespace GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFives
 {
     using GameOn.Common.DTOs;
     using GameOn.Domain;

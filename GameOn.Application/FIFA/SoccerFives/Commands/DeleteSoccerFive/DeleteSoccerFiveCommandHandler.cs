@@ -1,7 +1,7 @@
 ﻿// <copyright file="DeleteSoccerFiveCommandHandler.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
-namespace GameOn.Application.SoccerFives.Commands.DeleteSoccerFive
+namespace GameOn.Application.FIFA.SoccerFives.Commands.DeleteSoccerFive
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -27,20 +27,20 @@ namespace GameOn.Application.SoccerFives.Commands.DeleteSoccerFive
         /// <inheritdoc />
         public async Task<bool> Handle(DeleteSoccerFiveCommand request, CancellationToken cancellationToken)
         {
-            var soccerFiveInDb = await this.context.SoccerFives.FirstOrDefaultAsync(x => x.Id == request.SoccerFiveId, cancellationToken);
+            var soccerFiveInDb = await context.SoccerFives.FirstOrDefaultAsync(x => x.Id == request.SoccerFiveId, cancellationToken);
 
             if (soccerFiveInDb == null || soccerFiveInDb.CreatedById != request.CurrentPlayerId)
             {
                 throw new NotImplementedException();
             }
 
-            var answers = await this.context.SoccerFiveVoteAnswers.Where(x => x.VoteChoice.SoccerFiveId == request.SoccerFiveId).ToListAsync(cancellationToken);
-            var choices = await this.context.SoccerFiveVoteChoices.Where(x => x.SoccerFiveId == request.SoccerFiveId).ToListAsync(cancellationToken);
+            var answers = await context.SoccerFiveVoteAnswers.Where(x => x.VoteChoice.SoccerFiveId == request.SoccerFiveId).ToListAsync(cancellationToken);
+            var choices = await context.SoccerFiveVoteChoices.Where(x => x.SoccerFiveId == request.SoccerFiveId).ToListAsync(cancellationToken);
 
-            this.context.SoccerFiveVoteAnswers.RemoveRange(answers);
-            this.context.SoccerFiveVoteChoices.RemoveRange(choices);
-            this.context.SoccerFives.Remove(soccerFiveInDb);
-            await this.context.SaveChangesAsync(cancellationToken);
+            context.SoccerFiveVoteAnswers.RemoveRange(answers);
+            context.SoccerFiveVoteChoices.RemoveRange(choices);
+            context.SoccerFives.Remove(soccerFiveInDb);
+            await context.SaveChangesAsync(cancellationToken);
             return true;
         }
     }

@@ -2,9 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.SoccerFives.Commands.UpdateSoccerFiveSurvey
+namespace GameOn.Application.FIFA.SoccerFives.Commands.UpdateSoccerFiveSurvey
 {
-    using GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById;
+    using GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFiveById;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
