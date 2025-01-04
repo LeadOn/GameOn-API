@@ -28,7 +28,7 @@ namespace GameOn.Application.Common.Platforms.Queries.GetAllPlatforms
         /// <inheritdoc />
         public async Task<IEnumerable<Platform>> Handle(GetAllPlatformsQuery request, CancellationToken cancellationToken)
         {
-            return await context.Platforms.ToListAsync();
+            return await this.context.Platforms.ToListAsync();
         }
     }
 }

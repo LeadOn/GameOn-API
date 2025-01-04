@@ -5,8 +5,8 @@
 namespace GameOn.Application.FIFA.TournamentPlayers.Commands.UpdateTournamentSubscription
 {
     using GameOn.Application.Common.Players.Queries.GetPlayerByKeycloakId;
+    using GameOn.Application.FIFA.FifaTeams.Queries.GetFifaTeamById;
     using GameOn.Application.FIFA.Tournaments.Queries.CheckTournamentSubscription;
-    using GameOn.Application.FifaTeams.Queries.GetFifaTeamById;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;

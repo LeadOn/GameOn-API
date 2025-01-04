@@ -28,7 +28,7 @@ namespace GameOn.Application.Common.Platforms.Queries.GetPlatformById
         /// <inheritdoc />
         public async Task<Platform?> Handle(GetPlatformByIdQuery request, CancellationToken cancellationToken)
         {
-            return await context.Platforms.FirstOrDefaultAsync(x => x.Id == request.PlatformId);
+            return await this.context.Platforms.FirstOrDefaultAsync(x => x.Id == request.PlatformId);
         }
     }
 }
