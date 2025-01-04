@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Platforms.Commands.UpdatePlatform
+namespace GameOn.Application.Common.Platforms.Commands.UpdatePlatform
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -31,7 +31,7 @@ namespace GameOn.Application.Platforms.Commands.UpdatePlatform
         /// <inheritdoc />
         public async Task<Platform> Handle(UpdatePlatformCommand request, CancellationToken cancellationToken)
         {
-            var platformInDb = await this.context.Platforms.FirstOrDefaultAsync(x => x.Id == request.PlatformId, cancellationToken);
+            var platformInDb = await context.Platforms.FirstOrDefaultAsync(x => x.Id == request.PlatformId, cancellationToken);
 
             if (platformInDb is null)
             {
@@ -40,8 +40,8 @@ namespace GameOn.Application.Platforms.Commands.UpdatePlatform
 
             platformInDb.Name = request.Name;
 
-            this.context.Platforms.Update(platformInDb);
-            await this.context.SaveChangesAsync(cancellationToken);
+            context.Platforms.Update(platformInDb);
+            await context.SaveChangesAsync(cancellationToken);
             return platformInDb;
         }
     }

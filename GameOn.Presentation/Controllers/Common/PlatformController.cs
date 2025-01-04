@@ -2,12 +2,12 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Presentation.Controllers
+namespace GameOn.Presentation.Controllers.Common
 {
-    using GameOn.Application.Platforms.Commands.CreatePlatform;
-    using GameOn.Application.Platforms.Commands.UpdatePlatform;
-    using GameOn.Application.Platforms.Queries.GetAllPlatforms;
-    using GameOn.Application.Platforms.Queries.GetPlatformById;
+    using GameOn.Application.Common.Platforms.Commands.CreatePlatform;
+    using GameOn.Application.Common.Platforms.Commands.UpdatePlatform;
+    using GameOn.Application.Common.Platforms.Queries.GetAllPlatforms;
+    using GameOn.Application.Common.Platforms.Queries.GetPlatformById;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;

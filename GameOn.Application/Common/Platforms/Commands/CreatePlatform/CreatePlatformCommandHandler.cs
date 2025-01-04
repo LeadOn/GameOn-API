@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Platforms.Commands.CreatePlatform
+namespace GameOn.Application.Common.Platforms.Commands.CreatePlatform
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -35,8 +35,8 @@ namespace GameOn.Application.Platforms.Commands.CreatePlatform
                 Name = request.Name,
             };
 
-            this.context.Platforms.Add(platform);
-            await this.context.SaveChangesAsync(cancellationToken);
+            context.Platforms.Add(platform);
+            await context.SaveChangesAsync(cancellationToken);
             return platform;
         }
     }

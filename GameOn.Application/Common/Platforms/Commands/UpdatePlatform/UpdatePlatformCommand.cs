@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Platforms.Commands.UpdatePlatform
+namespace GameOn.Application.Common.Platforms.Commands.UpdatePlatform
 {
     using GameOn.Domain;
     using MediatR;

@@ -4,12 +4,12 @@
 
 namespace GameOn.Application.Common.Players.Queries.GetPlayerStats
 {
+    using GameOn.Application.Common.Platforms.Queries.GetAllPlatforms;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Application.FifaGamePlayed.Queries.GetFifaGamePlayedById;
     using GameOn.Application.FifaTeams.Queries.GetMostLossesFifaTeamsByPlayer;
     using GameOn.Application.FifaTeams.Queries.GetMostPlayedFifaTeamsByPlayer;
     using GameOn.Application.FifaTeams.Queries.GetMostWinsFifaTeamsByPlayer;
-    using GameOn.Application.Platforms.Queries.GetAllPlatforms;
     using GameOn.Application.TeamPlayers.Queries.SearchTeamPlayer;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
