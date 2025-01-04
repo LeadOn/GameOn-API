@@ -28,7 +28,7 @@ namespace GameOn.Application.FIFA.Seasons.Queries.GetCurrentSeason
         /// <inheritdoc />
         public async Task<Season?> Handle(GetCurrentSeasonQuery request, CancellationToken cancellationToken)
         {
-            return await context.Seasons.FirstOrDefaultAsync(x => x.Id == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"));
+            return await this.context.Seasons.FirstOrDefaultAsync(x => x.Id == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"));
         }
     }
 }

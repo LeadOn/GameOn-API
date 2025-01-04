@@ -141,7 +141,7 @@
         }
       }
     },
-    "/FifaGame/tournament/{tournamentId}": {
+    "/fifa/FifaGame/tournament/{tournamentId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get games played by tournament.",
@@ -183,7 +183,7 @@
         }
       }
     },
-    "/FifaGame/{gameId}": {
+    "/fifa/FifaGame/{gameId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get game played by ID.",
@@ -249,7 +249,7 @@
         }
       }
     },
-    "/FifaGame/planned/{playerId}": {
+    "/fifa/FifaGame/planned/{playerId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get users planned games.",
@@ -290,7 +290,7 @@
         }
       }
     },
-    "/FifaGame/last/{number}": {
+    "/fifa/FifaGame/last/{number}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get last games played.",
@@ -326,7 +326,7 @@
         }
       }
     },
-    "/FifaGame/last/{number}/player/{playerId}": {
+    "/fifa/FifaGame/last/{number}/player/{playerId}": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Get last games played by player.",
@@ -371,7 +371,7 @@
         }
       }
     },
-    "/FifaGame": {
+    "/fifa/FifaGame": {
       "get": {
         "tags": ["FifaGame"],
         "summary": "Search games played in database.",
@@ -514,7 +514,7 @@
         }
       }
     },
-    "/FifaTeam": {
+    "/fifa/FifaTeam": {
       "get": {
         "tags": ["FifaTeam"],
         "summary": "Get all FIFA Teams in database.",
