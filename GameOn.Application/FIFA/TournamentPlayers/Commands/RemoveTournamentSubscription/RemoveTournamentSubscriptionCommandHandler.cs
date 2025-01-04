@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.FIFA.TournamentPlayers.Commands.RemoveTournamentSubscription
 {
-    using GameOn.Application.Players.Queries.GetPlayerById;
+    using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

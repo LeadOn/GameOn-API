@@ -4,6 +4,7 @@
 
 namespace GameOn.Presentation.Controllers.FIFA
 {
+    using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.FIFA.SoccerFives.Commands.CreateSoccerFive;
     using GameOn.Application.FIFA.SoccerFives.Commands.DeleteSoccerFive;
     using GameOn.Application.FIFA.SoccerFives.Commands.UpdateSoccerFive;
@@ -11,7 +12,6 @@ namespace GameOn.Presentation.Controllers.FIFA
     using GameOn.Application.FIFA.SoccerFives.Commands.VoteSoccerFive;
     using GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFiveById;
     using GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFives;
-    using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;

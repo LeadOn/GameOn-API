@@ -28,7 +28,7 @@ namespace GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFives
         /// <inheritdoc />
         public async Task<List<SoccerFive>> Handle(GetSoccerFivesQuery request, CancellationToken cancellationToken)
         {
-            return await context.SoccerFives.Include(x => x.CreatedBy).ToListAsync(cancellationToken);
+            return await this.context.SoccerFives.Include(x => x.CreatedBy).ToListAsync(cancellationToken);
         }
     }
 }

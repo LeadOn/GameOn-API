@@ -4,9 +4,9 @@
 
 namespace GameOn.Presentation.Controllers
 {
+    using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Highlights.Commands.CreateHighlight;
     using GameOn.Application.Highlights.Queries.GetAllHighlights;
-    using GameOn.Application.Players.Queries.GetConnectedPlayer;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;

@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Players.Commands.UpdateConnectedPlayer
+namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;

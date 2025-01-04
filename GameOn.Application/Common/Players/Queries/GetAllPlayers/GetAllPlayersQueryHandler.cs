@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Players.Queries.GetAllPlayers
+namespace GameOn.Application.Common.Players.Queries.GetAllPlayers
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
