@@ -2,11 +2,11 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Presentation.Controllers
+namespace GameOn.Presentation.Controllers.Common
 {
+    using GameOn.Application.Common.Highlights.Commands.CreateHighlight;
+    using GameOn.Application.Common.Highlights.Queries.GetAllHighlights;
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
-    using GameOn.Application.Highlights.Commands.CreateHighlight;
-    using GameOn.Application.Highlights.Queries.GetAllHighlights;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
@@ -75,7 +75,7 @@ namespace GameOn.Presentation.Controllers
             }
 
             var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery
-                { ConnectedPlayer = this.User.GetConnectedPlayer() });
+            { ConnectedPlayer = this.User.GetConnectedPlayer() });
 
             if (playerInDb is null)
             {
