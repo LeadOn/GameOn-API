@@ -30,14 +30,14 @@ namespace GameOn.Application.FIFA.Tournaments.Queries.CheckTournamentSubscriptio
         {
             // Getting player
             var playerInDb =
-                await context.Players.FirstOrDefaultAsync(x => x.KeycloakId == request.ConnectedPlayer.KeycloakId, cancellationToken);
+                await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == request.ConnectedPlayer.KeycloakId, cancellationToken);
 
             if (playerInDb is null)
             {
                 return null;
             }
 
-            var playerSubscription = await context.TournamentPlayers.FirstOrDefaultAsync(x => x.TournamentId == request.TournamentId && x.PlayerId == playerInDb.Id, cancellationToken);
+            var playerSubscription = await this.context.TournamentPlayers.FirstOrDefaultAsync(x => x.TournamentId == request.TournamentId && x.PlayerId == playerInDb.Id, cancellationToken);
 
             if (playerSubscription is not null)
             {

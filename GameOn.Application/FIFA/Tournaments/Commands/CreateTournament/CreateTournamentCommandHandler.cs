@@ -27,8 +27,8 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.CreateTournament
         /// <inheritdoc />
         public async Task<Tournament> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
-            context.Tournaments.Add(request.Tournament);
-            await context.SaveChangesAsync(cancellationToken);
+            this.context.Tournaments.Add(request.Tournament);
+            await this.context.SaveChangesAsync(cancellationToken);
             return request.Tournament;
         }
     }

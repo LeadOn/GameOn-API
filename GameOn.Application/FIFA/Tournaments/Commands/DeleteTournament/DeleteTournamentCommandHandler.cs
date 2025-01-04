@@ -27,7 +27,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.DeleteTournament
         /// <inheritdoc />
         public async Task<bool> Handle(DeleteTournamentCommand request, CancellationToken cancellationToken)
         {
-            var tournamentInDb = await context.Tournaments.FirstOrDefaultAsync(x => x.Id == request.TournamentId, cancellationToken);
+            var tournamentInDb = await this.context.Tournaments.FirstOrDefaultAsync(x => x.Id == request.TournamentId, cancellationToken);
 
             if (tournamentInDb == null)
             {
@@ -35,7 +35,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.DeleteTournament
             }
 
             // Updating games (not deleting tournament games)
-            var games = await context.FifaGamesPlayed.Where(x => x.TournamentId == request.TournamentId).ToListAsync(cancellationToken);
+            var games = await this.context.FifaGamesPlayed.Where(x => x.TournamentId == request.TournamentId).ToListAsync(cancellationToken);
 
             foreach (var game in games)
             {
@@ -43,13 +43,13 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.DeleteTournament
             }
 
             // Deleting tournament player
-            var tournamentPlayers = await context.TournamentPlayers.Where(x => x.TournamentId == request.TournamentId).ToListAsync(cancellationToken);
+            var tournamentPlayers = await this.context.TournamentPlayers.Where(x => x.TournamentId == request.TournamentId).ToListAsync(cancellationToken);
 
-            context.FifaGamesPlayed.UpdateRange(games);
-            context.TournamentPlayers.RemoveRange(tournamentPlayers);
-            context.Tournaments.Remove(tournamentInDb);
+            this.context.FifaGamesPlayed.UpdateRange(games);
+            this.context.TournamentPlayers.RemoveRange(tournamentPlayers);
+            this.context.Tournaments.Remove(tournamentInDb);
 
-            await context.SaveChangesAsync(cancellationToken);
+            await this.context.SaveChangesAsync(cancellationToken);
 
             return true;
         }

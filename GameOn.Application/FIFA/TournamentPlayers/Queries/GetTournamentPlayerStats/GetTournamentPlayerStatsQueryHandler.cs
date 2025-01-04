@@ -34,7 +34,7 @@ namespace GameOn.Application.FIFA.TournamentPlayers.Queries.GetTournamentPlayerS
         public async Task<PlatformStatsDto> Handle(GetTournamentPlayerStatsQuery request, CancellationToken cancellationToken)
         {
             // Get player from database.
-            var playerInDb = await mediator.Send(new GetPlayerByIdQuery { PlayerId = request.PlayerId }, cancellationToken);
+            var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = request.PlayerId }, cancellationToken);
 
             if (playerInDb is null)
             {
@@ -44,7 +44,7 @@ namespace GameOn.Application.FIFA.TournamentPlayers.Queries.GetTournamentPlayerS
             var stats = new PlatformStatsDto { AverageGoalGiven = 0, AverageGoalTaken = 0, Draws = 0, GoalDifference = 0, Losses = 0, Wins = 0, GoalsGiven = 0, GoalsTaken = 0 };
 
             // Getting games played by platform
-            var teamPlayersInDb = await mediator.Send(
+            var teamPlayersInDb = await this.mediator.Send(
                 new SearchTeamPlayerQuery
                 {
                     Query = x => x.FifaGamePlayed.TournamentId == request.TournamentId
@@ -53,7 +53,7 @@ namespace GameOn.Application.FIFA.TournamentPlayers.Queries.GetTournamentPlayerS
                     Limit = 1000000,
                 }, cancellationToken);
 
-            var gamesNotPlayed = await mediator.Send(
+            var gamesNotPlayed = await this.mediator.Send(
                 new SearchTeamPlayerQuery
                 {
                     Query = x => x.FifaGamePlayed.TournamentId == request.TournamentId
@@ -80,7 +80,7 @@ namespace GameOn.Application.FIFA.TournamentPlayers.Queries.GetTournamentPlayerS
                 foreach (var teamPlayer in teamPlayersInDb)
                 {
                     // Getting game
-                    var gameInDb = await mediator.Send(new GetFifaGamePlayedByIdQuery { FifaGamePlayedId = teamPlayer.FifaGameId }, cancellationToken);
+                    var gameInDb = await this.mediator.Send(new GetFifaGamePlayedByIdQuery { FifaGamePlayedId = teamPlayer.FifaGameId }, cancellationToken);
 
                     if (gameInDb is null)
                     {
@@ -91,11 +91,11 @@ namespace GameOn.Application.FIFA.TournamentPlayers.Queries.GetTournamentPlayerS
                     {
                         stats.Draws++;
                     }
-                    else if (teamPlayer.Team == 0 && gameInDb.Team1.Score > gameInDb.Team2.Score || teamPlayer.Team == 1 && gameInDb.Team1.Score < gameInDb.Team2.Score)
+                    else if ((teamPlayer.Team == 0 && gameInDb.Team1.Score > gameInDb.Team2.Score) || (teamPlayer.Team == 1 && gameInDb.Team1.Score < gameInDb.Team2.Score))
                     {
                         stats.Wins++;
                     }
-                    else if (teamPlayer.Team == 0 && gameInDb.Team1.Score < gameInDb.Team2.Score || teamPlayer.Team == 1 && gameInDb.Team1.Score > gameInDb.Team2.Score)
+                    else if ((teamPlayer.Team == 0 && gameInDb.Team1.Score < gameInDb.Team2.Score) || (teamPlayer.Team == 1 && gameInDb.Team1.Score > gameInDb.Team2.Score))
                     {
                         stats.Losses++;
                     }

@@ -28,7 +28,7 @@ namespace GameOn.Application.FIFA.Tournaments.Queries.GetAllTournaments
         /// <inheritdoc />
         public async Task<IEnumerable<Tournament>> Handle(GetAllTournamentsQuery request, CancellationToken cancellationToken)
         {
-            return await context.Tournaments.OrderBy(x => x.State).ToListAsync(cancellationToken: cancellationToken);
+            return await this.context.Tournaments.OrderBy(x => x.State).ToListAsync(cancellationToken: cancellationToken);
         }
     }
 }
