@@ -331,52 +331,6 @@
 					]
 				},
 				{
-					"name": "Season",
-					"item": [
-						{
-							"name": "Get current season",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/season/current",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"season",
-										"current"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get all",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/season",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"season"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
 					"name": "Get home data",
 					"request": {
 						"auth": {
@@ -1170,6 +1124,54 @@
 										"6",
 										"phase1",
 										"score"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Season",
+					"item": [
+						{
+							"name": "Get current season",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifa/season/current",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifa",
+										"season",
+										"current"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifa/season",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifa",
+										"season"
 									]
 								}
 							},

@@ -2,10 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Presentation.Controllers
+namespace GameOn.Presentation.Controllers.FIFA
 {
-    using GameOn.Application.Seasons.Queries.GetAllSeasons;
-    using GameOn.Application.Seasons.Queries.GetCurrentSeason;
+    using GameOn.Application.FIFA.Seasons.Queries.GetAllSeasons;
+    using GameOn.Application.FIFA.Seasons.Queries.GetCurrentSeason;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,7 @@ namespace GameOn.Presentation.Controllers
     /// Season Controller.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("fifa/[controller]")]
     public class SeasonController : ControllerBase
     {
         private readonly ISender mediator;

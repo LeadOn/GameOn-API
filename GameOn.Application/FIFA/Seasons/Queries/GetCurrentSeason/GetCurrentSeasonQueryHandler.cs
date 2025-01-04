@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Seasons.Queries.GetCurrentSeason
+namespace GameOn.Application.FIFA.Seasons.Queries.GetCurrentSeason
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -28,7 +28,7 @@ namespace GameOn.Application.Seasons.Queries.GetCurrentSeason
         /// <inheritdoc />
         public async Task<Season?> Handle(GetCurrentSeasonQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Seasons.FirstOrDefaultAsync(x => x.Id == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"));
+            return await context.Seasons.FirstOrDefaultAsync(x => x.Id == int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"));
         }
     }
 }

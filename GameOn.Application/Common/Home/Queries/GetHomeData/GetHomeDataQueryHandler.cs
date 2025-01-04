@@ -4,8 +4,8 @@
 
 namespace GameOn.Application.Common.Home.Queries.GetHomeData
 {
+    using GameOn.Application.FIFA.Seasons.Queries.GetCurrentSeason;
     using GameOn.Application.FIFA.Tournaments.Queries.GetFeaturedTournaments;
-    using GameOn.Application.Seasons.Queries.GetCurrentSeason;
     using GameOn.Common.DTOs.Common;
     using GameOn.Common.Interfaces;
     using MediatR;

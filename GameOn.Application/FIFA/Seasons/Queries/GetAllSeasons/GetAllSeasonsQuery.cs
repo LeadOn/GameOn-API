@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Seasons.Queries.GetAllSeasons
+namespace GameOn.Application.FIFA.Seasons.Queries.GetAllSeasons
 {
     using GameOn.Domain;
     using MediatR;
