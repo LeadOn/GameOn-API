@@ -7,6 +7,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
+    using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummonerAdmin;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
@@ -137,6 +138,38 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
 
 #pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
+#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+        }
+
+        /// <summary>
+        /// Update summoner of given player.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <param name="riotGamesNickname">Riot Games Nickname.</param>
+        /// <param name="riotGamesTagLine">Riot Games Tag Line (ex: EUW).</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{playerId:int}/admin")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update user League of Legends profile.")]
+        [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateSummoner(int playerId, string riotGamesNickname, string riotGamesTagLine)
+        {
+            var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = playerId });
+
+            if (playerInDb == null)
+            {
+                return this.NotFound();
+            }
+
+            playerInDb.RiotGamesNickname = riotGamesNickname;
+            playerInDb.RiotGamesTagLine = riotGamesTagLine;
+
+#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+            return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerAdminCommand { Player = playerInDb }));
 #pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
         }
     }
