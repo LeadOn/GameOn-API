@@ -1117,7 +1117,7 @@
         }
       }
     },
-    "/SoccerFive": {
+    "/fifa/SoccerFive": {
       "get": {
         "tags": ["SoccerFive"],
         "summary": "Get all soccer fives created.",
@@ -1223,7 +1223,7 @@
         }
       }
     },
-    "/SoccerFive/{id}": {
+    "/fifa/SoccerFive/{id}": {
       "get": {
         "tags": ["SoccerFive"],
         "summary": "Get all soccer fives created.",
@@ -1291,7 +1291,7 @@
         }
       }
     },
-    "/SoccerFive/{id}/survey": {
+    "/fifa/SoccerFive/{id}/survey": {
       "patch": {
         "tags": ["SoccerFive"],
         "summary": "Update five survey.",
@@ -1345,7 +1345,7 @@
         }
       }
     },
-    "/SoccerFive/{id}/survey/vote": {
+    "/fifa/SoccerFive/{id}/survey/vote": {
       "post": {
         "tags": ["SoccerFive"],
         "summary": "Vote five survey.",

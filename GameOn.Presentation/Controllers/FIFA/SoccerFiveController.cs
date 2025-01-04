@@ -2,16 +2,16 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Presentation.Controllers
+namespace GameOn.Presentation.Controllers.FIFA
 {
+    using GameOn.Application.FIFA.SoccerFives.Commands.CreateSoccerFive;
+    using GameOn.Application.FIFA.SoccerFives.Commands.DeleteSoccerFive;
+    using GameOn.Application.FIFA.SoccerFives.Commands.UpdateSoccerFive;
+    using GameOn.Application.FIFA.SoccerFives.Commands.UpdateSoccerFiveSurvey;
+    using GameOn.Application.FIFA.SoccerFives.Commands.VoteSoccerFive;
+    using GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFiveById;
+    using GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFives;
     using GameOn.Application.Players.Queries.GetConnectedPlayer;
-    using GameOn.Application.SoccerFives.Commands.CreateSoccerFive;
-    using GameOn.Application.SoccerFives.Commands.DeleteSoccerFive;
-    using GameOn.Application.SoccerFives.Commands.UpdateSoccerFive;
-    using GameOn.Application.SoccerFives.Commands.UpdateSoccerFiveSurvey;
-    using GameOn.Application.SoccerFives.Commands.VoteSoccerFive;
-    using GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById;
-    using GameOn.Application.TournamentPlayers.Queries.GetSoccerFives;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
@@ -24,7 +24,7 @@ namespace GameOn.Presentation.Controllers
     /// SoccerFive Controller.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("fifa/[controller]")]
     public class SoccerFiveController : ControllerBase
     {
         private readonly ISender mediator;

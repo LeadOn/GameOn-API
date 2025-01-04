@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.SoccerFives.Commands.CreateSoccerFive
+namespace GameOn.Application.FIFA.SoccerFives.Commands.CreateSoccerFive
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -27,8 +27,8 @@ namespace GameOn.Application.SoccerFives.Commands.CreateSoccerFive
         /// <inheritdoc />
         public async Task<SoccerFive> Handle(CreateSoccerFiveCommand request, CancellationToken cancellationToken)
         {
-            this.context.SoccerFives.Add(request.SoccerFive);
-            await this.context.SaveChangesAsync(cancellationToken);
+            context.SoccerFives.Add(request.SoccerFive);
+            await context.SaveChangesAsync(cancellationToken);
             return request.SoccerFive;
         }
     }

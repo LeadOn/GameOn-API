@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.TournamentPlayers.Queries.GetSoccerFives
+namespace GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFives
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -28,7 +28,7 @@ namespace GameOn.Application.TournamentPlayers.Queries.GetSoccerFives
         /// <inheritdoc />
         public async Task<List<SoccerFive>> Handle(GetSoccerFivesQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.SoccerFives.Include(x => x.CreatedBy).ToListAsync(cancellationToken);
+            return await context.SoccerFives.Include(x => x.CreatedBy).ToListAsync(cancellationToken);
         }
     }
 }

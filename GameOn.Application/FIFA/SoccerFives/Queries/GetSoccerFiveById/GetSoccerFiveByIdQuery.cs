@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.TournamentPlayers.Queries.GetSoccerFiveById
+namespace GameOn.Application.FIFA.SoccerFives.Queries.GetSoccerFiveById
 {
     using GameOn.Common.DTOs;
     using MediatR;

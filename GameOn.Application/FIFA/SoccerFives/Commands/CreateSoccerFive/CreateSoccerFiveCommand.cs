@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.SoccerFives.Commands.CreateSoccerFive
+namespace GameOn.Application.FIFA.SoccerFives.Commands.CreateSoccerFive
 {
     using GameOn.Domain;
     using MediatR;
