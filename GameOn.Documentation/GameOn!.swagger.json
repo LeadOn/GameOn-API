@@ -1069,7 +1069,7 @@
         }
       }
     },
-    "/Season": {
+    "/fifa/Season": {
       "get": {
         "tags": ["Season"],
         "summary": "Get all seasons.",
@@ -1093,7 +1093,7 @@
         }
       }
     },
-    "/Season/current": {
+    "/fifa/Season/current": {
       "get": {
         "tags": ["Season"],
         "summary": "Get current season.",
