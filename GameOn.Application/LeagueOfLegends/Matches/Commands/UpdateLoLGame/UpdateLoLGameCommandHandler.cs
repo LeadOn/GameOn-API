@@ -13,7 +13,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
     /// <summary>
     /// UpdateLoLGameCommandHandler class.
     /// </summary>
-    public class UpdateLoLGameCommandHandler : IRequestHandler<UpdateLoLGameCommand, bool>
+    public class UpdateLoLGameCommandHandler : IRequestHandler<UpdateLoLGameCommand, LoLGame>
     {
         private readonly IApplicationDbContext context;
         private readonly IMatchService matchService;
@@ -30,7 +30,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
         }
 
         /// <inheritdoc />
-        public async Task<bool> Handle(UpdateLoLGameCommand request, CancellationToken cancellationToken)
+        public async Task<LoLGame> Handle(UpdateLoLGameCommand request, CancellationToken cancellationToken)
         {
             var matchInDb = await this.context.LeagueOfLegendsGames.FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
 
@@ -61,6 +61,18 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     ChampionId = participant.ChampionId,
                     ChampionName = participant.ChampionName,
                     TeamId = participant.TeamId,
+                    Win = participant.Win,
+                    ChampLevel = participant.ChampLevel,
+                    Kills = participant.Kills,
+                    Deaths = participant.Deaths,
+                    Assists = participant.Assists,
+                    Item0 = participant.Item0,
+                    Item1 = participant.Item1,
+                    Item2 = participant.Item2,
+                    Item3 = participant.Item3,
+                    Item4 = participant.Item4,
+                    Item5 = participant.Item5,
+                    Item6 = participant.Item6,
                 };
 
                 // Checking if participant is a GameOn! User
@@ -78,6 +90,31 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             matchInDb.EndOfGameResult = matchFromRiot.Info.EndOfGameResult;
             matchInDb.GameVersion = matchFromRiot.Info.GameVersion;
 
+            matchInDb.GameStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            matchInDb.GameStart = matchInDb.GameStart.AddMilliseconds(matchFromRiot.Info.GameStartTimeStamp).ToLocalTime();
+
+            matchInDb.GameEnd = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            matchInDb.GameEnd = matchInDb.GameEnd.AddMilliseconds((double)matchFromRiot.Info.GameEndTimestamp).ToLocalTime();
+
+            switch (matchFromRiot.Info.QueueId)
+            {
+                case 420:
+                    matchInDb.QueueType = "RANKED_SOLO_DUO";
+                    break;
+
+                case 430:
+                    matchInDb.QueueType = "NORMAL_5v5";
+                    break;
+
+                case 440:
+                    matchInDb.QueueType = "RANKED_FLEX";
+                    break;
+
+                default:
+                    matchInDb.QueueType = "Inconnu";
+                    break;
+            }
+
             foreach (var team in matchFromRiot.Info.Teams)
             {
                 if (team.HasWon)
@@ -87,7 +124,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             }
 
             await this.context.SaveChangesAsync(cancellationToken);
-            return true;
+            return matchInDb;
         }
     }
 }

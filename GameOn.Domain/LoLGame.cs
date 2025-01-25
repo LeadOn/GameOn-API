@@ -37,9 +37,24 @@ namespace GameOn.Domain
         public DateTime RetrievedOn { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// Gets or sets Game start DateTime.
+        /// </summary>
+        public DateTime GameStart { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Gets or sets Game end DateTime.
+        /// </summary>
+        public DateTime GameEnd { get; set; } = DateTime.Now;
+
+        /// <summary>
         /// Gets or sets Winning team ID.
         /// </summary>
         public int? WinningTeamId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Queue Type.
+        /// </summary>
+        public string QueueType { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets League of Legends Game Participants.
