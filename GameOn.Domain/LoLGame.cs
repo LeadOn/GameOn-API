@@ -52,6 +52,11 @@ namespace GameOn.Domain
         public int? WinningTeamId { get; set; }
 
         /// <summary>
+        /// Gets or sets Queue Type.
+        /// </summary>
+        public string QueueType { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets League of Legends Game Participants.
         /// </summary>
         public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;

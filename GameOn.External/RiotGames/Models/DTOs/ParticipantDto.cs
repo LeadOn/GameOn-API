@@ -106,5 +106,65 @@ namespace GameOn.External.RiotGames.Models.DTOs
         /// </summary>
         [JsonProperty("teamId")]
         public int TeamId { get; set; }
+
+        /// <summary>
+        /// Gets or sets kills.
+        /// </summary>
+        [JsonProperty("kills")]
+        public int Kills { get; set; }
+
+        /// <summary>
+        /// Gets or sets Deaths.
+        /// </summary>
+        [JsonProperty("deaths")]
+        public int Deaths { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether game has been won.
+        /// </summary>
+        [JsonProperty("win")]
+        public bool Win { get; set; }
+
+        /// <summary>
+        /// Gets or sets Item 0.
+        /// </summary>
+        [JsonProperty("item0")]
+        public int Item0 { get; set; }
+
+        /// <summary>
+        /// Gets or sets Item 1.
+        /// </summary>
+        [JsonProperty("item1")]
+        public int Item1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets Item 2.
+        /// </summary>
+        [JsonProperty("item2")]
+        public int Item2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets Item 3.
+        /// </summary>
+        [JsonProperty("item3")]
+        public int Item3 { get; set; }
+
+        /// <summary>
+        /// Gets or sets Item 4.
+        /// </summary>
+        [JsonProperty("item4")]
+        public int Item4 { get; set; }
+
+        /// <summary>
+        /// Gets or sets Item 5.
+        /// </summary>
+        [JsonProperty("item5")]
+        public int Item5 { get; set; }
+
+        /// <summary>
+        /// Gets or sets Item 6.
+        /// </summary>
+        [JsonProperty("item6")]
+        public int Item6 { get; set; }
     }
 }
