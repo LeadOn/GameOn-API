@@ -16,7 +16,8 @@ namespace GameOn.Persistence
     public class GameOnContext : DbContext, IApplicationDbContext
     {
         // SQL Connection string
-        private readonly string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING");
+        private readonly string connectionString =
+            "Server=127.0.0.1;Port=3306;User=gameondev;Password=dPis$L%T3Jv34VbP;Database=gameon";//Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING");
 
         /// <summary>
         /// Gets or sets Players.
@@ -749,6 +750,14 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.RetrievedOn)
                     .HasColumnName("retrieved_on")
+                    .HasDefaultValue(DateTime.Now);
+
+                entity.Property(e => e.GameStart)
+                    .HasColumnName("game_start")
+                    .HasDefaultValue(DateTime.Now);
+
+                entity.Property(e => e.GameEnd)
+                    .HasColumnName("game_end")
                     .HasDefaultValue(DateTime.Now);
 
                 entity.HasMany(e => e.LeagueOfLegendsGameParticipants)

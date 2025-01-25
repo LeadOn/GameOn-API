@@ -37,6 +37,16 @@ namespace GameOn.Domain
         public DateTime RetrievedOn { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// Gets or sets Game start DateTime.
+        /// </summary>
+        public DateTime GameStart { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Gets or sets Game end DateTime.
+        /// </summary>
+        public DateTime GameEnd { get; set; } = DateTime.Now;
+
+        /// <summary>
         /// Gets or sets Winning team ID.
         /// </summary>
         public int? WinningTeamId { get; set; }

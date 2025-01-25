@@ -50,14 +50,15 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
                 // Updating those games in database
                 await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = matchesFromRiot.ToList(), Player = playerInDb });
+                return new List<LoLGame>();
 
-                return await this.context.LeagueOfLegendsGameParticipants
-                    .Include(x => x.Game)
-                    .Where(x => x.PlayerId == playerInDb.Id)
-                    .OrderByDescending(x => x.MatchId)
-                    .Take(5)
-                    .Select(x => x.Game)
-                    .ToListAsync(cancellationToken);
+                // return await this.context.LeagueOfLegendsGameParticipants
+                //     .Include(x => x.Game)
+                //     .Where(x => x.PlayerId == playerInDb.Id)
+                //     .OrderByDescending(x => x.MatchId)
+                //     .Take(5)
+                //     .Select(x => x.Game)
+                //     .ToListAsync(cancellationToken);
             }
         }
     }

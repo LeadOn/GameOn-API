@@ -35,7 +35,6 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets Game.
         /// </summary>
-        [JsonIgnore]
         public virtual LoLGame Game { get; set; } = null!;
     }
 }

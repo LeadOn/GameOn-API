@@ -78,6 +78,12 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             matchInDb.EndOfGameResult = matchFromRiot.Info.EndOfGameResult;
             matchInDb.GameVersion = matchFromRiot.Info.GameVersion;
 
+            matchInDb.GameStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            matchInDb.GameStart = matchInDb.GameStart.AddMilliseconds(matchFromRiot.Info.GameStartTimeStamp).ToLocalTime();
+
+            matchInDb.GameEnd = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            matchInDb.GameEnd = matchInDb.GameEnd.AddMilliseconds((double)matchFromRiot.Info.GameEndTimestamp).ToLocalTime();
+
             foreach (var team in matchFromRiot.Info.Teams)
             {
                 if (team.HasWon)
