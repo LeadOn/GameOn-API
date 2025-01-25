@@ -10,7 +10,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
     /// <summary>
     /// UpdateLoLGameCommand class.
     /// </summary>
-    public class UpdateLoLGameCommand : IRequest<bool>
+    public class UpdateLoLGameCommand : IRequest<LoLGame>
     {
         /// <summary>
         /// Gets or sets Match ID.

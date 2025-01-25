@@ -751,14 +751,26 @@ namespace GameOn.Persistence
                     .HasColumnName("retrieved_on")
                     .HasDefaultValue(DateTime.Now);
 
+                entity.Property(e => e.GameStart)
+                    .HasColumnName("game_start")
+                    .HasDefaultValue(DateTime.Now);
+
+                entity.Property(e => e.GameEnd)
+                    .HasColumnName("game_end")
+                    .HasDefaultValue(DateTime.Now);
+
+                entity.Property(e => e.WinningTeamId)
+                    .HasColumnName("winning_team_id");
+
+                entity.Property(e => e.QueueType)
+                    .HasColumnName("queue_type")
+                    .HasMaxLength(50);
+
                 entity.HasMany(e => e.LeagueOfLegendsGameParticipants)
                     .WithOne(f => f.Game)
                     .HasForeignKey(f => f.MatchId)
                     .HasConstraintName("FK_LoL_Games_Participants")
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.Property(e => e.WinningTeamId)
-                    .HasColumnName("winning_team_id");
             });
 
             modelBuilder.Entity<LoLGameParticipant>(entity =>
@@ -800,8 +812,44 @@ namespace GameOn.Persistence
                     .HasColumnName("champion_name")
                     .HasMaxLength(150);
 
+                entity.Property(e => e.ChampLevel)
+                    .HasColumnName("champLevel");
+
                 entity.Property(e => e.TeamId)
                     .HasColumnName("team_id");
+
+                entity.Property(e => e.Kills)
+                    .HasColumnName("kills");
+
+                entity.Property(e => e.Deaths)
+                    .HasColumnName("deaths");
+
+                entity.Property(e => e.Assists)
+                    .HasColumnName("assists");
+
+                entity.Property(e => e.Item0)
+                    .HasColumnName("item0");
+
+                entity.Property(e => e.Item1)
+                    .HasColumnName("item1");
+
+                entity.Property(e => e.Item2)
+                    .HasColumnName("item2");
+
+                entity.Property(e => e.Item3)
+                    .HasColumnName("item3");
+
+                entity.Property(e => e.Item4)
+                    .HasColumnName("item4");
+
+                entity.Property(e => e.Item5)
+                    .HasColumnName("item5");
+
+                entity.Property(e => e.Item6)
+                    .HasColumnName("item6");
+
+                entity.Property(e => e.Win)
+                    .HasColumnName("win");
             });
         }
     }
