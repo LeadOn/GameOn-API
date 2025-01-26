@@ -18,6 +18,12 @@ namespace GameOn.External.RiotGames.Models.DTOs
         public int CurrentGold { get; set; }
 
         /// <summary>
+        /// Gets or sets damage stats.
+        /// </summary>
+        [JsonProperty("damageStats")]
+        public DamageStatsDto DamageStats { get; set; } = new DamageStatsDto();
+
+        /// <summary>
         /// Gets or sets gold per second.
         /// </summary>
         [JsonProperty("goldPerSecond")]

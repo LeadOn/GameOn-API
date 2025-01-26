@@ -930,6 +930,42 @@ namespace GameOn.Persistence
                 entity.Property(e => e.Xp)
                     .HasColumnName("xp");
 
+                entity.Property(e => e.MagicDamageDone)
+                    .HasColumnName("magic_damage_done");
+
+                entity.Property(e => e.MagicDamageDoneToChampions)
+                    .HasColumnName("magic_damage_done_to_champions");
+
+                entity.Property(e => e.MagicDamageTaken)
+                    .HasColumnName("magic_damage_taken");
+
+                entity.Property(e => e.PhysicalDamageDone)
+                    .HasColumnName("physical_damage_done");
+
+                entity.Property(e => e.PhysicalDamageDoneToChampions)
+                    .HasColumnName("physical_damage_done_to_champions");
+
+                entity.Property(e => e.PhysicalDamageTaken)
+                    .HasColumnName("physical_damage_taken");
+
+                entity.Property(e => e.TotalDamageDone)
+                    .HasColumnName("total_damage_done");
+
+                entity.Property(e => e.TotalDamageDoneToChampions)
+                    .HasColumnName("total_damage_done_to_champions");
+
+                entity.Property(e => e.TotalDamageTaken)
+                    .HasColumnName("total_damage_taken");
+
+                entity.Property(e => e.TrueDamageDone)
+                    .HasColumnName("true_damage_done");
+
+                entity.Property(e => e.TrueDamageDoneToChampions)
+                    .HasColumnName("true_damage_done_to_champions");
+
+                entity.Property(e => e.TrueDamageTaken)
+                    .HasColumnName("true_damage_taken");
+
                 entity.HasOne(e => e.TimelineFrame)
                     .WithMany(f => f.LoLGameTimelineFrameParticipants)
                     .HasForeignKey(e => e.LoLGameTimelineFrameId)
