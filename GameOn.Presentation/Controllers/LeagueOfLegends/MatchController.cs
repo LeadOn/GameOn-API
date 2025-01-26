@@ -6,6 +6,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
     using GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById;
+    using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameTimelineByMatchId;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed;
     using GameOn.Domain;
     using MediatR;
@@ -71,6 +72,23 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         public async Task<IActionResult> GetById(string matchId)
         {
             return this.Ok(await this.mediator.Send(new GetGameByIdQuery { MatchId = matchId }));
+        }
+
+        /// <summary>
+        /// Get match timeline by ID.
+        /// </summary>
+        /// <param name="matchId">Match ID.</param>
+        /// <returns>200 OK with Match timeline.</returns>
+        [HttpGet]
+        [Route("{matchId}/timeline")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get Match Timeline by ID.")]
+        [SwaggerResponse(200, "Match Timeline.", typeof(List<LoLGameTimelineFrame>))]
+        [SwaggerResponse(404, "Match not found")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetGameTimeline(string matchId)
+        {
+            return this.Ok(await this.mediator.Send(new GetGameTimelineByMatchIdQuery { MatchId = matchId }));
         }
 
         /// <summary>

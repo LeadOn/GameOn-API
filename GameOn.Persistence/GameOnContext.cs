@@ -99,6 +99,16 @@ namespace GameOn.Persistence
         public DbSet<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Game Timeline Frame.
+        /// </summary>
+        public DbSet<LoLGameTimelineFrame> LeagueOfLegendsGameTimelineFrames { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets LoL Game Timeline Frame Participant.
+        /// </summary>
+        public DbSet<LoLGameTimelineFrameParticipant> LeagueOfLegendsGameTimelineFrameParticipants { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -143,7 +153,7 @@ namespace GameOn.Persistence
                     .HasMaxLength(500);
 
                 entity.Property(e => e.CreatedOn)
-                    .HasDefaultValue(DateTime.UtcNow)
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00))
                     .HasColumnName("created_on");
 
                 entity.Property(e => e.Archived)
@@ -209,12 +219,12 @@ namespace GameOn.Persistence
                 entity.Property(e => e.PlannedFrom)
                     .HasColumnName("planned_from")
                     .IsRequired()
-                    .HasDefaultValue(DateTime.UtcNow);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.PlannedTo)
                     .HasColumnName("planned_to")
                     .IsRequired()
-                    .HasDefaultValue(DateTime.UtcNow.AddDays(1));
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.WinnerId)
                     .HasColumnName("winner_id");
@@ -272,7 +282,7 @@ namespace GameOn.Persistence
                 entity.Property(e => e.JoinedAt)
                     .HasColumnName("joined_at")
                     .IsRequired()
-                    .HasDefaultValue(DateTime.UtcNow);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.Phase1Score)
                     .HasColumnName("phase_1_score");
@@ -365,7 +375,7 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.PlayedOn)
                     .HasColumnName("played_on")
-                    .HasDefaultValue(DateTime.Now);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.Team1Id)
                     .HasColumnName("team_1_id")
@@ -636,7 +646,7 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.PublicationDate)
                     .HasColumnName("publication_date")
-                    .HasDefaultValue(DateTime.Now);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
@@ -684,7 +694,7 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.CreatedOn)
                     .HasColumnName("created_on")
-                    .HasDefaultValue(DateTime.Now);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.QueueType)
                     .HasColumnName("queue_type")
@@ -749,15 +759,15 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.RetrievedOn)
                     .HasColumnName("retrieved_on")
-                    .HasDefaultValue(DateTime.Now);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.GameStart)
                     .HasColumnName("game_start")
-                    .HasDefaultValue(DateTime.Now);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.GameEnd)
                     .HasColumnName("game_end")
-                    .HasDefaultValue(DateTime.Now);
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
 
                 entity.Property(e => e.WinningTeamId)
                     .HasColumnName("winning_team_id");
@@ -850,6 +860,81 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Win)
                     .HasColumnName("win");
+            });
+
+            modelBuilder.Entity<LoLGameTimelineFrame>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("LeagueOfLegendsGameTimelineFrame");
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id");
+
+                entity.Property(e => e.Timestamp)
+                    .HasColumnName("timestamp");
+
+                entity.HasOne(e => e.Game)
+                    .WithMany(f => f.LoLGameTimelineFrames)
+                    .HasForeignKey(e => e.MatchId)
+                    .HasConstraintName("FK_LoL_Game_Frame")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameTimelineFrameParticipant>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("LeagueOfLegendsGameTimelineFrameParticipant");
+
+                entity.Property(e => e.LoLGameTimelineFrameId)
+                    .HasColumnName("timeline_frame_id");
+
+                entity.Property(e => e.CurrentGold)
+                    .HasColumnName("current_gold");
+
+                entity.Property(e => e.GoldPerSecond)
+                    .HasColumnName("gold_per_second");
+
+                entity.Property(e => e.JungleMinionsKilled)
+                    .HasColumnName("jungle_minions_killed");
+
+                entity.Property(e => e.Level)
+                    .HasColumnName("level");
+
+                entity.Property(e => e.MinionsKilled)
+                    .HasColumnName("minions_killed");
+
+                entity.Property(e => e.ParticipantId)
+                    .HasColumnName("participantId");
+
+                entity.Property(e => e.ParticipantPUUID)
+                    .HasColumnName("participantPuuid");
+
+                entity.Property(e => e.TimeEnemySpentControlled)
+                    .HasColumnName("time_enemy_spent_controlled");
+
+                entity.Property(e => e.TotalGold)
+                    .HasColumnName("total_gold");
+
+                entity.Property(e => e.Xp)
+                    .HasColumnName("xp");
+
+                entity.HasOne(e => e.TimelineFrame)
+                    .WithMany(f => f.LoLGameTimelineFrameParticipants)
+                    .HasForeignKey(e => e.LoLGameTimelineFrameId)
+                    .HasConstraintName("FK_LoL_Game_Frame_Participant")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

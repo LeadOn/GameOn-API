@@ -45,5 +45,14 @@ namespace GameOn.External.RiotGames.Implementations
             return await RunRequest<MatchDto>(this.client, request, cancellationToken);
 #pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
+
+        /// <inheritdoc />
+        public async Task<TimelineDto> GetGameTimelineById(string matchId, CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/lol/match/v5/matches/{matchId}/timeline?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+            return await RunRequest<TimelineDto>(this.client, request, cancellationToken);
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+        }
     }
 }

@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "4.3.0"
+    "version": "5.0.0"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -663,6 +663,43 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LoLGame"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Match not found"
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Match/{matchId}/timeline": {
+      "get": {
+        "tags": ["Match"],
+        "summary": "Get Match Timeline by ID.",
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Match Timeline.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoLGameTimelineFrame"
+                  }
                 }
               }
             }
@@ -2571,15 +2608,34 @@
             "type": "string",
             "format": "date-time"
           },
+          "gameStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gameEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
           "winningTeamId": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "queueType": {
+            "type": "string",
             "nullable": true
           },
           "leagueOfLegendsGameParticipants": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LoLGameParticipant"
+            },
+            "nullable": true
+          },
+          "loLGameTimelineFrames": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLGameTimelineFrame"
             },
             "nullable": true
           }
@@ -2653,6 +2709,45 @@
             "type": "integer",
             "format": "int32"
           },
+          "kills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deaths": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "win": {
+            "type": "boolean"
+          },
+          "item0": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "item1": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "item2": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "item3": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "item4": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "item5": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "item6": {
+            "type": "integer",
+            "format": "int32"
+          },
           "id": {
             "type": "integer",
             "format": "int32"
@@ -2668,6 +2763,85 @@
           },
           "player": {
             "$ref": "#/components/schemas/Player"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameTimelineFrame": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loLGameTimelineFrameParticipants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLGameTimelineFrameParticipant"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameTimelineFrameParticipant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loLGameTimelineFrameId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentGold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "goldPerSecond": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "jungleMinionsKilled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minionsKilled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "participantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "timeEnemySpentControlled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalGold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "xp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "participantPUUID": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

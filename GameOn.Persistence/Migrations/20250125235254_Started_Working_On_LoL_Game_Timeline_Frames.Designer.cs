@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20250125235254_Started_Working_On_LoL_Game_Timeline_Frames")]
+    partial class Started_Working_On_LoL_Game_Timeline_Frames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PublicationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 26, 0, 52, 54, 497, DateTimeKind.Local).AddTicks(868))
                         .HasColumnName("publication_date");
 
                     b.PrimitiveCollection<string>("RemovedFeatures")
@@ -107,7 +110,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 26, 0, 52, 54, 486, DateTimeKind.Local).AddTicks(9792))
                         .HasColumnName("played_on");
 
                     b.Property<int>("SeasonId")
@@ -273,7 +276,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 26, 0, 52, 54, 498, DateTimeKind.Local).AddTicks(1357))
                         .HasColumnName("created_on");
 
                     b.Property<bool>("FreshBlood")
@@ -348,7 +351,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("GameEnd")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 26, 0, 52, 54, 500, DateTimeKind.Local).AddTicks(2334))
                         .HasColumnName("game_end");
 
                     b.Property<long?>("GameId")
@@ -358,7 +361,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("GameStart")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 26, 0, 52, 54, 500, DateTimeKind.Local).AddTicks(2117))
                         .HasColumnName("game_start");
 
                     b.Property<string>("GameVersion")
@@ -375,7 +378,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("RetrievedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 26, 0, 52, 54, 500, DateTimeKind.Local).AddTicks(1845))
                         .HasColumnName("retrieved_on");
 
                     b.Property<int?>("WinningTeamId")
@@ -542,67 +545,6 @@ namespace GameOn.Persistence.Migrations
                     b.ToTable("LeagueOfLegendsGameTimelineFrame", (string)null);
                 });
 
-            modelBuilder.Entity("GameOn.Domain.LoLGameTimelineFrameParticipant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CurrentGold")
-                        .HasColumnType("int")
-                        .HasColumnName("current_gold");
-
-                    b.Property<int>("GoldPerSecond")
-                        .HasColumnType("int")
-                        .HasColumnName("gold_per_second");
-
-                    b.Property<int>("JungleMinionsKilled")
-                        .HasColumnType("int")
-                        .HasColumnName("jungle_minions_killed");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int")
-                        .HasColumnName("level");
-
-                    b.Property<int>("LoLGameTimelineFrameId")
-                        .HasColumnType("int")
-                        .HasColumnName("timeline_frame_id");
-
-                    b.Property<int>("MinionsKilled")
-                        .HasColumnType("int")
-                        .HasColumnName("minions_killed");
-
-                    b.Property<int>("ParticipantId")
-                        .HasColumnType("int")
-                        .HasColumnName("participantId");
-
-                    b.Property<string>("ParticipantPUUID")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("participantPuuid");
-
-                    b.Property<int>("TimeEnemySpentControlled")
-                        .HasColumnType("int")
-                        .HasColumnName("time_enemy_spent_controlled");
-
-                    b.Property<int>("TotalGold")
-                        .HasColumnType("int")
-                        .HasColumnName("total_gold");
-
-                    b.Property<int>("Xp")
-                        .HasColumnType("int")
-                        .HasColumnName("xp");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LoLGameTimelineFrameId");
-
-                    b.ToTable("LeagueOfLegendsGameTimelineFrameParticipant", (string)null);
-                });
-
             modelBuilder.Entity("GameOn.Domain.Platform", b =>
                 {
                     b.Property<int>("Id")
@@ -641,7 +583,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 25, 23, 52, 54, 476, DateTimeKind.Utc).AddTicks(8472))
                         .HasColumnName("created_on");
 
                     b.Property<string>("FullName")
@@ -875,13 +817,13 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 25, 23, 52, 54, 479, DateTimeKind.Utc).AddTicks(9575))
                         .HasColumnName("planned_from");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 26, 23, 52, 54, 479, DateTimeKind.Utc).AddTicks(9920))
                         .HasColumnName("planned_to");
 
                     b.Property<string>("Rules")
@@ -928,7 +870,7 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
+                        .HasDefaultValue(new DateTime(2025, 1, 25, 23, 52, 54, 483, DateTimeKind.Utc).AddTicks(6535))
                         .HasColumnName("joined_at");
 
                     b.Property<int?>("Phase1Score")
@@ -1096,18 +1038,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("GameOn.Domain.LoLGameTimelineFrameParticipant", b =>
-                {
-                    b.HasOne("GameOn.Domain.LoLGameTimelineFrame", "TimelineFrame")
-                        .WithMany("LoLGameTimelineFrameParticipants")
-                        .HasForeignKey("LoLGameTimelineFrameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_LoL_Game_Frame_Participant");
-
-                    b.Navigation("TimelineFrame");
-                });
-
             modelBuilder.Entity("GameOn.Domain.SoccerFive", b =>
                 {
                     b.HasOne("GameOn.Domain.Player", "CreatedBy")
@@ -1215,11 +1145,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("LeagueOfLegendsGameParticipants");
 
                     b.Navigation("LoLGameTimelineFrames");
-                });
-
-            modelBuilder.Entity("GameOn.Domain.LoLGameTimelineFrame", b =>
-                {
-                    b.Navigation("LoLGameTimelineFrameParticipants");
                 });
 
             modelBuilder.Entity("GameOn.Domain.Platform", b =>
