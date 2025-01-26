@@ -60,5 +60,10 @@ namespace GameOn.Domain
         /// Gets or sets League of Legends Game Participants.
         /// </summary>
         public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets League of Legends Timeline Frames.
+        /// </summary>
+        public virtual List<LoLGameTimelineFrame> LoLGameTimelineFrames { get; set; } = null!;
     }
 }

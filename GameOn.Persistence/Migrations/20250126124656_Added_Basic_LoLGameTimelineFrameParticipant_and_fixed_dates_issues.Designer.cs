@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20250126124656_Added_Basic_LoLGameTimelineFrameParticipant_and_fixed_dates_issues")]
+    partial class Added_Basic_LoLGameTimelineFrameParticipant_and_fixed_dates_issues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,8 +52,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PublicationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("publication_date");
+                        .HasColumnName("publication_date")
+                        .HasDefaultValueSql("getdate()");
 
                     b.PrimitiveCollection<string>("RemovedFeatures")
                         .HasMaxLength(500)
@@ -107,8 +110,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlayedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("played_on");
+                        .HasColumnName("played_on")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("SeasonId")
                         .HasColumnType("int")
@@ -273,8 +276,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("created_on");
+                        .HasColumnName("created_on")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<bool>("FreshBlood")
                         .HasColumnType("tinyint(1)")
@@ -348,8 +351,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("GameEnd")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("game_end");
+                        .HasColumnName("game_end")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<long?>("GameId")
                         .HasColumnType("bigint")
@@ -358,8 +361,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("GameStart")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("game_start");
+                        .HasColumnName("game_start")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("GameVersion")
                         .HasMaxLength(100)
@@ -375,8 +378,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("RetrievedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("retrieved_on");
+                        .HasColumnName("retrieved_on")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("WinningTeamId")
                         .HasColumnType("int")
@@ -551,18 +554,6 @@ namespace GameOn.Persistence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CurrentGold")
-                        .HasColumnType("int")
-                        .HasColumnName("current_gold");
-
-                    b.Property<int>("GoldPerSecond")
-                        .HasColumnType("int")
-                        .HasColumnName("gold_per_second");
-
-                    b.Property<int>("JungleMinionsKilled")
-                        .HasColumnType("int")
-                        .HasColumnName("jungle_minions_killed");
-
                     b.Property<int>("Level")
                         .HasColumnType("int")
                         .HasColumnName("level");
@@ -576,25 +567,7 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnName("minions_killed");
 
                     b.Property<int>("ParticipantId")
-                        .HasColumnType("int")
-                        .HasColumnName("participantId");
-
-                    b.Property<string>("ParticipantPUUID")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("participantPuuid");
-
-                    b.Property<int>("TimeEnemySpentControlled")
-                        .HasColumnType("int")
-                        .HasColumnName("time_enemy_spent_controlled");
-
-                    b.Property<int>("TotalGold")
-                        .HasColumnType("int")
-                        .HasColumnName("total_gold");
-
-                    b.Property<int>("Xp")
-                        .HasColumnType("int")
-                        .HasColumnName("xp");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -641,8 +614,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("created_on");
+                        .HasColumnName("created_on")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("FullName")
                         .HasMaxLength(100)
@@ -875,14 +848,14 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("PlannedFrom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("planned_from");
+                        .HasColumnName("planned_from")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<DateTime>("PlannedTo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("planned_to");
+                        .HasColumnName("planned_to")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Rules")
                         .HasMaxLength(5000)
@@ -928,8 +901,8 @@ namespace GameOn.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified))
-                        .HasColumnName("joined_at");
+                        .HasColumnName("joined_at")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("Phase1Score")
                         .HasColumnType("int")

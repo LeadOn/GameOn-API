@@ -7,6 +7,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
+    using GameOn.External.RiotGames.Models.DTOs;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
@@ -83,6 +84,51 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                 }
 
                 this.context.LeagueOfLegendsGameParticipants.Add(participantInDb);
+            }
+
+            // Updating timeline
+            var timelineFromRiot = await this.matchService.GetGameTimelineById(request.MatchId, cancellationToken);
+
+            if (timelineFromRiot is null)
+            {
+                throw new NotImplementedException("Timeline doesn't exist in Riot Games API!");
+            }
+
+            var frames = await this.context.LeagueOfLegendsGameTimelineFrames.Where(x => x.MatchId == request.MatchId).ToListAsync(cancellationToken);
+            this.context.LeagueOfLegendsGameTimelineFrames.RemoveRange(frames);
+
+            foreach (var frame in timelineFromRiot.Info.Frames)
+            {
+                // Inserting / updating frame
+                var frameInDb = new LoLGameTimelineFrame
+                {
+                    MatchId = request.MatchId,
+                    Timestamp = frame.Timestamp,
+                    LoLGameTimelineFrameParticipants = new List<LoLGameTimelineFrameParticipant>(),
+                };
+
+                foreach (var prop in frame.ParticipantFrames.GetType().GetProperties())
+                {
+                    var participant = prop.GetValue(frame.ParticipantFrames, null) as ParticipantFrameDto;
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
+                    var puuid = timelineFromRiot.Info.Participants.First(x => x.ParticipantId == participant.ParticipantId).PUUID;
+                    frameInDb.LoLGameTimelineFrameParticipants.Add(new LoLGameTimelineFrameParticipant
+                    {
+                        CurrentGold = participant.CurrentGold,
+                        GoldPerSecond = participant.GoldPerSecond,
+                        JungleMinionsKilled = participant.JungleMinionsKilled,
+                        Level = participant.Level,
+                        MinionsKilled = participant.MinionsKilled,
+                        ParticipantId = participant.ParticipantId,
+                        ParticipantPUUID = puuid,
+                        TimeEnemySpentControlled = participant.TimeEnemySpentControlled,
+                        TotalGold = participant.TotalGold,
+                        Xp = participant.Xp,
+                    });
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
+                }
+
+                this.context.LeagueOfLegendsGameTimelineFrames.Add(frameInDb);
             }
 
             // Updating game
