@@ -27,5 +27,13 @@ namespace GameOn.External.RiotGames.Interfaces
         /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
         /// <returns><see cref="MatchDto"/>Match DTO.</returns>
         Task<MatchDto> GetGameById(string matchId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets game's timeline by it's Riot Games ID.
+        /// </summary>
+        /// <param name="matchId">ID of the game.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+        /// <returns><see cref="TimelineDto"/>Timeline DTO.</returns>
+        Task<TimelineDto> GetGameTimelineById(string matchId, CancellationToken cancellationToken);
     }
 }

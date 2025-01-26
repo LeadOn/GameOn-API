@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
-		"name": "GameOn! 4.3.0",
+		"name": "GameOn! 5.0.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -1298,20 +1298,20 @@
 								"method": "PATCH",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/lol/summoner/5/admin?riotGamesNickname=Riclèss&riotGamesTagLine=EUW",
+									"raw": "{{baseUrl}}/lol/summoner/35/admin?riotGamesNickname=Jinwok&riotGamesTagLine=EUW",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"lol",
 										"summoner",
-										"5",
+										"35",
 										"admin"
 									],
 									"query": [
 										{
 											"key": "riotGamesNickname",
-											"value": "Riclèss"
+											"value": "Jinwok"
 										},
 										{
 											"key": "riotGamesTagLine",
@@ -1382,14 +1382,37 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/lol/match/EUW1_7249227980",
+									"raw": "{{baseUrl}}/lol/match/EUW1_7282636237",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"lol",
 										"match",
-										"EUW1_7249227980"
+										"EUW1_7282636237"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get game timeline by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/lol/match/EUW1_7282636237/timeline",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"lol",
+										"match",
+										"EUW1_7282636237",
+										"timeline"
 									]
 								}
 							},
