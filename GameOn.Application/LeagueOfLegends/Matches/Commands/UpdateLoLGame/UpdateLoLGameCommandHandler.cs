@@ -124,6 +124,18 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                         TimeEnemySpentControlled = participant.TimeEnemySpentControlled,
                         TotalGold = participant.TotalGold,
                         Xp = participant.Xp,
+                        MagicDamageDone = participant.DamageStats.MagicDamageDone,
+                        MagicDamageDoneToChampions = participant.DamageStats.MagicDamageDoneToChampions,
+                        MagicDamageTaken = participant.DamageStats.MagicDamageTaken,
+                        PhysicalDamageDone = participant.DamageStats.PhysicalDamageDone,
+                        PhysicalDamageDoneToChampions = participant.DamageStats.PhysicalDamageDoneToChampions,
+                        TotalDamageDone = participant.DamageStats.TotalDamageDone,
+                        TotalDamageDoneToChampions = participant.DamageStats.TotalDamageDoneToChampions,
+                        TotalDamageTaken = participant.DamageStats.TotalDamageTaken,
+                        TrueDamageDone = participant.DamageStats.TrueDamageDone,
+                        TrueDamageTaken = participant.DamageStats.TrueDamageTaken,
+                        TrueDamageDoneToChampions = participant.DamageStats.TrueDamageDoneToChampions,
+                        PhysicalDamageTaken = participant.DamageStats.PhysicalDamageTaken,
                     });
 #pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 }

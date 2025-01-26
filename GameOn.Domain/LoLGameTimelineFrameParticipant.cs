@@ -72,6 +72,66 @@ namespace GameOn.Domain
         public string ParticipantPUUID { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets or sets magic damage done.
+        /// </summary>
+        public int MagicDamageDone { get; set; }
+
+        /// <summary>
+        /// Gets or sets magic damage done to champions.
+        /// </summary>
+        public int MagicDamageDoneToChampions { get; set; }
+
+        /// <summary>
+        /// Gets or sets magic damage taken.
+        /// </summary>
+        public int MagicDamageTaken { get; set; }
+
+        /// <summary>
+        /// Gets or sets physical damage done.
+        /// </summary>
+        public int PhysicalDamageDone { get; set; }
+
+        /// <summary>
+        /// Gets or sets physical damage done to champions.
+        /// </summary>
+        public int PhysicalDamageDoneToChampions { get; set; }
+
+        /// <summary>
+        /// Gets or sets physical damage taken.
+        /// </summary>
+        public int PhysicalDamageTaken { get; set; }
+
+        /// <summary>
+        /// Gets or sets total damage done.
+        /// </summary>
+        public int TotalDamageDone { get; set; }
+
+        /// <summary>
+        /// Gets or sets total damage done to champions.
+        /// </summary>
+        public int TotalDamageDoneToChampions { get; set; }
+
+        /// <summary>
+        /// Gets or sets total damage taken.
+        /// </summary>
+        public int TotalDamageTaken { get; set; }
+
+        /// <summary>
+        /// Gets or sets true damage done.
+        /// </summary>
+        public int TrueDamageDone { get; set; }
+
+        /// <summary>
+        /// Gets or sets true damage done to champions.
+        /// </summary>
+        public int TrueDamageDoneToChampions { get; set; }
+
+        /// <summary>
+        /// Gets or sets true damage taken.
+        /// </summary>
+        public int TrueDamageTaken { get; set; }
+
+        /// <summary>
         /// Gets or sets Frame.
         /// </summary>
         [JsonIgnore]
