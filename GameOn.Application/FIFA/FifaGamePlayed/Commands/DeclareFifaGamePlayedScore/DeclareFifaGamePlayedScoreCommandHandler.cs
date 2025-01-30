@@ -4,8 +4,6 @@
 
 namespace GameOn.Application.FIFA.FifaGamePlayed.Commands.DeclareFifaGamePlayedScore
 {
-    using GameOn.Application.Common.Platforms.Queries.GetPlatformById;
-    using GameOn.Application.FIFA.FifaTeams.Queries.GetFifaTeamById;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;

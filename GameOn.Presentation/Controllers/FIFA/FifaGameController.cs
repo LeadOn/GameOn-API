@@ -2,11 +2,11 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Application.Common.Players.Queries.GetPlayerByKeycloakId;
-
 namespace GameOn.Presentation.Controllers.FIFA
 {
+    using GameOn.Application.Common.Players.Queries.GetPlayerByKeycloakId;
     using GameOn.Application.FIFA.FifaGamePlayed.Commands.CreateFifaGamePlayed;
+    using GameOn.Application.FIFA.FifaGamePlayed.Commands.DeclareFifaGamePlayedScore;
     using GameOn.Application.FIFA.FifaGamePlayed.Commands.DeleteFifaGamePlayed;
     using GameOn.Application.FIFA.FifaGamePlayed.Commands.UpdateFifaGamePlayed;
     using GameOn.Application.FIFA.FifaGamePlayed.Queries.GetFifaGamePlayedById;
@@ -239,7 +239,7 @@ namespace GameOn.Presentation.Controllers.FIFA
         /// <param name="score1">Score 1.</param>
         /// <param name="score2">Score 2.</param>
         /// <returns>IActionResult object.</returns>
-        [HttpPatch]
+        [HttpPost]
         [Authorize]
         [Route("{gameId:int}/{score1:int}/{score2:int}")]
         [Produces("application/json")]
@@ -258,7 +258,15 @@ namespace GameOn.Presentation.Controllers.FIFA
                 return this.Problem();
             }
 
-            var updatedGame = await this.mediator.Send(new DeclareScoreDto {  });
+            var updatedGame = await this.mediator.Send(new DeclareFifaGamePlayedScoreCommand {
+                ScoreDto = new DeclareScoreDto
+                {
+                    GameId = gameId,
+                    ScoreTeam1 = score1,
+                    ScoreTeam2 = score2,
+                    CurrentPlayerId = currentUser.Id,
+                },
+            });
 
             if (updatedGame is null)
             {
