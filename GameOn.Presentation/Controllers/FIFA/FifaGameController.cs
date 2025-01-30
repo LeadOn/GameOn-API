@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.Application.Common.Players.Queries.GetPlayerByKeycloakId;
+
 namespace GameOn.Presentation.Controllers.FIFA
 {
     using GameOn.Application.FIFA.FifaGamePlayed.Commands.CreateFifaGamePlayed;
@@ -219,6 +221,44 @@ namespace GameOn.Presentation.Controllers.FIFA
         public async Task<IActionResult> Update([FromBody] UpdateGameDto game)
         {
             var updatedGame = await this.mediator.Send(new UpdateFifaGamePlayedCommand { Game = game });
+
+            if (updatedGame is null)
+            {
+                return this.Problem();
+            }
+            else
+            {
+                return this.Ok(updatedGame);
+            }
+        }
+
+        /// <summary>
+        /// Declare score in database.
+        /// </summary>
+        /// <param name="gameId">Game ID.</param>
+        /// <param name="score1">Score 1.</param>
+        /// <param name="score2">Score 2.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize]
+        [Route("{gameId:int}/{score1:int}/{score2:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Declares score of a game in database.")]
+        [SwaggerResponse(200, "Updated game.", typeof(FifaGamePlayed))]
+        [SwaggerResponse(401, "User is not logged in.")]
+        [SwaggerResponse(403, "User isn't authorized.")]
+        [SwaggerResponse(500, "Unknown error.")]
+        public async Task<IActionResult> DeclareScore(int gameId, int score1, int score2)
+        {
+            var currentUserId = this.User.GetConnectedPlayer().KeycloakId;
+            var currentUser = await this.mediator.Send(new GetPlayerByKeycloakIdQuery { KeycloakId = currentUserId });
+
+            if (currentUser is null)
+            {
+                return this.Problem();
+            }
+
+            var updatedGame = await this.mediator.Send(new DeclareScoreDto {  });
 
             if (updatedGame is null)
             {

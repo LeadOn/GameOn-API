@@ -1,57 +1,32 @@
-﻿// <copyright file="UpdateGameDto.cs" company="LeadOn's Corp'">
+﻿// <copyright file="DeclareScoreDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
 namespace GameOn.Common.DTOs
 {
     /// <summary>
-    /// UpdateGameDto class.
+    /// DeclareScoreDto class.
     /// </summary>
-    public class UpdateGameDto
+    public class DeclareScoreDto
     {
         /// <summary>
-        /// Gets or sets Id.
+        /// Gets or sets Game Id.
         /// </summary>
-        public int Id { get; set; }
+        public int GameId { get; set; }
 
         /// <summary>
-        /// Gets or sets Platform Id.
+        /// Gets or sets Score Team 1.
         /// </summary>
-        public int PlatformId { get; set; }
+        public int ScoreTeam1 { get; set; }
 
         /// <summary>
-        /// Gets or sets FifaTeam 1.
+        /// Gets or sets Score Team 2.
         /// </summary>
-        public int? FifaTeam1 { get; set; }
+        public int ScoreTeam2 { get; set; }
 
         /// <summary>
-        /// Gets or sets FifaTeam 2.
+        /// Gets or sets Current Player ID.
         /// </summary>
-        public int? FifaTeam2 { get; set; }
-
-        /// <summary>
-        /// Gets or sets Team score 1.
-        /// </summary>
-        public int TeamScore1 { get; set; }
-
-        /// <summary>
-        /// Gets or sets Team score 2.
-        /// </summary>
-        public int TeamScore2 { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether game is played or not.
-        /// </summary>
-        public bool IsPlayed { get; set; }
-
-        /// <summary>
-        /// Gets or sets Tournament ID.
-        /// </summary>
-        public int? TournamentId { get; set; }
-
-        /// <summary>
-        /// Gets or sets Phase.
-        /// </summary>
-        public int? Phase { get; set; }
+        public int CurrentPlayerId { get; set; }
     }
 }

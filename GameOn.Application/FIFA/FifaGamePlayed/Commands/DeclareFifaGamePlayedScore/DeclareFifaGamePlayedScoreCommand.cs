@@ -1,21 +1,21 @@
-﻿// <copyright file="UpdateFifaGamePlayedCommand.cs" company="LeadOn's Corp'">
+﻿// <copyright file="DeclareFifaGamePlayedScoreCommand.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.FIFA.FifaGamePlayed.Commands.UpdateFifaGamePlayed
+namespace GameOn.Application.FIFA.FifaGamePlayed.Commands.DeclareFifaGamePlayedScore
 {
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
 
     /// <summary>
-    /// UpdateFifaGamePlayedCommand class.
+    /// DeclareFifaGamePlayedScoreCommand class.
     /// </summary>
-    public class UpdateFifaGamePlayedCommand : IRequest<FifaGamePlayed?>
+    public class DeclareFifaGamePlayedScoreCommand : IRequest<FifaGamePlayed?>
     {
         /// <summary>
-        /// Gets or sets UpdateGameDto.
+        /// Gets or sets Declare Score DTO.
         /// </summary>
-        public UpdateGameDto Game { get; set; } = new UpdateGameDto();
+        public DeclareScoreDto ScoreDto { get; set; } = new DeclareScoreDto();
     }
 }
