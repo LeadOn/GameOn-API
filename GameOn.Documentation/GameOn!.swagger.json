@@ -514,6 +514,62 @@
         }
       }
     },
+    "/fifa/FifaGame/{gameId}/{score1}/{score2}": {
+      "post": {
+        "tags": ["FifaGame"],
+        "summary": "Declares score of a game in database.",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "score1",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "score2",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated game.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FifaGamePlayed"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User is not logged in."
+          },
+          "403": {
+            "description": "User isn't authorized."
+          },
+          "500": {
+            "description": "Unknown error."
+          }
+        }
+      }
+    },
     "/fifa/FifaTeam": {
       "get": {
         "tags": ["FifaTeam"],
@@ -2842,6 +2898,54 @@
           "participantPUUID": {
             "type": "string",
             "nullable": true
+          },
+          "magicDamageDone": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "magicDamageDoneToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "magicDamageTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "physicalDamageDone": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "physicalDamageDoneToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "physicalDamageTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalDamageDone": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalDamageDoneToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalDamageTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trueDamageDone": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trueDamageDoneToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trueDamageTaken": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
-		"name": "GameOn! 5.0.0",
+		"name": "GameOn! 5.0.1",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -618,6 +618,36 @@
 									"path": [
 										"fifa",
 										"fifagame"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Declare score",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Id\": 89,\r\n    \"PlatformId\": 2,\r\n    \"TeamCode1\": \"FCB\",\r\n    \"FifaTeam1\": 21,\r\n    \"TeamScore1\": 2,\r\n    \"TeamCode2\": \"MCI\",\r\n    \"FifaTeam2\": 10,\r\n    \"TeamScore2\": 1,\r\n    \"IsPlayed\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fifa/fifagame/1/2/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifa",
+										"fifagame",
+										"1",
+										"2",
+										"3"
 									]
 								}
 							},
