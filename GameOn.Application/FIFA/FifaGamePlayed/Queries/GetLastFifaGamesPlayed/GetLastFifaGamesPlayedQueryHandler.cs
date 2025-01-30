@@ -40,6 +40,7 @@ namespace GameOn.Application.FIFA.FifaGamePlayed.Queries.GetLastFifaGamesPlayed
                 .Include(x => x.Platform)
                 .Include(x => x.Highlights)
                 .OrderByDescending(x => x.PlayedOn)
+                .Where(x => x.IsPlayed == true)
                 .Take(request.Limit)
                 .ToListAsync(cancellationToken);
 
