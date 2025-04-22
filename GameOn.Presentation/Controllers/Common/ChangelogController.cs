@@ -5,7 +5,12 @@
 namespace GameOn.Presentation.Controllers.Common
 {
     using GameOn.Application.Common.Changelogs.Commands.CreateChangelog;
+    using GameOn.Application.Common.Changelogs.Commands.DeleteChangelog;
+    using GameOn.Application.Common.Changelogs.Commands.UpdateChangelog;
     using GameOn.Application.Common.Changelogs.Queries.GetAllChangelogs;
+    using GameOn.Application.Common.Changelogs.Queries.GetChangelogById;
+    using GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog;
+    using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -46,6 +51,47 @@ namespace GameOn.Presentation.Controllers.Common
         }
 
         /// <summary>
+        /// Get latest changelog.
+        /// </summary>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("latest")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get latest changelog from database.")]
+        [SwaggerResponse(200, "Latest changelog.", typeof(Changelog))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetLatest()
+        {
+            return this.Ok(await this.mediator.Send(new GetLatestChangelogQuery()));
+        }
+
+        /// <summary>
+        /// Get changelog by ID.
+        /// </summary>
+        /// <param name="id">Changelog ID.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{id:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get changelog from database.")]
+        [SwaggerResponse(200, "Changelog.", typeof(Changelog))]
+        [SwaggerResponse(404, "Changelog not found in database.", typeof(Changelog))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var changelog = await this.mediator.Send(new GetChangelogByIdQuery { Id = id });
+
+            if (changelog == null)
+            {
+                return this.NotFound();
+            }
+            else
+            {
+                return this.Ok(changelog);
+            }
+        }
+
+        /// <summary>
         /// Create changelog.
         /// </summary>
         /// <param name="changelog">Changelog to create.</param>
@@ -57,9 +103,50 @@ namespace GameOn.Presentation.Controllers.Common
         [SwaggerOperation(Summary = "Create changelog in database.")]
         [SwaggerResponse(200, "Created changelog.", typeof(Changelog))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetAll(Changelog changelog)
+        public async Task<IActionResult> CreateChangelog(CreateChangelogDto changelog)
         {
             return this.Ok(await this.mediator.Send(new CreateChangelogCommand { Changelog = changelog }));
+        }
+
+        /// <summary>
+        /// Update changelog.
+        /// </summary>
+        /// <param name="changelog">Changelog to update.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Route("")]
+        [Authorize(Roles = "gameon_admin")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update changelog in database.")]
+        [SwaggerResponse(200, "Updated changelog.", typeof(Changelog))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateChangelog(Changelog changelog)
+        {
+            return this.Ok(await this.mediator.Send(new UpdateChangelogCommand { Changelog = changelog }));
+        }
+
+        /// <summary>
+        /// Delete changelog.
+        /// </summary>
+        /// <param name="id">Changelog to update.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Route("{id:int}")]
+        [Authorize(Roles = "gameon_admin")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Delete changelog in database.")]
+        [SwaggerResponse(204, "Deleted changelog.", typeof(Changelog))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> DeleteChangelog(int id)
+        {
+            var result = await this.mediator.Send(new DeleteChangelogCommand { Id = id });
+
+            if (result == false)
+            {
+                return this.NotFound();
+            }
+
+            return this.NoContent();
         }
     }
 }

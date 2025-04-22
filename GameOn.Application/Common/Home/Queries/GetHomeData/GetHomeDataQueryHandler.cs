@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog;
+
 namespace GameOn.Application.Common.Home.Queries.GetHomeData
 {
     using GameOn.Application.FIFA.Seasons.Queries.GetCurrentSeason;
@@ -33,25 +35,19 @@ namespace GameOn.Application.Common.Home.Queries.GetHomeData
         /// <inheritdoc />
         public async Task<HomeDataDto> Handle(GetHomeDataQuery request, CancellationToken cancellationToken)
         {
-            var homeData = new HomeDataDto();
-
-            var latestChangelog = await this.context.Changelogs.OrderByDescending(e => e.PublicationDate).FirstOrDefaultAsync();
-            if (latestChangelog is not null)
+            var homeData = new HomeDataDto
             {
-                homeData.LatestChangelog = latestChangelog;
-            }
+                LatestChangelog = await this.mediator.Send(new GetLatestChangelogQuery(), cancellationToken),
+            };
 
-            var currentSeason = await this.mediator.Send(new GetCurrentSeasonQuery());
+            var currentSeason = await this.mediator.Send(new GetCurrentSeasonQuery(), cancellationToken);
             if (currentSeason is not null)
             {
                 homeData.CurrentSeason = currentSeason;
             }
 
-            var featuredTournaments = await this.mediator.Send(new GetFeaturedTournamentsQuery());
-            if (featuredTournaments is not null)
-            {
-                homeData.FeaturedTournaments = featuredTournaments.ToList();
-            }
+            var featuredTournaments = await this.mediator.Send(new GetFeaturedTournamentsQuery(), cancellationToken);
+            homeData.FeaturedTournaments = featuredTournaments.ToList();
 
             return homeData;
         }
