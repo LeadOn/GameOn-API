@@ -35,7 +35,9 @@ namespace GameOn.Application.Common.Changelogs.Commands.CreateChangelog
                 RemovedFeatures = request.Changelog.RemovedFeatures,
                 NewFeatures = request.Changelog.NewFeatures,
                 Context = request.Changelog.Context,
-                PublicationDate = request.Changelog.PublicationDate,
+                PublicationDate = DateTime.Now,
+                Published = request.Changelog.Published,
+                Name = request.Changelog.Name,
             };
 
             this.context.Changelogs.Add(newChangelog);

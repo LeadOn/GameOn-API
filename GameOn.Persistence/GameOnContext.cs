@@ -656,6 +656,10 @@ namespace GameOn.Persistence
                     .HasColumnName("type")
                     .HasDefaultValue(0);
 
+                entity.Property(e => e.Published)
+                    .HasColumnName("published")
+                    .HasDefaultValue(false);
+
                 entity.Property(e => e.Version)
                     .HasColumnName("version")
                     .HasMaxLength(10);

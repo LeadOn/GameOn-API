@@ -4,17 +4,18 @@
 
 namespace GameOn.Application.Common.Changelogs.Commands.CreateChangelog
 {
+    using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
-
+    
     /// <summary>
     /// CreateChangelogCommand class.
     /// </summary>
     public class CreateChangelogCommand : IRequest<Changelog>
     {
         /// <summary>
-        /// Gets or sets Changelog.
+        /// Gets or sets CreateChangelogDto.
         /// </summary>
-        public Changelog Changelog { get; set; } = new Changelog();
+        public CreateChangelogDto Changelog { get; set; } = new CreateChangelogDto();
     }
 }

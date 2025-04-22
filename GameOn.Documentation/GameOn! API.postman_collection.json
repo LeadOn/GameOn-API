@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
-		"name": "GameOn! 5.0.1",
+		"name": "GameOn! 5.2.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -44,7 +44,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"Id\": 0,\r\n    \"PublicationDate\": \"2024-11-01T00:00:00\",\r\n    \"Type\": 0,\r\n    \"Version\": \"1.0.0\",\r\n    \"Context\": \"oui\",\r\n    \"NewFeatures\": [\r\n        \"feat1\",\r\n        \"feat2\"\r\n    ]\r\n}",
+									"raw": "{\r\n    \"Type\": 2,\r\n    \"Version\": \"test\",\r\n    \"Context\": \"test2\",\r\n    \"UpdatedFeatures\": [\r\n        \"test424\"\r\n    ],\r\n    \"Published\": true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -58,6 +58,50 @@
 									],
 									"path": [
 										"changelog"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update changelog",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Id\": 23,\r\n    \"Type\": 2,\r\n    \"Version\": \"test\",\r\n    \"Context\": \"test2\",\r\n    \"UpdatedFeatures\": [\r\n        \"test424\"\r\n    ],\r\n    \"Published\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/changelog",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"changelog"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete changelog",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/changelog/12",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"changelog",
+										"12"
 									]
 								}
 							},
@@ -78,6 +122,48 @@
 									],
 									"path": [
 										"changelog"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get latest",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/changelog/latest",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"changelog",
+										"latest"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/changelog/20",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"changelog",
+										"20"
 									]
 								}
 							},
