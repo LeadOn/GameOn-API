@@ -1,54 +1,45 @@
-﻿// <copyright file="UpdateChangelogCommandHandler.cs" company="LeadOn's Corp'">
+﻿// <copyright file="DeleteChangelogCommandHandler.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameOn.Application.Common.Changelogs.Commands.UpdateChangelog
+namespace GameOn.Application.Common.Changelogs.Commands.DeleteChangelog
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
 
     /// <summary>
-    /// UpdateChangelogCommandHandler class.
+    /// DeleteChangelogCommandHandler class.
     /// </summary>
-    public class UpdateChangelogCommandHandler : IRequestHandler<UpdateChangelogCommand, Changelog>
+    public class DeleteChangelogCommandHandler : IRequestHandler<DeleteChangelogCommand, bool>
     {
         private readonly IApplicationDbContext context;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateChangelogCommandHandler"/> class.
+        /// Initializes a new instance of the <see cref="DeleteChangelogCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
-        public UpdateChangelogCommandHandler(IApplicationDbContext context)
+        public DeleteChangelogCommandHandler(IApplicationDbContext context)
         {
             this.context = context;
         }
 
         /// <inheritdoc />
-        public async Task<Changelog> Handle(UpdateChangelogCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteChangelogCommand request, CancellationToken cancellationToken)
         {
-            var changelogInDb = await this.context.Changelogs.FirstOrDefaultAsync(x => x.Id == request.Changelog.Id, cancellationToken);
+            var changelogInDb = await this.context.Changelogs.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (changelogInDb == null)
             {
-                throw new NotImplementedException();
+                return false;
             }
 
-            changelogInDb.Published = request.Changelog.Published;
-            changelogInDb.Name = request.Changelog.Name;
-            changelogInDb.Context = request.Changelog.Context;
-            changelogInDb.Version = request.Changelog.Version;
-            changelogInDb.Type = request.Changelog.Type;
-            changelogInDb.NewFeatures = request.Changelog.NewFeatures;
-            changelogInDb.RemovedFeatures = request.Changelog.RemovedFeatures;
-            changelogInDb.UpdatedFeatures = request.Changelog.UpdatedFeatures;
-
-            this.context.Changelogs.Update(changelogInDb);
+            this.context.Changelogs.Remove(changelogInDb);
             await this.context.SaveChangesAsync(cancellationToken);
-            return request.Changelog;
+            return true;
         }
     }
 }

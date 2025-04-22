@@ -1,16 +1,20 @@
-﻿// <copyright file="GetLatestChangelog.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GetChangelogByIdQuery.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog
+namespace GameOn.Application.Common.Changelogs.Queries.GetChangelogById
 {
     using GameOn.Domain;
     using MediatR;
 
     /// <summary>
-    /// GetLatestChangelogQuery class.
+    /// GetChangelogByIdQuery class.
     /// </summary>
-    public class GetLatestChangelogQuery : IRequest<Changelog>
+    public class GetChangelogByIdQuery : IRequest<Changelog?>
     {
+        /// <summary>
+        /// Gets or sets Changelog ID.
+        /// </summary>
+        public int Id { get; set; }
     }
 }

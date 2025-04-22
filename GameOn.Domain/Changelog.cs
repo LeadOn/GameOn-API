@@ -30,6 +30,11 @@ namespace GameOn.Domain
         public int Type { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether changelog is published or not.
+        /// </summary>
+        public bool Published { get; set; }
+
+        /// <summary>
         /// Gets or sets version.
         /// </summary>
         public string Version { get; set; } = string.Empty;

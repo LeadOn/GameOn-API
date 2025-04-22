@@ -1,21 +1,21 @@
-﻿// <copyright file="CreateChangelogCommand.cs" company="LeadOn's Corp'">
+﻿// <copyright file="UpdateChangelogCommand.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Changelogs.Commands.CreateChangelog
+namespace GameOn.Application.Common.Changelogs.Commands.UpdateChangelog
 {
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
     
     /// <summary>
-    /// CreateChangelogCommand class.
+    /// UpdateChangelogCommand class.
     /// </summary>
-    public class CreateChangelogCommand : IRequest<Changelog>
+    public class UpdateChangelogCommand : IRequest<Changelog>
     {
         /// <summary>
-        /// Gets or sets CreateChangelogDto.
+        /// Gets or sets Changelog to update.
         /// </summary>
-        public CreateChangelogDto Changelog { get; set; } = new CreateChangelogDto();
+        public Changelog Changelog { get; set; } = new Changelog();
     }
 }

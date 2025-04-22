@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "LeadOn's Corp - GameOn! API",
     "description": "This API goal is to monitor players performance across multiple games.",
@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "5.0.0"
+    "version": "5.2.0"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -67,6 +67,44 @@
           "content": {
             "application/json": {
               "schema": {
+                "$ref": "#/components/schemas/CreateChangelogDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChangelogDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChangelogDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created changelog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Changelog"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Changelog"],
+        "summary": "Update changelog in database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/Changelog"
               }
             },
@@ -84,7 +122,100 @@
         },
         "responses": {
           "200": {
-            "description": "Created changelog.",
+            "description": "Updated changelog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Changelog"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Changelog/latest": {
+      "get": {
+        "tags": ["Changelog"],
+        "summary": "Get latest changelog from database.",
+        "responses": {
+          "200": {
+            "description": "Latest changelog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Changelog"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/Changelog/{id}": {
+      "get": {
+        "tags": ["Changelog"],
+        "summary": "Get changelog from database.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Changelog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Changelog"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Changelog not found in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Changelog"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Changelog"],
+        "summary": "Delete changelog in database.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted changelog.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2196,6 +2327,55 @@
           "type": {
             "type": "integer",
             "format": "int32"
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "context": {
+            "type": "string",
+            "nullable": true
+          },
+          "newFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "updatedFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "removedFeatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateChangelogDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "published": {
+            "type": "boolean"
           },
           "version": {
             "type": "string",

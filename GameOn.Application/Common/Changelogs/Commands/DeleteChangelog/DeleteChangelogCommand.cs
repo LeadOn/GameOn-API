@@ -1,21 +1,21 @@
-﻿// <copyright file="UpdateChangelogCommand.cs" company="LeadOn's Corp'">
+﻿// <copyright file="DeleteChangelogCommand.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Changelogs.Commands.UpdateChangelog
+namespace GameOn.Application.Common.Changelogs.Commands.DeleteChangelog
 {
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
-    
+
     /// <summary>
-    /// UpdateChangelogCommand class.
+    /// DeleteChangelogCommand class.
     /// </summary>
-    public class UpdateChangelogCommand : IRequest<Changelog>
+    public class DeleteChangelogCommand : IRequest<bool>
     {
         /// <summary>
-        /// Gets or sets Changelog to update..
+        /// Gets or sets Changelog ID.
         /// </summary>
-        public Changelog Changelog { get; set; } = new Changelog();
+        public int Id { get; set; }
     }
 }

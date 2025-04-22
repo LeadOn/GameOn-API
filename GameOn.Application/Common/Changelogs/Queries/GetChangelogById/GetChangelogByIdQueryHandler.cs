@@ -1,8 +1,8 @@
-﻿// <copyright file="GetLatestChangelogQueryHandler.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GetChangelogByIdQueryHandler.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog
+namespace GameOn.Application.Common.Changelogs.Queries.GetChangelogById
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -10,25 +10,25 @@ namespace GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
-    /// GetLatestChangelogQueryHandler class.
+    /// GetChangelogByIdQueryHandler class.
     /// </summary>
-    public class GetLatestChangelogQueryHandler : IRequestHandler<GetLatestChangelogQuery, Changelog>
+    public class GetChangelogByIdQueryHandler : IRequestHandler<GetChangelogByIdQuery, Changelog?>
     {
         private readonly IApplicationDbContext context;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetLatestChangelogQueryHandler"/> class.
+        /// Initializes a new instance of the <see cref="GetChangelogByIdQueryHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
-        public GetLatestChangelogQueryHandler(IApplicationDbContext context)
+        public GetChangelogByIdQueryHandler(IApplicationDbContext context)
         {
             this.context = context;
         }
 
         /// <inheritdoc />
-        public async Task<Changelog> Handle(GetLatestChangelogQuery request, CancellationToken cancellationToken)
+        public async Task<Changelog?> Handle(GetChangelogByIdQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Changelogs.OrderByDescending(x => x.PublicationDate).FirstAsync(cancellationToken);
+            return await this.context.Changelogs.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         }
     }
 }

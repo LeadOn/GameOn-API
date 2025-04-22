@@ -1,16 +1,16 @@
-﻿// <copyright file="GetAllChangelogQuery.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GetLatestChangelog.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Changelogs.Queries.GetAllChangelogs
+namespace GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog
 {
     using GameOn.Domain;
     using MediatR;
 
     /// <summary>
-    /// GetAllChangelogQuery class.
+    /// GetLatestChangelogQuery class.
     /// </summary>
-    public class GetAllChangelogQuery : IRequest<IEnumerable<Changelog>>
+    public class GetLatestChangelogQuery : IRequest<Changelog>
     {
     }
 }
