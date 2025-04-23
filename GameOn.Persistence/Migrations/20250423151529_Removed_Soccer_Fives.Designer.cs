@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20250423151529_Removed_Soccer_Fives")]
+    partial class Removed_Soccer_Fives
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

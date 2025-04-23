@@ -1,0 +1,127 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace GameOn.Persistence.Migrations
+{
+    /// <inheritdoc />
+    public partial class Removed_Soccer_Fives : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "SoccerFiveVoteAnswer");
+
+            migrationBuilder.DropTable(
+                name: "SoccerFiveVoteChoice");
+
+            migrationBuilder.DropTable(
+                name: "SoccerFive");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "SoccerFive",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    created_by_id = table.Column<int>(type: "int", nullable: false),
+                    description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    planned_on = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    state = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    vote_question = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoccerFive", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_SoccerFive_Player_Created_By",
+                        column: x => x.created_by_id,
+                        principalTable: "Player",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "SoccerFiveVoteChoice",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    soccer_five_id = table.Column<int>(type: "int", nullable: false),
+                    label = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    order = table.Column<int>(type: "int", nullable: false, defaultValue: 1)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoccerFiveVoteChoice", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_SoccerFive_VoteChoice",
+                        column: x => x.soccer_five_id,
+                        principalTable: "SoccerFive",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "SoccerFiveVoteAnswer",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    player_id = table.Column<int>(type: "int", nullable: false),
+                    vote_choice_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SoccerFiveVoteAnswer", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Player_VoteAnswer",
+                        column: x => x.player_id,
+                        principalTable: "Player",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VoteChoice_VoteAnswer",
+                        column: x => x.vote_choice_id,
+                        principalTable: "SoccerFiveVoteChoice",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoccerFive_created_by_id",
+                table: "SoccerFive",
+                column: "created_by_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoccerFiveVoteAnswer_player_id",
+                table: "SoccerFiveVoteAnswer",
+                column: "player_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoccerFiveVoteAnswer_vote_choice_id",
+                table: "SoccerFiveVoteAnswer",
+                column: "vote_choice_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SoccerFiveVoteChoice_soccer_five_id",
+                table: "SoccerFiveVoteChoice",
+                column: "soccer_five_id");
+        }
+    }
+}
