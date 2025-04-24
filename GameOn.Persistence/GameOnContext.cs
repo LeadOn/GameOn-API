@@ -186,7 +186,8 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Description)
                     .HasColumnName("description")
-                    .HasMaxLength(5000);
+                    .HasMaxLength(5000)
+                    .IsRequired();
 
                 entity.Property(e => e.State)
                     .HasColumnName("state")
