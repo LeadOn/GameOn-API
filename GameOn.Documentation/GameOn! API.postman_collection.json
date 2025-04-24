@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "1b7d2b8f-7c79-47c3-aa79-d5f86660b91e",
-		"name": "GameOn! 5.2.0",
+		"_postman_id": "1319992f-a208-4bcb-91f5-9faa28794297",
+		"name": "GameOn! 5.2.2",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -470,7 +470,7 @@
 			"description": "Contains every part of the API that is cross-games."
 		},
 		{
-			"name": "Soccer / FIFA",
+			"name": "FIFA",
 			"item": [
 				{
 					"name": "FifaGamePlayed",
@@ -811,167 +811,6 @@
 									],
 									"path": [
 										"highlight"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "SoccerFive",
-					"item": [
-						{
-							"name": "Get all",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/fifa/soccerfive",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"fifa",
-										"soccerfive"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get by ID",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/fifa/soccerfive/1",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"fifa",
-										"soccerfive",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"PlannedOn\": null,\r\n    \"Name\": \"Test name\",\r\n    \"Description\": \"oui\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/fifa/soccerfive",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"fifa",
-										"soccerfive"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update game",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"Id\": 1,\r\n    \"PlannedOn\": \"2024-08-15T12:30:00\",\r\n    \"Name\": \"Five septembre #1\",\r\n    \"Description\": \"oui\",\r\n    \"State\": 1\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/fifa/soccerfive",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"fifa",
-										"soccerfive"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update survey",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"VoteQuestion\": \"New question?\",\r\n    \"VotesChoices\": [\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 1\",\r\n            \"Order\": 1\r\n        },\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 2\",\r\n            \"Order\": 2\r\n        },\r\n        {\r\n            \"id\": 0,\r\n            \"label\": \"Label 3\",\r\n            \"Order\": 3\r\n        }\r\n    ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/fifa/soccerfive/1/survey",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"fifa",
-										"soccerfive",
-										"1",
-										"survey"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Vote five",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"SoccerFiveId\": 1,\r\n    \"ChoiceIds\": [18, 20]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/fifa/soccerfive/1/survey/vote",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"fifa",
-										"soccerfive",
-										"1",
-										"survey",
-										"vote"
 									]
 								}
 							},

@@ -59,21 +59,6 @@ namespace GameOn.Common.Interfaces
         DbSet<TournamentPlayer> TournamentPlayers { get; set; }
 
         /// <summary>
-        /// Gets or sets SoccerFives.
-        /// </summary>
-        DbSet<SoccerFive> SoccerFives { get; set; }
-
-        /// <summary>
-        /// Gets or sets SoccerFiveVoteChoices.
-        /// </summary>
-        DbSet<SoccerFiveVoteChoice> SoccerFiveVoteChoices { get; set; }
-
-        /// <summary>
-        /// Gets or sets SoccerFiveVoteAnswers.
-        /// </summary>
-        DbSet<SoccerFiveVoteAnswer> SoccerFiveVoteAnswers { get; set; }
-
-        /// <summary>
         /// Gets or sets Changelogs.
         /// </summary>
         DbSet<Changelog> Changelogs { get; set; }

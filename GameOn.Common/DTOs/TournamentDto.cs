@@ -56,7 +56,7 @@ namespace GameOn.Common.DTOs
         /// <summary>
         /// Gets or sets Description.
         /// </summary>
-        public string? Description { get; set; }
+        public string Description { get; set; } = "Aucune description renseignée.";
 
         /// <summary>
         /// Gets or sets State.
