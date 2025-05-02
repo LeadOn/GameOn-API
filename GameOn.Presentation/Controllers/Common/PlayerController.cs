@@ -113,7 +113,7 @@ namespace GameOn.Presentation.Controllers.Common
         }
 
         /// <summary>
-        /// Update user (admin only).
+        /// Update connected user.
         /// </summary>
         /// <param name="update"><see cref="UpdatePlayerDto"/>.</param>
         /// <returns>IActionResult object.</returns>
@@ -135,7 +135,7 @@ namespace GameOn.Presentation.Controllers.Common
         }
 
         /// <summary>
-        /// Update connected user.
+        /// Update user (admin only).
         /// </summary>
         /// <param name="update"><see cref="UpdatePlayerDto"/>.</param>
         /// <returns>IActionResult object.</returns>

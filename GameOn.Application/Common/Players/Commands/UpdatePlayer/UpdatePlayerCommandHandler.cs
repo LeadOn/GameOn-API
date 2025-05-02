@@ -37,7 +37,7 @@ namespace GameOn.Application.Common.Players.Commands.UpdatePlayer
 
             playerInDb.FullName = request.Player.FullName;
             playerInDb.Nickname = request.Player.Nickname;
-            playerInDb.ProfilePictureUrl = request.Player.ProfilePictureUrl;
+            playerInDb.ProfilePictureUrl = request.Player.ProfilePictureUrl ?? "https://gameon.valentinvirot.fr/assets/img/gameon-logo.webp";
             playerInDb.KeycloakId = request.Player.KeycloakId;
             playerInDb.Archived = request.Player.Archived;
 
