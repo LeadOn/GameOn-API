@@ -13,7 +13,8 @@
         "DEFAULT_PLATFORM": "",
         "RIOT_GAMES_ACCOUNT_API_ROUTE": "",
         "RIOT_GAMES_SUMMONER_API_ROUTE": "",
-        "RIOT_GAMES_API_KEY": ""
+        "RIOT_GAMES_API_KEY": "",
+        "MEDIATR_LICENSE_KEY": ""
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"
