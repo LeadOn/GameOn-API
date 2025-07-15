@@ -2,6 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.External.NetworkStorage.Implementations;
+using GameOn.External.NetworkStorage.Interfaces;
+using Minio;
+
 namespace GameOn.External
 {
     using GameOn.External.RiotGames.Implementations;
@@ -25,6 +29,17 @@ namespace GameOn.External
             services.AddScoped<ISummonerService, SummonerV4Service>();
             services.AddScoped<ILeagueService, LeagueV4Service>();
             services.AddScoped<IMatchService, MatchV5Service>();
+
+            // Adding connection to MinIO
+            services.AddMinio(client =>
+                client.WithEndpoint(Environment.GetEnvironmentVariable("S3_ENDPOINT") ?? throw new NotImplementedException())
+                    .WithCredentials(
+                        Environment.GetEnvironmentVariable("S3_ACCESS_KEY") ?? throw new NotImplementedException(),
+                        Environment.GetEnvironmentVariable("S3_SECRET_KEY") ?? throw new NotImplementedException())
+                    .WithSSL(false)
+                    .Build());
+            services.AddScoped<INetworkStorageService, MinIOService>();
+
             return services;
         }
     }

@@ -1,36 +1,104 @@
-﻿// <copyright file="AccountV1Service.cs" company="LeadOn's Corp'">
+﻿// <copyright file="MinIOService.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.External.RiotGames.Implementations
+using GameOn.External.NetworkStorage.Interfaces;
+using Minio;
+using Minio.DataModel.Args;
+
+namespace GameOn.External.NetworkStorage.Implementations
 {
-    using GameOn.External.Common;
-    using GameOn.External.RiotGames.Interfaces;
-    using GameOn.External.RiotGames.Models.DTOs;
-
     /// <summary>
-    /// AccountV1Service class.
+    /// MinIOService class.
     /// </summary>
-    public class AccountV1Service : HttpServiceBase, IAccountService
+    public class MinIOService : INetworkStorageService
     {
-        private readonly HttpClient client;
+        private IMinioClient minioClient;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AccountV1Service"/> class.
-        /// </summary>
-        /// <param name="client"><see cref="HttpClient"/>.</param>
-        public AccountV1Service(HttpClient client)
+        public MinIOService(IMinioClient minioClient)
         {
-            this.client = client;
+            this.minioClient = minioClient;
         }
 
-        /// <inheritdoc/>
-        public async Task<AccountDto> GetAccountPuuid(string tagLine, string nickname, CancellationToken cancellationToken)
+        public async Task<Stream?> GetFile(string bucketName, string fileName)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/riot/account/v1/accounts/by-riot-id/{nickname}/{tagLine}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
-            return await RunRequest<AccountDto>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null
+            // Creating bucket if it doesn't exist
+            var bucketExists = await this.minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName));
+
+            if (!bucketExists)
+            {
+                await this.minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(bucketName));
+            }
+
+            // Checking if file exists
+            try
+            {
+                var fileExists =
+                    await this.minioClient.StatObjectAsync(new StatObjectArgs().WithBucket(bucketName)
+                        .WithObject(fileName));
+                
+                if (fileExists is null)
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            var fileStream = new FileStream(Path.GetTempFileName(), FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose);
+            await this.minioClient.GetObjectAsync(
+                new GetObjectArgs().WithBucket(bucketName).WithObject(fileName).WithCallbackStream(stream =>
+                {
+                    stream.CopyTo(fileStream);
+                    fileStream.Position = 0;
+                }));
+
+            return fileStream;
+        }
+
+        public string GetContentType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            switch (extension)
+            {
+                case ".txt":
+                    return "text/plain";
+                case ".pdf":
+                    return "application/pdf";
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+                case ".png":
+                    return "image/png";
+                case ".gif":
+                    return "image/gif";
+                case ".doc":
+                    return "application/msword";
+                case ".docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".xls":
+                    return "application/vnd.ms-excel";
+                case ".xlsx":
+                    return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                case ".ppt":
+                    return "application/vnd.ms-powerpoint";
+                case ".pptx":
+                    return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                case ".zip":
+                    return "application/zip";
+                case ".rar":
+                    return "application/x-rar-compressed";
+                case ".mp3":
+                    return "audio/mpeg";
+                case ".mp4":
+                    return "video/mp4";
+                case ".webp":
+                    return "image/webp";
+                default:
+                    return "application/octet-stream";
+            }
         }
     }
 }

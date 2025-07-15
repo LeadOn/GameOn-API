@@ -1,224 +1,61 @@
-﻿// <copyright file="GetPlayerStatsQueryHandler.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GetProfilePictureQueryHandler.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Players.Queries.GetPlayerStats
+namespace GameOn.Application.Common.Players.Queries.GetProfilePicture
 {
-    using GameOn.Application.Common.Platforms.Queries.GetAllPlatforms;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
-    using GameOn.Application.FIFA.FifaGamePlayed.Queries.GetFifaGamePlayedById;
-    using GameOn.Application.FIFA.FifaTeams.Queries.GetMostLossesFifaTeamsByPlayer;
-    using GameOn.Application.FIFA.FifaTeams.Queries.GetMostPlayedFifaTeamsByPlayer;
-    using GameOn.Application.FIFA.FifaTeams.Queries.GetMostWinsFifaTeamsByPlayer;
-    using GameOn.Application.FIFA.TeamPlayers.Queries.SearchTeamPlayer;
     using GameOn.Common.DTOs;
-    using GameOn.Domain;
+    using GameOn.Common.Exceptions;
+    using GameOn.External.NetworkStorage.Interfaces;
     using MediatR;
 
     /// <summary>
-    /// GetAllPlayersQueryHandler class.
+    /// GetProfilePictureQueryHandler class.
     /// </summary>
-    public class GetPlayerStatsQueryHandler : IRequestHandler<GetPlayerStatsQuery, FifaPlayerStatsDto?>
+    public class GetProfilePictureQueryHandler : IRequestHandler<GetProfilePictureQuery, ProfilePictureDto>
     {
-        private readonly ISender mediator;
+        private readonly IMediator mediator;
+        private readonly INetworkStorageService nsService;
+        private readonly string bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME") ?? throw new MissingEnvironmentVariableException("S3_BUCKET_NAME");
+        private readonly string ppBasePath = Environment.GetEnvironmentVariable("S3_PP_BASE_PATH") ?? throw new MissingEnvironmentVariableException("S3_PP_BASE_PATH");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetPlayerStatsQueryHandler"/> class.
+        /// Initializes a new instance of the <see cref="GetProfilePictureQueryHandler"/> class.
         /// </summary>
+        /// <param name="nsService">NetworkStorageService, injected.</param>
         /// <param name="mediator">Mediator, injected.</param>
-        public GetPlayerStatsQueryHandler(ISender mediator)
+        public GetProfilePictureQueryHandler(INetworkStorageService nsService, IMediator mediator)
         {
+            this.nsService = nsService;
             this.mediator = mediator;
         }
 
         /// <inheritdoc />
-        public async Task<FifaPlayerStatsDto?> Handle(GetPlayerStatsQuery request, CancellationToken cancellationToken)
+        public async Task<ProfilePictureDto> Handle(GetProfilePictureQuery request, CancellationToken cancellationToken)
         {
-            request.SeasonId ??= int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1");
+            var ppDto = new ProfilePictureDto();
 
-            // Get player from database.
+            // First, getting player
             var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = request.PlayerId }, cancellationToken);
 
             if (playerInDb is null)
             {
-                return null;
+                return ppDto;
             }
 
-            // Getting stats per platforms
-            var platformsStats = new List<PlatformStatsDto>();
-
-            var platformsInDb = await this.mediator.Send(new GetAllPlatformsQuery(), cancellationToken);
-
-            var globalStats = new PlatformStatsDto
+            if (playerInDb.ProfilePictureUrl is null || playerInDb.ProfilePictureUrl == string.Empty)
             {
-                Platform = new Platform { Id = 0, Name = "Global" },
-            };
-            var avgGoalsTaken = new List<float>();
-            var avgGoalsGiven = new List<float>();
-
-            foreach (var platform in platformsInDb)
-            {
-                var stats = new PlatformStatsDto { AverageGoalGiven = 0, AverageGoalTaken = 0, Draws = 0, GoalDifference = 0, Losses = 0, Platform = platform, Wins = 0, GoalsGiven = 0, GoalsTaken = 0 };
-
-                // Getting games played by platform
-                var teamPlayersInDb = await this.mediator.Send(
-                    new SearchTeamPlayerQuery
-                    {
-                        Query = x => x.FifaGamePlayed.PlatformId == platform.Id
-                                     && x.PlayerId == playerInDb.Id
-                                     && x.FifaGamePlayed.SeasonId == request.SeasonId
-                                     && x.FifaGamePlayed.IsPlayed == true,
-                        Limit = 1000000,
-                    }, cancellationToken);
-
-                if (teamPlayersInDb.ToList().Count > 0)
-                {
-                    // For each game played, getting that stats
-                    foreach (var teamPlayer in teamPlayersInDb)
-                    {
-                        // Getting game
-                        var gameInDb = await this.mediator.Send(new GetFifaGamePlayedByIdQuery { FifaGamePlayedId = teamPlayer.FifaGameId }, cancellationToken) ?? throw new NotImplementedException();
-
-                        if (gameInDb.Team1.Score == gameInDb.Team2.Score)
-                        {
-                            stats.Draws++;
-                        }
-                        else if ((teamPlayer.Team == 0 && gameInDb.Team1.Score > gameInDb.Team2.Score) || (teamPlayer.Team == 1 && gameInDb.Team1.Score < gameInDb.Team2.Score))
-                        {
-                            stats.Wins++;
-                        }
-                        else if ((teamPlayer.Team == 0 && gameInDb.Team1.Score < gameInDb.Team2.Score) || (teamPlayer.Team == 1 && gameInDb.Team1.Score > gameInDb.Team2.Score))
-                        {
-                            stats.Losses++;
-                        }
-
-                        if (teamPlayer.Team == 0)
-                        {
-                            stats.GoalsGiven += gameInDb.Team1.Score;
-                            stats.GoalsTaken += gameInDb.Team2.Score;
-                        }
-                        else if (teamPlayer.Team == 1)
-                        {
-                            stats.GoalsGiven += gameInDb.Team2.Score;
-                            stats.GoalsTaken += gameInDb.Team1.Score;
-                        }
-                    }
-
-                    stats.GoalDifference = stats.GoalsGiven - stats.GoalsTaken;
-                    if (stats.GoalsGiven == 0 || stats.Wins + stats.Losses + stats.Draws == 0)
-                    {
-                        stats.AverageGoalGiven = 0;
-                    }
-                    else
-                    {
-                        stats.AverageGoalGiven = (float)Math.Round((double)(stats.GoalsGiven / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
-                    }
-
-                    if (stats.GoalsTaken == 0 || stats.Wins + stats.Losses + stats.Draws == 0)
-                    {
-                        stats.AverageGoalTaken = 0;
-                    }
-                    else
-                    {
-                        stats.AverageGoalTaken = (float)Math.Round((double)(stats.GoalsTaken / (float)(stats.Wins + stats.Draws + stats.Losses)), 2);
-                    }
-
-                    var gamesPlayed = stats.Wins + stats.Losses + stats.Draws;
-
-                    // Calculating win rate
-                    if (stats.Wins == 0 || gamesPlayed == 0)
-                    {
-                        stats.WinRate = 0;
-                    }
-                    else
-                    {
-                        stats.WinRate = (float)Math.Round((double)(stats.Wins * 100 / (float)gamesPlayed), 2);
-                    }
-
-                    // Calculating loose rate
-                    if (stats.Losses == 0 || gamesPlayed == 0)
-                    {
-                        stats.LooseRate = 0;
-                    }
-                    else
-                    {
-                        stats.LooseRate = (float)Math.Round((double)(stats.Losses * 100 / (float)gamesPlayed), 2);
-                    }
-
-                    // Calculating draw rate
-                    if (stats.Draws == 0 || gamesPlayed == 0)
-                    {
-                        stats.DrawRate = 0;
-                    }
-                    else
-                    {
-                        stats.DrawRate = (float)Math.Round((double)(stats.Draws * 100 / (float)gamesPlayed), 2);
-                    }
-
-                    globalStats.Wins += stats.Wins;
-                    globalStats.Losses += stats.Losses;
-                    globalStats.Draws += stats.Draws;
-                    globalStats.GoalDifference += stats.GoalDifference;
-                    globalStats.GoalsTaken += stats.GoalsTaken;
-                    globalStats.GoalsGiven += stats.GoalsGiven;
-                    avgGoalsGiven.Add(stats.AverageGoalGiven);
-                    avgGoalsTaken.Add(stats.AverageGoalTaken);
-
-                    platformsStats.Add(stats);
-                }
-            }
-
-            if (avgGoalsGiven.Count != 0)
-            {
-                globalStats.AverageGoalGiven = (float)Math.Round((double)avgGoalsGiven.Average(), 2);
-            }
-
-            if (avgGoalsTaken.Count != 0)
-            {
-                globalStats.AverageGoalTaken = (float)Math.Round((double)avgGoalsTaken.Average(), 2);
-            }
-
-            var totalGamesPlayed = globalStats.Wins + globalStats.Losses + globalStats.Draws;
-
-            // Calculating win rate
-            if (globalStats.Wins == 0 || totalGamesPlayed == 0)
-            {
-                globalStats.WinRate = 0;
+                ppDto.FileName = Environment.GetEnvironmentVariable("DEFAULT_PROFILE_PIC") ?? throw new MissingEnvironmentVariableException("DEFAULT_PROFILE_PIC");
             }
             else
             {
-                globalStats.WinRate = (float)Math.Round((double)(globalStats.Wins * 100 / (float)totalGamesPlayed), 2);
+                ppDto.FileName = playerInDb.ProfilePictureUrl;
             }
 
-            // Calculating loose rate
-            if (globalStats.Losses == 0 || totalGamesPlayed == 0)
-            {
-                globalStats.LooseRate = 0;
-            }
-            else
-            {
-                globalStats.LooseRate = (float)Math.Round((double)(globalStats.Losses * 100 / (float)totalGamesPlayed), 2);
-            }
-
-            // Calculating draw rate
-            if (globalStats.Draws == 0 || totalGamesPlayed == 0)
-            {
-                globalStats.DrawRate = 0;
-            }
-            else
-            {
-                globalStats.DrawRate = (float)Math.Round((double)(globalStats.Draws * 100 / (float)totalGamesPlayed), 2);
-            }
-
-            platformsStats.Add(globalStats);
-
-            return new FifaPlayerStatsDto
-            {
-                StatsPerPlatform = platformsStats.OrderBy(x => x.Platform.Id).ToList(),
-                MostWinsTeams = await this.mediator.Send(new GetMostWinsFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }, cancellationToken),
-                MostLossesTeams = await this.mediator.Send(new GetMostLossesFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }, cancellationToken),
-                MostPlayedTeams = await this.mediator.Send(new GetMostPlayedFifaTeamsByPlayerQuery { PlayerId = request.PlayerId, SeasonId = (int)request.SeasonId, NumberOfTeams = 3 }, cancellationToken),
-            };
+            // Getting profile picture
+            ppDto.FileStream = await this.nsService.GetFile(this.bucketName, this.ppBasePath + "/" + ppDto.FileName);
+            return ppDto;
         }
     }
 }

@@ -14,7 +14,13 @@
         "RIOT_GAMES_ACCOUNT_API_ROUTE": "",
         "RIOT_GAMES_SUMMONER_API_ROUTE": "",
         "RIOT_GAMES_API_KEY": "",
-        "MEDIATR_LICENSE_KEY": ""
+        "MEDIATR_LICENSE_KEY": "",
+        "S3_ENDPOINT": "",
+        "S3_ACCESS_KEY": "",
+        "S3_SECRET_KEY": "",
+        "S3_BUCKET_NAME": "",
+        "S3_PP_BASE_PATH": "",
+        "DEFAULT_PROFILE_PIC": ""
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"

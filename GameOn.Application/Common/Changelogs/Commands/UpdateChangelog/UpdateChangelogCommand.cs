@@ -7,7 +7,7 @@ namespace GameOn.Application.Common.Changelogs.Commands.UpdateChangelog
     using GameOn.Common.DTOs;
     using GameOn.Domain;
     using MediatR;
-    
+
     /// <summary>
     /// UpdateChangelogCommand class.
     /// </summary>
