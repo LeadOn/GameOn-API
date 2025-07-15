@@ -45,21 +45,12 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
             playerInDb.FullName = request.Player.FullName;
             playerInDb.Nickname = request.Player.Nickname;
 
-            if (request.Player.ProfilePictureUrl is not null && request.Player.ProfilePictureUrl != string.Empty)
-            {
-                playerInDb.ProfilePictureUrl = request.Player.ProfilePictureUrl;
-            }
-            else
-            {
-                playerInDb.ProfilePictureUrl = "https://gameon.valentinvirot.fr/assets/img/gameon-logo.webp";
-            }
-
             if (request.Player.RiotGamesNickname is not null && request.Player.RiotGamesTagLine is not null)
             {
                 // First, checking if player isn't already present in DB
                 var playersWithRiotCombo = await this.context.Players.FirstOrDefaultAsync(x => x.RiotGamesNickname == request.Player.RiotGamesNickname && x.RiotGamesTagLine == request.Player.RiotGamesTagLine, cancellationToken);
 
-                if (playersWithRiotCombo is not null)
+                if (playersWithRiotCombo is not null && playersWithRiotCombo.Id != playerInDb.Id)
                 {
                     return playerInDb;
                 }

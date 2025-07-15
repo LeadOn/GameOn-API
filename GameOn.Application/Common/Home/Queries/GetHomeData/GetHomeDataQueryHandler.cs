@@ -2,10 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog;
-
 namespace GameOn.Application.Common.Home.Queries.GetHomeData
 {
+    using GameOn.Application.Common.Changelogs.Queries.GetLatestChangelog;
     using GameOn.Application.FIFA.Seasons.Queries.GetCurrentSeason;
     using GameOn.Application.FIFA.Tournaments.Queries.GetFeaturedTournaments;
     using GameOn.Common.DTOs.Common;

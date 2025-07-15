@@ -40,11 +40,6 @@ namespace GameOn.Common.DTOs
         public string Nickname { get; set; } = "INVALID FULLNAME";
 
         /// <summary>
-        /// Gets or sets Profile Picture URL.
-        /// </summary>
-        public string? ProfilePictureUrl { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the player is archived.
         /// </summary>
         public bool Archived { get; set; } = false;

@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.Application.Common.Players.Commands.UpdatePlayerProfilePicture;
+
 namespace GameOn.Presentation.Controllers.Common
 {
     using GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer;
@@ -10,8 +12,10 @@ namespace GameOn.Presentation.Controllers.Common
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Application.Common.Players.Queries.GetPlayerStats;
+    using GameOn.Application.Common.Players.Queries.GetProfilePicture;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
+    using GameOn.External.NetworkStorage.Interfaces;
     using GameOn.Presentation.Classes;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -26,14 +30,16 @@ namespace GameOn.Presentation.Controllers.Common
     public class PlayerController : ControllerBase
     {
         private readonly ISender mediator;
+        private readonly INetworkStorageService nsService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerController"/> class.
         /// </summary>
         /// <param name="mediator">MediatR interface, injected.</param>
-        public PlayerController(ISender mediator)
+        public PlayerController(ISender mediator, INetworkStorageService nsService)
         {
             this.mediator = mediator;
+            this.nsService = nsService;
         }
 
         /// <summary>
@@ -150,6 +156,51 @@ namespace GameOn.Presentation.Controllers.Common
         public async Task<IActionResult> UpdateUser([FromBody] UpdatePlayerDto update)
         {
             return this.Ok(await this.mediator.Send(new UpdatePlayerCommand { Player = update }));
+        }
+
+        /// <summary>
+        /// Gets profile picture from network attached storage.
+        /// </summary>
+        /// <param name="playerId">Player ID.</param>
+        /// <returns>File.</returns>
+        [HttpGet]
+        [Route("{playerId}/pp")]
+        [SwaggerOperation(Summary = "Get player's profile picture from server.")]
+        [SwaggerResponse(200, "Player's profile picture from server.", typeof(FileStreamResult))]
+        [SwaggerResponse(404, "No profile picture found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetPlayerProfilePicture(int playerId)
+        {
+            var ppDto = await this.mediator.Send(new GetProfilePictureQuery { PlayerId = playerId});
+
+            if (ppDto.FileStream is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.File(ppDto.FileStream, this.nsService.GetContentType(ppDto.FileName));
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("pp")]
+        [SwaggerOperation(Summary = "Sends profile picture to a player.")]
+        [SwaggerResponse(201, "Player's profile picture created on the server.", typeof(FileStreamResult))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(404, "No profile picture found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateProfilePicture([FromForm] IFormFile profilePicture)
+        {
+            var currentPlayer = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            if (currentPlayer is null)
+            {
+                return this.Unauthorized();
+            }
+
+            var status = await this.mediator.Send(new UpdatePlayerProfilePictureCommand { PlayerId = currentPlayer.Id, File = profilePicture });
+
+            return status ? this.Created() : this.Problem();
         }
     }
 }

@@ -2,11 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Common.Exceptions;
-
 namespace GameOn.Application
 {
     using System.Reflection;
+    using GameOn.Common.Exceptions;
     using GameOn.External;
     using Microsoft.Extensions.DependencyInjection;
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="GetLatestChangelog.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GetLatestChangelogQuery.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 

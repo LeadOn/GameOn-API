@@ -258,7 +258,8 @@ namespace GameOn.Presentation.Controllers.FIFA
                 return this.Problem();
             }
 
-            var updatedGame = await this.mediator.Send(new DeclareFifaGamePlayedScoreCommand {
+            var updatedGame = await this.mediator.Send(new DeclareFifaGamePlayedScoreCommand
+            {
                 ScoreDto = new DeclareScoreDto
                 {
                     GameId = gameId,
