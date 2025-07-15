@@ -2,15 +2,14 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.External.NetworkStorage.Implementations;
-using GameOn.External.NetworkStorage.Interfaces;
-using Minio;
-
 namespace GameOn.External
 {
+    using GameOn.External.NetworkStorage.Implementations;
+    using GameOn.External.NetworkStorage.Interfaces;
     using GameOn.External.RiotGames.Implementations;
     using GameOn.External.RiotGames.Interfaces;
     using Microsoft.Extensions.DependencyInjection;
+    using Minio;
 
     /// <summary>
     /// Dependency Injection class.

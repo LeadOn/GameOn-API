@@ -2,25 +2,30 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.External.NetworkStorage.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Minio;
-using Minio.DataModel.Args;
-
 namespace GameOn.External.NetworkStorage.Implementations
 {
+    using GameOn.External.NetworkStorage.Interfaces;
+    using Microsoft.AspNetCore.Http;
+    using Minio;
+    using Minio.DataModel.Args;
+
     /// <summary>
     /// MinIOService class.
     /// </summary>
     public class MinIOService : INetworkStorageService
     {
-        private IMinioClient minioClient;
+        private readonly IMinioClient minioClient;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MinIOService" /> class.
+        /// </summary>
+        /// <param name="minioClient">Minio client interface, injected.</param>
         public MinIOService(IMinioClient minioClient)
         {
             this.minioClient = minioClient;
         }
 
+        /// <inheritdoc />
         public async Task<Stream?> GetFile(string bucketName, string fileName)
         {
             // Creating bucket if it doesn't exist
@@ -59,6 +64,7 @@ namespace GameOn.External.NetworkStorage.Implementations
             return fileStream;
         }
 
+        /// <inheritdoc />
         public async Task UploadFile(string bucketName, string filePath, IFormFile file)
         {
             // Creating bucket if it doesn't exist
@@ -82,10 +88,11 @@ namespace GameOn.External.NetworkStorage.Implementations
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
+        /// <inheritdoc />
         public string GetContentType(string fileName)
         {
             var extension = Path.GetExtension(fileName).ToLowerInvariant();
