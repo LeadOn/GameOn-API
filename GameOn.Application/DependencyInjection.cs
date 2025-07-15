@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.Common.Exceptions;
+
 namespace GameOn.Application
 {
     using System.Reflection;
@@ -20,7 +22,11 @@ namespace GameOn.Application
         /// <returns>IServiceCollection.</returns>
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.LicenseKey = Environment.GetEnvironmentVariable("MEDIATR_LICENSE_KEY") ?? throw new MissingEnvironmentVariableException("MEDIATR_LICENSE_KEY");
+            });
             services.AddExternal();
             return services;
         }

@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1319992f-a208-4bcb-91f5-9faa28794297",
-		"name": "GameOn! 5.2.3",
+		"name": "GameOn! 5.2.9",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
