@@ -3,6 +3,7 @@
 // </copyright>
 
 using GameOn.External.NetworkStorage.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Minio;
 using Minio.DataModel.Args;
 
@@ -36,7 +37,7 @@ namespace GameOn.External.NetworkStorage.Implementations
                 var fileExists =
                     await this.minioClient.StatObjectAsync(new StatObjectArgs().WithBucket(bucketName)
                         .WithObject(fileName));
-                
+
                 if (fileExists is null)
                 {
                     return null;
@@ -56,6 +57,33 @@ namespace GameOn.External.NetworkStorage.Implementations
                 }));
 
             return fileStream;
+        }
+
+        public async Task UploadFile(string bucketName, string filePath, IFormFile file)
+        {
+            // Creating bucket if it doesn't exist
+            var bucketExists = await this.minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName));
+
+            if (!bucketExists)
+            {
+                await this.minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(bucketName));
+            }
+
+            try
+            {
+                // Upload file to bucket
+                await this.minioClient.PutObjectAsync(
+                    new PutObjectArgs()
+                        .WithBucket(bucketName)
+                        .WithObject(filePath)
+                        .WithContentType(file.ContentType)
+                        .WithStreamData(file.OpenReadStream())
+                        .WithObjectSize(file.Length));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public string GetContentType(string fileName)

@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.Application.Common.Players.Commands.UpdatePlayerProfilePicture;
+
 namespace GameOn.Presentation.Controllers.Common
 {
     using GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer;
@@ -177,6 +179,28 @@ namespace GameOn.Presentation.Controllers.Common
             }
 
             return this.File(ppDto.FileStream, this.nsService.GetContentType(ppDto.FileName));
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("pp")]
+        [SwaggerOperation(Summary = "Sends profile picture to a player.")]
+        [SwaggerResponse(201, "Player's profile picture created on the server.", typeof(FileStreamResult))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(404, "No profile picture found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateProfilePicture([FromForm] IFormFile profilePicture)
+        {
+            var currentPlayer = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            if (currentPlayer is null)
+            {
+                return this.Unauthorized();
+            }
+
+            var status = await this.mediator.Send(new UpdatePlayerProfilePictureCommand { PlayerId = currentPlayer.Id, File = profilePicture });
+
+            return status ? this.Created() : this.Problem();
         }
     }
 }

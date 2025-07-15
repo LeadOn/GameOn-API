@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using Microsoft.AspNetCore.Http;
+
 namespace GameOn.External.NetworkStorage.Interfaces
 {
     /// <summary>
@@ -10,6 +12,8 @@ namespace GameOn.External.NetworkStorage.Interfaces
     public interface INetworkStorageService
     {
         Task<Stream?> GetFile(string bucketName, string fileName);
+
+        Task UploadFile(string bucketName, string filePath, IFormFile file);
 
         String GetContentType(string fileName);
     }
