@@ -59,7 +59,7 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
                 // First, checking if player isn't already present in DB
                 var playersWithRiotCombo = await this.context.Players.FirstOrDefaultAsync(x => x.RiotGamesNickname == request.Player.RiotGamesNickname && x.RiotGamesTagLine == request.Player.RiotGamesTagLine, cancellationToken);
 
-                if (playersWithRiotCombo is not null)
+                if (playersWithRiotCombo is not null && playersWithRiotCombo.Id != playerInDb.Id)
                 {
                     return playerInDb;
                 }
