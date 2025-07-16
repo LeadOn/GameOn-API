@@ -2,12 +2,11 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Application.Common.Players.Commands.UpdatePlayerProfilePicture;
-
 namespace GameOn.Presentation.Controllers.Common
 {
     using GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer;
     using GameOn.Application.Common.Players.Commands.UpdatePlayer;
+    using GameOn.Application.Common.Players.Commands.UpdatePlayerProfilePicture;
     using GameOn.Application.Common.Players.Queries.GetAllPlayers;
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
@@ -36,6 +35,7 @@ namespace GameOn.Presentation.Controllers.Common
         /// Initializes a new instance of the <see cref="PlayerController"/> class.
         /// </summary>
         /// <param name="mediator">MediatR interface, injected.</param>
+        /// <param name="nsService">NetworkStorageService interface, injected.</param>
         public PlayerController(ISender mediator, INetworkStorageService nsService)
         {
             this.mediator = mediator;
@@ -171,7 +171,7 @@ namespace GameOn.Presentation.Controllers.Common
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetPlayerProfilePicture(int playerId)
         {
-            var ppDto = await this.mediator.Send(new GetProfilePictureQuery { PlayerId = playerId});
+            var ppDto = await this.mediator.Send(new GetProfilePictureQuery { PlayerId = playerId });
 
             if (ppDto.FileStream is null)
             {
@@ -181,16 +181,27 @@ namespace GameOn.Presentation.Controllers.Common
             return this.File(ppDto.FileStream, this.nsService.GetContentType(ppDto.FileName));
         }
 
+        /// <summary>
+        /// Upload user profile picture.
+        /// </summary>
+        /// <param name="profilePicture">Profile picture file.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPost]
         [Authorize]
         [Route("pp")]
         [SwaggerOperation(Summary = "Sends profile picture to a player.")]
         [SwaggerResponse(201, "Player's profile picture created on the server.", typeof(FileStreamResult))]
         [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(406, "Wrong file format.")]
         [SwaggerResponse(404, "No profile picture found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> UpdateProfilePicture([FromForm] IFormFile profilePicture)
+        public async Task<IActionResult> UpdateProfilePicture(IFormFile profilePicture)
         {
+            if (!CheckIfPictureFormatIsAuthorized(profilePicture.ContentType))
+            {
+                return this.StatusCode(406);
+            }
+
             var currentPlayer = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
 
             if (currentPlayer is null)
@@ -201,6 +212,16 @@ namespace GameOn.Presentation.Controllers.Common
             var status = await this.mediator.Send(new UpdatePlayerProfilePictureCommand { PlayerId = currentPlayer.Id, File = profilePicture });
 
             return status ? this.Created() : this.Problem();
+        }
+
+        /// <summary>
+        /// Checks if file type is valid.
+        /// </summary>
+        /// <param name="contentType">File content type.</param>
+        /// <returns>True if valid, false if not.</returns>
+        private static bool CheckIfPictureFormatIsAuthorized(string contentType)
+        {
+            return contentType is "image/jpeg" or "image/png" or "image/gif" or "image/webp";
         }
     }
 }

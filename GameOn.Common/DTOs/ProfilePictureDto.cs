@@ -11,8 +11,14 @@ namespace GameOn.Common.DTOs
     /// </summary>
     public class ProfilePictureDto
     {
+        /// <summary>
+        /// Gets or sets File Stream.
+        /// </summary>
         public Stream? FileStream { get; set; }
 
-        public string FileName { get; set; }
+        /// <summary>
+        /// Gets or sets File name.
+        /// </summary>
+        public string FileName { get; set; } = string.Empty;
     }
 }
