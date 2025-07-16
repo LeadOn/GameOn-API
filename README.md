@@ -25,6 +25,13 @@ Here are all of the environment variables currently used :
     <li>RIOT_GAMES_ACCOUNT_API_ROUTE: Riot Games API route to be used for Account management (exemple: europe.api.riotgames.com).</li>
     <li>RIOT_GAMES_SUMMONER_API_ROUTE: Riot Games API route to be used for Summoner management (exemple: euw1.api.riotgames.com).</li>
     <li>RIOT_GAMES_API_KEY: Riot Games API Key (can be obtained via Riot's official developer website).</li>
+    <li>MEDIATR_LICENSE_KEY: MediatR License Key (can be obtained via their official website).</li>
+    <li>S3_ENDPOINT: Endpoint to S3 Bucket.</li>
+    <li>S3_ACCESS_KEY: S3 Bucket Access key.</li>
+    <li>S3_SECRET_KEY: S3 Bucket Secret key.</li>
+    <li>S3_BUCKET_NAME: S3 Bucket Name.</li>
+    <li>S3_PP_BASE_PATH: Base path to profile pictures in S3 bucket.</li>
+    <li>DEFAULT_PROFILE_PIC: Default profile picture name.</li>
 </ul>
 
 ## Can I use it for my own?

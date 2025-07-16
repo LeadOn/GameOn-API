@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1319992f-a208-4bcb-91f5-9faa28794297",
-		"name": "GameOn! 5.4.0",
+		"name": "GameOn! 6.0.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -374,6 +374,34 @@
 									"path": [
 										"player",
 										"1",
+										"pp"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update profile picture",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profilePicture",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/player/pp",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
 										"pp"
 									]
 								}
