@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1319992f-a208-4bcb-91f5-9faa28794297",
-		"name": "GameOn! 5.2.9",
+		"name": "GameOn! 6.0.0",
 		"description": "This API goal is to monitor players performance across real-world and virtual games.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6882080"
@@ -356,6 +356,53 @@
 											"value": "",
 											"disabled": true
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get player profile picture",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/player/1/pp",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"1",
+										"pp"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update profile picture",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profilePicture",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/player/pp",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"player",
+										"pp"
 									]
 								}
 							},
@@ -907,6 +954,26 @@
 							"response": []
 						},
 						{
+							"name": "Get Tournament Logo",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifa/tournament/9/logo",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifa",
+										"tournament",
+										"9",
+										"logo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create",
 							"request": {
 								"method": "POST",
@@ -954,6 +1021,36 @@
 											"key": "fifaTeamId",
 											"value": "1"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Tournament Logo",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "tournamentPicture",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fifa/tournament/7/logo",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifa",
+										"tournament",
+										"7",
+										"logo"
 									]
 								}
 							},

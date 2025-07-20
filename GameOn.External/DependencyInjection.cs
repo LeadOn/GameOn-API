@@ -4,9 +4,12 @@
 
 namespace GameOn.External
 {
+    using GameOn.External.NetworkStorage.Implementations;
+    using GameOn.External.NetworkStorage.Interfaces;
     using GameOn.External.RiotGames.Implementations;
     using GameOn.External.RiotGames.Interfaces;
     using Microsoft.Extensions.DependencyInjection;
+    using Minio;
 
     /// <summary>
     /// Dependency Injection class.
@@ -25,6 +28,17 @@ namespace GameOn.External
             services.AddScoped<ISummonerService, SummonerV4Service>();
             services.AddScoped<ILeagueService, LeagueV4Service>();
             services.AddScoped<IMatchService, MatchV5Service>();
+
+            // Adding connection to MinIO
+            services.AddMinio(client =>
+                client.WithEndpoint(Environment.GetEnvironmentVariable("S3_ENDPOINT") ?? throw new NotImplementedException())
+                    .WithCredentials(
+                        Environment.GetEnvironmentVariable("S3_ACCESS_KEY") ?? throw new NotImplementedException(),
+                        Environment.GetEnvironmentVariable("S3_SECRET_KEY") ?? throw new NotImplementedException())
+                    .WithSSL(false)
+                    .Build());
+            services.AddScoped<INetworkStorageService, MinIOService>();
+
             return services;
         }
     }

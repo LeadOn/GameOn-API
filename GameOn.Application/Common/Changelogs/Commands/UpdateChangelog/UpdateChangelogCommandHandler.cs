@@ -2,14 +2,13 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-
 namespace GameOn.Application.Common.Changelogs.Commands.UpdateChangelog
 {
+    using AutoMapper;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// UpdateChangelogCommandHandler class.

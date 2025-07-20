@@ -61,13 +61,12 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
 
             if (summonerIdFromRiot is not null)
             {
-                playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
                 playerInDb.LolSummonerLevel = summonerIdFromRiot.SummonerLevel;
                 playerInDb.LolIconId = summonerIdFromRiot.ProfileIconId;
                 playerInDb.LolRefreshedOn = DateTime.Now;
 
                 // Updating player Rank
-                var playerRank = await this.leagueService.GetLeagueEntries(summonerIdFromRiot.SummonerId, cancellationToken);
+                var playerRank = await this.leagueService.GetLeagueEntries(playerInDb.RiotGamesPUUID, cancellationToken);
 
                 if (playerRank is not null)
                 {

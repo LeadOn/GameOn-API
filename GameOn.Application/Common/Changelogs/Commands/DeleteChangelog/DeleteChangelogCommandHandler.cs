@@ -2,14 +2,11 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-
 namespace GameOn.Application.Common.Changelogs.Commands.DeleteChangelog
 {
     using GameOn.Common.Interfaces;
-    using GameOn.Domain;
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// DeleteChangelogCommandHandler class.

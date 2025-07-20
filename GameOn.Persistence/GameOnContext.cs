@@ -518,7 +518,7 @@ namespace GameOn.Persistence
                     .HasForeignKey(e => e.FifaGameId)
                     .HasConstraintName("FK_FifaTeamPlayer_FifaGamePlayed");
             });
-            
+
             modelBuilder.Entity<Changelog>(entity =>
             {
                 entity.ToTable("Changelog");
