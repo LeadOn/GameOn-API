@@ -2,14 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Application.FIFA.Tournaments.Queries.GetTournamentById;
-
 namespace GameOn.Application.FIFA.Tournaments.Commands.UpdateTournamentPicture
 {
-    using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Common.Exceptions;
     using GameOn.Common.Interfaces;
-    using GameOn.Domain;
     using GameOn.External.NetworkStorage.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

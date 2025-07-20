@@ -2,11 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Application.FIFA.Tournaments.Queries.GetTournamentById;
-
 namespace GameOn.Application.FIFA.Tournaments.Queries.GetTournamentLogo
 {
-    using GameOn.Application.Common.Players.Queries.GetPlayerById;
+    using GameOn.Application.FIFA.Tournaments.Queries.GetTournamentById;
     using GameOn.Common.DTOs;
     using GameOn.Common.Exceptions;
     using GameOn.External.NetworkStorage.Interfaces;
