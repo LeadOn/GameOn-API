@@ -1,15 +1,13 @@
-﻿// <copyright file="ProfilePictureDto.cs" company="LeadOn's Corp'">
+﻿// <copyright file="TournamentLogoDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
 namespace GameOn.Common.DTOs
 {
-    using GameOn.Domain;
-
     /// <summary>
-    /// ProfilePictureDto class.
+    /// TournamentLogoDto class.
     /// </summary>
-    public class ProfilePictureDto
+    public class TournamentLogoDto
     {
         /// <summary>
         /// Gets or sets File Stream.

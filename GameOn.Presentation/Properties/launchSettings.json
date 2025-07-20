@@ -20,6 +20,7 @@
         "S3_SECRET_KEY": "",
         "S3_BUCKET_NAME": "",
         "S3_PP_BASE_PATH": "",
+        "S3_TP_BASE_PATH": "",
         "DEFAULT_PROFILE_PIC": ""
       },
       "dotnetRunMessages": true,

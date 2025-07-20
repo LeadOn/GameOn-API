@@ -1,8 +1,8 @@
-﻿// <copyright file="UpdatePlayerProfilePictureCommand.cs" company="LeadOn's Corp'">
+﻿// <copyright file="UpdateTournamentPictureCommand.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.Common.Players.Commands.UpdatePlayerProfilePicture
+namespace GameOn.Application.FIFA.Tournaments.Commands.UpdateTournamentPicture
 {
     using GameOn.Common.DTOs;
     using GameOn.Domain;
@@ -10,14 +10,14 @@ namespace GameOn.Application.Common.Players.Commands.UpdatePlayerProfilePicture
     using Microsoft.AspNetCore.Http;
 
     /// <summary>
-    /// UpdatePlayerProfilePictureCommand class.
+    /// UpdateTournamentPictureCommand class.
     /// </summary>
-    public class UpdatePlayerProfilePictureCommand : IRequest<bool>
+    public class UpdateTournamentPictureCommand : IRequest<bool>
     {
         /// <summary>
-        /// Gets or sets Player ID.
+        /// Gets or sets Tournament ID.
         /// </summary>
-        public int PlayerId { get; set; }
+        public int TournamentId { get; set; }
 
         /// <summary>
         /// Gets or sets File.
