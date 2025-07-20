@@ -9,13 +9,14 @@
 	<Title>GameOn! Persistence</Title>
 	<Authors>LeadOn</Authors>
 	<Company>LeadOn's Corp</Company>
-	<Description>Persistance layer of the GameOn! Project</Description>
+	<Description>Persistance layer of the GameOn! app.</Description>
 	<Copyright>LeadOn's Corp</Copyright>
 	<PackageProjectUrl>https://www.valentinvirot.fr</PackageProjectUrl>
 	<PackageIcon>gameon-icon.png</PackageIcon>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
+	<Version>6.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

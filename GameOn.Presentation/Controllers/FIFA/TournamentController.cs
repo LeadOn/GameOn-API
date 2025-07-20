@@ -13,12 +13,15 @@ namespace GameOn.Presentation.Controllers.FIFA
     using GameOn.Application.FIFA.Tournaments.Commands.SavePhase1Score;
     using GameOn.Application.FIFA.Tournaments.Commands.SubscribeTournament;
     using GameOn.Application.FIFA.Tournaments.Commands.UpdateTournament;
+    using GameOn.Application.FIFA.Tournaments.Commands.UpdateTournamentPicture;
     using GameOn.Application.FIFA.Tournaments.Queries.CheckTournamentSubscription;
     using GameOn.Application.FIFA.Tournaments.Queries.GetAllTournaments;
     using GameOn.Application.FIFA.Tournaments.Queries.GetFeaturedTournaments;
     using GameOn.Application.FIFA.Tournaments.Queries.GetTournamentById;
+    using GameOn.Application.FIFA.Tournaments.Queries.GetTournamentLogo;
     using GameOn.Common.DTOs;
     using GameOn.Domain;
+    using GameOn.External.NetworkStorage.Interfaces;
     using GameOn.Presentation.Classes;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -33,14 +36,17 @@ namespace GameOn.Presentation.Controllers.FIFA
     public class TournamentController : ControllerBase
     {
         private readonly ISender mediator;
+        private readonly INetworkStorageService nsService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TournamentController"/> class.
         /// </summary>
         /// <param name="mediator">MediatR interface, injected.</param>
-        public TournamentController(ISender mediator)
+        /// <param name="nsService">NetworkStorage interface, injected.</param>
+        public TournamentController(ISender mediator, INetworkStorageService nsService)
         {
             this.mediator = mediator;
+            this.nsService = nsService;
         }
 
         /// <summary>
@@ -330,6 +336,66 @@ namespace GameOn.Presentation.Controllers.FIFA
             {
                 return this.NoContent();
             }
+        }
+
+        /// <summary>
+        /// Upload tournament picture.
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <param name="tournamentPicture">Tournament picture file.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{tournamentId}/logo")]
+        [SwaggerOperation(Summary = "Updates tournament picture.")]
+        [SwaggerResponse(201, "Tournament's picture created on the server.")]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(406, "Wrong file format.")]
+        [SwaggerResponse(404, "No profile picture found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateTournamentPicture(int tournamentId, IFormFile tournamentPicture)
+        {
+            if (!CheckIfPictureFormatIsAuthorized(tournamentPicture.ContentType))
+            {
+                return this.StatusCode(406);
+            }
+
+            var currentPlayer = await this.mediator.Send(new UpdateTournamentPictureCommand { TournamentId = tournamentId, File = tournamentPicture });
+
+            return currentPlayer ? this.Created() : this.Problem();
+        }
+
+        /// <summary>
+        /// Gets tournament logo from network attached storage.
+        /// </summary>
+        /// <param name="tournamentId">Tournament ID.</param>
+        /// <returns>File.</returns>
+        [HttpGet]
+        [Route("{tournamentId}/logo")]
+        [SwaggerOperation(Summary = "Get tournament logo from server.")]
+        [SwaggerResponse(200, "Tournament logo from server.", typeof(FileStreamResult))]
+        [SwaggerResponse(404, "No tournament logo found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetTournamentLogo(int tournamentId)
+        {
+            var tpDto = await this.mediator.Send(new GetTournamentLogoQuery { TournamentId = tournamentId });
+
+            if (tpDto.FileStream is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.File(tpDto.FileStream, this.nsService.GetContentType(tpDto.FileName));
+        }
+
+        /// <summary>
+        /// Checks if file type is valid.
+        /// </summary>
+        /// <param name="contentType">File content type.</param>
+        /// <returns>True if valid, false if not.</returns>
+        private static bool CheckIfPictureFormatIsAuthorized(string contentType)
+        {
+            return contentType is "image/jpeg" or "image/png" or "image/gif" or "image/webp";
         }
     }
 }

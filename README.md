@@ -31,6 +31,7 @@ Here are all of the environment variables currently used :
     <li>S3_SECRET_KEY: S3 Bucket Secret key.</li>
     <li>S3_BUCKET_NAME: S3 Bucket Name.</li>
     <li>S3_PP_BASE_PATH: Base path to profile pictures in S3 bucket.</li>
+    <li>S3_TP_BASE_PATH: Base path to tournament pictures in S3 bucket.</li>
     <li>DEFAULT_PROFILE_PIC: Default profile picture name.</li>
 </ul>
 

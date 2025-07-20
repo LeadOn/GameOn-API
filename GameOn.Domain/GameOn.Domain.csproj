@@ -9,13 +9,14 @@
 	<Title>GameOn! Domain</Title>
 	<Authors>LeadOn</Authors>
 	<Company>LeadOn's Corp</Company>
-	<Description>Domain layer of the GameOn! project.</Description>
+	<Description>Domain layer of the GameOn! app.</Description>
 	<Copyright>LeadOn's Corp</Copyright>
 	<PackageProjectUrl>https://www.valentinvirot.fr</PackageProjectUrl>
 	<PackageIcon>gameon-icon.png</PackageIcon>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
+	<Version>6.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
