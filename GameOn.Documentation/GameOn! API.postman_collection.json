@@ -954,6 +954,26 @@
 							"response": []
 						},
 						{
+							"name": "Get Tournament Logo",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fifa/tournament/9/logo",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifa",
+										"tournament",
+										"9",
+										"logo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create",
 							"request": {
 								"method": "POST",
@@ -1001,6 +1021,36 @@
 											"key": "fifaTeamId",
 											"value": "1"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Tournament Logo",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "tournamentPicture",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fifa/tournament/7/logo",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fifa",
+										"tournament",
+										"7",
+										"logo"
 									]
 								}
 							},
