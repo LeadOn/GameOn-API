@@ -70,7 +70,9 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 
                         if (summonerIdFromRiot is not null)
                         {
-                            playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
+                            playerInDb.LolSummonerLevel = summonerIdFromRiot.SummonerLevel;
+                            playerInDb.LolIconId = summonerIdFromRiot.ProfileIconId;
+                            playerInDb.LolRefreshedOn = DateTime.Now;
                         }
                     }
                 }

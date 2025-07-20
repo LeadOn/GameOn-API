@@ -12,11 +12,11 @@ namespace GameOn.External.RiotGames.Interfaces
     public interface ILeagueService
     {
         /// <summary>
-        /// Gets League Entries by Summoner's ID.
+        /// Gets League Entries by its PUUID.
         /// </summary>
-        /// <param name="summonerId">Summoner ID.</param>
+        /// <param name="puuid">PUUID ID.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
         /// <returns><see cref="IEnumerable{LeagueEntryDto}"/>.</returns>
-        Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string summonerId, CancellationToken cancellationToken);
+        Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string puuid, CancellationToken cancellationToken);
     }
 }

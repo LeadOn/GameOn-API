@@ -25,9 +25,9 @@ namespace GameOn.External.RiotGames.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string summonerId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<LeagueEntryDto>> GetLeagueEntries(string puuid, CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/league/v4/entries/by-summoner/{summonerId}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/league/v4/entries/by-puuid/{puuid}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
 #pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return await RunRequest<IEnumerable<LeagueEntryDto>>(this.client, request, cancellationToken);
 #pragma warning restore CS8603 // Existence possible d'un retour de référence null
