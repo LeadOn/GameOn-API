@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "6.0.3"
+    "version": "6.1.0"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -3360,6 +3360,9 @@
           },
           "featured": {
             "type": "boolean"
+          },
+          "phaseOneDoubleRound": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3431,6 +3434,9 @@
             "$ref": "#/components/schemas/Player"
           },
           "featured": {
+            "type": "boolean"
+          },
+          "phaseOneDoubleRound": {
             "type": "boolean"
           }
         },

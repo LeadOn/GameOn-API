@@ -51,6 +51,7 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.UpdateTournament
             tournamentInDb.LoosePoints = request.TournamentDto.LoosePoints;
             tournamentInDb.Rules = request.TournamentDto.Rules;
             tournamentInDb.Featured = request.TournamentDto.Featured;
+            tournamentInDb.PhaseOneDoubleRound = request.TournamentDto.PhaseOneDoubleRound;
 
             this.context.Tournaments.Update(tournamentInDb);
             await this.context.SaveChangesAsync(cancellationToken);
