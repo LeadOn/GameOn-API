@@ -45,23 +45,24 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.GoToPhase1
 
             foreach (var player in tournamentPlayers)
             {
-                // Looping for every opponent
                 foreach (var player2 in tournamentPlayers)
                 {
                     if (player.Player.Id != player2.Player.Id)
                     {
-                        var newGame = new FifaGamePlayed
+                        if (tournamentInDb.PhaseOneDoubleRound || player.Player.Id < player2.Player.Id)
                         {
-                            CreatedById = player.Player.Id,
-                            IsPlayed = false,
-                            PlatformId = int.Parse(Environment.GetEnvironmentVariable("DEFAULT_PLATFORM") ?? "1"),
-                            PlayedOn = DateTime.UtcNow,
-                            SeasonId = int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"),
-                            Team1Id = player.Team.Id,
-                            Team2Id = player2.Team.Id,
-                            Phase = 1,
-                            TournamentId = request.TournamentId,
-                            TeamPlayers = new List<FifaTeamPlayer>
+                            var newGame = new FifaGamePlayed
+                            {
+                                CreatedById = player.Player.Id,
+                                IsPlayed = false,
+                                PlatformId = int.Parse(Environment.GetEnvironmentVariable("DEFAULT_PLATFORM") ?? "1"),
+                                PlayedOn = DateTime.UtcNow,
+                                SeasonId = int.Parse(Environment.GetEnvironmentVariable("CURRENT_SEASON") ?? "1"),
+                                Team1Id = player.Team.Id,
+                                Team2Id = player2.Team.Id,
+                                Phase = 1,
+                                TournamentId = request.TournamentId,
+                                TeamPlayers = new List<FifaTeamPlayer>
                                 {
                                     new FifaTeamPlayer
                                     {
@@ -74,13 +75,15 @@ namespace GameOn.Application.FIFA.Tournaments.Commands.GoToPhase1
                                         Team = 1,
                                     },
                                 },
-                        };
+                            };
 
-                        this.context.FifaGamesPlayed.Add(newGame);
-                        await this.context.SaveChangesAsync(cancellationToken);
+                            this.context.FifaGamesPlayed.Add(newGame);
+                        }
                     }
                 }
             }
+
+            await this.context.SaveChangesAsync(cancellationToken);
 
             // Updating tournament to Phase 1
             tournamentInDb.State = TournamentStates.Phase1;

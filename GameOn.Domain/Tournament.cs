@@ -82,6 +82,11 @@ public class Tournament
     public bool Featured { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether one or two games will be generated in phase 1.
+    /// </summary>
+    public bool PhaseOneDoubleRound { get; set; }
+
+    /// <summary>
     /// Gets or sets Tournament winner.
     /// </summary>
     [JsonIgnore]

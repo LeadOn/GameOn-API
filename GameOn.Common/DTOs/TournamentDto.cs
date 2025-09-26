@@ -41,6 +41,7 @@ namespace GameOn.Common.DTOs
             this.LoosePoints = tour.LoosePoints;
             this.DrawPoints = tour.DrawPoints;
             this.Featured = tour.Featured;
+            this.PhaseOneDoubleRound = tour.PhaseOneDoubleRound;
         }
 
         /// <summary>
@@ -122,5 +123,10 @@ namespace GameOn.Common.DTOs
         /// Gets or sets a value indicating whether a tournament is featured or not.
         /// </summary>
         public bool Featured { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether one or two games will be generated in phase 1.
+        /// </summary>
+        public bool PhaseOneDoubleRound { get; set; }
     }
 }

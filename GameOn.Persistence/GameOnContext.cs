@@ -235,6 +235,10 @@ namespace GameOn.Persistence
                     .HasColumnName("featured")
                     .HasDefaultValue(false);
 
+                entity.Property(e => e.PhaseOneDoubleRound)
+                    .HasColumnName("phase_one_double_round")
+                    .HasDefaultValue(false);
+
                 entity.HasOne(e => e.Winner)
                     .WithMany(f => f.TournamentsWon)
                     .HasForeignKey(e => e.WinnerId)
