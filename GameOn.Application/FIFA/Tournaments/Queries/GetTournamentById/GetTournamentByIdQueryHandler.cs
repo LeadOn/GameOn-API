@@ -101,7 +101,7 @@ namespace GameOn.Application.FIFA.Tournaments.Queries.GetTournamentById
                     { PlayerId = player.Player.Id, TournamentId = request.TournamentId }, cancellationToken);
             }
 
-            tournament.Players = tournament.Players.OrderByDescending(x => x.Score).ToList();
+            tournament.Players = tournament.Players.OrderByDescending(x => x.Score).ThenByDescending(x => x.Stats.GoalDifference).ToList();
 
             return tournament;
         }
