@@ -104,7 +104,7 @@ namespace GameOn.Persistence
 
         /// <inheritdoc />
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseMySql(this.connectionString, ServerVersion.AutoDetect(this.connectionString));
+            => options.UseSqlServer(this.connectionString);
 
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -293,7 +293,7 @@ namespace GameOn.Persistence
                       .WithMany(f => f.TournamentPlayers)
                       .HasForeignKey(e => e.FifaTeamId)
                       .HasConstraintName("FK_TournamentPlayer_FifaTeam")
-                      .OnDelete(DeleteBehavior.Cascade);
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Season>(entity =>
@@ -409,13 +409,13 @@ namespace GameOn.Persistence
                     .WithMany(f => f.GamesPlayedTeam1)
                     .HasForeignKey(e => e.Team1Id)
                     .HasConstraintName("FK_FifaGamePlayed_FifaTeam1")
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(e => e.Team2)
                     .WithMany(f => f.GamesPlayedTeam2)
                     .HasForeignKey(e => e.Team2Id)
                     .HasConstraintName("FK_FifaGamePlayed_FifaTeam2")
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(e => e.Platform)
                     .WithMany(f => f.GamesPlayed)
@@ -439,7 +439,7 @@ namespace GameOn.Persistence
                     .WithMany(f => f.Games)
                     .HasForeignKey(e => e.TournamentId)
                     .HasConstraintName("FK_FifaGamePlayed_Tournament")
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Highlight>(entity =>
@@ -520,7 +520,8 @@ namespace GameOn.Persistence
                 entity.HasOne(e => e.FifaGamePlayed)
                     .WithMany(f => f.TeamPlayers)
                     .HasForeignKey(e => e.FifaGameId)
-                    .HasConstraintName("FK_FifaTeamPlayer_FifaGamePlayed");
+                    .HasConstraintName("FK_FifaTeamPlayer_FifaGamePlayed")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Changelog>(entity =>
@@ -691,12 +692,6 @@ namespace GameOn.Persistence
                 entity.Property(e => e.PlayerId)
                     .HasColumnName("player_id");
 
-                entity.HasOne(e => e.Player)
-                    .WithMany(f => f.LeagueOfLegendsGameParticipants)
-                    .HasForeignKey(e => e.PlayerId)
-                    .HasConstraintName("FK_Player_LoL_Game_Participant")
-                    .OnDelete(DeleteBehavior.Cascade);
-
                 entity.Property(e => e.Puuid)
                     .HasColumnName("puuid")
                     .HasMaxLength(150);
@@ -754,6 +749,12 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.Win)
                     .HasColumnName("win");
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.LeagueOfLegendsGameParticipants)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_Player_LoL_Game_Participant")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<LoLGameTimelineFrame>(entity =>

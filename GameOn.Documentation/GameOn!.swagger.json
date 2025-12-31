@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "6.1.1"
+    "version": "6.2.1"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -3577,5 +3577,43 @@
         "additionalProperties": false
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Admin"
+    },
+    {
+      "name": "Changelog"
+    },
+    {
+      "name": "Common"
+    },
+    {
+      "name": "FifaGame"
+    },
+    {
+      "name": "FifaTeam"
+    },
+    {
+      "name": "Highlight"
+    },
+    {
+      "name": "Match"
+    },
+    {
+      "name": "Platform"
+    },
+    {
+      "name": "Player"
+    },
+    {
+      "name": "Season"
+    },
+    {
+      "name": "Summoner"
+    },
+    {
+      "name": "Tournament"
+    }
+  ]
 }

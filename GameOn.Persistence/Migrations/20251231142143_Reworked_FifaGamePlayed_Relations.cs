@@ -1,0 +1,66 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace GameOn.Persistence.Migrations
+{
+    /// <inheritdoc />
+    public partial class Reworked_FifaGamePlayed_Relations : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam1",
+                table: "FifaGamePlayed");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam2",
+                table: "FifaGamePlayed");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam1",
+                table: "FifaGamePlayed",
+                column: "team_1_id",
+                principalTable: "FifaTeam",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam2",
+                table: "FifaGamePlayed",
+                column: "team_2_id",
+                principalTable: "FifaTeam",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam1",
+                table: "FifaGamePlayed");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam2",
+                table: "FifaGamePlayed");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam1",
+                table: "FifaGamePlayed",
+                column: "team_1_id",
+                principalTable: "FifaTeam",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FifaGamePlayed_FifaTeam2",
+                table: "FifaGamePlayed",
+                column: "team_2_id",
+                principalTable: "FifaTeam",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+        }
+    }
+}

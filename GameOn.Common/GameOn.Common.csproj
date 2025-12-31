@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -16,7 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>6.0.0</Version>
+    <Version>6.2.1</Version>
+    <PackageReleaseNotes>Now migrated to .NET 10 + SQL Server instead of MySQL</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

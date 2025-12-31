@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20251231141857_Reworked_TournamentPlayer_Relations")]
+    partial class Reworked_TournamentPlayer_Relations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -917,42 +920,42 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.Player", "CreatedBy")
                         .WithMany("FifaGameCreated")
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_FifaGamePlayed_Player_Created_By");
 
                     b.HasOne("GameOn.Domain.Platform", "Platform")
                         .WithMany("GamesPlayed")
                         .HasForeignKey("PlatformId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_FifaGamePlayed_Platform");
 
                     b.HasOne("GameOn.Domain.Season", "Season")
                         .WithMany("FifaGamePlayed")
                         .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_FifaGamePlayed_Season");
 
                     b.HasOne("GameOn.Domain.FifaTeam", "Team1")
                         .WithMany("GamesPlayedTeam1")
                         .HasForeignKey("Team1Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_FifaGamePlayed_FifaTeam1");
 
                     b.HasOne("GameOn.Domain.FifaTeam", "Team2")
                         .WithMany("GamesPlayedTeam2")
                         .HasForeignKey("Team2Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_FifaGamePlayed_FifaTeam2");
 
                     b.HasOne("GameOn.Domain.Tournament", "Tournament")
                         .WithMany("Games")
                         .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("FK_FifaGamePlayed_Tournament");
 
                     b.Navigation("CreatedBy");
@@ -980,7 +983,7 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.Player", "Player")
                         .WithMany("FifaTeamPlayers")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_FifaTeamPlayer_Player");
 
@@ -994,14 +997,14 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.Player", "CreatedBy")
                         .WithMany("Highlights")
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Highlight_Player_Created_By");
 
                     b.HasOne("GameOn.Domain.FifaGamePlayed", "FifaGame")
                         .WithMany("Highlights")
                         .HasForeignKey("FifaGameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_FifaGame_Highlight");
 
@@ -1015,7 +1018,7 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.Player", "Player")
                         .WithMany("LeagueOfLegendsRankHistory")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Player_LoLRankHistory");
 
@@ -1027,14 +1030,14 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.LoLGame", "Game")
                         .WithMany("LeagueOfLegendsGameParticipants")
                         .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Games_Participants");
 
                     b.HasOne("GameOn.Domain.Player", "Player")
                         .WithMany("LeagueOfLegendsGameParticipants")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_Player_LoL_Game_Participant");
 
                     b.Navigation("Game");
@@ -1047,7 +1050,7 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.LoLGame", "Game")
                         .WithMany("LoLGameTimelineFrames")
                         .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Game_Frame");
 
@@ -1059,7 +1062,7 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.LoLGameTimelineFrame", "TimelineFrame")
                         .WithMany("LoLGameTimelineFrameParticipants")
                         .HasForeignKey("LoLGameTimelineFrameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Game_Frame_Participant");
 

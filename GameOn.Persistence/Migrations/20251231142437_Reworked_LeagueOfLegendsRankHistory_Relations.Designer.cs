@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20251231142437_Reworked_LeagueOfLegendsRankHistory_Relations")]
+    partial class Reworked_LeagueOfLegendsRankHistory_Relations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1027,14 +1030,14 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.LoLGame", "Game")
                         .WithMany("LeagueOfLegendsGameParticipants")
                         .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Games_Participants");
 
                     b.HasOne("GameOn.Domain.Player", "Player")
                         .WithMany("LeagueOfLegendsGameParticipants")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_Player_LoL_Game_Participant");
 
                     b.Navigation("Game");
@@ -1047,7 +1050,7 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.LoLGame", "Game")
                         .WithMany("LoLGameTimelineFrames")
                         .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Game_Frame");
 
@@ -1059,7 +1062,7 @@ namespace GameOn.Persistence.Migrations
                     b.HasOne("GameOn.Domain.LoLGameTimelineFrame", "TimelineFrame")
                         .WithMany("LoLGameTimelineFrameParticipants")
                         .HasForeignKey("LoLGameTimelineFrameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Game_Frame_Participant");
 

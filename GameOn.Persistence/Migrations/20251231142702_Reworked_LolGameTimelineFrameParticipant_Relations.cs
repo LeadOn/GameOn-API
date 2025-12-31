@@ -1,0 +1,41 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace GameOn.Persistence.Migrations
+{
+    /// <inheritdoc />
+    public partial class Reworked_LolGameTimelineFrameParticipant_Relations : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_LoL_Game_Frame_Participant",
+                table: "LeagueOfLegendsGameTimelineFrameParticipant");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_LoL_Game_Frame_Participant",
+                table: "LeagueOfLegendsGameTimelineFrameParticipant",
+                column: "timeline_frame_id",
+                principalTable: "LeagueOfLegendsGameTimelineFrame",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_LoL_Game_Frame_Participant",
+                table: "LeagueOfLegendsGameTimelineFrameParticipant");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_LoL_Game_Frame_Participant",
+                table: "LeagueOfLegendsGameTimelineFrameParticipant",
+                column: "timeline_frame_id",
+                principalTable: "LeagueOfLegendsGameTimelineFrame",
+                principalColumn: "id");
+        }
+    }
+}

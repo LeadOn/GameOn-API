@@ -1,0 +1,87 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace GameOn.Persistence.Migrations
+{
+    /// <inheritdoc />
+    public partial class Reworked_TournamentPlayer_Relations : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_TournamentPlayer_FifaTeam",
+                table: "TournamentPlayer");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TournamentPlayer_Player",
+                table: "TournamentPlayer");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TournamentPlayer_Tournament",
+                table: "TournamentPlayer");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TournamentPlayer_FifaTeam",
+                table: "TournamentPlayer",
+                column: "fifa_team_id",
+                principalTable: "FifaTeam",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TournamentPlayer_Player",
+                table: "TournamentPlayer",
+                column: "player_id",
+                principalTable: "Player",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TournamentPlayer_Tournament",
+                table: "TournamentPlayer",
+                column: "tournament_id",
+                principalTable: "Tournament",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_TournamentPlayer_FifaTeam",
+                table: "TournamentPlayer");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TournamentPlayer_Player",
+                table: "TournamentPlayer");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TournamentPlayer_Tournament",
+                table: "TournamentPlayer");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TournamentPlayer_FifaTeam",
+                table: "TournamentPlayer",
+                column: "fifa_team_id",
+                principalTable: "FifaTeam",
+                principalColumn: "id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TournamentPlayer_Player",
+                table: "TournamentPlayer",
+                column: "player_id",
+                principalTable: "Player",
+                principalColumn: "id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TournamentPlayer_Tournament",
+                table: "TournamentPlayer",
+                column: "tournament_id",
+                principalTable: "Tournament",
+                principalColumn: "id");
+        }
+    }
+}

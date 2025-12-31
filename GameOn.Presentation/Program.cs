@@ -7,6 +7,7 @@ using GameOn.Application;
 using GameOn.Common.Exceptions;
 using GameOn.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi;
 #pragma warning restore SA1200 // Using directives should be placed correctly
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,12 +22,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "6.1.1",
+        Version = "6.2.1",
         Title = "LeadOn's Corp - GameOn! API",
         Description = "This API goal is to monitor players performance across multiple games.",
-        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        Contact = new OpenApiContact
         {
             Email = "virot.valentin@gmail.com",
             Name = "Valentin Virot",
