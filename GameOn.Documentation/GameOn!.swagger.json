@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "6.2.1"
+    "version": "6.2.2"
   },
   "paths": {
     "/Admin/dashboard": {

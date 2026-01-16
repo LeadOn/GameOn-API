@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>6.2.1</Version>
-	<PackageReleaseNotes>Now migrated to .NET 10 + SQL Server instead of MySQL</PackageReleaseNotes>
+	<Version>6.2.2</Version>
+	<PackageReleaseNotes>Updated dependencies</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
