@@ -28,7 +28,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
         /// <inheritdoc />
         public async Task<IEnumerable<PlayerDto>> Handle(GetAllLeaguePlayersQuery request, CancellationToken cancellationToken)
         {
-            var playersInDb = await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived && x.LolSummonerId != null).Select(x => new PlayerDto(x)).ToListAsync(cancellationToken);
+            var playersInDb = await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived && x.RiotGamesPUUID != null).Select(x => new PlayerDto(x)).ToListAsync(cancellationToken);
 
             foreach (var player in playersInDb)
             {

@@ -71,13 +71,13 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
                         playerInDb.RiotGamesTagLine = puuidFromRiot.TagLine;
                         playerInDb.RiotGamesPUUID = puuidFromRiot.Puuid;
 
-                        // Now, getting its league summoners ID
-                        var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(puuidFromRiot.Puuid, cancellationToken);
+                        // // Now, getting its league summoners ID
+                        // var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(puuidFromRiot.Puuid, cancellationToken);
 
-                        if (summonerIdFromRiot is not null)
-                        {
-                            playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
-                        }
+                        // if (summonerIdFromRiot is not null)
+                        // {
+                        //     playerInDb.LolSummonerId = summonerIdFromRiot.SummonerId;
+                        // }
                     }
                 }
             }
