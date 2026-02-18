@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "6.2.3"
+    "version": "6.2.4"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -3162,10 +3162,6 @@
             "type": "string",
             "nullable": true
           },
-          "lolSummonerId": {
-            "type": "string",
-            "nullable": true
-          },
           "lolSummonerLevel": {
             "type": "integer",
             "format": "int64",
@@ -3230,10 +3226,6 @@
             "nullable": true
           },
           "riotGamesPUUID": {
-            "type": "string",
-            "nullable": true
-          },
-          "lolSummonerId": {
             "type": "string",
             "nullable": true
           },

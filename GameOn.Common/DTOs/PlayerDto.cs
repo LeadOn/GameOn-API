@@ -32,7 +32,6 @@ namespace GameOn.Common.DTOs
             this.RiotGamesNickname = player.RiotGamesNickname;
             this.RiotGamesPUUID = player.RiotGamesPUUID;
             this.RiotGamesTagLine = player.RiotGamesTagLine;
-            // this.LolSummonerId = player.LolSummonerId;
             this.LolSummonerLevel = player.LolSummonerLevel;
             this.LolRefreshedOn = player.LolRefreshedOn;
             this.CreatedOn = player.CreatedOn;
@@ -79,11 +78,6 @@ namespace GameOn.Common.DTOs
         /// Gets or sets player's Riot Games PUUID.
         /// </summary>
         public string? RiotGamesPUUID { get; set; }
-
-        // /// <summary>
-        // /// Gets or sets player's LOL Summoner ID.
-        // /// </summary>
-        // public string? LolSummonerId { get; set; }
 
         /// <summary>
         /// Gets or sets player's LOL Summoner's level.
