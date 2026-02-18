@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>6.2.2</Version>
-    <PackageReleaseNotes>Updated dependencies</PackageReleaseNotes>
+    <Version>6.2.4</Version>
+    <PackageReleaseNotes>Removed useless field on Player table.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

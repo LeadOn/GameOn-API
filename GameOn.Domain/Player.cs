@@ -52,11 +52,6 @@ namespace GameOn.Domain
         public string? RiotGamesPUUID { get; set; }
 
         /// <summary>
-        /// Gets or sets player's LOL Summoner ID.
-        /// </summary>
-        public string? LolSummonerId { get; set; }
-
-        /// <summary>
         /// Gets or sets player's LOL Summoner's level.
         /// </summary>
         public long? LolSummonerLevel { get; set; }
