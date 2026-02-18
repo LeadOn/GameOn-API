@@ -157,10 +157,6 @@ namespace GameOn.Persistence
                     .HasColumnName("riot_games_puuid")
                     .HasMaxLength(150);
 
-                entity.Property(e => e.LolSummonerId)
-                    .HasColumnName("lol_summoner_id")
-                    .HasMaxLength(150);
-
                 entity.Property(e => e.LolIconId)
                     .HasColumnName("lol_icon_id");
 

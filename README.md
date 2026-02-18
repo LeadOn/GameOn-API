@@ -6,7 +6,7 @@
 
 # Description
 
-This project is a back-end for the GameOn! project, done using ASP.NET on the .NET 9 framework, and will be running live on [this site](https://gameon-api.valentinvirot.fr/).
+This project is a back-end for the GameOn! project, done using ASP.NET on the .NET 10 framework, and will be running live on [this site](https://gameon-api.valentinvirot.fr/).
 
 First, the project was built around the N-Layer architecture (you can find it in the archive/n-layer branch).
 Now, the project is using the Clean Architecture + CQRS design patterns, that suits better in this use case.
