@@ -54,7 +54,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 return await this.context.LeagueOfLegendsGames
                     .Include(x => x.LeagueOfLegendsGameParticipants)
                     .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId))
-                    .OrderByDescending(x => x.RetrievedOn)
+                    .OrderByDescending(x => x.MatchId)
                     .Take(5)
                     .ToListAsync(cancellationToken);
             }
