@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "6.2.5",
+        Version = "6.2.6",
         Title = "LeadOn's Corp - GameOn! API",
         Description = "This API goal is to monitor players performance across multiple games.",
         Contact = new OpenApiContact

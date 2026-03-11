@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>6.2.5</Version>
-	<PackageReleaseNotes>Updated dependencies.</PackageReleaseNotes>
+	<Version>6.2.6</Version>
+	<PackageReleaseNotes>Fixed issue with LoL game retrieval.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -46,7 +46,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.0" />
     <PackageReference Include="MediatR" Version="14.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
