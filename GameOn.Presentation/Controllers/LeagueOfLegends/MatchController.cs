@@ -35,7 +35,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// Get last matches played by Summoner.
         /// </summary>
         /// <param name="playerId">GameOn! Player ID.</param>
-        /// <returns>200 OK with Player list.</returns>
+        /// <param name="page">Pagination current page.</param>
+        /// <param name="size">Pagination size.</param>
+        /// <returns>200 OK with Player's game list.</returns>
         [HttpGet]
         [Route("player/{playerId:int}")]
         [Produces("application/json")]
@@ -43,9 +45,35 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(200, "Games played.", typeof(List<LoLGame>))]
         [SwaggerResponse(404, "Player not found / no Riot Games PUUID found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetLastGamesForUser(int playerId)
+        public async Task<IActionResult> GetLastGamesForUser(int playerId, int? page, int? size)
         {
-            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { PlayerId = playerId });
+            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { PlayerId = playerId, Page = page ?? 1, NumberOfResults = size ?? 10 });
+
+            if (lastGames is not null)
+            {
+                return this.Ok(lastGames);
+            }
+            else
+            {
+                return this.NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Get last matches played.
+        /// </summary>
+        /// <param name="page">Pagination current page.</param>
+        /// <param name="size">Pagination size.</param>
+        /// <returns>200 OK with game list.</returns>
+        [HttpGet]
+        [Route("last")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get last games played.")]
+        [SwaggerResponse(200, "Games played.", typeof(List<LoLGame>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetLastGamesPlayed(int? page, int? size)
+        {
+            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { Page = page ?? 1, NumberOfResults = size ?? 10 });
 
             if (lastGames is not null)
             {
