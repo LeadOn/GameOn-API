@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.Common.DTOs.Common;
+
 namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 {
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
@@ -14,7 +16,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
     /// <summary>
     /// GetLastGamesPlayedQueryHandler class.
     /// </summary>
-    public class GetLastGamesPlayedQueryHandler : IRequestHandler<GetLastGamesPlayedQuery, IEnumerable<LoLGame>?>
+    public class GetLastGamesPlayedQueryHandler : IRequestHandler<GetLastGamesPlayedQuery, ListResultDto<LoLGame>?>
     {
         private readonly IApplicationDbContext context;
         private readonly IMatchService matchService;
@@ -34,8 +36,36 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<LoLGame>?> Handle(GetLastGamesPlayedQuery request, CancellationToken cancellationToken)
+        public async Task<ListResultDto<LoLGame>?> Handle(GetLastGamesPlayedQuery request, CancellationToken cancellationToken)
         {
+            var query = this.context.LeagueOfLegendsGames.AsQueryable();
+
+            if (request.PlayerId is null)
+            {
+                query = query.Include(x => x.LeagueOfLegendsGameParticipants);
+
+                if (request.RankedGamesOnly == true)
+                {
+                    query = query.Where(x => x.QueueType == "RANKED_SOLO_DUO" || x.QueueType == "RANKED_FLEX");
+                }
+                
+                var count = await query.CountAsync(cancellationToken);
+                var resultsFromDb = await this.context.LeagueOfLegendsGames
+                    .Include(x => x.LeagueOfLegendsGameParticipants)
+                    .OrderByDescending(x => x.MatchId)
+                    .Skip((request.Page - 1) * request.NumberOfResults)
+                    .Take(request.NumberOfResults)
+                    .ToListAsync(cancellationToken);
+
+                return new ListResultDto<LoLGame>
+                {
+                    Page = request.Page,
+                    Results = resultsFromDb,
+                    ResultsPerPage = request.NumberOfResults,
+                    Total = count,
+                };
+            }
+
             // Getting player in database
             var playerInDb = await this.context.Players.FirstOrDefaultAsync(x => x.Id == request.PlayerId && x.RiotGamesPUUID != null);
 
@@ -51,12 +81,27 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 // Updating those games in database
                 await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = matchesFromRiot.ToList(), Player = playerInDb });
 
-                return await this.context.LeagueOfLegendsGames
-                    .Include(x => x.LeagueOfLegendsGameParticipants)
-                    .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId))
-                    .OrderByDescending(x => x.MatchId)
-                    .Take(5)
+                query = query.Include(x => x.LeagueOfLegendsGameParticipants)
+                    .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId));
+
+                if (request.RankedGamesOnly == true)
+                {
+                    query = query.Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId) && (x.QueueType == "RANKED_SOLO_DUO" || x.QueueType == "RANKED_FLEX"));
+                }
+
+                var count = await query.CountAsync(cancellationToken);
+                var resultsFromDb = await query.OrderByDescending(x => x.MatchId)
+                    .Skip((request.Page - 1) * request.NumberOfResults)
+                    .Take(request.NumberOfResults)
                     .ToListAsync(cancellationToken);
+
+                return new ListResultDto<LoLGame>
+                {
+                    Page = request.Page,
+                    Results = resultsFromDb,
+                    ResultsPerPage = request.NumberOfResults,
+                    Total = count,
+                };
             }
         }
     }
