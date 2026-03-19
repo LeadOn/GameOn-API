@@ -28,5 +28,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
         /// Gets or sets number of results.
         /// </summary>
         public int NumberOfResults { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a game is a ranked or not.
+        /// </summary>
+        public bool RankedGamesOnly { get; set; }
     }
 }
