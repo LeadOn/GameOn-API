@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>6.3.0</Version>
-	<PackageReleaseNotes>Now automatically syncs lol games when imported.</PackageReleaseNotes>
+	<Version>6.4.0</Version>
+	<PackageReleaseNotes>Reworked LoL games query route + fixed issue with LoL games import</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
