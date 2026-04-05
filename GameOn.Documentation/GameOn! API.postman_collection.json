@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "63613532-5cbb-4327-8d6f-42053fc4aa7a",
-    "name": "GameOn! 6.4.0",
+    "name": "GameOn! 6.4.1",
     "description": "This API goal is to monitor players performance across real-world and virtual games.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "6882080"
@@ -17,13 +17,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/dashboard",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "dashboard"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "dashboard"]
             }
           },
           "response": []
@@ -53,12 +48,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/changelog",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "changelog"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["changelog"]
                 }
               },
               "response": []
@@ -79,12 +70,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/changelog",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "changelog"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["changelog"]
                 }
               },
               "response": []
@@ -96,13 +83,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/changelog/12",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "changelog",
-                    "12"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["changelog", "12"]
                 }
               },
               "response": []
@@ -117,12 +99,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/changelog",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "changelog"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["changelog"]
                 }
               },
               "response": []
@@ -137,13 +115,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/changelog/latest",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "changelog",
-                    "latest"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["changelog", "latest"]
                 }
               },
               "response": []
@@ -158,13 +131,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/changelog/20",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "changelog",
-                    "20"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["changelog", "20"]
                 }
               },
               "response": []
@@ -185,12 +153,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/platform",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "platform"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["platform"]
                 }
               },
               "response": []
@@ -205,13 +169,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/platform/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "platform",
-                    "1"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["platform", "1"]
                 }
               },
               "response": []
@@ -232,12 +191,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/platform",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "platform"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["platform"]
                 }
               },
               "response": []
@@ -258,12 +213,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/platform",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "platform"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["platform"]
                 }
               },
               "response": []
@@ -280,13 +231,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/player/me",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player",
-                    "me"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player", "me"]
                 }
               },
               "response": []
@@ -301,13 +247,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/player/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player",
-                    "1"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player", "1"]
                 }
               },
               "response": []
@@ -322,12 +263,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/player",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player"]
                 }
               },
               "response": []
@@ -342,14 +279,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/player/1/stats",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player",
-                    "1",
-                    "stats"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player", "1", "stats"],
                   "query": [
                     {
                       "key": "seasonId",
@@ -368,14 +299,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/player/1/pp",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player",
-                    "1",
-                    "pp"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player", "1", "pp"]
                 }
               },
               "response": []
@@ -397,13 +322,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/player/pp",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player",
-                    "pp"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player", "pp"]
                 }
               },
               "response": []
@@ -424,13 +344,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/player/me",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player",
-                    "me"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player", "me"]
                 }
               },
               "response": []
@@ -451,12 +366,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/player",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "player"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["player"]
                 }
               },
               "response": []
@@ -473,13 +384,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/common/home",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "common",
-                "home"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["common", "home"]
             }
           },
           "response": []
@@ -494,14 +400,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/common/global/stats",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "common",
-                "global",
-                "stats"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["common", "global", "stats"],
               "query": [
                 {
                   "key": "seasonId",
@@ -532,15 +432,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame/tournament/6?isPlayed=true",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame",
-                    "tournament",
-                    "6"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame", "tournament", "6"],
                   "query": [
                     {
                       "key": "isPlayed",
@@ -561,14 +454,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame/248",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame",
-                    "248"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame", "248"]
                 }
               },
               "response": []
@@ -583,15 +470,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame/last/5",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame",
-                    "last",
-                    "5"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame", "last", "5"]
                 }
               },
               "response": []
@@ -606,15 +486,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame/planned/7",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame",
-                    "planned",
-                    "7"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame", "planned", "7"]
                 }
               },
               "response": []
@@ -629,17 +502,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame/last/5/player/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame",
-                    "last",
-                    "5",
-                    "player",
-                    "1"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame", "last", "5", "player", "1"]
                 }
               },
               "response": []
@@ -654,13 +518,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame?limit=10&platformId=1&startDate=2023-06-01T00:00:00&endDate=2023-08-31T00:00:00",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame"],
                   "query": [
                     {
                       "key": "limit",
@@ -699,13 +558,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame"]
                 }
               },
               "response": []
@@ -717,14 +571,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame/460",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame",
-                    "460"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame", "460"]
                 }
               },
               "response": []
@@ -745,13 +593,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame"]
                 }
               },
               "response": []
@@ -772,16 +615,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifagame/1/2/3",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifagame",
-                    "1",
-                    "2",
-                    "3"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifagame", "1", "2", "3"]
                 }
               },
               "response": []
@@ -801,13 +636,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/fifateam",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "fifateam"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "fifateam"]
                 }
               },
               "response": []
@@ -833,12 +663,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/highlight",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "highlight"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["highlight"]
                 }
               },
               "response": []
@@ -853,12 +679,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/highlight",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "highlight"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["highlight"]
                 }
               },
               "response": []
@@ -878,13 +700,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament"]
                 }
               },
               "response": []
@@ -899,14 +716,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/featured",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "featured"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "featured"]
                 }
               },
               "response": []
@@ -921,14 +732,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/7",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "7"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "7"]
                 }
               },
               "response": []
@@ -940,15 +745,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/4/subscription",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "4",
-                    "subscription"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "4", "subscription"]
                 }
               },
               "response": []
@@ -960,15 +758,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/9/logo",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "9",
-                    "logo"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "9", "logo"]
                 }
               },
               "response": []
@@ -989,13 +780,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament"]
                 }
               },
               "response": []
@@ -1007,15 +793,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/4/subscription?fifaTeamId=1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "4",
-                    "subscription"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "4", "subscription"],
                   "query": [
                     {
                       "key": "fifaTeamId",
@@ -1043,15 +822,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/7/logo",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "7",
-                    "logo"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "7", "logo"]
                 }
               },
               "response": []
@@ -1063,15 +835,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/6/subscription?fifaTeamId=1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "6",
-                    "subscription"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "6", "subscription"],
                   "query": [
                     {
                       "key": "fifaTeamId",
@@ -1098,14 +863,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/7",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "7"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "7"]
                 }
               },
               "response": []
@@ -1117,14 +876,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/7",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "7"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "7"]
                 }
               },
               "response": []
@@ -1136,16 +889,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/7/player/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "7",
-                    "player",
-                    "1"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "7", "player", "1"]
                 }
               },
               "response": []
@@ -1157,15 +902,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/4/phase1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "4",
-                    "phase1"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "4", "phase1"]
                 }
               },
               "response": []
@@ -1177,16 +915,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/tournament/6/phase1/score",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "tournament",
-                    "6",
-                    "phase1",
-                    "score"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "tournament", "6", "phase1", "score"]
                 }
               },
               "response": []
@@ -1206,14 +936,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/season/current",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "season",
-                    "current"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "season", "current"]
                 }
               },
               "response": []
@@ -1228,13 +952,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/fifa/season",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "fifa",
-                    "season"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["fifa", "season"]
                 }
               },
               "response": []
@@ -1260,14 +979,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/summoner/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "summoner",
-                    "1"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "summoner", "1"]
                 }
               },
               "response": []
@@ -1282,15 +995,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/summoner/1/rank",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "summoner",
-                    "1",
-                    "rank"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "summoner", "1", "rank"]
                 }
               },
               "response": []
@@ -1305,13 +1011,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/summoner",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "summoner"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "summoner"]
                 }
               },
               "response": []
@@ -1332,14 +1033,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/lol/summoner/me",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "summoner",
-                    "me"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "summoner", "me"]
                 }
               },
               "response": []
@@ -1351,15 +1046,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/summoner/35/admin?riotGamesNickname=Jinwok&riotGamesTagLine=EUW",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "summoner",
-                    "35",
-                    "admin"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "summoner", "35", "admin"],
                   "query": [
                     {
                       "key": "riotGamesNickname",
@@ -1384,14 +1072,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/summoner/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "summoner",
-                    "1"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "summoner", "1"]
                 }
               },
               "response": []
@@ -1412,14 +1094,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/match/last?page=1&size=1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "match",
-                    "last"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "match", "last"],
                   "query": [
                     {
                       "key": "page",
@@ -1446,15 +1122,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/match/player/1?page=1&size=2&playerId=1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "match",
-                    "player",
-                    "1"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "match", "player", "1"],
                   "query": [
                     {
                       "key": "page",
@@ -1486,14 +1155,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/match/EUW1_7282636237",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "match",
-                    "EUW1_7282636237"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "match", "EUW1_7282636237"]
                 }
               },
               "response": []
@@ -1508,15 +1171,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/match/EUW1_7282636237/timeline",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "match",
-                    "EUW1_7282636237",
-                    "timeline"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "match", "EUW1_7282636237", "timeline"]
                 }
               },
               "response": []
@@ -1531,15 +1187,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/lol/match/EUW1_7243931843/update",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "lol",
-                    "match",
-                    "EUW1_7243931843",
-                    "update"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["lol", "match", "EUW1_7243931843", "update"]
                 }
               },
               "response": []
@@ -1566,9 +1215,7 @@
       "script": {
         "type": "text/javascript",
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
@@ -1576,9 +1223,7 @@
       "script": {
         "type": "text/javascript",
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

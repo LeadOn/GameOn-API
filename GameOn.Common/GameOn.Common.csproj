@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>6.4.0</Version>
-    <PackageReleaseNotes>Reworked LoL games query route + fixed issue with LoL games import</PackageReleaseNotes>
+    <Version>6.4.1</Version>
+    <PackageReleaseNotes>Updated dependencies.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
