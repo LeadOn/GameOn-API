@@ -2,10 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner
+using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
+
+namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummonerAdmin
 {
-    using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
-    using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummonerAdmin;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;

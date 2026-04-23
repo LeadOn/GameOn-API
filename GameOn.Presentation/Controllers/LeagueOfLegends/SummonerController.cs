@@ -2,6 +2,8 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
+using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerRanks;
+
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
@@ -171,6 +173,22 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
 #pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerAdminCommand { Player = playerInDb }));
 #pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+        }
+
+        /// <summary>
+        /// Update every summoner rank.
+        /// </summary>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Route("ranks")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Update every League of Legends ranks.")]
+        [SwaggerResponse(204, "Updated user profiles.", typeof(Player))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateAllRanks()
+        {
+            await this.mediator.Send(new UpdateAllPlayerRanksCommand());
+            return this.NoContent();
         }
     }
 }
