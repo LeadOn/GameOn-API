@@ -2,10 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Common.DTOs.Common;
-
 namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 {
+    using GameOn.Common.DTOs.Common;
     using GameOn.Domain;
     using MediatR;
 

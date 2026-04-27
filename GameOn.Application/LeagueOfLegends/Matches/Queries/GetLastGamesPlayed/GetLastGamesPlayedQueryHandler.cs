@@ -2,11 +2,10 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Common.DTOs.Common;
-
 namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 {
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
+    using GameOn.Common.DTOs.Common;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
@@ -48,7 +47,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 {
                     query = query.Where(x => x.QueueType == "RANKED_SOLO_DUO" || x.QueueType == "RANKED_FLEX");
                 }
-                
+
                 var count = await query.CountAsync(cancellationToken);
                 var resultsFromDb = await this.context.LeagueOfLegendsGames
                     .Include(x => x.LeagueOfLegendsGameParticipants)
