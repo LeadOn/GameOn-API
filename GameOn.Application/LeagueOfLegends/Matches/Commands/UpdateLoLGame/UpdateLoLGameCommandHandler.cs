@@ -16,7 +16,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
     /// </summary>
     public class UpdateLoLGameCommandHandler : IRequestHandler<UpdateLoLGameCommand, LoLGame>
     {
-        private static readonly Dictionary<int, string> QueueTypeById = new()
+        private static readonly Dictionary<int, string> QueueTypeById = new ()
         {
             [0] = "Custom games",
             [2] = "5v5 Blind Pick games",
@@ -131,11 +131,6 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
         {
             this.context = context;
             this.matchService = matchService;
-        }
-
-        private static string MapQueueType(int queueId)
-        {
-            return QueueTypeById.TryGetValue(queueId, out var queueType) ? queueType : "Inconnu";
         }
 
         /// <inheritdoc />
@@ -277,6 +272,11 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 
             await this.context.SaveChangesAsync(cancellationToken);
             return matchInDb;
+        }
+
+        private static string MapQueueType(int queueId)
+        {
+            return QueueTypeById.TryGetValue(queueId, out var queueType) ? queueType : "Inconnu";
         }
     }
 }

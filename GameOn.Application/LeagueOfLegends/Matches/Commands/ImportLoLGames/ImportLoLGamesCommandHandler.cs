@@ -2,10 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame;
-
 namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
 {
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
