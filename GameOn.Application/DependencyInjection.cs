@@ -5,6 +5,7 @@
 namespace GameOn.Application
 {
     using System.Reflection;
+    using GameOn.Application.Services.Jobs;
     using GameOn.Common.Exceptions;
     using GameOn.External;
     using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ namespace GameOn.Application
                 cfg.LicenseKey = Environment.GetEnvironmentVariable("MEDIATR_LICENSE_KEY") ?? throw new MissingEnvironmentVariableException("MEDIATR_LICENSE_KEY");
             });
             services.AddExternal();
+            services.AddHostedService<RefreshLeagueSummonerRanksJob>();
             return services;
         }
     }

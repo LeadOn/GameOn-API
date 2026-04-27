@@ -2,12 +2,11 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerRanks;
-
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
+    using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerRanks;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummonerAdmin;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
