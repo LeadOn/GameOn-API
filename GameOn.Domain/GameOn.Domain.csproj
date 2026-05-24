@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>6.5.1</Version>
-	<PackageReleaseNotes>Added auto rank refresh for LoL players.</PackageReleaseNotes>
+	<Version>6.5.2</Version>
+	<PackageReleaseNotes>Fixed duplication rank issue in  database.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

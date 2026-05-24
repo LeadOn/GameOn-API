@@ -67,6 +67,19 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerR
                     {
                         foreach (var entry in playerRank)
                         {
+                            var lastEntry = await this.context.LeagueOfLegendsRankHistory
+                                .Where(x => x.PlayerId == playerInDb.Id && x.QueueType == entry.QueueType)
+                                .OrderByDescending(x => x.CreatedOn)
+                                .FirstOrDefaultAsync(cancellationToken);
+
+                            if (lastEntry is not null
+                                && lastEntry.Tier == entry.Tier
+                                && lastEntry.Rank == entry.Rank
+                                && lastEntry.LeaguePoints == entry.LeaguePoints)
+                            {
+                                continue;
+                            }
+
                             var playRank = new LeagueOfLegendsRankHistory
                             {
                                 CreatedOn = DateTime.Now,
