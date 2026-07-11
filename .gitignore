@@ -684,3 +684,6 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,dotnetcore,aspnetcore,visualstudio,visualstudiocode,rider
+# LoL backfill script progress files
+scripts/backfill_done.txt
+scripts/backfill_failed.txt
