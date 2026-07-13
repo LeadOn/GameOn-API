@@ -80,7 +80,7 @@ namespace GameOn.External.RiotGames.Models.DTOs
         /// <summary>
         /// Gets or sets consumables purchased.
         /// </summary>
-        [JsonProperty("consumablesPurshased")]
+        [JsonProperty("consumablesPurchased")]
         public int ConsumablesPurchased { get; set; }
 
         /// <summary>
