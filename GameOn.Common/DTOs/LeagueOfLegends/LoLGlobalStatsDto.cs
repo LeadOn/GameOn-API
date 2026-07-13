@@ -25,7 +25,7 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         public LoLFunStatDto? PingMachine { get; set; }
 
         /// <summary>
-        /// Gets or sets the Biggest Inter award: most deaths in a single game.
+        /// Gets or sets the Biggest Inter award: most deaths not compensated by kills or assists in a single game.
         /// </summary>
         public LoLFunStatDto? BiggestInter { get; set; }
 
@@ -45,7 +45,7 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         public LoLFunStatDto? OneTrickPony { get; set; }
 
         /// <summary>
-        /// Gets or sets the Crowd Control Master award: most time enemies spent controlled by them in a single game.
+        /// Gets or sets the Crowd Control Master award: most time enemies spent slowed or controlled by them in a single game, averaged per enemy.
         /// </summary>
         public LoLFunStatDto? CrowdControlMaster { get; set; }
 

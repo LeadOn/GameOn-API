@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>7.0.0</Version>
-    <PackageReleaseNotes>Updated dependencies + fixed issues with LOL player refresh. Now matching front-end version scheme</PackageReleaseNotes>
+    <Version>7.0.2</Version>
+    <PackageReleaseNotes>Implemented League of Legends fun stats.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

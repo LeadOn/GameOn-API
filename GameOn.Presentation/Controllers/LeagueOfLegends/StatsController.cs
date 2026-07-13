@@ -31,6 +31,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <summary>
         /// Get global League of Legends fun stats, all players included.
         /// </summary>
+        /// <param name="rankedOnly">Only include ranked games (Solo/Duo and Flex).</param>
+        /// <param name="queue">Queue restriction: All, Solo or Flex. Solo or Flex implies ranked games only.</param>
+        /// <param name="period">Rolling time window: AllTime, Week, Month, ThreeMonths or SixMonths.</param>
         /// <returns>200 OK with global stats recap.</returns>
         [HttpGet]
         [Route("global")]
@@ -38,9 +41,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerOperation(Summary = "Get global League of Legends fun stats, all players included.")]
         [SwaggerResponse(200, "Global fun stats recap.", typeof(LoLGlobalStatsDto))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetGlobalStats()
+        public async Task<IActionResult> GetGlobalStats(bool rankedOnly = false, LoLQueueFilter queue = LoLQueueFilter.All, LoLStatsPeriod period = LoLStatsPeriod.AllTime)
         {
-            return this.Ok(await this.mediator.Send(new GetLoLGlobalStatsQuery()));
+            return this.Ok(await this.mediator.Send(new GetLoLGlobalStatsQuery { RankedOnly = rankedOnly, Queue = queue, Period = period }));
         }
     }
 }

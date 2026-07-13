@@ -23,6 +23,16 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
         private const int ComebackGoldDeficit = 1000;
         private const int MinimumJungleMonstersForThief = 20;
 
+        // Any player actually playing reaches this level well before the 15 minutes mark, however passive.
+        // Below it, the player was AFK and would win the Pacifist award by default.
+        private const int MinimumLevelForPacifist = 8;
+
+        // Games shorter than this are remakes: Riot marks every participant as a loser, which would pollute streaks and win rates.
+        private static readonly TimeSpan MinimumGameDuration = TimeSpan.FromMinutes(5);
+
+        // Matched against LoLGame.QueueType to keep only games against real opponents.
+        private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
+
         private readonly IApplicationDbContext context;
 
         /// <summary>
@@ -37,10 +47,52 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
         /// <inheritdoc />
         public async Task<LoLGlobalStatsDto> Handle(GetLoLGlobalStatsQuery request, CancellationToken cancellationToken)
         {
+            // Match-v5 and league-v4 don't use the same queue identifiers.
+            var matchQueueType = request.Queue switch
+            {
+                LoLQueueFilter.Solo => "RANKED_SOLO_DUO",
+                LoLQueueFilter.Flex => "RANKED_FLEX",
+                _ => null,
+            };
+
+            var rankQueueType = request.Queue switch
+            {
+                LoLQueueFilter.Solo => "RANKED_SOLO_5x5",
+                LoLQueueFilter.Flex => "RANKED_FLEX_SR",
+                _ => null,
+            };
+
+            // GameStart is stored in server local time, so the cutoff uses the same clock.
+            DateTime? since = request.Period switch
+            {
+                LoLStatsPeriod.Week => DateTime.Now.AddDays(-7),
+                LoLStatsPeriod.Month => DateTime.Now.AddMonths(-1),
+                LoLStatsPeriod.ThreeMonths => DateTime.Now.AddMonths(-3),
+                LoLStatsPeriod.SixMonths => DateTime.Now.AddMonths(-6),
+                _ => null,
+            };
+
+            var participantsQuery = this.context.LeagueOfLegendsGameParticipants
+                .Where(x => x.PlayerId != null && x.ChampionName != string.Empty);
+
+            if (matchQueueType is not null)
+            {
+                participantsQuery = participantsQuery.Where(x => x.Game.QueueType == matchQueueType);
+            }
+            else if (request.RankedOnly)
+            {
+                participantsQuery = participantsQuery.Where(x => x.Game.QueueType == "RANKED_SOLO_DUO" || x.Game.QueueType == "RANKED_FLEX");
+            }
+
+            if (since is not null)
+            {
+                participantsQuery = participantsQuery.Where(x => x.Game.GameStart >= since);
+            }
+
             // Every game participation linked to a GameOn player, with its game context.
-            // Rows with an empty champion name are placeholders left by failed imports and are excluded.
-            var participants = await this.context.LeagueOfLegendsGameParticipants
-                .Where(x => x.PlayerId != null && x.ChampionName != string.Empty)
+            // Rows with an empty champion name are placeholders left by failed imports and are excluded,
+            // as are remakes and games without real opponents (bots, customs, tutorials).
+            var participants = (await participantsQuery
                 .Select(x => new
                 {
                     PlayerId = x.PlayerId!.Value,
@@ -56,9 +108,14 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                     x.Win,
                     x.TeamId,
                     x.Game.GameStart,
+                    x.Game.GameEnd,
                     x.Game.GameVersion,
+                    x.Game.QueueType,
                 })
-                .ToListAsync(cancellationToken);
+                .ToListAsync(cancellationToken))
+                .Where(x => x.GameEnd - x.GameStart >= MinimumGameDuration
+                    && !ExcludedQueueTypeKeywords.Any(keyword => x.QueueType.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
 
             var result = new LoLGlobalStatsDto
             {
@@ -71,8 +128,21 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                 return result;
             }
 
-            // Rank history snapshots, used for the LP drop award.
-            var rankHistory = await this.context.LeagueOfLegendsRankHistory
+            // Rank history snapshots, used for the LP drop award. Snapshots are ranked by nature,
+            // so the RankedOnly flag doesn't apply here.
+            var rankHistoryQuery = this.context.LeagueOfLegendsRankHistory.AsQueryable();
+
+            if (rankQueueType is not null)
+            {
+                rankHistoryQuery = rankHistoryQuery.Where(x => x.QueueType == rankQueueType);
+            }
+
+            if (since is not null)
+            {
+                rankHistoryQuery = rankHistoryQuery.Where(x => x.CreatedOn >= since);
+            }
+
+            var rankHistory = await rankHistoryQuery
                 .Select(x => new { x.PlayerId, x.QueueType, x.Tier, x.Rank, x.LeaguePoints, x.CreatedOn })
                 .ToListAsync(cancellationToken);
 
@@ -85,12 +155,23 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                     x.TimelineFrame.Timestamp,
                     x.ParticipantId,
                     x.ParticipantPUUID,
+                    x.Level,
                     x.CurrentGold,
+                    x.TotalGold,
                     x.TotalDamageTaken,
                     x.TotalDamageDoneToChampions,
                     x.TimeEnemySpentControlled,
                     x.JungleMinionsKilled,
                 })
+                .ToListAsync(cancellationToken);
+
+            // Second to last frame of each game, for the squirrel award: between it and the final frame,
+            // current gold can only grow faster than total gold earned if the player sold items.
+            var previousFrames = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
+                .Where(x => x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames
+                    .Where(f => f.Timestamp < x.TimelineFrame.Game.LoLGameTimelineFrames.Max(m => m.Timestamp))
+                    .Max(f => f.Timestamp))
+                .Select(x => new { x.TimelineFrame.MatchId, x.ParticipantPUUID, x.CurrentGold, x.TotalGold })
                 .ToListAsync(cancellationToken);
 
             // First timeline frame at or after the 20 minutes mark, for the comeback award.
@@ -117,7 +198,11 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             var topPinger = participants.OrderByDescending(x => x.Pings).First();
             result.PingMachine = BuildAward(players.GetValueOrDefault(topPinger.PlayerId), topPinger.Pings, $"{topPinger.Pings} pings on {topPinger.ChampionName}", topPinger.MatchId, topPinger.GameStart);
 
-            var biggestInter = participants.OrderByDescending(x => x.Deaths).First();
+            // Dying a lot is not inting if the player contributed: kills fully offset deaths, assists count for half.
+            var biggestInter = participants
+                .OrderByDescending(x => x.Deaths - x.Kills - (x.Assists / 2.0))
+                .ThenByDescending(x => x.Deaths)
+                .First();
             result.BiggestInter = BuildAward(players.GetValueOrDefault(biggestInter.PlayerId), biggestInter.Deaths, $"{biggestInter.Kills}/{biggestInter.Deaths}/{biggestInter.Assists} on {biggestInter.ChampionName}", biggestInter.MatchId, biggestInter.GameStart);
 
             var highestBounty = participants.OrderByDescending(x => x.BountyLevel).First();
@@ -150,11 +235,13 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                 .Where(x => x.Tracked is not null)
                 .ToList();
 
+            // Riot cumulates this counter over every enemy hit, slows included, so values far above
+            // the game duration are expected. Displayed as an average per enemy to stay readable.
             var ccMaster = trackedFrames.OrderByDescending(x => x.Frame.TimeEnemySpentControlled).FirstOrDefault();
             if (ccMaster is not null)
             {
-                var ccSeconds = Math.Round(ccMaster.Frame.TimeEnemySpentControlled / 1000.0);
-                result.CrowdControlMaster = BuildAward(players.GetValueOrDefault(ccMaster.Tracked!.PlayerId), ccSeconds, $"Enemies spent {ccSeconds} seconds controlled by {ccMaster.Tracked.ChampionName}", ccMaster.Frame.MatchId, ccMaster.Tracked.GameStart);
+                var ccSecondsPerEnemy = Math.Round(ccMaster.Frame.TimeEnemySpentControlled / 1000.0 / 5.0);
+                result.CrowdControlMaster = BuildAward(players.GetValueOrDefault(ccMaster.Tracked!.PlayerId), ccSecondsPerEnemy, $"Each enemy spent on average {ccSecondsPerEnemy} seconds slowed or controlled by {ccMaster.Tracked.ChampionName}", ccMaster.Frame.MatchId, ccMaster.Tracked.GameStart);
             }
 
             var punchingBall = trackedFrames
@@ -169,7 +256,7 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             }
 
             var pacifist = trackedFrames
-                .Where(x => x.Frame.Timestamp >= FifteenMinutesInMs)
+                .Where(x => x.Frame.Timestamp >= FifteenMinutesInMs && x.Frame.Level >= MinimumLevelForPacifist)
                 .OrderBy(x => x.Frame.TotalDamageDoneToChampions)
                 .FirstOrDefault();
 
@@ -178,7 +265,15 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                 result.Pacifist = BuildAward(players.GetValueOrDefault(pacifist.Tracked!.PlayerId), pacifist.Frame.TotalDamageDoneToChampions, $"Only {pacifist.Frame.TotalDamageDoneToChampions} damage to champions on {pacifist.Tracked.ChampionName}", pacifist.Frame.MatchId, pacifist.Tracked.GameStart);
             }
 
-            var squirrel = trackedFrames.OrderByDescending(x => x.Frame.CurrentGold).FirstOrDefault();
+            // Players selling their whole inventory right before the nexus falls would fake the award:
+            // a gold jump bigger than the gold earned over the final minute means items were sold.
+            var previousFrameLookup = previousFrames.ToDictionary(x => (x.MatchId, x.ParticipantPUUID));
+
+            var squirrel = trackedFrames
+                .Where(x => !previousFrameLookup.TryGetValue((x.Frame.MatchId, x.Frame.ParticipantPUUID), out var previous)
+                    || x.Frame.CurrentGold - previous.CurrentGold <= x.Frame.TotalGold - previous.TotalGold)
+                .OrderByDescending(x => x.Frame.CurrentGold)
+                .FirstOrDefault();
             if (squirrel is not null)
             {
                 result.Squirrel = BuildAward(players.GetValueOrDefault(squirrel.Tracked!.PlayerId), squirrel.Frame.CurrentGold, $"Ended the game sitting on {squirrel.Frame.CurrentGold} unspent gold on {squirrel.Tracked.ChampionName}", squirrel.Frame.MatchId, squirrel.Tracked.GameStart);
@@ -307,8 +402,12 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
 
             result.EmotionalElevator = emotionalElevator;
 
+            // One entry per tracked team per game: a duo/trio queueing together counts once,
+            // and a game with tracked players on both sides counts once per team (one win, one loss).
             var cursedPatch = participants
                 .Where(x => !string.IsNullOrEmpty(x.GameVersion))
+                .GroupBy(x => (x.MatchId, x.TeamId))
+                .Select(g => g.First())
                 .GroupBy(x => string.Join('.', x.GameVersion!.Split('.').Take(2)))
                 .Where(g => g.Count() >= MinimumGamesForCursedPatch)
                 .Select(g => new { Patch = g.Key, Games = g.Count(), Wins = g.Count(x => x.Win) })
