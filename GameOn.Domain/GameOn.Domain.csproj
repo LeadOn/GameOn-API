@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.0.2</Version>
-	<PackageReleaseNotes>Implemented League of Legends fun stats.</PackageReleaseNotes>
+	<Version>7.0.4</Version>
+	<PackageReleaseNotes>Implemented support for remake LoL games + aded LoL Queue types coming directly from Riot Games.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -32,5 +32,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
         /// Gets or sets a value indicating whether a game is a ranked or not.
         /// </summary>
         public bool RankedGamesOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the queue type to filter games by (e.g. RANKED_SOLO_DUO, ARAM, NORMAL_DRAFT).
+        /// </summary>
+        public string? QueueType { get; set; }
     }
 }

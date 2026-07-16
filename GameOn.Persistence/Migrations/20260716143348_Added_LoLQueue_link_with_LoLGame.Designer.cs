@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20260716143348_Added_LoLQueue_link_with_LoLGame")]
+    partial class Added_LoLQueue_link_with_LoLGame
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -372,12 +375,6 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("game_version");
 
-                    b.Property<bool>("IsRemake")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_remake");
-
                     b.Property<int?>("QueueId")
                         .HasColumnType("int")
                         .HasColumnName("queue_id");
@@ -459,9 +456,6 @@ namespace GameOn.Persistence.Migrations
                     b.Property<int>("Deaths")
                         .HasColumnType("int")
                         .HasColumnName("deaths");
-
-                    b.Property<bool>("GameEndedInEarlySurrender")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Item0")
                         .HasColumnType("int")

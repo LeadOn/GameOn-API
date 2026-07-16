@@ -27,9 +27,6 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
         // Below it, the player was AFK and would win the Pacifist award by default.
         private const int MinimumLevelForPacifist = 8;
 
-        // Games shorter than this are remakes: Riot marks every participant as a loser, which would pollute streaks and win rates.
-        private static readonly TimeSpan MinimumGameDuration = TimeSpan.FromMinutes(5);
-
         // Matched against LoLGame.QueueType to keep only games against real opponents.
         private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
 
@@ -91,7 +88,7 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
 
             // Every game participation linked to a GameOn player, with its game context.
             // Rows with an empty champion name are placeholders left by failed imports and are excluded,
-            // as are remakes and games without real opponents (bots, customs, tutorials).
+            // as are remakes (LoLGame.IsRemake) and games without real opponents (bots, customs, tutorials).
             var participants = (await participantsQuery
                 .Select(x => new
                 {
@@ -108,12 +105,12 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                     x.Win,
                     x.TeamId,
                     x.Game.GameStart,
-                    x.Game.GameEnd,
                     x.Game.GameVersion,
                     x.Game.QueueType,
+                    x.Game.IsRemake,
                 })
                 .ToListAsync(cancellationToken))
-                .Where(x => x.GameEnd - x.GameStart >= MinimumGameDuration
+                .Where(x => !x.IsRemake
                     && !ExcludedQueueTypeKeywords.Any(keyword => x.QueueType.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 

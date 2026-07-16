@@ -89,6 +89,11 @@ namespace GameOn.Common.Interfaces
         public DbSet<LoLGameTimelineFrameParticipant> LeagueOfLegendsGameTimelineFrameParticipants { get; set; }
 
         /// <summary>
+        /// Gets or sets LoL Queues.
+        /// </summary>
+        public DbSet<LoLQueue> LeagueOfLegendsQueues { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>
