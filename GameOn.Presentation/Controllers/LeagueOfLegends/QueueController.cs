@@ -5,6 +5,9 @@
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
     using GameOn.Application.LeagueOfLegends.Queues.Commands.SyncQueues;
+    using GameOn.Application.LeagueOfLegends.Queues.Queries.GetAllQueues;
+    using GameOn.Application.LeagueOfLegends.Queues.Queries.GetPlayerQueues;
+    using GameOn.Domain;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -45,6 +48,37 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
             await this.mediator.Send(new SyncQueuesCommand());
 
             return this.NoContent();
+        }
+
+        /// <summary>
+        /// Get all League of Legends queues in database.
+        /// </summary>
+        /// <returns>200 OK with queue list.</returns>
+        [HttpGet]
+        [Route("")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get all League of Legends queues in database.")]
+        [SwaggerResponse(200, "Queues in database.", typeof(List<LoLQueue>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetAll()
+        {
+            return this.Ok(await this.mediator.Send(new GetAllQueuesQuery()));
+        }
+
+        /// <summary>
+        /// Get the queues a given player has already played on.
+        /// </summary>
+        /// <param name="playerId">GameOn! Player ID.</param>
+        /// <returns>200 OK with queue list.</returns>
+        [HttpGet]
+        [Route("player/{playerId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get the League of Legends queues a player has already played on.")]
+        [SwaggerResponse(200, "Queues played by the player.", typeof(List<LoLQueue>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetPlayerQueues(int playerId)
+        {
+            return this.Ok(await this.mediator.Send(new GetPlayerQueuesQuery { PlayerId = playerId }));
         }
     }
 }
