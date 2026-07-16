@@ -28,5 +28,10 @@ namespace GameOn.Domain
         /// Gets or sets Notes.
         /// </summary>
         public string? Notes { get; set; }
+
+        /// <summary>
+        /// Gets or sets League of Legends Games.
+        /// </summary>
+        public virtual List<LoLGame> LeagueOfLegendsGames { get; set; } = null!;
     }
 }

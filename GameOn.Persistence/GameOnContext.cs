@@ -672,11 +672,20 @@ namespace GameOn.Persistence
                     .HasColumnName("queue_type")
                     .HasMaxLength(50);
 
+                entity.Property(e => e.QueueId)
+                    .HasColumnName("queue_id");
+
                 entity.HasMany(e => e.LeagueOfLegendsGameParticipants)
                     .WithOne(f => f.Game)
                     .HasForeignKey(f => f.MatchId)
                     .HasConstraintName("FK_LoL_Games_Participants")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Queue)
+                    .WithMany(f => f.LeagueOfLegendsGames)
+                    .HasForeignKey(e => e.QueueId)
+                    .HasConstraintName("FK_LoLGame_LoLQueue")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<LoLQueue>(entity =>

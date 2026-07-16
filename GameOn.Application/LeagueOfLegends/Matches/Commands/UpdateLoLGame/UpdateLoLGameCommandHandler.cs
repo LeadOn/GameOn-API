@@ -270,6 +270,9 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 
             matchInDb.QueueType = MapQueueType(matchFromRiot.Info.QueueId);
 
+            var queueExists = await this.context.LeagueOfLegendsQueues.AnyAsync(x => x.Id == matchFromRiot.Info.QueueId, cancellationToken);
+            matchInDb.QueueId = queueExists ? matchFromRiot.Info.QueueId : null;
+
             foreach (var team in matchFromRiot.Info.Teams)
             {
                 if (team.HasWon)
