@@ -94,6 +94,11 @@ namespace GameOn.Persistence
         public DbSet<LoLGameTimelineFrameParticipant> LeagueOfLegendsGameTimelineFrameParticipants { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Queues.
+        /// </summary>
+        public DbSet<LoLQueue> LeagueOfLegendsQueues { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -663,15 +668,53 @@ namespace GameOn.Persistence
                 entity.Property(e => e.WinningTeamId)
                     .HasColumnName("winning_team_id");
 
+                entity.Property(e => e.IsRemake)
+                    .HasColumnName("is_remake")
+                    .HasDefaultValue(false);
+
                 entity.Property(e => e.QueueType)
                     .HasColumnName("queue_type")
                     .HasMaxLength(50);
+
+                entity.Property(e => e.QueueId)
+                    .HasColumnName("queue_id");
 
                 entity.HasMany(e => e.LeagueOfLegendsGameParticipants)
                     .WithOne(f => f.Game)
                     .HasForeignKey(f => f.MatchId)
                     .HasConstraintName("FK_LoL_Games_Participants")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Queue)
+                    .WithMany(f => f.LeagueOfLegendsGames)
+                    .HasForeignKey(e => e.QueueId)
+                    .HasConstraintName("FK_LoLGame_LoLQueue")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<LoLQueue>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsQueue");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever()
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Map)
+                    .HasColumnName("map")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Notes)
+                    .HasColumnName("notes")
+                    .HasMaxLength(500);
             });
 
             modelBuilder.Entity<LoLGameParticipant>(entity =>

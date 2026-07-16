@@ -29,6 +29,7 @@ namespace GameOn.Application
             });
             services.AddExternal();
             services.AddHostedService<RefreshLeagueSummonerRanksJob>();
+            services.AddHostedService<RefreshLeagueQueuesJob>();
             return services;
         }
     }

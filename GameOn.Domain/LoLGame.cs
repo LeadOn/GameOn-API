@@ -52,9 +52,24 @@ namespace GameOn.Domain
         public int? WinningTeamId { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the game ended in an early surrender for all participants (remake).
+        /// </summary>
+        public bool IsRemake { get; set; }
+
+        /// <summary>
         /// Gets or sets Queue Type.
         /// </summary>
         public string QueueType { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets Queue ID (FK to <see cref="LoLQueue"/>).
+        /// </summary>
+        public int? QueueId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Queue.
+        /// </summary>
+        public virtual LoLQueue? Queue { get; set; }
 
         /// <summary>
         /// Gets or sets League of Legends Game Participants.

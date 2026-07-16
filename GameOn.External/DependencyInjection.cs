@@ -28,6 +28,7 @@ namespace GameOn.External
             services.AddScoped<ISummonerService, SummonerV4Service>();
             services.AddScoped<ILeagueService, LeagueV4Service>();
             services.AddScoped<IMatchService, MatchV5Service>();
+            services.AddScoped<IQueueService, QueueService>();
 
             // Adding connection to MinIO
             services.AddMinio(client =>

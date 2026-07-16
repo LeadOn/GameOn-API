@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20260716114438_Added_LeagueOfLegends_Queue_Table")]
+    partial class Added_LeagueOfLegends_Queue_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -372,16 +375,6 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("game_version");
 
-                    b.Property<bool>("IsRemake")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_remake");
-
-                    b.Property<int?>("QueueId")
-                        .HasColumnType("int")
-                        .HasColumnName("queue_id");
-
                     b.Property<string>("QueueType")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -399,8 +392,6 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnName("winning_team_id");
 
                     b.HasKey("MatchId");
-
-                    b.HasIndex("QueueId");
 
                     b.ToTable("LeagueOfLegendsGame", (string)null);
                 });
@@ -459,9 +450,6 @@ namespace GameOn.Persistence.Migrations
                     b.Property<int>("Deaths")
                         .HasColumnType("int")
                         .HasColumnName("deaths");
-
-                    b.Property<bool>("GameEndedInEarlySurrender")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Item0")
                         .HasColumnType("int")
@@ -1059,17 +1047,6 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("GameOn.Domain.LoLGame", b =>
-                {
-                    b.HasOne("GameOn.Domain.LoLQueue", "Queue")
-                        .WithMany("LeagueOfLegendsGames")
-                        .HasForeignKey("QueueId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("FK_LoLGame_LoLQueue");
-
-                    b.Navigation("Queue");
-                });
-
             modelBuilder.Entity("GameOn.Domain.LoLGameParticipant", b =>
                 {
                     b.HasOne("GameOn.Domain.LoLGame", "Game")
@@ -1181,11 +1158,6 @@ namespace GameOn.Persistence.Migrations
             modelBuilder.Entity("GameOn.Domain.LoLGameTimelineFrame", b =>
                 {
                     b.Navigation("LoLGameTimelineFrameParticipants");
-                });
-
-            modelBuilder.Entity("GameOn.Domain.LoLQueue", b =>
-                {
-                    b.Navigation("LeagueOfLegendsGames");
                 });
 
             modelBuilder.Entity("GameOn.Domain.Platform", b =>
