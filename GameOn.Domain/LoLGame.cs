@@ -52,6 +52,11 @@ namespace GameOn.Domain
         public int? WinningTeamId { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the game ended in an early surrender for all participants (remake).
+        /// </summary>
+        public bool IsRemake { get; set; }
+
+        /// <summary>
         /// Gets or sets Queue Type.
         /// </summary>
         public string QueueType { get; set; } = string.Empty;

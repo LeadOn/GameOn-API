@@ -273,11 +273,20 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             var queueExists = await this.context.LeagueOfLegendsQueues.AnyAsync(x => x.Id == matchFromRiot.Info.QueueId, cancellationToken);
             matchInDb.QueueId = queueExists ? matchFromRiot.Info.QueueId : null;
 
-            foreach (var team in matchFromRiot.Info.Teams)
+            matchInDb.IsRemake = matchFromRiot.Info.Participants.All(x => x.GameEndedInEarlySurrender);
+
+            if (matchInDb.IsRemake)
             {
-                if (team.HasWon)
+                matchInDb.WinningTeamId = null;
+            }
+            else
+            {
+                foreach (var team in matchFromRiot.Info.Teams)
                 {
-                    matchInDb.WinningTeamId = team.TeamId;
+                    if (team.HasWon)
+                    {
+                        matchInDb.WinningTeamId = team.TeamId;
+                    }
                 }
             }
 

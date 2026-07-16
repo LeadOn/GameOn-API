@@ -126,6 +126,12 @@ namespace GameOn.External.RiotGames.Models.DTOs
         public bool Win { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the game ended in an early surrender (remake) for this participant.
+        /// </summary>
+        [JsonProperty("gameEndedInEarlySurrender")]
+        public bool GameEndedInEarlySurrender { get; set; }
+
+        /// <summary>
         /// Gets or sets Item 0.
         /// </summary>
         [JsonProperty("item0")]
