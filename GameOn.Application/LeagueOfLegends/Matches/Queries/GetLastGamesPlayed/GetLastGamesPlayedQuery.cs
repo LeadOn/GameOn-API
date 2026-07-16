@@ -34,8 +34,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
         public bool RankedGamesOnly { get; set; }
 
         /// <summary>
-        /// Gets or sets the queue type to filter games by (e.g. RANKED_SOLO_DUO, ARAM, NORMAL_DRAFT).
+        /// Gets or sets the queue IDs to filter games by (Riot queueId, see LoLQueue).
         /// </summary>
-        public string? QueueType { get; set; }
+        public List<int>? QueueIds { get; set; }
     }
 }
