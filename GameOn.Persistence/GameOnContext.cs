@@ -16,7 +16,8 @@ namespace GameOn.Persistence
     public class GameOnContext : DbContext, IApplicationDbContext
     {
         // SQL Connection string
-        private readonly string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING");
+        private readonly string connectionString =
+            "Server=192.168.1.45;Database=gameondev;User Id=sa;Password=DueJC*!7ie9!ESJQ;Encrypt=False";//Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING");
 
         /// <summary>
         /// Gets or sets Players.
@@ -671,10 +672,6 @@ namespace GameOn.Persistence
                 entity.Property(e => e.IsRemake)
                     .HasColumnName("is_remake")
                     .HasDefaultValue(false);
-
-                entity.Property(e => e.QueueType)
-                    .HasColumnName("queue_type")
-                    .HasMaxLength(50);
 
                 entity.Property(e => e.QueueId)
                     .HasColumnName("queue_id");

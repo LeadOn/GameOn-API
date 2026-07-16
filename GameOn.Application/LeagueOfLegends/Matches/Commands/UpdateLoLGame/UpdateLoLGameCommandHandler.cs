@@ -165,11 +165,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             matchInDb.GameEnd = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             matchInDb.GameEnd = matchInDb.GameEnd.AddMilliseconds((double)matchFromRiot.Info.GameEndTimestamp).ToLocalTime();
 
-            // QueueType is kept as a legacy read-only compatibility field for existing API consumers,
-            // now derived from LoLQueue (synced from Riot) instead of a hardcoded mapping.
-            var queueInDb = await this.context.LeagueOfLegendsQueues.FirstOrDefaultAsync(x => x.Id == matchFromRiot.Info.QueueId, cancellationToken);
-            matchInDb.QueueId = queueInDb?.Id;
-            matchInDb.QueueType = queueInDb?.Description ?? queueInDb?.Map ?? "Inconnu";
+            var queueExists = await this.context.LeagueOfLegendsQueues.AnyAsync(x => x.Id == matchFromRiot.Info.QueueId, cancellationToken);
+            matchInDb.QueueId = queueExists ? matchFromRiot.Info.QueueId : null;
 
             matchInDb.IsRemake = matchFromRiot.Info.Participants.All(x => x.GameEndedInEarlySurrender);
 

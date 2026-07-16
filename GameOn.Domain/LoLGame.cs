@@ -57,11 +57,6 @@ namespace GameOn.Domain
         public bool IsRemake { get; set; }
 
         /// <summary>
-        /// Gets or sets Queue Type.
-        /// </summary>
-        public string QueueType { get; set; } = string.Empty;
-
-        /// <summary>
         /// Gets or sets Queue ID (FK to <see cref="LoLQueue"/>).
         /// </summary>
         public int? QueueId { get; set; }
