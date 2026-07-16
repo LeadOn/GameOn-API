@@ -94,6 +94,11 @@ namespace GameOn.Persistence
         public DbSet<LoLGameTimelineFrameParticipant> LeagueOfLegendsGameTimelineFrameParticipants { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Queues.
+        /// </summary>
+        public DbSet<LoLQueue> LeagueOfLegendsQueues { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -672,6 +677,31 @@ namespace GameOn.Persistence
                     .HasForeignKey(f => f.MatchId)
                     .HasConstraintName("FK_LoL_Games_Participants")
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLQueue>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsQueue");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever()
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Map)
+                    .HasColumnName("map")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Notes)
+                    .HasColumnName("notes")
+                    .HasMaxLength(500);
             });
 
             modelBuilder.Entity<LoLGameParticipant>(entity =>
