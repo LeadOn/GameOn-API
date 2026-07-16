@@ -45,7 +45,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
                 if (request.RankedGamesOnly == true)
                 {
-                    query = query.Where(x => x.QueueType == "RANKED_SOLO_DUO" || x.QueueType == "RANKED_FLEX" || (x.Queue != null && x.Queue.Description != null && x.Queue.Description.Contains("Rank")));
+                    query = query.Where(x => x.Queue != null && x.Queue.Description != null && x.Queue.Description.Contains("Rank"));
                 }
 
                 if (request.QueueIds is { Count: > 0 })
@@ -89,7 +89,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
                 if (request.RankedGamesOnly == true)
                 {
-                    query = query.Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId) && (x.QueueType == "RANKED_SOLO_DUO" || x.QueueType == "RANKED_FLEX" || (x.Queue != null && x.Queue.Description != null && x.Queue.Description.Contains("Rank"))));
+                    query = query.Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId) && x.Queue != null && x.Queue.Description != null && x.Queue.Description.Contains("Rank"));
                 }
 
                 if (request.QueueIds is { Count: > 0 })

@@ -27,7 +27,7 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
         // Below it, the player was AFK and would win the Pacifist award by default.
         private const int MinimumLevelForPacifist = 8;
 
-        // Matched against LoLGame.QueueType to keep only games against real opponents.
+        // Matched against LoLQueue.Map + Description (synced from Riot) to keep only games against real opponents.
         private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
 
         private readonly IApplicationDbContext context;
@@ -45,11 +45,11 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
         public async Task<LoLGlobalStatsDto> Handle(GetLoLGlobalStatsQuery request, CancellationToken cancellationToken)
         {
             // Match-v5 and league-v4 don't use the same queue identifiers.
-            var matchQueueType = request.Queue switch
+            var matchQueueId = request.Queue switch
             {
-                LoLQueueFilter.Solo => "RANKED_SOLO_DUO",
-                LoLQueueFilter.Flex => "RANKED_FLEX",
-                _ => null,
+                LoLQueueFilter.Solo => 420,
+                LoLQueueFilter.Flex => 440,
+                _ => (int?)null,
             };
 
             var rankQueueType = request.Queue switch
@@ -72,13 +72,13 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             var participantsQuery = this.context.LeagueOfLegendsGameParticipants
                 .Where(x => x.PlayerId != null && x.ChampionName != string.Empty);
 
-            if (matchQueueType is not null)
+            if (matchQueueId is not null)
             {
-                participantsQuery = participantsQuery.Where(x => x.Game.QueueType == matchQueueType);
+                participantsQuery = participantsQuery.Where(x => x.Game.QueueId == matchQueueId);
             }
             else if (request.RankedOnly)
             {
-                participantsQuery = participantsQuery.Where(x => x.Game.QueueType == "RANKED_SOLO_DUO" || x.Game.QueueType == "RANKED_FLEX");
+                participantsQuery = participantsQuery.Where(x => x.Game.QueueId == 420 || x.Game.QueueId == 440);
             }
 
             if (since is not null)
@@ -106,12 +106,15 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                     x.TeamId,
                     x.Game.GameStart,
                     x.Game.GameVersion,
-                    x.Game.QueueType,
+                    QueueMap = x.Game.Queue != null ? x.Game.Queue.Map : null,
+                    QueueDescription = x.Game.Queue != null ? x.Game.Queue.Description : null,
                     x.Game.IsRemake,
                 })
                 .ToListAsync(cancellationToken))
                 .Where(x => !x.IsRemake
-                    && !ExcludedQueueTypeKeywords.Any(keyword => x.QueueType.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+                    && !ExcludedQueueTypeKeywords.Any(keyword =>
+                        ((x.QueueMap ?? string.Empty) + " " + (x.QueueDescription ?? string.Empty))
+                            .Contains(keyword, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
             var result = new LoLGlobalStatsDto
