@@ -4,6 +4,8 @@
 
 namespace GameOn.Domain
 {
+    using System.Text.Json.Serialization;
+
     /// <summary>
     /// LoLQueue class.
     /// </summary>
@@ -32,6 +34,7 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets League of Legends Games.
         /// </summary>
+        [JsonIgnore]
         public virtual List<LoLGame> LeagueOfLegendsGames { get; set; } = null!;
     }
 }

@@ -38,7 +38,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <param name="page">Pagination current page.</param>
         /// <param name="size">Pagination size.</param>
         /// <param name="rankedOnly">Only get ranked only games.</param>
-        /// <param name="queueType">Filter games by queue type (e.g. RANKED_SOLO_DUO, ARAM, NORMAL_DRAFT).</param>
+        /// <param name="queues">Filter games by queue IDs, comma-separated (Riot queueId, see LoLQueue).</param>
         /// <returns>200 OK with Player's game list.</returns>
         [HttpGet]
         [Route("player/{playerId:int}")]
@@ -47,9 +47,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(200, "Games played.", typeof(List<LoLGame>))]
         [SwaggerResponse(404, "Player not found / no Riot Games PUUID found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetLastGamesForUser(int playerId, int? page, int? size, bool rankedOnly = false, string? queueType = null)
+        public async Task<IActionResult> GetLastGamesForUser(int playerId, int? page, int? size, bool rankedOnly = false, string? queues = null)
         {
-            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { PlayerId = playerId, Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueType = queueType });
+            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { PlayerId = playerId, Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueIds = ParseQueueIds(queues) });
 
             if (lastGames is not null)
             {
@@ -67,7 +67,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <param name="page">Pagination current page.</param>
         /// <param name="size">Pagination size.</param>
         /// <param name="rankedOnly">Only get ranked only games.</param>
-        /// <param name="queueType">Filter games by queue type (e.g. RANKED_SOLO_DUO, ARAM, NORMAL_DRAFT).</param>
+        /// <param name="queues">Filter games by queue IDs, comma-separated (Riot queueId, see LoLQueue).</param>
         /// <returns>200 OK with game list.</returns>
         [HttpGet]
         [Route("last")]
@@ -75,9 +75,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerOperation(Summary = "Get last games played.")]
         [SwaggerResponse(200, "Games played.", typeof(List<LoLGame>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetLastGamesPlayed(int? page, int? size, bool rankedOnly = false, string? queueType = null)
+        public async Task<IActionResult> GetLastGamesPlayed(int? page, int? size, bool rankedOnly = false, string? queues = null)
         {
-            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueType = queueType });
+            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueIds = ParseQueueIds(queues) });
 
             if (lastGames is not null)
             {
@@ -140,6 +140,24 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
             await this.mediator.Send(new UpdateLoLGameCommand { MatchId = matchId });
 
             return this.NoContent();
+        }
+
+        /// <summary>
+        /// Parses a comma-separated list of queue IDs (e.g. "420,440") into a list of ints.
+        /// </summary>
+        /// <param name="queues">Comma-separated queue IDs.</param>
+        /// <returns>Parsed list, or null if the input is empty.</returns>
+        private static List<int>? ParseQueueIds(string? queues)
+        {
+            if (string.IsNullOrWhiteSpace(queues))
+            {
+                return null;
+            }
+
+            return queues
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Select(int.Parse)
+                .ToList();
         }
     }
 }

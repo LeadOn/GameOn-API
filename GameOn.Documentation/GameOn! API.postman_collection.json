@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "63613532-5cbb-4327-8d6f-42053fc4aa7a",
-    "name": "GameOn! 6.5.0",
+    "name": "GameOn! 7.1.0",
     "description": "This API goal is to monitor players performance across real-world and virtual games.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "6882080"
@@ -1430,7 +1430,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/lol/match/last?page=1&size=1",
+                  "raw": "{{baseUrl}}/lol/match/last?page=1&size=1&queues=1750,420,400",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -1442,13 +1442,15 @@
                   "query": [
                     {
                       "key": "page",
-                      "value": "1",
-                      "type": "text"
+                      "value": "1"
                     },
                     {
                       "key": "size",
-                      "value": "1",
-                      "type": "text"
+                      "value": "1"
+                    },
+                    {
+                      "key": "queues",
+                      "value": "1750,420,400"
                     }
                   ]
                 }
@@ -1464,7 +1466,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/lol/match/player/1?page=1&size=2&playerId=1",
+                  "raw": "{{baseUrl}}/lol/match/player/1?page=1&size=2&playerId=1&queues=",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -1477,18 +1479,19 @@
                   "query": [
                     {
                       "key": "page",
-                      "value": "1",
-                      "type": "text"
+                      "value": "1"
                     },
                     {
                       "key": "size",
-                      "value": "2",
-                      "type": "text"
+                      "value": "2"
                     },
                     {
                       "key": "playerId",
-                      "value": "1",
-                      "type": "text"
+                      "value": "1"
+                    },
+                    {
+                      "key": "queues",
+                      "value": ""
                     }
                   ]
                 }
@@ -1565,6 +1568,68 @@
             }
           ],
           "description": "All matches played by Summoner."
+        },
+        {
+          "name": "Queues",
+          "item": [
+            {
+              "name": "Get all",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/lol/queue",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lol",
+                    "queue"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get all played by Player",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/lol/queue/player/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lol",
+                    "queue",
+                    "player",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Sync queues",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/lol/queue/sync",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lol",
+                    "queue",
+                    "sync"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ]
     }

@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>7.0.4</Version>
-    <PackageReleaseNotes>Implemented support for remake LoL games + aded LoL Queue types coming directly from Riot Games.</PackageReleaseNotes>
+    <Version>7.1.0</Version>
+    <PackageReleaseNotes>Now fully using LoLQueues!</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

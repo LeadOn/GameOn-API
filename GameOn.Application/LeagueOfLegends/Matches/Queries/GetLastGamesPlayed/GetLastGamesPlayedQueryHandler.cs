@@ -45,17 +45,17 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
                 if (request.RankedGamesOnly == true)
                 {
-                    query = query.Where(x => x.QueueType == "RANKED_SOLO_DUO" || x.QueueType == "RANKED_FLEX");
+                    query = query.Where(x => x.Queue != null && x.Queue.Description != null && x.Queue.Description.Contains("Rank"));
                 }
 
-                if (!string.IsNullOrWhiteSpace(request.QueueType))
+                if (request.QueueIds is { Count: > 0 })
                 {
-                    query = query.Where(x => x.QueueType == request.QueueType);
+                    query = query.Where(x => x.QueueId.HasValue && request.QueueIds.Contains(x.QueueId.Value));
                 }
 
                 var count = await query.CountAsync(cancellationToken);
                 var resultsFromDb = await query
-                    .OrderByDescending(x => x.MatchId)
+                    .OrderByDescending(x => x.GameStart)
                     .Skip((request.Page - 1) * request.NumberOfResults)
                     .Take(request.NumberOfResults)
                     .ToListAsync(cancellationToken);
@@ -89,16 +89,16 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
                 if (request.RankedGamesOnly == true)
                 {
-                    query = query.Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId) && (x.QueueType == "RANKED_SOLO_DUO" || x.QueueType == "RANKED_FLEX"));
+                    query = query.Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId) && x.Queue != null && x.Queue.Description != null && x.Queue.Description.Contains("Rank"));
                 }
 
-                if (!string.IsNullOrWhiteSpace(request.QueueType))
+                if (request.QueueIds is { Count: > 0 })
                 {
-                    query = query.Where(x => x.QueueType == request.QueueType);
+                    query = query.Where(x => x.QueueId.HasValue && request.QueueIds.Contains(x.QueueId.Value));
                 }
 
                 var count = await query.CountAsync(cancellationToken);
-                var resultsFromDb = await query.OrderByDescending(x => x.MatchId)
+                var resultsFromDb = await query.OrderByDescending(x => x.GameStart)
                     .Skip((request.Page - 1) * request.NumberOfResults)
                     .Take(request.NumberOfResults)
                     .ToListAsync(cancellationToken);
