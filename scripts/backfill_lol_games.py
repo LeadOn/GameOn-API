@@ -59,7 +59,7 @@ def fetch_all_match_ids(base_url: str, page_size: int = 100) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Re-sync all LoL games from Riot.")
-    parser.add_argument("--base-url", default="http://localhost:5184")
+    parser.add_argument("--base-url", default="https://gameon-api.valentinvirot.fr", help="GameOn API base URL (default: https://gameon-api.valentinvirot.fr)")
     parser.add_argument("--delay", type=float, default=3.0, help="seconds between games (default: 3)")
     parser.add_argument("--limit", type=int, default=None, help="only process N games (for testing)")
     parser.add_argument("--cooldown", type=float, default=120.0, help="pause after repeated failures (default: 120s)")
