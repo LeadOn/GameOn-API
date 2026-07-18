@@ -4,6 +4,8 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory
 {
+    using System.Globalization;
+    using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using MediatR;
@@ -30,6 +32,11 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
         /// <inheritdoc />
         public async Task<IEnumerable<LeagueOfLegendsRankHistory>> Handle(GetSummonerRankHistoryQuery request, CancellationToken cancellationToken)
         {
+            if (request.Granularity is not null)
+            {
+                return await this.GetBucketedHistory(request, cancellationToken);
+            }
+
             var historySoloQueue = await this.context.LeagueOfLegendsRankHistory
                 .Where(x => x.PlayerId == request.PlayerId && x.QueueType == "RANKED_SOLO_5x5")
                 .OrderByDescending(x => x.CreatedOn)
@@ -85,7 +92,54 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
                 }
             }
 
-            return soloHistoryToRetrieve.Take(50).ToList().Concat(flexHistoryToRetrieve.Take(50).ToList()).OrderBy(x => x.CreatedOn).ToList();
+            var limit = request.Limit ?? 50;
+
+            return soloHistoryToRetrieve.Take(limit).ToList().Concat(flexHistoryToRetrieve.Take(limit).ToList()).OrderBy(x => x.CreatedOn).ToList();
+        }
+
+        /// <summary>
+        /// Builds a comparable key that groups a date down to the given granularity's period.
+        /// </summary>
+        private static long GetBucketKey(DateTime date, LoLRankHistoryGranularity granularity)
+        {
+            return granularity switch
+            {
+                LoLRankHistoryGranularity.Day => (date.Year * 10000L) + (date.Month * 100) + date.Day,
+                LoLRankHistoryGranularity.Week => (ISOWeek.GetYear(date) * 100L) + ISOWeek.GetWeekOfYear(date),
+                LoLRankHistoryGranularity.Month => (date.Year * 100L) + date.Month,
+                _ => throw new ArgumentOutOfRangeException(nameof(granularity), granularity, null),
+            };
+        }
+
+        /// <summary>
+        /// Keeps only the last snapshot of each period (day/week/month) per queue, over a rolling window.
+        /// </summary>
+        private async Task<IEnumerable<LeagueOfLegendsRankHistory>> GetBucketedHistory(GetSummonerRankHistoryQuery request, CancellationToken cancellationToken)
+        {
+            var granularity = request.Granularity!.Value;
+
+            var days = request.Days ?? granularity switch
+            {
+                LoLRankHistoryGranularity.Day => 21,
+                LoLRankHistoryGranularity.Week => 90,
+                LoLRankHistoryGranularity.Month => 365,
+                _ => 30,
+            };
+
+            var since = DateTime.Now.AddDays(-days);
+
+            var history = await this.context.LeagueOfLegendsRankHistory
+                .Where(x => x.PlayerId == request.PlayerId
+                    && x.CreatedOn >= since
+                    && (x.QueueType == "RANKED_SOLO_5x5" || x.QueueType == "RANKED_FLEX_SR"))
+                .OrderBy(x => x.CreatedOn)
+                .ToListAsync(cancellationToken);
+
+            return history
+                .GroupBy(x => (x.QueueType, Bucket: GetBucketKey(x.CreatedOn, granularity)))
+                .Select(g => g.OrderByDescending(x => x.CreatedOn).First())
+                .OrderBy(x => x.CreatedOn)
+                .ToList();
         }
     }
 }

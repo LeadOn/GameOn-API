@@ -13,6 +13,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
     using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
     using MediatR;
@@ -85,6 +86,8 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// </summary>
         /// <param name="id">Summoner ID.</param>
         /// <param name="limit">Limit.</param>
+        /// <param name="granularity">When set, only the last rank snapshot of each period (day/week/month) is returned, instead of every change.</param>
+        /// <param name="days">How many days back to look when <paramref name="granularity"/> is set. Defaults to a sensible window for the chosen granularity.</param>
         /// <returns>IActionResult object.</returns>
         [HttpGet]
         [Route("{id:int}/rank")]
@@ -93,10 +96,10 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(200, "List of rank history.", typeof(List<LeagueOfLegendsRankHistory>))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetRankHistory(int id, int? limit)
+        public async Task<IActionResult> GetRankHistory(int id, int? limit, LoLRankHistoryGranularity? granularity, int? days)
         {
 #pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
-            return this.Ok(await this.mediator.Send(new GetSummonerRankHistoryQuery { PlayerId = id, Limit = limit }));
+            return this.Ok(await this.mediator.Send(new GetSummonerRankHistoryQuery { PlayerId = id, Limit = limit, Granularity = granularity, Days = days }));
 #pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
         }
 
