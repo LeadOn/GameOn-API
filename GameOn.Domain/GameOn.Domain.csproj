@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.1.0</Version>
-	<PackageReleaseNotes>Now fully using LoLQueues!</PackageReleaseNotes>
+	<Version>7.2.0</Version>
+	<PackageReleaseNotes>Reworked rank history + able to import any game using riot's ID</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
