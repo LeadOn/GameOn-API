@@ -128,6 +128,11 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                 return result;
             }
 
+            // Bot/co-op games are excluded from participants above, but their timeline frames are still
+            // in the database with several bots sharing the same placeholder PUUID ("BOT"). Restricting
+            // the frame queries below to tracked matches avoids duplicate (MatchId, ParticipantPUUID) keys.
+            var trackedMatchIds = participants.Select(x => x.MatchId).Distinct().ToList();
+
             // Rank history snapshots, used for the LP drop award. Snapshots are ranked by nature,
             // so the RankedOnly flag doesn't apply here.
             var rankHistoryQuery = this.context.LeagueOfLegendsRankHistory.AsQueryable();
@@ -148,7 +153,8 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
 
             // Last timeline frame of each game, for every participant (cumulative stats = end of game values).
             var lastFrames = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
-                .Where(x => x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames.Max(f => f.Timestamp))
+                .Where(x => trackedMatchIds.Contains(x.TimelineFrame.MatchId)
+                    && x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames.Max(f => f.Timestamp))
                 .Select(x => new
                 {
                     x.TimelineFrame.MatchId,
@@ -168,15 +174,17 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             // Second to last frame of each game, for the squirrel award: between it and the final frame,
             // current gold can only grow faster than total gold earned if the player sold items.
             var previousFrames = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
-                .Where(x => x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames
-                    .Where(f => f.Timestamp < x.TimelineFrame.Game.LoLGameTimelineFrames.Max(m => m.Timestamp))
-                    .Max(f => f.Timestamp))
+                .Where(x => trackedMatchIds.Contains(x.TimelineFrame.MatchId)
+                    && x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames
+                        .Where(f => f.Timestamp < x.TimelineFrame.Game.LoLGameTimelineFrames.Max(m => m.Timestamp))
+                        .Max(f => f.Timestamp))
                 .Select(x => new { x.TimelineFrame.MatchId, x.ParticipantPUUID, x.CurrentGold, x.TotalGold })
                 .ToListAsync(cancellationToken);
 
             // First timeline frame at or after the 20 minutes mark, for the comeback award.
             var framesAt20 = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
-                .Where(x => x.TimelineFrame.Timestamp >= TwentyMinutesInMs
+                .Where(x => trackedMatchIds.Contains(x.TimelineFrame.MatchId)
+                    && x.TimelineFrame.Timestamp >= TwentyMinutesInMs
                     && x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames
                         .Where(f => f.Timestamp >= TwentyMinutesInMs)
                         .Min(f => f.Timestamp))
@@ -267,7 +275,11 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
 
             // Players selling their whole inventory right before the nexus falls would fake the award:
             // a gold jump bigger than the gold earned over the final minute means items were sold.
-            var previousFrameLookup = previousFrames.ToDictionary(x => (x.MatchId, x.ParticipantPUUID));
+            // Bots share the same placeholder PUUID ("BOT") within a match: grouped instead of a plain
+            // ToDictionary, since only real, tracked participants (unique PUUIDs) are ever looked up below.
+            var previousFrameLookup = previousFrames
+                .GroupBy(x => (x.MatchId, x.ParticipantPUUID))
+                .ToDictionary(g => g.Key, g => g.First());
 
             var squirrel = trackedFrames
                 .Where(x => !previousFrameLookup.TryGetValue((x.Frame.MatchId, x.Frame.ParticipantPUUID), out var previous)
