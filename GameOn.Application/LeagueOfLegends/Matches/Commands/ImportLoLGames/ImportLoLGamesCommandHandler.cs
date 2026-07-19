@@ -55,7 +55,11 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
 
                     this.context.LeagueOfLegendsGames.Add(matchInDb);
                     await this.context.SaveChangesAsync(cancellationToken);
-                    await this.mediator.Send(new UpdateLoLGameCommand { MatchId = matchInDb.MatchId }, CancellationToken.None);
+
+                    if (request.ExecuteUpdate)
+                    {
+                        await this.mediator.Send(new UpdateLoLGameCommand { MatchId = matchInDb.MatchId }, CancellationToken.None);
+                    }
                 }
             }
 

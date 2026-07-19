@@ -21,5 +21,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames
         /// Gets or sets Player.
         /// </summary>
         public Player Player { get; set; } = new Player();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether <see cref="UpdateLoLGame.UpdateLoLGameCommand"/> should be executed for each newly imported match, to retrieve its details from Riot Games.
+        /// </summary>
+        public bool ExecuteUpdate { get; set; } = true;
     }
 }

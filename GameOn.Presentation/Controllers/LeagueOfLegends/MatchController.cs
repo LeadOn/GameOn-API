@@ -4,12 +4,16 @@
 
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
+    using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameTimelineByMatchId;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed;
     using GameOn.Domain;
+    using GameOn.Presentation.Classes;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
 
@@ -138,6 +142,35 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         public async Task<IActionResult> UpdateMatch(string matchId)
         {
             await this.mediator.Send(new UpdateLoLGameCommand { MatchId = matchId });
+
+            return this.NoContent();
+        }
+
+        /// <summary>
+        /// Import a match by ID (retrieve data from Riot Games and store it in database).
+        /// </summary>
+        /// <param name="matchId">Match ID.</param>
+        /// <param name="executeUpdate">If true, immediately retrieves the match's details from Riot Games after importing it.</param>
+        /// <returns>204 No Content.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("{matchId}/import")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Import a Match by ID (retrieve data from Riot Games).")]
+        [SwaggerResponse(204, "Success.")]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(404, "Connected player not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> ImportMatch(string matchId, bool executeUpdate = true)
+        {
+            var connectedPlayer = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
+
+            if (connectedPlayer is null)
+            {
+                return this.NotFound();
+            }
+
+            await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = new List<string> { matchId }, Player = connectedPlayer, ExecuteUpdate = executeUpdate });
 
             return this.NoContent();
         }
