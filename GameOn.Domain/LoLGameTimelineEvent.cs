@@ -22,6 +22,11 @@ namespace GameOn.Domain
         public int LoLGameTimelineFrameId { get; set; }
 
         /// <summary>
+        /// Gets or sets Match ID (denormalized from the frame, needed to link to <see cref="LoLGameParticipant"/> via PUUID).
+        /// </summary>
+        public string MatchId { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets timestamp.
         /// </summary>
         public int Timestamp { get; set; }
@@ -42,14 +47,29 @@ namespace GameOn.Domain
         public int? ParticipantId { get; set; }
 
         /// <summary>
+        /// Gets or sets participant PUUID (resolved from <see cref="ParticipantId"/>).
+        /// </summary>
+        public string? ParticipantPUUID { get; set; }
+
+        /// <summary>
         /// Gets or sets killer participant ID.
         /// </summary>
         public int? KillerId { get; set; }
 
         /// <summary>
+        /// Gets or sets killer PUUID (resolved from <see cref="KillerId"/>).
+        /// </summary>
+        public string? KillerPUUID { get; set; }
+
+        /// <summary>
         /// Gets or sets victim participant ID.
         /// </summary>
         public int? VictimId { get; set; }
+
+        /// <summary>
+        /// Gets or sets victim PUUID (resolved from <see cref="VictimId"/>).
+        /// </summary>
+        public string? VictimPUUID { get; set; }
 
         /// <summary>
         /// Gets or sets killer team ID.
@@ -132,6 +152,11 @@ namespace GameOn.Domain
         public int? CreatorId { get; set; }
 
         /// <summary>
+        /// Gets or sets ward creator PUUID (resolved from <see cref="CreatorId"/>).
+        /// </summary>
+        public string? CreatorPUUID { get; set; }
+
+        /// <summary>
         /// Gets or sets building type (BUILDING_KILL).
         /// </summary>
         public string? BuildingType { get; set; }
@@ -181,6 +206,26 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual LoLGameTimelineFrame TimelineFrame { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the game participant this event pertains to (resolved via <see cref="MatchId"/> + <see cref="ParticipantPUUID"/>).
+        /// </summary>
+        public virtual LoLGameParticipant? Participant { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game participant credited as killer (resolved via <see cref="MatchId"/> + <see cref="KillerPUUID"/>).
+        /// </summary>
+        public virtual LoLGameParticipant? Killer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game participant who is the victim (resolved via <see cref="MatchId"/> + <see cref="VictimPUUID"/>).
+        /// </summary>
+        public virtual LoLGameParticipant? Victim { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game participant who created the ward (resolved via <see cref="MatchId"/> + <see cref="CreatorPUUID"/>).
+        /// </summary>
+        public virtual LoLGameParticipant? Creator { get; set; }
 
         /// <summary>
         /// Gets or sets assisting participants.

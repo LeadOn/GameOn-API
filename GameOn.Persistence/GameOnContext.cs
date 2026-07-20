@@ -798,6 +798,9 @@ namespace GameOn.Persistence
                 entity.Property(e => e.Win)
                     .HasColumnName("win");
 
+                entity.HasAlternateKey(e => new { e.MatchId, e.Puuid })
+                    .HasName("AK_LoLGameParticipant_MatchId_Puuid");
+
                 entity.HasOne(e => e.Player)
                     .WithMany(f => f.LeagueOfLegendsGameParticipants)
                     .HasForeignKey(e => e.PlayerId)
@@ -1011,6 +1014,10 @@ namespace GameOn.Persistence
                 entity.Property(e => e.LoLGameTimelineFrameId)
                     .HasColumnName("timeline_frame_id");
 
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.Timestamp)
                     .HasColumnName("timestamp");
 
@@ -1024,11 +1031,23 @@ namespace GameOn.Persistence
                 entity.Property(e => e.ParticipantId)
                     .HasColumnName("participant_id");
 
+                entity.Property(e => e.ParticipantPUUID)
+                    .HasColumnName("participant_puuid")
+                    .HasMaxLength(150);
+
                 entity.Property(e => e.KillerId)
                     .HasColumnName("killer_id");
 
+                entity.Property(e => e.KillerPUUID)
+                    .HasColumnName("killer_puuid")
+                    .HasMaxLength(150);
+
                 entity.Property(e => e.VictimId)
                     .HasColumnName("victim_id");
+
+                entity.Property(e => e.VictimPUUID)
+                    .HasColumnName("victim_puuid")
+                    .HasMaxLength(150);
 
                 entity.Property(e => e.KillerTeamId)
                     .HasColumnName("killer_team_id");
@@ -1081,6 +1100,10 @@ namespace GameOn.Persistence
                 entity.Property(e => e.CreatorId)
                     .HasColumnName("creator_id");
 
+                entity.Property(e => e.CreatorPUUID)
+                    .HasColumnName("creator_puuid")
+                    .HasMaxLength(150);
+
                 entity.Property(e => e.BuildingType)
                     .HasColumnName("building_type")
                     .HasMaxLength(100);
@@ -1120,6 +1143,38 @@ namespace GameOn.Persistence
                     .HasForeignKey(e => e.LoLGameTimelineFrameId)
                     .HasConstraintName("FK_LoL_Game_Frame_Event")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                // Restrict (not Cascade): LoLGame already cascades to LoLGameTimelineEvent via
+                // LoLGameTimelineFrame above, SQL Server refuses a second cascade path through
+                // LoLGameParticipant. The handler deletes/commits old frames+events before touching
+                // participants, so Restrict never blocks the normal sync flow.
+                entity.HasOne(e => e.Participant)
+                    .WithMany()
+                    .HasForeignKey(e => new { e.MatchId, e.ParticipantPUUID })
+                    .HasPrincipalKey(p => new { p.MatchId, p.Puuid })
+                    .HasConstraintName("FK_LoL_Event_Participant")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Killer)
+                    .WithMany()
+                    .HasForeignKey(e => new { e.MatchId, e.KillerPUUID })
+                    .HasPrincipalKey(p => new { p.MatchId, p.Puuid })
+                    .HasConstraintName("FK_LoL_Event_Killer")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Victim)
+                    .WithMany()
+                    .HasForeignKey(e => new { e.MatchId, e.VictimPUUID })
+                    .HasPrincipalKey(p => new { p.MatchId, p.Puuid })
+                    .HasConstraintName("FK_LoL_Event_Victim")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Creator)
+                    .WithMany()
+                    .HasForeignKey(e => new { e.MatchId, e.CreatorPUUID })
+                    .HasPrincipalKey(p => new { p.MatchId, p.Puuid })
+                    .HasConstraintName("FK_LoL_Event_Creator")
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<LoLGameTimelineEventAssist>(entity =>
@@ -1136,14 +1191,30 @@ namespace GameOn.Persistence
                 entity.Property(e => e.LoLGameTimelineEventId)
                     .HasColumnName("timeline_event_id");
 
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.ParticipantId)
                     .HasColumnName("participant_id");
+
+                entity.Property(e => e.ParticipantPUUID)
+                    .HasColumnName("participant_puuid")
+                    .HasMaxLength(150);
 
                 entity.HasOne(e => e.Event)
                     .WithMany(f => f.LoLGameTimelineEventAssists)
                     .HasForeignKey(e => e.LoLGameTimelineEventId)
                     .HasConstraintName("FK_LoL_Game_Event_Assist")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                // Restrict for the same multiple-cascade-paths reason as LoLGameTimelineEvent's participant links.
+                entity.HasOne(e => e.Participant)
+                    .WithMany()
+                    .HasForeignKey(e => new { e.MatchId, e.ParticipantPUUID })
+                    .HasPrincipalKey(p => new { p.MatchId, p.Puuid })
+                    .HasConstraintName("FK_LoL_EventAssist_Participant")
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
