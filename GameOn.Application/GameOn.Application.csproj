@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.2.0</Version>
-	<PackageReleaseNotes>Reworked rank history + able to import any game using riot's ID</PackageReleaseNotes>
+	<Version>7.2.1</Version>
+	<PackageReleaseNotes>Now having full details in LoL game history</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
