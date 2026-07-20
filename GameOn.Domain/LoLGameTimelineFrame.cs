@@ -36,5 +36,10 @@ namespace GameOn.Domain
         /// Gets or sets League of Legends Timeline Frames Participant.
         /// </summary>
         public virtual List<LoLGameTimelineFrameParticipant> LoLGameTimelineFrameParticipants { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets League of Legends Timeline Frame Events.
+        /// </summary>
+        public virtual List<LoLGameTimelineEvent> LoLGameTimelineEvents { get; set; } = null!;
     }
 }

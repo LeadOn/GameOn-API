@@ -12,6 +12,12 @@ namespace GameOn.External.RiotGames.Models.DTOs
     public class ParticipantFrameDto
     {
         /// <summary>
+        /// Gets or sets champion stats.
+        /// </summary>
+        [JsonProperty("championStats")]
+        public ChampionStatsDto ChampionStats { get; set; } = new ChampionStatsDto();
+
+        /// <summary>
         /// Gets or sets current gold.
         /// </summary>
         [JsonProperty("currentGold")]
@@ -52,6 +58,12 @@ namespace GameOn.External.RiotGames.Models.DTOs
         /// </summary>
         [JsonProperty("participantId")]
         public int ParticipantId { get; set; }
+
+        /// <summary>
+        /// Gets or sets position.
+        /// </summary>
+        [JsonProperty("position")]
+        public PositionDto? Position { get; set; }
 
         /// <summary>
         /// Gets or sets time enemy spent controlled.

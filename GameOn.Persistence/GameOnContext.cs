@@ -99,6 +99,16 @@ namespace GameOn.Persistence
         public DbSet<LoLQueue> LeagueOfLegendsQueues { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Game Timeline Events.
+        /// </summary>
+        public DbSet<LoLGameTimelineEvent> LeagueOfLegendsGameTimelineEvents { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets LoL Game Timeline Event Assists.
+        /// </summary>
+        public DbSet<LoLGameTimelineEventAssist> LeagueOfLegendsGameTimelineEventAssists { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -675,6 +685,9 @@ namespace GameOn.Persistence
                 entity.Property(e => e.QueueId)
                     .HasColumnName("queue_id");
 
+                entity.Property(e => e.FrameInterval)
+                    .HasColumnName("frame_interval");
+
                 entity.HasMany(e => e.LeagueOfLegendsGameParticipants)
                     .WithOne(f => f.Game)
                     .HasForeignKey(f => f.MatchId)
@@ -851,6 +864,12 @@ namespace GameOn.Persistence
                 entity.Property(e => e.ParticipantPUUID)
                     .HasColumnName("participantPuuid");
 
+                entity.Property(e => e.PositionX)
+                    .HasColumnName("position_x");
+
+                entity.Property(e => e.PositionY)
+                    .HasColumnName("position_y");
+
                 entity.Property(e => e.TimeEnemySpentControlled)
                     .HasColumnName("time_enemy_spent_controlled");
 
@@ -896,10 +915,234 @@ namespace GameOn.Persistence
                 entity.Property(e => e.TrueDamageTaken)
                     .HasColumnName("true_damage_taken");
 
+                entity.Property(e => e.AbilityHaste)
+                    .HasColumnName("ability_haste");
+
+                entity.Property(e => e.AbilityPower)
+                    .HasColumnName("ability_power");
+
+                entity.Property(e => e.Armor)
+                    .HasColumnName("armor");
+
+                entity.Property(e => e.ArmorPen)
+                    .HasColumnName("armor_pen");
+
+                entity.Property(e => e.ArmorPenPercent)
+                    .HasColumnName("armor_pen_percent");
+
+                entity.Property(e => e.AttackDamage)
+                    .HasColumnName("attack_damage");
+
+                entity.Property(e => e.AttackSpeed)
+                    .HasColumnName("attack_speed");
+
+                entity.Property(e => e.BonusArmorPenPercent)
+                    .HasColumnName("bonus_armor_pen_percent");
+
+                entity.Property(e => e.BonusMagicPenPercent)
+                    .HasColumnName("bonus_magic_pen_percent");
+
+                entity.Property(e => e.CcReduction)
+                    .HasColumnName("cc_reduction");
+
+                entity.Property(e => e.CooldownReduction)
+                    .HasColumnName("cooldown_reduction");
+
+                entity.Property(e => e.Health)
+                    .HasColumnName("health");
+
+                entity.Property(e => e.HealthMax)
+                    .HasColumnName("health_max");
+
+                entity.Property(e => e.HealthRegen)
+                    .HasColumnName("health_regen");
+
+                entity.Property(e => e.Lifesteal)
+                    .HasColumnName("lifesteal");
+
+                entity.Property(e => e.MagicPen)
+                    .HasColumnName("magic_pen");
+
+                entity.Property(e => e.MagicPenPercent)
+                    .HasColumnName("magic_pen_percent");
+
+                entity.Property(e => e.MagicResist)
+                    .HasColumnName("magic_resist");
+
+                entity.Property(e => e.MovementSpeed)
+                    .HasColumnName("movement_speed");
+
+                entity.Property(e => e.Omnivamp)
+                    .HasColumnName("omnivamp");
+
+                entity.Property(e => e.PhysicalVamp)
+                    .HasColumnName("physical_vamp");
+
+                entity.Property(e => e.Power)
+                    .HasColumnName("power");
+
+                entity.Property(e => e.PowerMax)
+                    .HasColumnName("power_max");
+
+                entity.Property(e => e.PowerRegen)
+                    .HasColumnName("power_regen");
+
+                entity.Property(e => e.SpellVamp)
+                    .HasColumnName("spell_vamp");
+
                 entity.HasOne(e => e.TimelineFrame)
                     .WithMany(f => f.LoLGameTimelineFrameParticipants)
                     .HasForeignKey(e => e.LoLGameTimelineFrameId)
                     .HasConstraintName("FK_LoL_Game_Frame_Participant")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameTimelineEvent>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("LeagueOfLegendsGameTimelineEvent");
+
+                entity.Property(e => e.LoLGameTimelineFrameId)
+                    .HasColumnName("timeline_frame_id");
+
+                entity.Property(e => e.Timestamp)
+                    .HasColumnName("timestamp");
+
+                entity.Property(e => e.RealTimestamp)
+                    .HasColumnName("real_timestamp");
+
+                entity.Property(e => e.EventType)
+                    .HasColumnName("event_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ParticipantId)
+                    .HasColumnName("participant_id");
+
+                entity.Property(e => e.KillerId)
+                    .HasColumnName("killer_id");
+
+                entity.Property(e => e.VictimId)
+                    .HasColumnName("victim_id");
+
+                entity.Property(e => e.KillerTeamId)
+                    .HasColumnName("killer_team_id");
+
+                entity.Property(e => e.TeamId)
+                    .HasColumnName("team_id");
+
+                entity.Property(e => e.Bounty)
+                    .HasColumnName("bounty");
+
+                entity.Property(e => e.ShutdownBounty)
+                    .HasColumnName("shutdown_bounty");
+
+                entity.Property(e => e.KillStreakLength)
+                    .HasColumnName("kill_streak_length");
+
+                entity.Property(e => e.MultiKillLength)
+                    .HasColumnName("multi_kill_length");
+
+                entity.Property(e => e.KillType)
+                    .HasColumnName("kill_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ItemId)
+                    .HasColumnName("item_id");
+
+                entity.Property(e => e.BeforeId)
+                    .HasColumnName("before_id");
+
+                entity.Property(e => e.AfterId)
+                    .HasColumnName("after_id");
+
+                entity.Property(e => e.GoldGain)
+                    .HasColumnName("gold_gain");
+
+                entity.Property(e => e.SkillSlot)
+                    .HasColumnName("skill_slot");
+
+                entity.Property(e => e.LevelUpType)
+                    .HasColumnName("level_up_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Level)
+                    .HasColumnName("level");
+
+                entity.Property(e => e.WardType)
+                    .HasColumnName("ward_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CreatorId)
+                    .HasColumnName("creator_id");
+
+                entity.Property(e => e.BuildingType)
+                    .HasColumnName("building_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TowerType)
+                    .HasColumnName("tower_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.LaneType)
+                    .HasColumnName("lane_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MonsterType)
+                    .HasColumnName("monster_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MonsterSubType)
+                    .HasColumnName("monster_sub_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TransformType)
+                    .HasColumnName("transform_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.DragonSoulType)
+                    .HasColumnName("dragon_soul_type")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PositionX)
+                    .HasColumnName("position_x");
+
+                entity.Property(e => e.PositionY)
+                    .HasColumnName("position_y");
+
+                entity.HasOne(e => e.TimelineFrame)
+                    .WithMany(f => f.LoLGameTimelineEvents)
+                    .HasForeignKey(e => e.LoLGameTimelineFrameId)
+                    .HasConstraintName("FK_LoL_Game_Frame_Event")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameTimelineEventAssist>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("LeagueOfLegendsGameTimelineEventAssist");
+
+                entity.Property(e => e.LoLGameTimelineEventId)
+                    .HasColumnName("timeline_event_id");
+
+                entity.Property(e => e.ParticipantId)
+                    .HasColumnName("participant_id");
+
+                entity.HasOne(e => e.Event)
+                    .WithMany(f => f.LoLGameTimelineEventAssists)
+                    .HasForeignKey(e => e.LoLGameTimelineEventId)
+                    .HasConstraintName("FK_LoL_Game_Event_Assist")
                     .OnDelete(DeleteBehavior.Cascade);
             });
         }
