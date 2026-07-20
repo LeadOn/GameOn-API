@@ -67,6 +67,11 @@ namespace GameOn.Domain
         public virtual LoLQueue? Queue { get; set; }
 
         /// <summary>
+        /// Gets or sets the timeline frame interval (in ms).
+        /// </summary>
+        public long? FrameInterval { get; set; }
+
+        /// <summary>
         /// Gets or sets League of Legends Game Participants.
         /// </summary>
         public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;

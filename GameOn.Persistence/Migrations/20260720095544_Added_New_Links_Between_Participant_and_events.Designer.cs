@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20260720095544_Added_New_Links_Between_Participant_and_events")]
+    partial class Added_New_Links_Between_Participant_and_events
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -529,8 +532,7 @@ namespace GameOn.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("MatchId", "Puuid")
-                        .HasName("AK_LoLGameParticipant_MatchId_Puuid");
+                    b.HasIndex("MatchId");
 
                     b.HasIndex("PlayerId");
 
@@ -631,12 +633,6 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("timeline_frame_id");
 
-                    b.Property<string>("MatchId")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("match_id");
-
                     b.Property<string>("MonsterSubType")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
@@ -716,14 +712,6 @@ namespace GameOn.Persistence.Migrations
 
                     b.HasIndex("LoLGameTimelineFrameId");
 
-                    b.HasIndex("MatchId", "CreatorPUUID");
-
-                    b.HasIndex("MatchId", "KillerPUUID");
-
-                    b.HasIndex("MatchId", "ParticipantPUUID");
-
-                    b.HasIndex("MatchId", "VictimPUUID");
-
                     b.ToTable("LeagueOfLegendsGameTimelineEvent", (string)null);
                 });
 
@@ -740,11 +728,6 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("timeline_event_id");
 
-                    b.Property<string>("MatchId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("match_id");
-
                     b.Property<int>("ParticipantId")
                         .HasColumnType("int")
                         .HasColumnName("participant_id");
@@ -757,8 +740,6 @@ namespace GameOn.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LoLGameTimelineEventId");
-
-                    b.HasIndex("MatchId", "ParticipantPUUID");
 
                     b.ToTable("LeagueOfLegendsGameTimelineEventAssist", (string)null);
                 });
@@ -1432,43 +1413,7 @@ namespace GameOn.Persistence.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Game_Frame_Event");
 
-                    b.HasOne("GameOn.Domain.LoLGameParticipant", "Creator")
-                        .WithMany()
-                        .HasForeignKey("MatchId", "CreatorPUUID")
-                        .HasPrincipalKey("MatchId", "Puuid")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_LoL_Event_Creator");
-
-                    b.HasOne("GameOn.Domain.LoLGameParticipant", "Killer")
-                        .WithMany()
-                        .HasForeignKey("MatchId", "KillerPUUID")
-                        .HasPrincipalKey("MatchId", "Puuid")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_LoL_Event_Killer");
-
-                    b.HasOne("GameOn.Domain.LoLGameParticipant", "Participant")
-                        .WithMany()
-                        .HasForeignKey("MatchId", "ParticipantPUUID")
-                        .HasPrincipalKey("MatchId", "Puuid")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_LoL_Event_Participant");
-
-                    b.HasOne("GameOn.Domain.LoLGameParticipant", "Victim")
-                        .WithMany()
-                        .HasForeignKey("MatchId", "VictimPUUID")
-                        .HasPrincipalKey("MatchId", "Puuid")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_LoL_Event_Victim");
-
-                    b.Navigation("Creator");
-
-                    b.Navigation("Killer");
-
-                    b.Navigation("Participant");
-
                     b.Navigation("TimelineFrame");
-
-                    b.Navigation("Victim");
                 });
 
             modelBuilder.Entity("GameOn.Domain.LoLGameTimelineEventAssist", b =>
@@ -1480,16 +1425,7 @@ namespace GameOn.Persistence.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_LoL_Game_Event_Assist");
 
-                    b.HasOne("GameOn.Domain.LoLGameParticipant", "Participant")
-                        .WithMany()
-                        .HasForeignKey("MatchId", "ParticipantPUUID")
-                        .HasPrincipalKey("MatchId", "Puuid")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_LoL_EventAssist_Participant");
-
                     b.Navigation("Event");
-
-                    b.Navigation("Participant");
                 });
 
             modelBuilder.Entity("GameOn.Domain.LoLGameTimelineFrame", b =>

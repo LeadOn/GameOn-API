@@ -22,5 +22,11 @@ namespace GameOn.External.RiotGames.Models.DTOs
         /// </summary>
         [JsonProperty("participantFrames")]
         public ParticipantFramesDto ParticipantFrames { get; set; } = new ParticipantFramesDto();
+
+        /// <summary>
+        /// Gets or sets events.
+        /// </summary>
+        [JsonProperty("events")]
+        public List<EventDto> Events { get; set; } = new List<EventDto>();
     }
 }
