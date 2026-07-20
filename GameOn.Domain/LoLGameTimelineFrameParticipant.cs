@@ -52,6 +52,16 @@ namespace GameOn.Domain
         public int ParticipantId { get; set; }
 
         /// <summary>
+        /// Gets or sets position X.
+        /// </summary>
+        public int PositionX { get; set; }
+
+        /// <summary>
+        /// Gets or sets position Y.
+        /// </summary>
+        public int PositionY { get; set; }
+
+        /// <summary>
         /// Gets or sets Time enemy spent controlled.
         /// </summary>
         public int TimeEnemySpentControlled { get; set; }
@@ -130,6 +140,131 @@ namespace GameOn.Domain
         /// Gets or sets true damage taken.
         /// </summary>
         public int TrueDamageTaken { get; set; }
+
+        /// <summary>
+        /// Gets or sets ability haste.
+        /// </summary>
+        public int AbilityHaste { get; set; }
+
+        /// <summary>
+        /// Gets or sets ability power.
+        /// </summary>
+        public int AbilityPower { get; set; }
+
+        /// <summary>
+        /// Gets or sets armor.
+        /// </summary>
+        public int Armor { get; set; }
+
+        /// <summary>
+        /// Gets or sets armor penetration.
+        /// </summary>
+        public int ArmorPen { get; set; }
+
+        /// <summary>
+        /// Gets or sets armor penetration percent.
+        /// </summary>
+        public int ArmorPenPercent { get; set; }
+
+        /// <summary>
+        /// Gets or sets attack damage.
+        /// </summary>
+        public int AttackDamage { get; set; }
+
+        /// <summary>
+        /// Gets or sets attack speed.
+        /// </summary>
+        public int AttackSpeed { get; set; }
+
+        /// <summary>
+        /// Gets or sets bonus armor penetration percent.
+        /// </summary>
+        public int BonusArmorPenPercent { get; set; }
+
+        /// <summary>
+        /// Gets or sets bonus magic penetration percent.
+        /// </summary>
+        public int BonusMagicPenPercent { get; set; }
+
+        /// <summary>
+        /// Gets or sets crowd control reduction.
+        /// </summary>
+        public int CcReduction { get; set; }
+
+        /// <summary>
+        /// Gets or sets cooldown reduction.
+        /// </summary>
+        public int CooldownReduction { get; set; }
+
+        /// <summary>
+        /// Gets or sets health.
+        /// </summary>
+        public int Health { get; set; }
+
+        /// <summary>
+        /// Gets or sets max health.
+        /// </summary>
+        public int HealthMax { get; set; }
+
+        /// <summary>
+        /// Gets or sets health regeneration.
+        /// </summary>
+        public int HealthRegen { get; set; }
+
+        /// <summary>
+        /// Gets or sets lifesteal.
+        /// </summary>
+        public int Lifesteal { get; set; }
+
+        /// <summary>
+        /// Gets or sets magic penetration.
+        /// </summary>
+        public int MagicPen { get; set; }
+
+        /// <summary>
+        /// Gets or sets magic penetration percent.
+        /// </summary>
+        public int MagicPenPercent { get; set; }
+
+        /// <summary>
+        /// Gets or sets magic resist.
+        /// </summary>
+        public int MagicResist { get; set; }
+
+        /// <summary>
+        /// Gets or sets movement speed.
+        /// </summary>
+        public int MovementSpeed { get; set; }
+
+        /// <summary>
+        /// Gets or sets omnivamp.
+        /// </summary>
+        public int Omnivamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets physical vamp.
+        /// </summary>
+        public int PhysicalVamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets power.
+        /// </summary>
+        public int Power { get; set; }
+
+        /// <summary>
+        /// Gets or sets max power.
+        /// </summary>
+        public int PowerMax { get; set; }
+
+        /// <summary>
+        /// Gets or sets power regeneration.
+        /// </summary>
+        public int PowerRegen { get; set; }
+
+        /// <summary>
+        /// Gets or sets spell vamp.
+        /// </summary>
+        public int SpellVamp { get; set; }
 
         /// <summary>
         /// Gets or sets Frame.

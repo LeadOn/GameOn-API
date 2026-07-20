@@ -47,9 +47,28 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                 throw new NotImplementedException("Game doesn't exist in Riot Games API!");
             }
 
-            // Updating game participants
+            var timelineFromRiot = await this.matchService.GetGameTimelineById(request.MatchId, cancellationToken);
+
+            if (timelineFromRiot is null)
+            {
+                throw new NotImplementedException("Timeline doesn't exist in Riot Games API!");
+            }
+
+            // Removing old timeline frames (and, by DB cascade, their events) first and committing
+            // before touching participants: LoLGameTimelineEvent has a Restrict FK to LoLGameParticipant,
+            // so old participants can't be deleted while old events still reference them.
+            var frames = await this.context.LeagueOfLegendsGameTimelineFrames.Where(x => x.MatchId == request.MatchId).ToListAsync(cancellationToken);
+            this.context.LeagueOfLegendsGameTimelineFrames.RemoveRange(frames);
+            await this.context.SaveChangesAsync(cancellationToken);
+
+            // Updating game participants. Committing the removal on its own, before adding the new
+            // participants (with the same MatchId+Puuid alternate key) and the new events that
+            // reference them by that same key: EF Core's change tracker otherwise gets confused
+            // between the about-to-be-deleted and about-to-be-added participants sharing the same
+            // key, and silently clears the events' *PUUID columns instead of persisting them.
             var participants = await this.context.LeagueOfLegendsGameParticipants.Where(x => x.MatchId == request.MatchId).ToListAsync(cancellationToken);
             this.context.LeagueOfLegendsGameParticipants.RemoveRange(participants);
+            await this.context.SaveChangesAsync(cancellationToken);
 
             foreach (var participant in matchFromRiot.Info.Participants)
             {
@@ -95,16 +114,6 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             }
 
             // Updating timeline
-            var timelineFromRiot = await this.matchService.GetGameTimelineById(request.MatchId, cancellationToken);
-
-            if (timelineFromRiot is null)
-            {
-                throw new NotImplementedException("Timeline doesn't exist in Riot Games API!");
-            }
-
-            var frames = await this.context.LeagueOfLegendsGameTimelineFrames.Where(x => x.MatchId == request.MatchId).ToListAsync(cancellationToken);
-            this.context.LeagueOfLegendsGameTimelineFrames.RemoveRange(frames);
-
             foreach (var frame in timelineFromRiot.Info.Frames)
             {
                 // Inserting / updating frame
@@ -131,6 +140,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                             MinionsKilled = participant.MinionsKilled,
                             ParticipantId = participant.ParticipantId,
                             ParticipantPUUID = puuid,
+                            PositionX = participant.Position?.X ?? 0,
+                            PositionY = participant.Position?.Y ?? 0,
                             TimeEnemySpentControlled = participant.TimeEnemySpentControlled,
                             TotalGold = participant.TotalGold,
                             Xp = participant.Xp,
@@ -146,10 +157,39 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                             TrueDamageTaken = participant.DamageStats.TrueDamageTaken,
                             TrueDamageDoneToChampions = participant.DamageStats.TrueDamageDoneToChampions,
                             PhysicalDamageTaken = participant.DamageStats.PhysicalDamageTaken,
+                            AbilityHaste = participant.ChampionStats.AbilityHaste,
+                            AbilityPower = participant.ChampionStats.AbilityPower,
+                            Armor = participant.ChampionStats.Armor,
+                            ArmorPen = participant.ChampionStats.ArmorPen,
+                            ArmorPenPercent = participant.ChampionStats.ArmorPenPercent,
+                            AttackDamage = participant.ChampionStats.AttackDamage,
+                            AttackSpeed = participant.ChampionStats.AttackSpeed,
+                            BonusArmorPenPercent = participant.ChampionStats.BonusArmorPenPercent,
+                            BonusMagicPenPercent = participant.ChampionStats.BonusMagicPenPercent,
+                            CcReduction = participant.ChampionStats.CcReduction,
+                            CooldownReduction = participant.ChampionStats.CooldownReduction,
+                            Health = participant.ChampionStats.Health,
+                            HealthMax = participant.ChampionStats.HealthMax,
+                            HealthRegen = participant.ChampionStats.HealthRegen,
+                            Lifesteal = participant.ChampionStats.Lifesteal,
+                            MagicPen = participant.ChampionStats.MagicPen,
+                            MagicPenPercent = participant.ChampionStats.MagicPenPercent,
+                            MagicResist = participant.ChampionStats.MagicResist,
+                            MovementSpeed = participant.ChampionStats.MovementSpeed,
+                            Omnivamp = participant.ChampionStats.Omnivamp,
+                            PhysicalVamp = participant.ChampionStats.PhysicalVamp,
+                            Power = participant.ChampionStats.Power,
+                            PowerMax = participant.ChampionStats.PowerMax,
+                            PowerRegen = participant.ChampionStats.PowerRegen,
+                            SpellVamp = participant.ChampionStats.SpellVamp,
                         });
     #pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                     }
                 }
+
+                frameInDb.LoLGameTimelineEvents = frame.Events
+                    .Select(evt => MapEvent(request.MatchId, evt, timelineFromRiot.Info.Participants))
+                    .ToList();
 
                 this.context.LeagueOfLegendsGameTimelineFrames.Add(frameInDb);
             }
@@ -158,6 +198,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             matchInDb.GameId = matchFromRiot.Info.GameId;
             matchInDb.EndOfGameResult = matchFromRiot.Info.EndOfGameResult;
             matchInDb.GameVersion = matchFromRiot.Info.GameVersion;
+            matchInDb.FrameInterval = timelineFromRiot.Info.FrameInterval;
 
             matchInDb.GameStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             matchInDb.GameStart = matchInDb.GameStart.AddMilliseconds(matchFromRiot.Info.GameStartTimeStamp).ToLocalTime();
@@ -187,6 +228,60 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 
             await this.context.SaveChangesAsync(cancellationToken);
             return matchInDb;
+        }
+
+        private static LoLGameTimelineEvent MapEvent(string matchId, EventDto evt, List<ParticipantTimeLineDto> participants)
+        {
+            string? ResolvePuuid(int? participantId)
+                => participantId is null ? null : participants.FirstOrDefault(x => x.ParticipantId == participantId)?.PUUID;
+
+            return new LoLGameTimelineEvent
+            {
+                MatchId = matchId,
+                Timestamp = evt.Timestamp,
+                RealTimestamp = evt.RealTimestamp,
+                EventType = evt.Type,
+                ParticipantId = evt.ParticipantId,
+                ParticipantPUUID = ResolvePuuid(evt.ParticipantId),
+                KillerId = evt.KillerId,
+                KillerPUUID = ResolvePuuid(evt.KillerId),
+                VictimId = evt.VictimId,
+                VictimPUUID = ResolvePuuid(evt.VictimId),
+                KillerTeamId = evt.KillerTeamId,
+                TeamId = evt.TeamId,
+                Bounty = evt.Bounty,
+                ShutdownBounty = evt.ShutdownBounty,
+                KillStreakLength = evt.KillStreakLength,
+                MultiKillLength = evt.MultiKillLength,
+                KillType = evt.KillType,
+                ItemId = evt.ItemId,
+                BeforeId = evt.BeforeId,
+                AfterId = evt.AfterId,
+                GoldGain = evt.GoldGain,
+                SkillSlot = evt.SkillSlot,
+                LevelUpType = evt.LevelUpType,
+                Level = evt.Level,
+                WardType = evt.WardType,
+                CreatorId = evt.CreatorId,
+                CreatorPUUID = ResolvePuuid(evt.CreatorId),
+                BuildingType = evt.BuildingType,
+                TowerType = evt.TowerType,
+                LaneType = evt.LaneType,
+                MonsterType = evt.MonsterType,
+                MonsterSubType = evt.MonsterSubType,
+                TransformType = evt.TransformType,
+                DragonSoulType = evt.DragonSoulType,
+                PositionX = evt.Position?.X,
+                PositionY = evt.Position?.Y,
+                LoLGameTimelineEventAssists = evt.AssistingParticipantIds?
+                    .Select(participantId => new LoLGameTimelineEventAssist
+                    {
+                        MatchId = matchId,
+                        ParticipantId = participantId,
+                        ParticipantPUUID = ResolvePuuid(participantId),
+                    })
+                    .ToList() ?? new List<LoLGameTimelineEventAssist>(),
+            };
         }
     }
 }

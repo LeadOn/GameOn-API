@@ -30,6 +30,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameTimelineByMa
         {
             return await this.context.LeagueOfLegendsGameTimelineFrames
                 .Include(x => x.LoLGameTimelineFrameParticipants)
+                .Include(x => x.LoLGameTimelineEvents)
+                    .ThenInclude(e => e.LoLGameTimelineEventAssists)
                 .OrderBy(x => x.Timestamp)
                 .Where(x => x.MatchId == request.MatchId)
                 .ToListAsync(cancellationToken);
