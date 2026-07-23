@@ -16,7 +16,8 @@ namespace GameOn.Persistence
     public class GameOnContext : DbContext, IApplicationDbContext
     {
         // SQL Connection string
-        private readonly string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING");
+        private readonly string connectionString =
+            "Server=192.168.1.45;Database=gameondev;User Id=sa;Password=^FVfUX%0S7$k*7oZ;Encrypt=False";//Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? throw new MissingEnvironmentVariableException("DB_CONNECTION_STRING");
 
         /// <summary>
         /// Gets or sets Players.
@@ -92,6 +93,11 @@ namespace GameOn.Persistence
         /// Gets or sets LoL Game Timeline Frame Participant.
         /// </summary>
         public DbSet<LoLGameTimelineFrameParticipant> LeagueOfLegendsGameTimelineFrameParticipants { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets LoL Game Participant Stats.
+        /// </summary>
+        public DbSet<LoLGameParticipantStat> LeagueOfLegendsGameParticipantStats { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets LoL Queues.
@@ -805,6 +811,63 @@ namespace GameOn.Persistence
                     .WithMany(f => f.LeagueOfLegendsGameParticipants)
                     .HasForeignKey(e => e.PlayerId)
                     .HasConstraintName("FK_Player_LoL_Game_Participant")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameParticipantStat>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsGameParticipantStat");
+
+                entity.Property(e => e.LoLGameParticipantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("lol_game_participant_id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.LoLGameParticipantId);
+
+                entity.Property(e => e.GameDurationSeconds)
+                    .HasColumnName("game_duration_seconds");
+
+                entity.Property(e => e.Kda)
+                    .HasColumnName("kda");
+
+                entity.Property(e => e.KillParticipationPercent)
+                    .HasColumnName("kill_participation_percent");
+
+                entity.Property(e => e.CreepScore)
+                    .HasColumnName("creep_score");
+
+                entity.Property(e => e.CsPerMinute)
+                    .HasColumnName("cs_per_minute");
+
+                entity.Property(e => e.GoldEarned)
+                    .HasColumnName("gold_earned");
+
+                entity.Property(e => e.GoldPerMinute)
+                    .HasColumnName("gold_per_minute");
+
+                entity.Property(e => e.DamageDealtToChampions)
+                    .HasColumnName("damage_dealt_to_champions");
+
+                entity.Property(e => e.DamagePerMinute)
+                    .HasColumnName("damage_per_minute");
+
+                entity.Property(e => e.DamageTaken)
+                    .HasColumnName("damage_taken");
+
+                entity.Property(e => e.WardsPlaced)
+                    .HasColumnName("wards_placed");
+
+                entity.Property(e => e.WardsKilled)
+                    .HasColumnName("wards_killed");
+
+                entity.Property(e => e.ComputedOn)
+                    .HasColumnName("computed_on");
+
+                entity.HasOne(e => e.Participant)
+                    .WithOne(p => p.Stats)
+                    .HasForeignKey<LoLGameParticipantStat>(e => e.LoLGameParticipantId)
+                    .HasConstraintName("FK_LoL_Game_Participant_Stat")
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

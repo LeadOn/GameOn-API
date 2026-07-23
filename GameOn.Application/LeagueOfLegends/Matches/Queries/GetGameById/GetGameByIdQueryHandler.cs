@@ -31,6 +31,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById
             return await this.context.LeagueOfLegendsGames
                 .Include(x => x.LeagueOfLegendsGameParticipants)
                 .ThenInclude(y => y.Player)
+                .Include(x => x.LeagueOfLegendsGameParticipants)
+                .ThenInclude(y => y.Stats)
                 .FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
         }
     }

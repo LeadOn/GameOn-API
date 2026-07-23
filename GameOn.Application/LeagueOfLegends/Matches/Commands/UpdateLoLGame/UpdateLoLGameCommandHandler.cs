@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 {
+    using GameOn.Application.LeagueOfLegends.Matches.Services;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
@@ -70,6 +71,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             this.context.LeagueOfLegendsGameParticipants.RemoveRange(participants);
             await this.context.SaveChangesAsync(cancellationToken);
 
+            var participantsInDb = new List<LoLGameParticipant>();
+
             foreach (var participant in matchFromRiot.Info.Participants)
             {
                 var participantInDb = new LoLGameParticipant
@@ -111,7 +114,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                 }
 
                 this.context.LeagueOfLegendsGameParticipants.Add(participantInDb);
+                participantsInDb.Add(participantInDb);
             }
+
+            var framesInDb = new List<LoLGameTimelineFrame>();
 
             // Updating timeline
             foreach (var frame in timelineFromRiot.Info.Frames)
@@ -192,7 +198,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     .ToList();
 
                 this.context.LeagueOfLegendsGameTimelineFrames.Add(frameInDb);
+                framesInDb.Add(frameInDb);
             }
+
+            ComputeParticipantStats(participantsInDb, framesInDb);
 
             // Updating game
             matchInDb.GameId = matchFromRiot.Info.GameId;
@@ -228,6 +237,48 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 
             await this.context.SaveChangesAsync(cancellationToken);
             return matchInDb;
+        }
+
+        private static void ComputeParticipantStats(List<LoLGameParticipant> participants, List<LoLGameTimelineFrame> frames)
+        {
+            var lastFrameTimestampMs = frames.Count > 0 ? frames.Max(f => f.Timestamp) : 0;
+
+            var lastFrameParticipants = frames
+                .Where(f => f.Timestamp == lastFrameTimestampMs)
+                .SelectMany(f => f.LoLGameTimelineFrameParticipants)
+                .GroupBy(p => p.ParticipantPUUID)
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var events = frames.SelectMany(f => f.LoLGameTimelineEvents).ToList();
+
+            var wardsPlacedByPuuid = events
+                .Where(e => e.EventType == "WARD_PLACED" && e.CreatorPUUID is not null)
+                .GroupBy(e => e.CreatorPUUID!)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var wardsKilledByPuuid = events
+                .Where(e => e.EventType == "WARD_KILL" && e.KillerPUUID is not null)
+                .GroupBy(e => e.KillerPUUID!)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            foreach (var teamParticipants in participants.GroupBy(p => p.TeamId))
+            {
+                var teamKills = teamParticipants.Sum(p => p.Kills);
+
+                foreach (var participant in teamParticipants)
+                {
+                    lastFrameParticipants.TryGetValue(participant.Puuid, out var lastFrame);
+
+                    participant.Stats = LoLGameParticipantStatCalculator.Compute(
+                        participant,
+                        teamKills,
+                        lastFrame,
+                        lastFrameTimestampMs,
+                        wardsPlacedByPuuid.GetValueOrDefault(participant.Puuid),
+                        wardsKilledByPuuid.GetValueOrDefault(participant.Puuid),
+                        participant.Stats);
+                }
+            }
         }
 
         private static LoLGameTimelineEvent MapEvent(string matchId, EventDto evt, List<ParticipantTimeLineDto> participants)
