@@ -53,6 +53,16 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                     query = query.Where(x => x.QueueId.HasValue && request.QueueIds.Contains(x.QueueId.Value));
                 }
 
+                if (request.StartDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart >= request.StartDate.Value);
+                }
+
+                if (request.EndDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart <= request.EndDate.Value);
+                }
+
                 var count = await query.CountAsync(cancellationToken);
                 var resultsFromDb = await query
                     .OrderByDescending(x => x.GameStart)
@@ -95,6 +105,16 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 if (request.QueueIds is { Count: > 0 })
                 {
                     query = query.Where(x => x.QueueId.HasValue && request.QueueIds.Contains(x.QueueId.Value));
+                }
+
+                if (request.StartDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart >= request.StartDate.Value);
+                }
+
+                if (request.EndDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart <= request.EndDate.Value);
                 }
 
                 var count = await query.CountAsync(cancellationToken);
