@@ -40,10 +40,17 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Services
 
             var stat = target ?? new LoLGameParticipantStat();
 
+            // Riot computes KDA and kill participation itself (via the match "challenges" object) once a
+            // match has been (re)imported after that field was added; no need to recompute it ourselves
+            // when it's available. Older/not-yet-resynced participants fall back to the manual formula.
             stat.LoLGameParticipantId = participant.Id;
             stat.GameDurationSeconds = lastFrameTimestampMs / 1000;
-            stat.Kda = Math.Round((participant.Kills + participant.Assists) / (double)Math.Max(participant.Deaths, 1), 2);
-            stat.KillParticipationPercent = teamKills > 0 ? Math.Round(100.0 * (participant.Kills + participant.Assists) / teamKills, 1) : 0;
+            stat.Kda = participant.Challenges is not null
+                ? Math.Round(participant.Challenges.Kda, 2)
+                : Math.Round((participant.Kills + participant.Assists) / (double)Math.Max(participant.Deaths, 1), 2);
+            stat.KillParticipationPercent = participant.Challenges is not null
+                ? Math.Round(100.0 * participant.Challenges.KillParticipation, 1)
+                : teamKills > 0 ? Math.Round(100.0 * (participant.Kills + participant.Assists) / teamKills, 1) : 0;
             stat.CreepScore = creepScore;
             stat.CsPerMinute = durationMinutes > 0 ? Math.Round(creepScore / durationMinutes, 2) : 0;
             stat.GoldEarned = goldEarned;

@@ -41,7 +41,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
             if (request.PlayerId is null)
             {
-                query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats);
+                query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats)
+                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges);
 
                 if (request.RankedGamesOnly == true)
                 {
@@ -95,6 +96,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = matchesFromRiot.ToList(), Player = playerInDb });
 
                 query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats)
+                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges)
                     .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId));
 
                 if (request.RankedGamesOnly == true)

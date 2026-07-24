@@ -4,6 +4,7 @@ using GameOn.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOn.Persistence.Migrations
 {
     [DbContext(typeof(GameOnContext))]
-    partial class GameOnContextModelSnapshot : ModelSnapshot
+    [Migration("20260724113700_Added_New_Fields_In_LoL_Game")]
+    partial class Added_New_Fields_In_LoL_Game
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -578,8 +581,8 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("blast_cone_opposite_opponent_count");
 
-                    b.Property<float>("BountyGold")
-                        .HasColumnType("real")
+                    b.Property<int>("BountyGold")
+                        .HasColumnType("int")
                         .HasColumnName("bounty_gold");
 
                     b.Property<int>("BuffsStolen")
@@ -626,16 +629,16 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("dragon_takedowns");
 
-                    b.Property<float>("EarliestBaron")
-                        .HasColumnType("real")
+                    b.Property<int>("EarliestBaron")
+                        .HasColumnType("int")
                         .HasColumnName("earliest_baron");
 
-                    b.Property<float>("EarliestDragonTakedown")
-                        .HasColumnType("real")
+                    b.Property<int>("EarliestDragonTakedown")
+                        .HasColumnType("int")
                         .HasColumnName("earliest_dragon_takedown");
 
-                    b.Property<float>("EarliestElderDragon")
-                        .HasColumnType("real")
+                    b.Property<int>("EarliestElderDragon")
+                        .HasColumnType("int")
                         .HasColumnName("earliest_elder_dragon");
 
                     b.Property<int>("EarlyLaningPhaseGoldExpAdvantage")
@@ -682,8 +685,8 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("faster_support_quest_completion");
 
-                    b.Property<float>("FastestLegendary")
-                        .HasColumnType("real")
+                    b.Property<int>("FastestLegendary")
+                        .HasColumnType("int")
                         .HasColumnName("fastest_legendary");
 
                     b.Property<int>("FistBumpParticipation")
@@ -986,8 +989,8 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("teleport_takedowns");
 
-                    b.Property<float>("ThirdInhibitorDestroyedTime")
-                        .HasColumnType("real")
+                    b.Property<int>("ThirdInhibitorDestroyedTime")
+                        .HasColumnType("int")
                         .HasColumnName("third_inhibitor_destroyed_time");
 
                     b.Property<int>("ThreeWardsOneSweeperCount")

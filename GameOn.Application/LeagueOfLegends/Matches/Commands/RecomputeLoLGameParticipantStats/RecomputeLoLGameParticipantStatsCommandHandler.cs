@@ -46,6 +46,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGamePa
         {
             var participants = await this.context.LeagueOfLegendsGameParticipants
                 .Include(x => x.Stats)
+                .Include(x => x.Challenges)
                 .Where(x => matchIds.Contains(x.MatchId))
                 .ToListAsync(cancellationToken);
 
