@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>7.2.1</Version>
-    <PackageReleaseNotes>Now having full details in LoL game history</PackageReleaseNotes>
+    <Version>7.2.4</Version>
+    <PackageReleaseNotes>Added way more data in LoL Games</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

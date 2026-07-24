@@ -1,752 +1,638 @@
-﻿// <copyright file="ChallengesDto.cs" company="LeadOn's Corp'">
+// <copyright file="LoLGameParticipantChallenge.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.External.RiotGames.Models.DTOs
+namespace GameOn.Domain
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     /// <summary>
-    /// ChallengesDto class.
+    /// LoLGameParticipantChallenge class. Mirrors Riot's own derived "challenges" stats for a
+    /// participant (KDA, kill participation, damage/min, ...), persisted as-is so the app doesn't
+    /// have to recompute what Riot already computes. <see cref="GameOn.External.RiotGames.Models.DTOs.ChallengesDto"/>
+    /// is the source DTO this entity mirrors field-for-field, except <c>legendaryItemUsed</c> (a list, not persisted).
     /// </summary>
-    public class ChallengesDto
+    public class LoLGameParticipantChallenge
     {
         /// <summary>
-        /// Gets or sets 12 Assist Streak count.
+        /// Gets or sets the LoL Game Participant ID (shared primary key / foreign key).
         /// </summary>
-        [JsonProperty("12AssistStreakCount")]
+        public int LoLGameParticipantId { get; set; }
+
+        /// <summary>
+        /// Gets or sets 12 assist streak count.
+        /// </summary>
         public int OneTwoAssistStreakCount { get; set; }
 
         /// <summary>
-        /// Gets or sets barron buff gold advantage over threshold.
+        /// Gets or sets baron buff gold advantage over threshold.
         /// </summary>
-        [JsonProperty("baronBuffGoldAdvantageOverThreshold")]
         public int BaronBuffGoldAdvantageOverThreshold { get; set; }
 
         /// <summary>
-        /// Gets or sets control wqrd time coverage in river or ennemy half.
+        /// Gets or sets control ward time coverage in river or enemy half.
         /// </summary>
-        [JsonProperty("controlWardTimeCoverageInRiverOrEnemyHalf")]
         public float ControlWardTimeCoverageInRiverOrEnemyHalf { get; set; }
 
         /// <summary>
-        /// Gets or sets Earliest baron.
+        /// Gets or sets earliest baron.
         /// </summary>
-        [JsonProperty("earliestBaron")]
         public float EarliestBaron { get; set; }
 
         /// <summary>
-        /// Gets or sets Earliest Dragon Takedown.
+        /// Gets or sets earliest dragon takedown.
         /// </summary>
-        [JsonProperty("earliestDragonTakedown")]
         public float EarliestDragonTakedown { get; set; }
 
         /// <summary>
         /// Gets or sets earliest elder dragon.
         /// </summary>
-        [JsonProperty("earliestElderDragon")]
         public float EarliestElderDragon { get; set; }
 
         /// <summary>
-        /// Gets or sets Early Laning Phase Gold Exp Advantage.
+        /// Gets or sets early laning phase gold experience advantage.
         /// </summary>
-        [JsonProperty("earlyLaningPhaseGoldExpAdvantage")]
         public int EarlyLaningPhaseGoldExpAdvantage { get; set; }
 
         /// <summary>
         /// Gets or sets faster support quest completion.
         /// </summary>
-        [JsonProperty("fasterSupportQuestCompletion")]
         public int FasterSupportQuestCompletion { get; set; }
 
         /// <summary>
         /// Gets or sets fastest legendary.
         /// </summary>
-        [JsonProperty("fastestLegendary")]
         public float FastestLegendary { get; set; }
 
         /// <summary>
-        /// Gets or sets had AFK Teammate.
+        /// Gets or sets had AFK teammate.
         /// </summary>
-        [JsonProperty("hadAfkTeammate")]
         public int HadAfkTeammate { get; set; }
 
         /// <summary>
         /// Gets or sets highest champion damage.
         /// </summary>
-        [JsonProperty("highestChampionDamage")]
         public int HighestChampionDamage { get; set; }
 
         /// <summary>
-        /// Gets or sets Highest crowd control score.
+        /// Gets or sets highest crowd control score.
         /// </summary>
-        [JsonProperty("highestCrowdControlScore")]
         public int HighestCrowdControlScore { get; set; }
 
         /// <summary>
         /// Gets or sets highest ward kills.
         /// </summary>
-        [JsonProperty("highestWardKills")]
         public int HighestWardKills { get; set; }
 
         /// <summary>
         /// Gets or sets jungler kills early jungle.
         /// </summary>
-        [JsonProperty("junglerKillsEarlyJungle")]
         public int JunglerKillsEarlyJungle { get; set; }
 
         /// <summary>
         /// Gets or sets kills on laners early jungle as jungler.
         /// </summary>
-        [JsonProperty("killsOnLanersEarlyJungleAsJungler")]
         public int KillsOnLanersEarlyJungleAsJungler { get; set; }
 
         /// <summary>
         /// Gets or sets laning phase gold experience advantage.
         /// </summary>
-        [JsonProperty("laningPhaseGoldExpAdvantage")]
         public int LaningPhaseGoldExpAdvantage { get; set; }
 
         /// <summary>
         /// Gets or sets legendary count.
         /// </summary>
-        [JsonProperty("legendaryCount")]
         public int LegendaryCount { get; set; }
 
         /// <summary>
-        /// Gets or sets max CS Advantage on Lane opponent.
+        /// Gets or sets max CS advantage on lane opponent.
         /// </summary>
-        [JsonProperty("maxCsAdvantageOnLaneOpponent")]
         public float MaxCsAdvantageOnLaneOpponent { get; set; }
 
         /// <summary>
         /// Gets or sets max level lead lane opponent.
         /// </summary>
-        [JsonProperty("maxLevelLeadLaneOpponent")]
         public int MaxLevelLeadLaneOpponent { get; set; }
 
         /// <summary>
         /// Gets or sets most wards destroyed one sweeper.
         /// </summary>
-        [JsonProperty("mostWardsDestroyedOneSweeper")]
         public int MostWardsDestroyedOneSweeper { get; set; }
 
         /// <summary>
-        /// Gets or sets Mythic item used.
+        /// Gets or sets mythic item used.
         /// </summary>
-        [JsonProperty("mythicItemUsed")]
         public int MythicItemUsed { get; set; }
 
         /// <summary>
         /// Gets or sets played champ select position.
         /// </summary>
-        [JsonProperty("playedChampSelectPosition")]
         public int PlayedChampSelectPosition { get; set; }
 
         /// <summary>
         /// Gets or sets solo turrets lategame.
         /// </summary>
-        [JsonProperty("soloTurretsLategame")]
         public int SoloTurretsLategame { get; set; }
 
         /// <summary>
         /// Gets or sets takedowns first 25 minutes.
         /// </summary>
-        [JsonProperty("takedownsFirst25Minutes")]
         public int TakedownsFirst25Minutes { get; set; }
 
         /// <summary>
         /// Gets or sets teleport takedowns.
         /// </summary>
-        [JsonProperty("teleportTakedowns")]
         public int TeleportTakedowns { get; set; }
 
         /// <summary>
         /// Gets or sets third inhibitor destroyed time.
         /// </summary>
-        [JsonProperty("thirdInhibitorDestroyedTime")]
         public float ThirdInhibitorDestroyedTime { get; set; }
 
         /// <summary>
         /// Gets or sets three wards one sweeper count.
         /// </summary>
-        [JsonProperty("threeWardsOneSweeperCount")]
         public int ThreeWardsOneSweeperCount { get; set; }
 
         /// <summary>
-        /// Gets or sets vision Score Advantage Lane Opponent.
+        /// Gets or sets vision score advantage lane opponent.
         /// </summary>
-        [JsonProperty("visionScoreAdvantageLaneOpponent")]
         public float VisionScoreAdvantageLaneOpponent { get; set; }
 
         /// <summary>
         /// Gets or sets infernal scale pickup.
         /// </summary>
-        [JsonProperty("InfernalScalePickup")]
         public int InfernalScalePickup { get; set; }
 
         /// <summary>
         /// Gets or sets fist bump participation.
         /// </summary>
-        [JsonProperty("fistBumpParticipation")]
         public int FistBumpParticipation { get; set; }
 
         /// <summary>
         /// Gets or sets void monster kill.
         /// </summary>
-        [JsonProperty("voidMonsterKill")]
         public int VoidMonsterKill { get; set; }
 
         /// <summary>
-        /// Gets or sets Ability Uses.
+        /// Gets or sets ability uses.
         /// </summary>
-        [JsonProperty("abilityUses")]
         public int AbilityUses { get; set; }
 
         /// <summary>
         /// Gets or sets aces before 15 minutes.
         /// </summary>
-        [JsonProperty("acesBefore15Minutes")]
         public int AcesBefore15Minutes { get; set; }
 
         /// <summary>
-        /// Gets or sets Allied Jungle Monster Kills.
+        /// Gets or sets allied jungle monster kills.
         /// </summary>
-        [JsonProperty("alliedJungleMonsterKills")]
         public float AlliedJungleMonsterKills { get; set; }
 
         /// <summary>
-        /// Gets or sets baron Takedowns.
+        /// Gets or sets baron takedowns.
         /// </summary>
-        [JsonProperty("baronTakedowns")]
         public int BaronTakedowns { get; set; }
 
         /// <summary>
         /// Gets or sets blast cone opposite opponent count.
         /// </summary>
-        [JsonProperty("blastConeOppositeOpponentCount")]
         public int BlastConeOppositeOpponentCount { get; set; }
 
         /// <summary>
         /// Gets or sets bounty gold.
         /// </summary>
-        [JsonProperty("bountyGold")]
         public float BountyGold { get; set; }
 
         /// <summary>
         /// Gets or sets buffs stolen.
         /// </summary>
-        [JsonProperty("buffsStolen")]
         public int BuffsStolen { get; set; }
 
         /// <summary>
         /// Gets or sets complete support quest in time.
         /// </summary>
-        [JsonProperty("completeSupportQuestInTime")]
         public int CompleteSupportQuestInTime { get; set; }
 
         /// <summary>
         /// Gets or sets control wards placed.
         /// </summary>
-        [JsonProperty("controlWardsPlaced")]
         public int ControlWardsPlaced { get; set; }
 
         /// <summary>
-        /// Gets or sets damages per minute.
+        /// Gets or sets damage per minute.
         /// </summary>
-        [JsonProperty("damagePerMinute")]
         public float DamagePerMinute { get; set; }
 
         /// <summary>
         /// Gets or sets damage taken on team percentage.
         /// </summary>
-        [JsonProperty("damageTakenOnTeamPercentage")]
         public float DamageTakenOnTeamPercentage { get; set; }
 
         /// <summary>
         /// Gets or sets danced with rift herald.
         /// </summary>
-        [JsonProperty("dancedWithRiftHerald")]
         public int DancedWithRiftHerald { get; set; }
 
         /// <summary>
         /// Gets or sets deaths by enemy champs.
         /// </summary>
-        [JsonProperty("deathsByEnemyChamps")]
         public int DeathsByEnemyChamps { get; set; }
 
         /// <summary>
         /// Gets or sets dodge skill shots small window.
         /// </summary>
-        [JsonProperty("dodgeSkillShotsSmallWindow")]
         public int DodgeSkillShotsSmallWindow { get; set; }
 
         /// <summary>
-        /// Gets or sets double Aces.
+        /// Gets or sets double aces.
         /// </summary>
-        [JsonProperty("doubleAces")]
         public int DoubleAces { get; set; }
 
         /// <summary>
         /// Gets or sets dragon takedowns.
         /// </summary>
-        [JsonProperty("dragonTakedowns")]
         public int DragonTakedowns { get; set; }
-
-        /// <summary>
-        /// Gets or sets legendary item used.
-        /// </summary>
-        [JsonProperty("legendaryItemUsed")]
-        public List<int> LegendaryItemUsed { get; set; } = new List<int>();
 
         /// <summary>
         /// Gets or sets effective heal and shielding.
         /// </summary>
-        [JsonProperty("effectiveHealAndShielding")]
         public float EffectiveHealAndShielding { get; set; }
 
         /// <summary>
-        /// Gets or sets elder Dragon Kills With Opposing Soul.
+        /// Gets or sets elder dragon kills with opposing soul.
         /// </summary>
-        [JsonProperty("elderDragonKillsWithOpposingSoul")]
         public int ElderDragonKillsWithOpposingSoul { get; set; }
 
         /// <summary>
-        /// Gets or sets elder dragon multi kills.
+        /// Gets or sets elder dragon multikills.
         /// </summary>
-        [JsonProperty("elderDragonMultikills")]
         public int ElderDragonMultikills { get; set; }
 
         /// <summary>
         /// Gets or sets enemy champion immobilizations.
         /// </summary>
-        [JsonProperty("enemyChampionImmobilizations")]
         public int EnemyChampionImmobilizations { get; set; }
 
         /// <summary>
         /// Gets or sets enemy jungle monster kills.
         /// </summary>
-        [JsonProperty("enemyJungleMonsterKills")]
         public float EnemyJungleMonsterKills { get; set; }
 
         /// <summary>
         /// Gets or sets epic monster kills near enemy jungler.
         /// </summary>
-        [JsonProperty("epicMonsterKillsNearEnemyJungler")]
         public int EpicMonsterKillsNearEnemyJungler { get; set; }
 
         /// <summary>
         /// Gets or sets epic monster kills within 30 seconds of spawn.
         /// </summary>
-        [JsonProperty("epicMonsterKillsWithin30SecondsOfSpawn")]
         public int EpicMonsterKillsWithin30SecondsOfSpawn { get; set; }
 
         /// <summary>
         /// Gets or sets epic monster steals.
         /// </summary>
-        [JsonProperty("epicMonsterSteals")]
         public int EpicMonsterSteals { get; set; }
 
         /// <summary>
         /// Gets or sets epic monster stolen without smite.
         /// </summary>
-        [JsonProperty("epicMonsterStolenWithoutSmite")]
         public int EpicMonsterStolenWithoutSmite { get; set; }
 
         /// <summary>
         /// Gets or sets flawless aces.
         /// </summary>
-        [JsonProperty("flawlessAces")]
         public int FlawlessAces { get; set; }
 
         /// <summary>
         /// Gets or sets full team takedown.
         /// </summary>
-        [JsonProperty("fullTeamTakedown")]
         public int FullTeamTakedown { get; set; }
 
         /// <summary>
         /// Gets or sets game length, in seconds.
         /// </summary>
-        [JsonProperty("gameLength")]
         public float GameLength { get; set; }
 
         /// <summary>
         /// Gets or sets gold earned per minute.
         /// </summary>
-        [JsonProperty("goldPerMinute")]
         public float GoldPerMinute { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the team had an open nexus.
         /// </summary>
-        [JsonProperty("hadOpenNexus")]
         public int HadOpenNexus { get; set; }
 
         /// <summary>
         /// Gets or sets immobilize and kill with ally.
         /// </summary>
-        [JsonProperty("immobilizeAndKillWithAlly")]
         public int ImmobilizeAndKillWithAlly { get; set; }
 
         /// <summary>
         /// Gets or sets jungle CS before 10 minutes.
         /// </summary>
-        [JsonProperty("jungleCsBefore10Minutes")]
         public float JungleCsBefore10Minutes { get; set; }
 
         /// <summary>
         /// Gets or sets jungler takedowns near damaged epic monster.
         /// </summary>
-        [JsonProperty("junglerTakedownsNearDamagedEpicMonster")]
         public int JunglerTakedownsNearDamagedEpicMonster { get; set; }
 
         /// <summary>
         /// Gets or sets the KDA ratio, as computed by Riot.
         /// </summary>
-        [JsonProperty("kda")]
         public float Kda { get; set; }
 
         /// <summary>
         /// Gets or sets kill after hidden with ally.
         /// </summary>
-        [JsonProperty("killAfterHiddenWithAlly")]
         public int KillAfterHiddenWithAlly { get; set; }
 
         /// <summary>
         /// Gets or sets the kill participation percentage (0-1), as computed by Riot.
         /// </summary>
-        [JsonProperty("killParticipation")]
         public float KillParticipation { get; set; }
 
         /// <summary>
         /// Gets or sets kills near enemy turret.
         /// </summary>
-        [JsonProperty("killsNearEnemyTurret")]
         public int KillsNearEnemyTurret { get; set; }
 
         /// <summary>
         /// Gets or sets kills on other lanes early as jungler on a laner.
         /// </summary>
-        [JsonProperty("killsOnOtherLanesEarlyJungleAsLaner")]
         public int KillsOnOtherLanesEarlyJungleAsLaner { get; set; }
 
         /// <summary>
         /// Gets or sets kills under own turret.
         /// </summary>
-        [JsonProperty("killsUnderOwnTurret")]
         public int KillsUnderOwnTurret { get; set; }
 
         /// <summary>
         /// Gets or sets kills with help from an epic monster buff.
         /// </summary>
-        [JsonProperty("killsWithHelpFromEpicMonster")]
         public int KillsWithHelpFromEpicMonster { get; set; }
 
         /// <summary>
         /// Gets or sets knock enemy into team and kill.
         /// </summary>
-        [JsonProperty("knockEnemyIntoTeamAndKill")]
         public int KnockEnemyIntoTeamAndKill { get; set; }
 
         /// <summary>
         /// Gets or sets turrets destroyed before plates fall.
         /// </summary>
-        [JsonProperty("kTurretsDestroyedBeforePlatesFall")]
         public int KTurretsDestroyedBeforePlatesFall { get; set; }
 
         /// <summary>
         /// Gets or sets land skill shots early game.
         /// </summary>
-        [JsonProperty("landSkillShotsEarlyGame")]
         public int LandSkillShotsEarlyGame { get; set; }
 
         /// <summary>
         /// Gets or sets lane minions killed in the first 10 minutes.
         /// </summary>
-        [JsonProperty("laneMinionsFirst10Minutes")]
         public int LaneMinionsFirst10Minutes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether an inhibitor was lost.
         /// </summary>
-        [JsonProperty("lostAnInhibitor")]
         public int LostAnInhibitor { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum kill deficit.
         /// </summary>
-        [JsonProperty("maxKillDeficit")]
         public int MaxKillDeficit { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Mejai's was fully stacked in time.
         /// </summary>
-        [JsonProperty("mejaisFullStackInTime")]
         public int MejaisFullStackInTime { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether more enemy jungle was taken than the opponent jungler.
         /// </summary>
-        [JsonProperty("moreEnemyJungleThanOpponent")]
         public float MoreEnemyJungleThanOpponent { get; set; }
 
         /// <summary>
         /// Gets or sets multikills with a single spell.
         /// </summary>
-        [JsonProperty("multiKillOneSpell")]
         public int MultiKillOneSpell { get; set; }
 
         /// <summary>
         /// Gets or sets the total number of multikills.
         /// </summary>
-        [JsonProperty("multikills")]
         public int Multikills { get; set; }
 
         /// <summary>
         /// Gets or sets multikills after an aggressive flash.
         /// </summary>
-        [JsonProperty("multikillsAfterAggressiveFlash")]
         public int MultikillsAfterAggressiveFlash { get; set; }
 
         /// <summary>
         /// Gets or sets multi rift herald turret count.
         /// </summary>
-        [JsonProperty("multiTurretRiftHeraldCount")]
         public int MultiTurretRiftHeraldCount { get; set; }
 
         /// <summary>
         /// Gets or sets outer turret executes before 10 minutes.
         /// </summary>
-        [JsonProperty("outerTurretExecutesBefore10Minutes")]
         public int OuterTurretExecutesBefore10Minutes { get; set; }
 
         /// <summary>
         /// Gets or sets outnumbered kills.
         /// </summary>
-        [JsonProperty("outnumberedKills")]
         public int OutnumberedKills { get; set; }
 
         /// <summary>
         /// Gets or sets outnumbered nexus kill.
         /// </summary>
-        [JsonProperty("outnumberedNexusKill")]
         public int OutnumberedNexusKill { get; set; }
 
         /// <summary>
         /// Gets or sets perfect dragon souls taken.
         /// </summary>
-        [JsonProperty("perfectDragonSoulsTaken")]
         public int PerfectDragonSoulsTaken { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the game was a perfect game.
         /// </summary>
-        [JsonProperty("perfectGame")]
         public int PerfectGame { get; set; }
 
         /// <summary>
         /// Gets or sets pick kill with ally.
         /// </summary>
-        [JsonProperty("pickKillWithAlly")]
         public int PickKillWithAlly { get; set; }
 
         /// <summary>
         /// Gets or sets poro explosions.
         /// </summary>
-        [JsonProperty("poroExplosions")]
         public int PoroExplosions { get; set; }
 
         /// <summary>
         /// Gets or sets quick cleanse.
         /// </summary>
-        [JsonProperty("quickCleanse")]
         public int QuickCleanse { get; set; }
 
         /// <summary>
         /// Gets or sets quick first turret.
         /// </summary>
-        [JsonProperty("quickFirstTurret")]
         public int QuickFirstTurret { get; set; }
 
         /// <summary>
         /// Gets or sets rift herald takedowns.
         /// </summary>
-        [JsonProperty("riftHeraldTakedowns")]
         public int RiftHeraldTakedowns { get; set; }
 
         /// <summary>
         /// Gets or sets save ally from death.
         /// </summary>
-        [JsonProperty("saveAllyFromDeath")]
         public int SaveAllyFromDeath { get; set; }
 
         /// <summary>
         /// Gets or sets scuttle crab kills.
         /// </summary>
-        [JsonProperty("scuttleCrabKills")]
         public int ScuttleCrabKills { get; set; }
 
         /// <summary>
         /// Gets or sets skill shots dodged.
         /// </summary>
-        [JsonProperty("skillshotsDodged")]
         public int SkillshotsDodged { get; set; }
 
         /// <summary>
         /// Gets or sets skill shots hit.
         /// </summary>
-        [JsonProperty("skillshotsHit")]
         public int SkillshotsHit { get; set; }
 
         /// <summary>
         /// Gets or sets snowballs hit.
         /// </summary>
-        [JsonProperty("snowballsHit")]
         public int SnowballsHit { get; set; }
 
         /// <summary>
         /// Gets or sets solo baron kills.
         /// </summary>
-        [JsonProperty("soloBaronKills")]
         public int SoloBaronKills { get; set; }
 
         /// <summary>
         /// Gets or sets solo kills.
         /// </summary>
-        [JsonProperty("soloKills")]
         public int SoloKills { get; set; }
 
         /// <summary>
         /// Gets or sets stealth wards placed.
         /// </summary>
-        [JsonProperty("stealthWardsPlaced")]
         public int StealthWardsPlaced { get; set; }
 
         /// <summary>
         /// Gets or sets survived single digit HP count.
         /// </summary>
-        [JsonProperty("survivedSingleDigitHpCount")]
         public int SurvivedSingleDigitHpCount { get; set; }
 
         /// <summary>
         /// Gets or sets survived three immobilizes in a single fight.
         /// </summary>
-        [JsonProperty("survivedThreeImmobilizesInFight")]
         public int SurvivedThreeImmobilizesInFight { get; set; }
 
         /// <summary>
         /// Gets or sets takedown on the first turret.
         /// </summary>
-        [JsonProperty("takedownOnFirstTurret")]
         public int TakedownOnFirstTurret { get; set; }
 
         /// <summary>
         /// Gets or sets the total number of takedowns.
         /// </summary>
-        [JsonProperty("takedowns")]
         public int Takedowns { get; set; }
 
         /// <summary>
         /// Gets or sets takedowns after gaining a level advantage.
         /// </summary>
-        [JsonProperty("takedownsAfterGainingLevelAdvantage")]
         public int TakedownsAfterGainingLevelAdvantage { get; set; }
 
         /// <summary>
         /// Gets or sets takedowns before jungle minions spawn.
         /// </summary>
-        [JsonProperty("takedownsBeforeJungleMinionSpawn")]
         public int TakedownsBeforeJungleMinionSpawn { get; set; }
 
         /// <summary>
         /// Gets or sets takedowns in the enemy fountain.
         /// </summary>
-        [JsonProperty("takedownsInEnemyFountain")]
         public int TakedownsInEnemyFountain { get; set; }
 
         /// <summary>
         /// Gets or sets team baron kills.
         /// </summary>
-        [JsonProperty("teamBaronKills")]
         public int TeamBaronKills { get; set; }
 
         /// <summary>
         /// Gets or sets the percentage of the team's total damage dealt to champions.
         /// </summary>
-        [JsonProperty("teamDamagePercentage")]
         public float TeamDamagePercentage { get; set; }
 
         /// <summary>
         /// Gets or sets team elder dragon kills.
         /// </summary>
-        [JsonProperty("teamElderDragonKills")]
         public int TeamElderDragonKills { get; set; }
 
         /// <summary>
         /// Gets or sets team rift herald kills.
         /// </summary>
-        [JsonProperty("teamRiftHeraldKills")]
         public int TeamRiftHeraldKills { get; set; }
 
         /// <summary>
         /// Gets or sets took large damage and survived.
         /// </summary>
-        [JsonProperty("tookLargeDamageSurvived")]
         public int TookLargeDamageSurvived { get; set; }
 
         /// <summary>
         /// Gets or sets turret plates taken.
         /// </summary>
-        [JsonProperty("turretPlatesTaken")]
         public int TurretPlatesTaken { get; set; }
 
         /// <summary>
         /// Gets or sets turrets taken with rift herald.
         /// </summary>
-        [JsonProperty("turretsTakenWithRiftHerald")]
         public int TurretsTakenWithRiftHerald { get; set; }
 
         /// <summary>
         /// Gets or sets turret takedowns.
         /// </summary>
-        [JsonProperty("turretTakedowns")]
         public int TurretTakedowns { get; set; }
 
         /// <summary>
         /// Gets or sets twenty minions killed in 3 seconds count.
         /// </summary>
-        [JsonProperty("twentyMinionsIn3SecondsCount")]
         public int TwentyMinionsIn3SecondsCount { get; set; }
 
         /// <summary>
         /// Gets or sets unseen recalls.
         /// </summary>
-        [JsonProperty("unseenRecalls")]
         public int UnseenRecalls { get; set; }
 
         /// <summary>
         /// Gets or sets the vision score per minute.
         /// </summary>
-        [JsonProperty("visionScorePerMinute")]
         public float VisionScorePerMinute { get; set; }
 
         /// <summary>
         /// Gets or sets wards guarded.
         /// </summary>
-        [JsonProperty("wardsGuarded")]
         public int WardsGuarded { get; set; }
 
         /// <summary>
         /// Gets or sets ward takedowns.
         /// </summary>
-        [JsonProperty("wardTakedowns")]
         public int WardTakedowns { get; set; }
 
         /// <summary>
         /// Gets or sets ward takedowns before 20 minutes.
         /// </summary>
-        [JsonProperty("wardTakedownsBefore20M")]
         public int WardTakedownsBefore20M { get; set; }
+
+        /// <summary>
+        /// Gets or sets the participant these challenges belong to.
+        /// </summary>
+        [JsonIgnore]
+        public virtual LoLGameParticipant Participant { get; set; } = null!;
     }
 }

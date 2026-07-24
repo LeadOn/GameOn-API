@@ -5,6 +5,7 @@
 namespace GameOn.Presentation.Controllers
 {
     using GameOn.Application.Administration.Queries.GetAdminDashboardStats;
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGameParticipantStats;
     using GameOn.Common.DTOs;
     using GameOn.Presentation.Classes;
     using MediatR;
@@ -53,6 +54,26 @@ namespace GameOn.Presentation.Controllers
             }
 
             return this.Ok(adminDashboard);
+        }
+
+        /// <summary>
+        /// Recomputes derived performance stats (KDA, CS/min, gold/min, damage/min, kill participation, wards)
+        /// for every League of Legends game participant already in database.
+        /// </summary>
+        /// <returns>200 OK with the number of participants updated.</returns>
+        [HttpPost]
+        [Route("lol/recompute-participant-stats")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Recompute LoL game participant derived stats for the whole history.")]
+        [SwaggerResponse(200, "Number of participants updated.", typeof(int))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> RecomputeLoLGameParticipantStats()
+        {
+            var totalUpdated = await this.mediator.Send(new RecomputeLoLGameParticipantStatsCommand());
+
+            return this.Ok(totalUpdated);
         }
     }
 }

@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 {
+    using GameOn.Application.LeagueOfLegends.Matches.Services;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
@@ -70,6 +71,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             this.context.LeagueOfLegendsGameParticipants.RemoveRange(participants);
             await this.context.SaveChangesAsync(cancellationToken);
 
+            var participantsInDb = new List<LoLGameParticipant>();
+
             foreach (var participant in matchFromRiot.Info.Participants)
             {
                 var participantInDb = new LoLGameParticipant
@@ -101,7 +104,15 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     Item4 = participant.Item4,
                     Item5 = participant.Item5,
                     Item6 = participant.Item6,
+                    TeamPosition = participant.TeamPosition,
+                    IndividualPosition = participant.IndividualPosition,
+                    VisionScore = participant.VisionScore,
                 };
+
+                if (participant.RiotChallenges is not null)
+                {
+                    participantInDb.Challenges = MapChallenges(participant.RiotChallenges);
+                }
 
                 // Checking if participant is a GameOn! User
                 var playerInDb = await this.context.Players.FirstOrDefaultAsync(x => x.RiotGamesPUUID == participant.Puuid);
@@ -111,7 +122,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                 }
 
                 this.context.LeagueOfLegendsGameParticipants.Add(participantInDb);
+                participantsInDb.Add(participantInDb);
             }
+
+            var framesInDb = new List<LoLGameTimelineFrame>();
 
             // Updating timeline
             foreach (var frame in timelineFromRiot.Info.Frames)
@@ -192,7 +206,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     .ToList();
 
                 this.context.LeagueOfLegendsGameTimelineFrames.Add(frameInDb);
+                framesInDb.Add(frameInDb);
             }
+
+            ComputeParticipantStats(participantsInDb, framesInDb);
 
             // Updating game
             matchInDb.GameId = matchFromRiot.Info.GameId;
@@ -228,6 +245,177 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 
             await this.context.SaveChangesAsync(cancellationToken);
             return matchInDb;
+        }
+
+        private static void ComputeParticipantStats(List<LoLGameParticipant> participants, List<LoLGameTimelineFrame> frames)
+        {
+            var lastFrameTimestampMs = frames.Count > 0 ? frames.Max(f => f.Timestamp) : 0;
+
+            var lastFrameParticipants = frames
+                .Where(f => f.Timestamp == lastFrameTimestampMs)
+                .SelectMany(f => f.LoLGameTimelineFrameParticipants)
+                .GroupBy(p => p.ParticipantPUUID)
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var events = frames.SelectMany(f => f.LoLGameTimelineEvents).ToList();
+
+            var wardsPlacedByPuuid = events
+                .Where(e => e.EventType == "WARD_PLACED" && e.CreatorPUUID is not null)
+                .GroupBy(e => e.CreatorPUUID!)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var wardsKilledByPuuid = events
+                .Where(e => e.EventType == "WARD_KILL" && e.KillerPUUID is not null)
+                .GroupBy(e => e.KillerPUUID!)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            foreach (var teamParticipants in participants.GroupBy(p => p.TeamId))
+            {
+                var teamKills = teamParticipants.Sum(p => p.Kills);
+
+                foreach (var participant in teamParticipants)
+                {
+                    lastFrameParticipants.TryGetValue(participant.Puuid, out var lastFrame);
+
+                    participant.Stats = LoLGameParticipantStatCalculator.Compute(
+                        participant,
+                        teamKills,
+                        lastFrame,
+                        lastFrameTimestampMs,
+                        wardsPlacedByPuuid.GetValueOrDefault(participant.Puuid),
+                        wardsKilledByPuuid.GetValueOrDefault(participant.Puuid),
+                        participant.Stats);
+                }
+            }
+        }
+
+        private static LoLGameParticipantChallenge MapChallenges(ChallengesDto dto)
+        {
+            return new LoLGameParticipantChallenge
+            {
+                OneTwoAssistStreakCount = dto.OneTwoAssistStreakCount,
+                BaronBuffGoldAdvantageOverThreshold = dto.BaronBuffGoldAdvantageOverThreshold,
+                ControlWardTimeCoverageInRiverOrEnemyHalf = dto.ControlWardTimeCoverageInRiverOrEnemyHalf,
+                EarliestBaron = dto.EarliestBaron,
+                EarliestDragonTakedown = dto.EarliestDragonTakedown,
+                EarliestElderDragon = dto.EarliestElderDragon,
+                EarlyLaningPhaseGoldExpAdvantage = dto.EarlyLaningPhaseGoldExpAdvantage,
+                FasterSupportQuestCompletion = dto.FasterSupportQuestCompletion,
+                FastestLegendary = dto.FastestLegendary,
+                HadAfkTeammate = dto.HadAfkTeammate,
+                HighestChampionDamage = dto.HighestChampionDamage,
+                HighestCrowdControlScore = dto.HighestCrowdControlScore,
+                HighestWardKills = dto.HighestWardKills,
+                JunglerKillsEarlyJungle = dto.JunglerKillsEarlyJungle,
+                KillsOnLanersEarlyJungleAsJungler = dto.KillsOnLanersEarlyJungleAsJungler,
+                LaningPhaseGoldExpAdvantage = dto.LaningPhaseGoldExpAdvantage,
+                LegendaryCount = dto.LegendaryCount,
+                MaxCsAdvantageOnLaneOpponent = dto.MaxCsAdvantageOnLaneOpponent,
+                MaxLevelLeadLaneOpponent = dto.MaxLevelLeadLaneOpponent,
+                MostWardsDestroyedOneSweeper = dto.MostWardsDestroyedOneSweeper,
+                MythicItemUsed = dto.MythicItemUsed,
+                PlayedChampSelectPosition = dto.PlayedChampSelectPosition,
+                SoloTurretsLategame = dto.SoloTurretsLategame,
+                TakedownsFirst25Minutes = dto.TakedownsFirst25Minutes,
+                TeleportTakedowns = dto.TeleportTakedowns,
+                ThirdInhibitorDestroyedTime = dto.ThirdInhibitorDestroyedTime,
+                ThreeWardsOneSweeperCount = dto.ThreeWardsOneSweeperCount,
+                VisionScoreAdvantageLaneOpponent = dto.VisionScoreAdvantageLaneOpponent,
+                InfernalScalePickup = dto.InfernalScalePickup,
+                FistBumpParticipation = dto.FistBumpParticipation,
+                VoidMonsterKill = dto.VoidMonsterKill,
+                AbilityUses = dto.AbilityUses,
+                AcesBefore15Minutes = dto.AcesBefore15Minutes,
+                AlliedJungleMonsterKills = dto.AlliedJungleMonsterKills,
+                BaronTakedowns = dto.BaronTakedowns,
+                BlastConeOppositeOpponentCount = dto.BlastConeOppositeOpponentCount,
+                BountyGold = dto.BountyGold,
+                BuffsStolen = dto.BuffsStolen,
+                CompleteSupportQuestInTime = dto.CompleteSupportQuestInTime,
+                ControlWardsPlaced = dto.ControlWardsPlaced,
+                DamagePerMinute = dto.DamagePerMinute,
+                DamageTakenOnTeamPercentage = dto.DamageTakenOnTeamPercentage,
+                DancedWithRiftHerald = dto.DancedWithRiftHerald,
+                DeathsByEnemyChamps = dto.DeathsByEnemyChamps,
+                DodgeSkillShotsSmallWindow = dto.DodgeSkillShotsSmallWindow,
+                DoubleAces = dto.DoubleAces,
+                DragonTakedowns = dto.DragonTakedowns,
+                EffectiveHealAndShielding = dto.EffectiveHealAndShielding,
+                ElderDragonKillsWithOpposingSoul = dto.ElderDragonKillsWithOpposingSoul,
+                ElderDragonMultikills = dto.ElderDragonMultikills,
+                EnemyChampionImmobilizations = dto.EnemyChampionImmobilizations,
+                EnemyJungleMonsterKills = dto.EnemyJungleMonsterKills,
+                EpicMonsterKillsNearEnemyJungler = dto.EpicMonsterKillsNearEnemyJungler,
+                EpicMonsterKillsWithin30SecondsOfSpawn = dto.EpicMonsterKillsWithin30SecondsOfSpawn,
+                EpicMonsterSteals = dto.EpicMonsterSteals,
+                EpicMonsterStolenWithoutSmite = dto.EpicMonsterStolenWithoutSmite,
+                FlawlessAces = dto.FlawlessAces,
+                FullTeamTakedown = dto.FullTeamTakedown,
+                GameLength = dto.GameLength,
+                GoldPerMinute = dto.GoldPerMinute,
+                HadOpenNexus = dto.HadOpenNexus,
+                ImmobilizeAndKillWithAlly = dto.ImmobilizeAndKillWithAlly,
+                JungleCsBefore10Minutes = dto.JungleCsBefore10Minutes,
+                JunglerTakedownsNearDamagedEpicMonster = dto.JunglerTakedownsNearDamagedEpicMonster,
+                Kda = dto.Kda,
+                KillAfterHiddenWithAlly = dto.KillAfterHiddenWithAlly,
+                KillParticipation = dto.KillParticipation,
+                KillsNearEnemyTurret = dto.KillsNearEnemyTurret,
+                KillsOnOtherLanesEarlyJungleAsLaner = dto.KillsOnOtherLanesEarlyJungleAsLaner,
+                KillsUnderOwnTurret = dto.KillsUnderOwnTurret,
+                KillsWithHelpFromEpicMonster = dto.KillsWithHelpFromEpicMonster,
+                KnockEnemyIntoTeamAndKill = dto.KnockEnemyIntoTeamAndKill,
+                KTurretsDestroyedBeforePlatesFall = dto.KTurretsDestroyedBeforePlatesFall,
+                LandSkillShotsEarlyGame = dto.LandSkillShotsEarlyGame,
+                LaneMinionsFirst10Minutes = dto.LaneMinionsFirst10Minutes,
+                LostAnInhibitor = dto.LostAnInhibitor,
+                MaxKillDeficit = dto.MaxKillDeficit,
+                MejaisFullStackInTime = dto.MejaisFullStackInTime,
+                MoreEnemyJungleThanOpponent = dto.MoreEnemyJungleThanOpponent,
+                MultiKillOneSpell = dto.MultiKillOneSpell,
+                Multikills = dto.Multikills,
+                MultikillsAfterAggressiveFlash = dto.MultikillsAfterAggressiveFlash,
+                MultiTurretRiftHeraldCount = dto.MultiTurretRiftHeraldCount,
+                OuterTurretExecutesBefore10Minutes = dto.OuterTurretExecutesBefore10Minutes,
+                OutnumberedKills = dto.OutnumberedKills,
+                OutnumberedNexusKill = dto.OutnumberedNexusKill,
+                PerfectDragonSoulsTaken = dto.PerfectDragonSoulsTaken,
+                PerfectGame = dto.PerfectGame,
+                PickKillWithAlly = dto.PickKillWithAlly,
+                PoroExplosions = dto.PoroExplosions,
+                QuickCleanse = dto.QuickCleanse,
+                QuickFirstTurret = dto.QuickFirstTurret,
+                RiftHeraldTakedowns = dto.RiftHeraldTakedowns,
+                SaveAllyFromDeath = dto.SaveAllyFromDeath,
+                ScuttleCrabKills = dto.ScuttleCrabKills,
+                SkillshotsDodged = dto.SkillshotsDodged,
+                SkillshotsHit = dto.SkillshotsHit,
+                SnowballsHit = dto.SnowballsHit,
+                SoloBaronKills = dto.SoloBaronKills,
+                SoloKills = dto.SoloKills,
+                StealthWardsPlaced = dto.StealthWardsPlaced,
+                SurvivedSingleDigitHpCount = dto.SurvivedSingleDigitHpCount,
+                SurvivedThreeImmobilizesInFight = dto.SurvivedThreeImmobilizesInFight,
+                TakedownOnFirstTurret = dto.TakedownOnFirstTurret,
+                Takedowns = dto.Takedowns,
+                TakedownsAfterGainingLevelAdvantage = dto.TakedownsAfterGainingLevelAdvantage,
+                TakedownsBeforeJungleMinionSpawn = dto.TakedownsBeforeJungleMinionSpawn,
+                TakedownsInEnemyFountain = dto.TakedownsInEnemyFountain,
+                TeamBaronKills = dto.TeamBaronKills,
+                TeamDamagePercentage = dto.TeamDamagePercentage,
+                TeamElderDragonKills = dto.TeamElderDragonKills,
+                TeamRiftHeraldKills = dto.TeamRiftHeraldKills,
+                TookLargeDamageSurvived = dto.TookLargeDamageSurvived,
+                TurretPlatesTaken = dto.TurretPlatesTaken,
+                TurretsTakenWithRiftHerald = dto.TurretsTakenWithRiftHerald,
+                TurretTakedowns = dto.TurretTakedowns,
+                TwentyMinionsIn3SecondsCount = dto.TwentyMinionsIn3SecondsCount,
+                UnseenRecalls = dto.UnseenRecalls,
+                VisionScorePerMinute = dto.VisionScorePerMinute,
+                WardsGuarded = dto.WardsGuarded,
+                WardTakedowns = dto.WardTakedowns,
+                WardTakedownsBefore20M = dto.WardTakedownsBefore20M,
+            };
         }
 
         private static LoLGameTimelineEvent MapEvent(string matchId, EventDto evt, List<ParticipantTimeLineDto> participants)
