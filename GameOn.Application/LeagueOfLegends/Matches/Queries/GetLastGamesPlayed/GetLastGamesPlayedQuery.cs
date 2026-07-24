@@ -37,5 +37,15 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
         /// Gets or sets the queue IDs to filter games by (Riot queueId, see LoLQueue).
         /// </summary>
         public List<int>? QueueIds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lower bound (inclusive) of the game start date range to filter by.
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the upper bound (inclusive) of the game start date range to filter by.
+        /// </summary>
+        public DateTime? EndDate { get; set; }
     }
 }

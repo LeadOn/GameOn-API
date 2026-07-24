@@ -172,5 +172,31 @@ namespace GameOn.External.RiotGames.Models.DTOs
         /// </summary>
         [JsonProperty("item6")]
         public int Item6 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the team position (TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY), Riot's most reliable inferred role.
+        /// </summary>
+        [JsonProperty("teamPosition")]
+        public string TeamPosition { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the individual position, a less reliable role heuristic than <see cref="TeamPosition"/>.
+        /// </summary>
+        [JsonProperty("individualPosition")]
+        public string IndividualPosition { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the vision score.
+        /// </summary>
+        [JsonProperty("visionScore")]
+        public int VisionScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Riot-computed derived challenge stats (KDA, kill participation, ...). Null on some remakes/older matches.
+        /// Named distinctly from "Challenges" because LoLGameParticipant (which extends this DTO) uses that name
+        /// for its navigation to the persisted LoLGameParticipantChallenge mirror entity.
+        /// </summary>
+        [JsonProperty("challenges")]
+        public ChallengesDto? RiotChallenges { get; set; }
     }
 }

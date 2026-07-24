@@ -94,6 +94,16 @@ namespace GameOn.Persistence
         public DbSet<LoLGameTimelineFrameParticipant> LeagueOfLegendsGameTimelineFrameParticipants { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Game Participant Stats.
+        /// </summary>
+        public DbSet<LoLGameParticipantStat> LeagueOfLegendsGameParticipantStats { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets LoL Game Participant Challenges.
+        /// </summary>
+        public DbSet<LoLGameParticipantChallenge> LeagueOfLegendsGameParticipantChallenges { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets LoL Queues.
         /// </summary>
         public DbSet<LoLQueue> LeagueOfLegendsQueues { get; set; } = null!;
@@ -730,6 +740,9 @@ namespace GameOn.Persistence
             {
                 entity.ToTable("LeagueOfLegendsGameParticipant");
 
+                // Not persisted directly: raw Riot DTO carrier, mapped field-by-field onto LoLGameParticipantChallenge instead.
+                entity.Ignore(e => e.RiotChallenges);
+
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id")
@@ -805,6 +818,204 @@ namespace GameOn.Persistence
                     .WithMany(f => f.LeagueOfLegendsGameParticipants)
                     .HasForeignKey(e => e.PlayerId)
                     .HasConstraintName("FK_Player_LoL_Game_Participant")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameParticipantStat>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsGameParticipantStat");
+
+                entity.Property(e => e.LoLGameParticipantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("lol_game_participant_id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.LoLGameParticipantId);
+
+                entity.Property(e => e.GameDurationSeconds)
+                    .HasColumnName("game_duration_seconds");
+
+                entity.Property(e => e.Kda)
+                    .HasColumnName("kda");
+
+                entity.Property(e => e.KillParticipationPercent)
+                    .HasColumnName("kill_participation_percent");
+
+                entity.Property(e => e.CreepScore)
+                    .HasColumnName("creep_score");
+
+                entity.Property(e => e.CsPerMinute)
+                    .HasColumnName("cs_per_minute");
+
+                entity.Property(e => e.GoldEarned)
+                    .HasColumnName("gold_earned");
+
+                entity.Property(e => e.GoldPerMinute)
+                    .HasColumnName("gold_per_minute");
+
+                entity.Property(e => e.DamageDealtToChampions)
+                    .HasColumnName("damage_dealt_to_champions");
+
+                entity.Property(e => e.DamagePerMinute)
+                    .HasColumnName("damage_per_minute");
+
+                entity.Property(e => e.DamageTaken)
+                    .HasColumnName("damage_taken");
+
+                entity.Property(e => e.WardsPlaced)
+                    .HasColumnName("wards_placed");
+
+                entity.Property(e => e.WardsKilled)
+                    .HasColumnName("wards_killed");
+
+                entity.Property(e => e.ComputedOn)
+                    .HasColumnName("computed_on");
+
+                entity.HasOne(e => e.Participant)
+                    .WithOne(p => p.Stats)
+                    .HasForeignKey<LoLGameParticipantStat>(e => e.LoLGameParticipantId)
+                    .HasConstraintName("FK_LoL_Game_Participant_Stat")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameParticipantChallenge>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsGameParticipantChallenge");
+
+                entity.Property(e => e.LoLGameParticipantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("lol_game_participant_id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.LoLGameParticipantId);
+
+                entity.Property(e => e.OneTwoAssistStreakCount).HasColumnName("one_two_assist_streak_count");
+                entity.Property(e => e.BaronBuffGoldAdvantageOverThreshold).HasColumnName("baron_buff_gold_advantage_over_threshold");
+                entity.Property(e => e.ControlWardTimeCoverageInRiverOrEnemyHalf).HasColumnName("control_ward_time_coverage_in_river_or_enemy_half");
+                entity.Property(e => e.EarliestBaron).HasColumnName("earliest_baron");
+                entity.Property(e => e.EarliestDragonTakedown).HasColumnName("earliest_dragon_takedown");
+                entity.Property(e => e.EarliestElderDragon).HasColumnName("earliest_elder_dragon");
+                entity.Property(e => e.EarlyLaningPhaseGoldExpAdvantage).HasColumnName("early_laning_phase_gold_exp_advantage");
+                entity.Property(e => e.FasterSupportQuestCompletion).HasColumnName("faster_support_quest_completion");
+                entity.Property(e => e.FastestLegendary).HasColumnName("fastest_legendary");
+                entity.Property(e => e.HadAfkTeammate).HasColumnName("had_afk_teammate");
+                entity.Property(e => e.HighestChampionDamage).HasColumnName("highest_champion_damage");
+                entity.Property(e => e.HighestCrowdControlScore).HasColumnName("highest_crowd_control_score");
+                entity.Property(e => e.HighestWardKills).HasColumnName("highest_ward_kills");
+                entity.Property(e => e.JunglerKillsEarlyJungle).HasColumnName("jungler_kills_early_jungle");
+                entity.Property(e => e.KillsOnLanersEarlyJungleAsJungler).HasColumnName("kills_on_laners_early_jungle_as_jungler");
+                entity.Property(e => e.LaningPhaseGoldExpAdvantage).HasColumnName("laning_phase_gold_exp_advantage");
+                entity.Property(e => e.LegendaryCount).HasColumnName("legendary_count");
+                entity.Property(e => e.MaxCsAdvantageOnLaneOpponent).HasColumnName("max_cs_advantage_on_lane_opponent");
+                entity.Property(e => e.MaxLevelLeadLaneOpponent).HasColumnName("max_level_lead_lane_opponent");
+                entity.Property(e => e.MostWardsDestroyedOneSweeper).HasColumnName("most_wards_destroyed_one_sweeper");
+                entity.Property(e => e.MythicItemUsed).HasColumnName("mythic_item_used");
+                entity.Property(e => e.PlayedChampSelectPosition).HasColumnName("played_champ_select_position");
+                entity.Property(e => e.SoloTurretsLategame).HasColumnName("solo_turrets_lategame");
+                entity.Property(e => e.TakedownsFirst25Minutes).HasColumnName("takedowns_first_25_minutes");
+                entity.Property(e => e.TeleportTakedowns).HasColumnName("teleport_takedowns");
+                entity.Property(e => e.ThirdInhibitorDestroyedTime).HasColumnName("third_inhibitor_destroyed_time");
+                entity.Property(e => e.ThreeWardsOneSweeperCount).HasColumnName("three_wards_one_sweeper_count");
+                entity.Property(e => e.VisionScoreAdvantageLaneOpponent).HasColumnName("vision_score_advantage_lane_opponent");
+                entity.Property(e => e.InfernalScalePickup).HasColumnName("infernal_scale_pickup");
+                entity.Property(e => e.FistBumpParticipation).HasColumnName("fist_bump_participation");
+                entity.Property(e => e.VoidMonsterKill).HasColumnName("void_monster_kill");
+                entity.Property(e => e.AbilityUses).HasColumnName("ability_uses");
+                entity.Property(e => e.AcesBefore15Minutes).HasColumnName("aces_before_15_minutes");
+                entity.Property(e => e.AlliedJungleMonsterKills).HasColumnName("allied_jungle_monster_kills");
+                entity.Property(e => e.BaronTakedowns).HasColumnName("baron_takedowns");
+                entity.Property(e => e.BlastConeOppositeOpponentCount).HasColumnName("blast_cone_opposite_opponent_count");
+                entity.Property(e => e.BountyGold).HasColumnName("bounty_gold");
+                entity.Property(e => e.BuffsStolen).HasColumnName("buffs_stolen");
+                entity.Property(e => e.CompleteSupportQuestInTime).HasColumnName("complete_support_quest_in_time");
+                entity.Property(e => e.ControlWardsPlaced).HasColumnName("control_wards_placed");
+                entity.Property(e => e.DamagePerMinute).HasColumnName("damage_per_minute");
+                entity.Property(e => e.DamageTakenOnTeamPercentage).HasColumnName("damage_taken_on_team_percentage");
+                entity.Property(e => e.DancedWithRiftHerald).HasColumnName("danced_with_rift_herald");
+                entity.Property(e => e.DeathsByEnemyChamps).HasColumnName("deaths_by_enemy_champs");
+                entity.Property(e => e.DodgeSkillShotsSmallWindow).HasColumnName("dodge_skill_shots_small_window");
+                entity.Property(e => e.DoubleAces).HasColumnName("double_aces");
+                entity.Property(e => e.DragonTakedowns).HasColumnName("dragon_takedowns");
+                entity.Property(e => e.EffectiveHealAndShielding).HasColumnName("effective_heal_and_shielding");
+                entity.Property(e => e.ElderDragonKillsWithOpposingSoul).HasColumnName("elder_dragon_kills_with_opposing_soul");
+                entity.Property(e => e.ElderDragonMultikills).HasColumnName("elder_dragon_multikills");
+                entity.Property(e => e.EnemyChampionImmobilizations).HasColumnName("enemy_champion_immobilizations");
+                entity.Property(e => e.EnemyJungleMonsterKills).HasColumnName("enemy_jungle_monster_kills");
+                entity.Property(e => e.EpicMonsterKillsNearEnemyJungler).HasColumnName("epic_monster_kills_near_enemy_jungler");
+                entity.Property(e => e.EpicMonsterKillsWithin30SecondsOfSpawn).HasColumnName("epic_monster_kills_within_30_seconds_of_spawn");
+                entity.Property(e => e.EpicMonsterSteals).HasColumnName("epic_monster_steals");
+                entity.Property(e => e.EpicMonsterStolenWithoutSmite).HasColumnName("epic_monster_stolen_without_smite");
+                entity.Property(e => e.FlawlessAces).HasColumnName("flawless_aces");
+                entity.Property(e => e.FullTeamTakedown).HasColumnName("full_team_takedown");
+                entity.Property(e => e.GameLength).HasColumnName("game_length");
+                entity.Property(e => e.GoldPerMinute).HasColumnName("gold_per_minute");
+                entity.Property(e => e.HadOpenNexus).HasColumnName("had_open_nexus");
+                entity.Property(e => e.ImmobilizeAndKillWithAlly).HasColumnName("immobilize_and_kill_with_ally");
+                entity.Property(e => e.JungleCsBefore10Minutes).HasColumnName("jungle_cs_before_10_minutes");
+                entity.Property(e => e.JunglerTakedownsNearDamagedEpicMonster).HasColumnName("jungler_takedowns_near_damaged_epic_monster");
+                entity.Property(e => e.Kda).HasColumnName("kda");
+                entity.Property(e => e.KillAfterHiddenWithAlly).HasColumnName("kill_after_hidden_with_ally");
+                entity.Property(e => e.KillParticipation).HasColumnName("kill_participation");
+                entity.Property(e => e.KillsNearEnemyTurret).HasColumnName("kills_near_enemy_turret");
+                entity.Property(e => e.KillsOnOtherLanesEarlyJungleAsLaner).HasColumnName("kills_on_other_lanes_early_jungle_as_laner");
+                entity.Property(e => e.KillsUnderOwnTurret).HasColumnName("kills_under_own_turret");
+                entity.Property(e => e.KillsWithHelpFromEpicMonster).HasColumnName("kills_with_help_from_epic_monster");
+                entity.Property(e => e.KnockEnemyIntoTeamAndKill).HasColumnName("knock_enemy_into_team_and_kill");
+                entity.Property(e => e.KTurretsDestroyedBeforePlatesFall).HasColumnName("k_turrets_destroyed_before_plates_fall");
+                entity.Property(e => e.LandSkillShotsEarlyGame).HasColumnName("land_skill_shots_early_game");
+                entity.Property(e => e.LaneMinionsFirst10Minutes).HasColumnName("lane_minions_first_10_minutes");
+                entity.Property(e => e.LostAnInhibitor).HasColumnName("lost_an_inhibitor");
+                entity.Property(e => e.MaxKillDeficit).HasColumnName("max_kill_deficit");
+                entity.Property(e => e.MejaisFullStackInTime).HasColumnName("mejais_full_stack_in_time");
+                entity.Property(e => e.MoreEnemyJungleThanOpponent).HasColumnName("more_enemy_jungle_than_opponent");
+                entity.Property(e => e.MultiKillOneSpell).HasColumnName("multi_kill_one_spell");
+                entity.Property(e => e.Multikills).HasColumnName("multikills");
+                entity.Property(e => e.MultikillsAfterAggressiveFlash).HasColumnName("multikills_after_aggressive_flash");
+                entity.Property(e => e.MultiTurretRiftHeraldCount).HasColumnName("multi_turret_rift_herald_count");
+                entity.Property(e => e.OuterTurretExecutesBefore10Minutes).HasColumnName("outer_turret_executes_before_10_minutes");
+                entity.Property(e => e.OutnumberedKills).HasColumnName("outnumbered_kills");
+                entity.Property(e => e.OutnumberedNexusKill).HasColumnName("outnumbered_nexus_kill");
+                entity.Property(e => e.PerfectDragonSoulsTaken).HasColumnName("perfect_dragon_souls_taken");
+                entity.Property(e => e.PerfectGame).HasColumnName("perfect_game");
+                entity.Property(e => e.PickKillWithAlly).HasColumnName("pick_kill_with_ally");
+                entity.Property(e => e.PoroExplosions).HasColumnName("poro_explosions");
+                entity.Property(e => e.QuickCleanse).HasColumnName("quick_cleanse");
+                entity.Property(e => e.QuickFirstTurret).HasColumnName("quick_first_turret");
+                entity.Property(e => e.RiftHeraldTakedowns).HasColumnName("rift_herald_takedowns");
+                entity.Property(e => e.SaveAllyFromDeath).HasColumnName("save_ally_from_death");
+                entity.Property(e => e.ScuttleCrabKills).HasColumnName("scuttle_crab_kills");
+                entity.Property(e => e.SkillshotsDodged).HasColumnName("skillshots_dodged");
+                entity.Property(e => e.SkillshotsHit).HasColumnName("skillshots_hit");
+                entity.Property(e => e.SnowballsHit).HasColumnName("snowballs_hit");
+                entity.Property(e => e.SoloBaronKills).HasColumnName("solo_baron_kills");
+                entity.Property(e => e.SoloKills).HasColumnName("solo_kills");
+                entity.Property(e => e.StealthWardsPlaced).HasColumnName("stealth_wards_placed");
+                entity.Property(e => e.SurvivedSingleDigitHpCount).HasColumnName("survived_single_digit_hp_count");
+                entity.Property(e => e.SurvivedThreeImmobilizesInFight).HasColumnName("survived_three_immobilizes_in_fight");
+                entity.Property(e => e.TakedownOnFirstTurret).HasColumnName("takedown_on_first_turret");
+                entity.Property(e => e.Takedowns).HasColumnName("takedowns");
+                entity.Property(e => e.TakedownsAfterGainingLevelAdvantage).HasColumnName("takedowns_after_gaining_level_advantage");
+                entity.Property(e => e.TakedownsBeforeJungleMinionSpawn).HasColumnName("takedowns_before_jungle_minion_spawn");
+                entity.Property(e => e.TakedownsInEnemyFountain).HasColumnName("takedowns_in_enemy_fountain");
+                entity.Property(e => e.TeamBaronKills).HasColumnName("team_baron_kills");
+                entity.Property(e => e.TeamDamagePercentage).HasColumnName("team_damage_percentage");
+                entity.Property(e => e.TeamElderDragonKills).HasColumnName("team_elder_dragon_kills");
+                entity.Property(e => e.TeamRiftHeraldKills).HasColumnName("team_rift_herald_kills");
+                entity.Property(e => e.TookLargeDamageSurvived).HasColumnName("took_large_damage_survived");
+                entity.Property(e => e.TurretPlatesTaken).HasColumnName("turret_plates_taken");
+                entity.Property(e => e.TurretsTakenWithRiftHerald).HasColumnName("turrets_taken_with_rift_herald");
+                entity.Property(e => e.TurretTakedowns).HasColumnName("turret_takedowns");
+                entity.Property(e => e.TwentyMinionsIn3SecondsCount).HasColumnName("twenty_minions_in_3_seconds_count");
+                entity.Property(e => e.UnseenRecalls).HasColumnName("unseen_recalls");
+                entity.Property(e => e.VisionScorePerMinute).HasColumnName("vision_score_per_minute");
+                entity.Property(e => e.WardsGuarded).HasColumnName("wards_guarded");
+                entity.Property(e => e.WardTakedowns).HasColumnName("ward_takedowns");
+                entity.Property(e => e.WardTakedownsBefore20M).HasColumnName("ward_takedowns_before_20m");
+
+                entity.HasOne(e => e.Participant)
+                    .WithOne(p => p.Challenges)
+                    .HasForeignKey<LoLGameParticipantChallenge>(e => e.LoLGameParticipantId)
+                    .HasConstraintName("FK_LoL_Game_Participant_Challenge")
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

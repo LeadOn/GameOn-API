@@ -37,5 +37,15 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual LoLGame Game { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the derived performance stats for this participant.
+        /// </summary>
+        public virtual LoLGameParticipantStat? Stats { get; set; }
+
+        /// <summary>
+        /// Gets or sets Riot's own derived "challenges" stats for this participant.
+        /// </summary>
+        public virtual LoLGameParticipantChallenge? Challenges { get; set; }
     }
 }

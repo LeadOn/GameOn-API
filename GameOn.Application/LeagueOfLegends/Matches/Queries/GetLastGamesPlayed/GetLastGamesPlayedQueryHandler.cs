@@ -41,7 +41,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
             if (request.PlayerId is null)
             {
-                query = query.Include(x => x.LeagueOfLegendsGameParticipants);
+                query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats)
+                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges);
 
                 if (request.RankedGamesOnly == true)
                 {
@@ -51,6 +52,16 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 if (request.QueueIds is { Count: > 0 })
                 {
                     query = query.Where(x => x.QueueId.HasValue && request.QueueIds.Contains(x.QueueId.Value));
+                }
+
+                if (request.StartDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart >= request.StartDate.Value);
+                }
+
+                if (request.EndDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart <= request.EndDate.Value);
                 }
 
                 var count = await query.CountAsync(cancellationToken);
@@ -84,7 +95,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 // Updating those games in database
                 await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = matchesFromRiot.ToList(), Player = playerInDb });
 
-                query = query.Include(x => x.LeagueOfLegendsGameParticipants)
+                query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats)
+                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges)
                     .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId));
 
                 if (request.RankedGamesOnly == true)
@@ -95,6 +107,16 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                 if (request.QueueIds is { Count: > 0 })
                 {
                     query = query.Where(x => x.QueueId.HasValue && request.QueueIds.Contains(x.QueueId.Value));
+                }
+
+                if (request.StartDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart >= request.StartDate.Value);
+                }
+
+                if (request.EndDate.HasValue)
+                {
+                    query = query.Where(x => x.GameStart <= request.EndDate.Value);
                 }
 
                 var count = await query.CountAsync(cancellationToken);
