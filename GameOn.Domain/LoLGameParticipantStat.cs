@@ -78,6 +78,33 @@ namespace GameOn.Domain
         public int WardsKilled { get; set; }
 
         /// <summary>
+        /// Gets or sets the physical damage dealt to champions.
+        /// </summary>
+        public int PhysicalDamageToChampions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the magic damage dealt to champions.
+        /// </summary>
+        public int MagicDamageToChampions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the true damage dealt to champions.
+        /// </summary>
+        public int TrueDamageToChampions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the time (in seconds) enemies spent crowd-controlled by this participant.
+        /// </summary>
+        public int TimeCcOthersSeconds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the overall performance rating, out of 10. Blends KDA, kill participation,
+        /// damage share, gold/min and survival into a single stable score, recomputed on every
+        /// (re)sync and never changing otherwise.
+        /// </summary>
+        public double Rating { get; set; }
+
+        /// <summary>
         /// Gets or sets the date these stats were last computed.
         /// </summary>
         public DateTime ComputedOn { get; set; } = DateTime.UtcNow;

@@ -41,6 +41,12 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                 throw new NotImplementedException("Game doesn't exist in database!");
             }
 
+            // Nulled out now (and persisted at the very next SaveChangesAsync, before old participants
+            // are removed below): both columns are Restrict FKs to LoLGameParticipant, so they'd block
+            // deletion of the old MVP/ACE participant otherwise.
+            matchInDb.MvpParticipantId = null;
+            matchInDb.AceParticipantId = null;
+
             var matchFromRiot = await this.matchService.GetGameById(request.MatchId, cancellationToken);
 
             if (matchFromRiot is null)
@@ -69,6 +75,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             // key, and silently clears the events' *PUUID columns instead of persisting them.
             var participants = await this.context.LeagueOfLegendsGameParticipants.Where(x => x.MatchId == request.MatchId).ToListAsync(cancellationToken);
             this.context.LeagueOfLegendsGameParticipants.RemoveRange(participants);
+
+            var oldTeams = await this.context.LeagueOfLegendsGameTeams.Where(x => x.MatchId == request.MatchId).ToListAsync(cancellationToken);
+            this.context.LeagueOfLegendsGameTeams.RemoveRange(oldTeams);
+
             await this.context.SaveChangesAsync(cancellationToken);
 
             var participantsInDb = new List<LoLGameParticipant>();
@@ -209,6 +219,11 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                 framesInDb.Add(frameInDb);
             }
 
+            // Flushing now assigns participantsInDb[*].Id (identity columns, still 0 on the new,
+            // not-yet-saved entities): DetermineMvpAndAce below needs the real values to set
+            // matchInDb.MvpParticipantId/AceParticipantId (plain int FKs, no navigation-based fixup).
+            await this.context.SaveChangesAsync(cancellationToken);
+
             ComputeParticipantStats(participantsInDb, framesInDb);
 
             // Updating game
@@ -243,6 +258,18 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                 }
             }
 
+            foreach (var team in matchFromRiot.Info.Teams)
+            {
+                this.context.LeagueOfLegendsGameTeams.Add(MapTeam(request.MatchId, team));
+            }
+
+            var (mvpParticipantId, aceParticipantId) = LoLGameParticipantStatCalculator.DetermineMvpAndAce(
+                participantsInDb,
+                matchInDb.WinningTeamId,
+                matchInDb.IsRemake);
+            matchInDb.MvpParticipantId = mvpParticipantId;
+            matchInDb.AceParticipantId = aceParticipantId;
+
             await this.context.SaveChangesAsync(cancellationToken);
             return matchInDb;
         }
@@ -272,6 +299,8 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             foreach (var teamParticipants in participants.GroupBy(p => p.TeamId))
             {
                 var teamKills = teamParticipants.Sum(p => p.Kills);
+                var teamDamage = teamParticipants.Sum(p =>
+                    lastFrameParticipants.TryGetValue(p.Puuid, out var frame) ? frame.TotalDamageDoneToChampions : 0);
 
                 foreach (var participant in teamParticipants)
                 {
@@ -280,6 +309,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     participant.Stats = LoLGameParticipantStatCalculator.Compute(
                         participant,
                         teamKills,
+                        teamDamage,
                         lastFrame,
                         lastFrameTimestampMs,
                         wardsPlacedByPuuid.GetValueOrDefault(participant.Puuid),
@@ -287,6 +317,30 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                         participant.Stats);
                 }
             }
+        }
+
+        private static LoLGameTeam MapTeam(string matchId, TeamDto dto)
+        {
+            return new LoLGameTeam
+            {
+                MatchId = matchId,
+                TeamId = dto.TeamId,
+                Win = dto.HasWon,
+                ChampionKills = dto.Objectives.Champion.Kills,
+                TowerKills = dto.Objectives.Tower.Kills,
+                InhibitorKills = dto.Objectives.Inhibitor.Kills,
+                DragonKills = dto.Objectives.Dragon.Kills,
+                RiftHeraldKills = dto.Objectives.RiftHerald.Kills,
+                BaronKills = dto.Objectives.Baron.Kills,
+                HordeKills = dto.Objectives.Horde.Kills,
+                FirstBlood = dto.Objectives.Champion.First,
+                FirstTower = dto.Objectives.Tower.First,
+                FirstInhibitor = dto.Objectives.Inhibitor.First,
+                FirstDragon = dto.Objectives.Dragon.First,
+                FirstBaron = dto.Objectives.Baron.First,
+                FirstRiftHerald = dto.Objectives.RiftHerald.First,
+                FirstHorde = dto.Objectives.Horde.First,
+            };
         }
 
         private static LoLGameParticipantChallenge MapChallenges(ChallengesDto dto)
