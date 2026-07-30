@@ -7,7 +7,7 @@
       "name": "Valentin Virot",
       "email": "virot.valentin@gmail.com"
     },
-    "version": "6.5.0"
+    "version": "7.3.1"
   },
   "paths": {
     "/Admin/dashboard": {
@@ -835,6 +835,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
           }
         ],
         "responses": {
@@ -894,6 +910,22 @@
             "in": "query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
             }
           }
         ],
@@ -1008,6 +1040,44 @@
           },
           "404": {
             "description": "Match not found"
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
+    "/lol/Match/{matchId}/import": {
+      "post": {
+        "tags": ["Match"],
+        "summary": "Import a Match by ID (retrieve data from Riot Games).",
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "executeUpdate",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "Connected player not found."
           },
           "500": {
             "description": "Unknown error happened."
@@ -1787,6 +1857,21 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/LoLRankHistoryGranularity"
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {
@@ -2471,6 +2556,508 @@
         },
         "additionalProperties": false
       },
+      "ChallengesDto": {
+        "type": "object",
+        "properties": {
+          "oneTwoAssistStreakCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "baronBuffGoldAdvantageOverThreshold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "controlWardTimeCoverageInRiverOrEnemyHalf": {
+            "type": "number",
+            "format": "float"
+          },
+          "earliestBaron": {
+            "type": "number",
+            "format": "float"
+          },
+          "earliestDragonTakedown": {
+            "type": "number",
+            "format": "float"
+          },
+          "earliestElderDragon": {
+            "type": "number",
+            "format": "float"
+          },
+          "earlyLaningPhaseGoldExpAdvantage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fasterSupportQuestCompletion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fastestLegendary": {
+            "type": "number",
+            "format": "float"
+          },
+          "hadAfkTeammate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highestChampionDamage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highestCrowdControlScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highestWardKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "junglerKillsEarlyJungle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsOnLanersEarlyJungleAsJungler": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "laningPhaseGoldExpAdvantage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "legendaryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxCsAdvantageOnLaneOpponent": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxLevelLeadLaneOpponent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mostWardsDestroyedOneSweeper": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mythicItemUsed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playedChampSelectPosition": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soloTurretsLategame": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsFirst25Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teleportTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "thirdInhibitorDestroyedTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "threeWardsOneSweeperCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visionScoreAdvantageLaneOpponent": {
+            "type": "number",
+            "format": "float"
+          },
+          "infernalScalePickup": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fistBumpParticipation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voidMonsterKill": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityUses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "acesBefore15Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "alliedJungleMonsterKills": {
+            "type": "number",
+            "format": "float"
+          },
+          "baronTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "blastConeOppositeOpponentCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bountyGold": {
+            "type": "number",
+            "format": "float"
+          },
+          "buffsStolen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completeSupportQuestInTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "controlWardsPlaced": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "damagePerMinute": {
+            "type": "number",
+            "format": "float"
+          },
+          "damageTakenOnTeamPercentage": {
+            "type": "number",
+            "format": "float"
+          },
+          "dancedWithRiftHerald": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deathsByEnemyChamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dodgeSkillShotsSmallWindow": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doubleAces": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dragonTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "legendaryItemUsed": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "effectiveHealAndShielding": {
+            "type": "number",
+            "format": "float"
+          },
+          "elderDragonKillsWithOpposingSoul": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "elderDragonMultikills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enemyChampionImmobilizations": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enemyJungleMonsterKills": {
+            "type": "number",
+            "format": "float"
+          },
+          "epicMonsterKillsNearEnemyJungler": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "epicMonsterKillsWithin30SecondsOfSpawn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "epicMonsterSteals": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "epicMonsterStolenWithoutSmite": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flawlessAces": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fullTeamTakedown": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameLength": {
+            "type": "number",
+            "format": "float"
+          },
+          "goldPerMinute": {
+            "type": "number",
+            "format": "float"
+          },
+          "hadOpenNexus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "immobilizeAndKillWithAlly": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "jungleCsBefore10Minutes": {
+            "type": "number",
+            "format": "float"
+          },
+          "junglerTakedownsNearDamagedEpicMonster": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kda": {
+            "type": "number",
+            "format": "float"
+          },
+          "killAfterHiddenWithAlly": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killParticipation": {
+            "type": "number",
+            "format": "float"
+          },
+          "killsNearEnemyTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsOnOtherLanesEarlyJungleAsLaner": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsUnderOwnTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsWithHelpFromEpicMonster": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "knockEnemyIntoTeamAndKill": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kTurretsDestroyedBeforePlatesFall": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "landSkillShotsEarlyGame": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "laneMinionsFirst10Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lostAnInhibitor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxKillDeficit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mejaisFullStackInTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "moreEnemyJungleThanOpponent": {
+            "type": "number",
+            "format": "float"
+          },
+          "multiKillOneSpell": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multikills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multikillsAfterAggressiveFlash": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multiTurretRiftHeraldCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outerTurretExecutesBefore10Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outnumberedKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outnumberedNexusKill": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perfectDragonSoulsTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perfectGame": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pickKillWithAlly": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "poroExplosions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quickCleanse": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quickFirstTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "riftHeraldTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saveAllyFromDeath": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scuttleCrabKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skillshotsDodged": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skillshotsHit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "snowballsHit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soloBaronKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soloKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stealthWardsPlaced": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "survivedSingleDigitHpCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "survivedThreeImmobilizesInFight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownOnFirstTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsAfterGainingLevelAdvantage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsBeforeJungleMinionSpawn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsInEnemyFountain": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamBaronKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamDamagePercentage": {
+            "type": "number",
+            "format": "float"
+          },
+          "teamElderDragonKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamRiftHeraldKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tookLargeDamageSurvived": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turretPlatesTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turretsTakenWithRiftHerald": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turretTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "twentyMinionsIn3SecondsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unseenRecalls": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visionScorePerMinute": {
+            "type": "number",
+            "format": "float"
+          },
+          "wardsGuarded": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wardTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wardTakedownsBefore20M": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Changelog": {
         "type": "object",
         "properties": {
@@ -3037,6 +3624,21 @@
           "queue": {
             "$ref": "#/components/schemas/LoLQueue"
           },
+          "frameInterval": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "mvpParticipantId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "aceParticipantId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "leagueOfLegendsGameParticipants": {
             "type": "array",
             "items": {
@@ -3048,6 +3650,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LoLGameTimelineFrame"
+            },
+            "nullable": true
+          },
+          "leagueOfLegendsGameTeams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLGameTeam"
             },
             "nullable": true
           }
@@ -3163,6 +3772,21 @@
             "type": "integer",
             "format": "int32"
           },
+          "teamPosition": {
+            "type": "string",
+            "nullable": true
+          },
+          "individualPosition": {
+            "type": "string",
+            "nullable": true
+          },
+          "visionScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "riotChallenges": {
+            "$ref": "#/components/schemas/ChallengesDto"
+          },
           "id": {
             "type": "integer",
             "format": "int32"
@@ -3178,6 +3802,887 @@
           },
           "player": {
             "$ref": "#/components/schemas/Player"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/LoLGameParticipantStat"
+          },
+          "challenges": {
+            "$ref": "#/components/schemas/LoLGameParticipantChallenge"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameParticipantChallenge": {
+        "type": "object",
+        "properties": {
+          "loLGameParticipantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "oneTwoAssistStreakCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "baronBuffGoldAdvantageOverThreshold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "controlWardTimeCoverageInRiverOrEnemyHalf": {
+            "type": "number",
+            "format": "float"
+          },
+          "earliestBaron": {
+            "type": "number",
+            "format": "float"
+          },
+          "earliestDragonTakedown": {
+            "type": "number",
+            "format": "float"
+          },
+          "earliestElderDragon": {
+            "type": "number",
+            "format": "float"
+          },
+          "earlyLaningPhaseGoldExpAdvantage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fasterSupportQuestCompletion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fastestLegendary": {
+            "type": "number",
+            "format": "float"
+          },
+          "hadAfkTeammate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highestChampionDamage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highestCrowdControlScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highestWardKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "junglerKillsEarlyJungle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsOnLanersEarlyJungleAsJungler": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "laningPhaseGoldExpAdvantage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "legendaryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxCsAdvantageOnLaneOpponent": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxLevelLeadLaneOpponent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mostWardsDestroyedOneSweeper": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mythicItemUsed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playedChampSelectPosition": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soloTurretsLategame": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsFirst25Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teleportTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "thirdInhibitorDestroyedTime": {
+            "type": "number",
+            "format": "float"
+          },
+          "threeWardsOneSweeperCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visionScoreAdvantageLaneOpponent": {
+            "type": "number",
+            "format": "float"
+          },
+          "infernalScalePickup": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fistBumpParticipation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voidMonsterKill": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityUses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "acesBefore15Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "alliedJungleMonsterKills": {
+            "type": "number",
+            "format": "float"
+          },
+          "baronTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "blastConeOppositeOpponentCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bountyGold": {
+            "type": "number",
+            "format": "float"
+          },
+          "buffsStolen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completeSupportQuestInTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "controlWardsPlaced": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "damagePerMinute": {
+            "type": "number",
+            "format": "float"
+          },
+          "damageTakenOnTeamPercentage": {
+            "type": "number",
+            "format": "float"
+          },
+          "dancedWithRiftHerald": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deathsByEnemyChamps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dodgeSkillShotsSmallWindow": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doubleAces": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dragonTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "effectiveHealAndShielding": {
+            "type": "number",
+            "format": "float"
+          },
+          "elderDragonKillsWithOpposingSoul": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "elderDragonMultikills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enemyChampionImmobilizations": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enemyJungleMonsterKills": {
+            "type": "number",
+            "format": "float"
+          },
+          "epicMonsterKillsNearEnemyJungler": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "epicMonsterKillsWithin30SecondsOfSpawn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "epicMonsterSteals": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "epicMonsterStolenWithoutSmite": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flawlessAces": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fullTeamTakedown": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameLength": {
+            "type": "number",
+            "format": "float"
+          },
+          "goldPerMinute": {
+            "type": "number",
+            "format": "float"
+          },
+          "hadOpenNexus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "immobilizeAndKillWithAlly": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "jungleCsBefore10Minutes": {
+            "type": "number",
+            "format": "float"
+          },
+          "junglerTakedownsNearDamagedEpicMonster": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kda": {
+            "type": "number",
+            "format": "float"
+          },
+          "killAfterHiddenWithAlly": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killParticipation": {
+            "type": "number",
+            "format": "float"
+          },
+          "killsNearEnemyTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsOnOtherLanesEarlyJungleAsLaner": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsUnderOwnTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "killsWithHelpFromEpicMonster": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "knockEnemyIntoTeamAndKill": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kTurretsDestroyedBeforePlatesFall": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "landSkillShotsEarlyGame": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "laneMinionsFirst10Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lostAnInhibitor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxKillDeficit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mejaisFullStackInTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "moreEnemyJungleThanOpponent": {
+            "type": "number",
+            "format": "float"
+          },
+          "multiKillOneSpell": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multikills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multikillsAfterAggressiveFlash": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multiTurretRiftHeraldCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outerTurretExecutesBefore10Minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outnumberedKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outnumberedNexusKill": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perfectDragonSoulsTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perfectGame": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pickKillWithAlly": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "poroExplosions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quickCleanse": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quickFirstTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "riftHeraldTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saveAllyFromDeath": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scuttleCrabKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skillshotsDodged": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skillshotsHit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "snowballsHit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soloBaronKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soloKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stealthWardsPlaced": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "survivedSingleDigitHpCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "survivedThreeImmobilizesInFight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownOnFirstTurret": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsAfterGainingLevelAdvantage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsBeforeJungleMinionSpawn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "takedownsInEnemyFountain": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamBaronKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamDamagePercentage": {
+            "type": "number",
+            "format": "float"
+          },
+          "teamElderDragonKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamRiftHeraldKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tookLargeDamageSurvived": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turretPlatesTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turretsTakenWithRiftHerald": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turretTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "twentyMinionsIn3SecondsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unseenRecalls": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visionScorePerMinute": {
+            "type": "number",
+            "format": "float"
+          },
+          "wardsGuarded": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wardTakedowns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wardTakedownsBefore20M": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameParticipantStat": {
+        "type": "object",
+        "properties": {
+          "loLGameParticipantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameDurationSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kda": {
+            "type": "number",
+            "format": "double"
+          },
+          "killParticipationPercent": {
+            "type": "number",
+            "format": "double"
+          },
+          "creepScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "csPerMinute": {
+            "type": "number",
+            "format": "double"
+          },
+          "goldEarned": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "goldPerMinute": {
+            "type": "number",
+            "format": "double"
+          },
+          "damageDealtToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "damagePerMinute": {
+            "type": "number",
+            "format": "double"
+          },
+          "damageTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wardsPlaced": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wardsKilled": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "physicalDamageToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "magicDamageToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trueDamageToChampions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "timeCcOthersSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rating": {
+            "type": "number",
+            "format": "double"
+          },
+          "computedOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameTeam": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "teamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "win": {
+            "type": "boolean"
+          },
+          "championKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "towerKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inhibitorKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dragonKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "riftHeraldKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "baronKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hordeKills": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstBlood": {
+            "type": "boolean"
+          },
+          "firstTower": {
+            "type": "boolean"
+          },
+          "firstInhibitor": {
+            "type": "boolean"
+          },
+          "firstDragon": {
+            "type": "boolean"
+          },
+          "firstBaron": {
+            "type": "boolean"
+          },
+          "firstRiftHerald": {
+            "type": "boolean"
+          },
+          "firstHorde": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameTimelineEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loLGameTimelineFrameId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "realTimestamp": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "eventType": {
+            "type": "string",
+            "nullable": true
+          },
+          "participantId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "participantPUUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "killerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "killerPUUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "victimId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "victimPUUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "killerTeamId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "teamId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "bounty": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "shutdownBounty": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "killStreakLength": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "multiKillLength": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "killType": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "beforeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "afterId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "goldGain": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "skillSlot": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "levelUpType": {
+            "type": "string",
+            "nullable": true
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "wardType": {
+            "type": "string",
+            "nullable": true
+          },
+          "creatorId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "creatorPUUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "buildingType": {
+            "type": "string",
+            "nullable": true
+          },
+          "towerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "laneType": {
+            "type": "string",
+            "nullable": true
+          },
+          "monsterType": {
+            "type": "string",
+            "nullable": true
+          },
+          "monsterSubType": {
+            "type": "string",
+            "nullable": true
+          },
+          "transformType": {
+            "type": "string",
+            "nullable": true
+          },
+          "dragonSoulType": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionX": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "positionY": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "participant": {
+            "$ref": "#/components/schemas/LoLGameParticipant"
+          },
+          "killer": {
+            "$ref": "#/components/schemas/LoLGameParticipant"
+          },
+          "victim": {
+            "$ref": "#/components/schemas/LoLGameParticipant"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/LoLGameParticipant"
+          },
+          "loLGameTimelineEventAssists": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLGameTimelineEventAssist"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLGameTimelineEventAssist": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loLGameTimelineEventId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "matchId": {
+            "type": "string",
+            "nullable": true
+          },
+          "participantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "participantPUUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "participant": {
+            "$ref": "#/components/schemas/LoLGameParticipant"
           }
         },
         "additionalProperties": false
@@ -3201,6 +4706,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LoLGameTimelineFrameParticipant"
+            },
+            "nullable": true
+          },
+          "loLGameTimelineEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLGameTimelineEvent"
             },
             "nullable": true
           }
@@ -3239,6 +4751,14 @@
             "format": "int32"
           },
           "participantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "positionX": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "positionY": {
             "type": "integer",
             "format": "int32"
           },
@@ -3303,6 +4823,106 @@
             "format": "int32"
           },
           "trueDamageTaken": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityHaste": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityPower": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "armor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "armorPen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "armorPenPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attackDamage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attackSpeed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bonusArmorPenPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bonusMagicPenPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ccReduction": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cooldownReduction": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "health": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "healthMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "healthRegen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lifesteal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "magicPen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "magicPenPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "magicResist": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "movementSpeed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "omnivamp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "physicalVamp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "power": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "powerMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "powerRegen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "spellVamp": {
             "type": "integer",
             "format": "int32"
           }
@@ -3391,6 +5011,11 @@
         "additionalProperties": false
       },
       "LoLQueueFilter": {
+        "enum": [0, 1, 2],
+        "type": "integer",
+        "format": "int32"
+      },
+      "LoLRankHistoryGranularity": {
         "enum": [0, 1, 2],
         "type": "integer",
         "format": "int32"
