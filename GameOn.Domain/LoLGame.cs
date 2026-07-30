@@ -72,6 +72,18 @@ namespace GameOn.Domain
         public long? FrameInterval { get; set; }
 
         /// <summary>
+        /// Gets or sets the MVP participant ID (highest <see cref="LoLGameParticipantStat.Rating"/> in the
+        /// winning team). Null if the game has no winning team, is a remake, or ratings aren't computable.
+        /// </summary>
+        public int? MvpParticipantId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ACE participant ID (highest <see cref="LoLGameParticipantStat.Rating"/> in the
+        /// losing team). Null if the game has no winning team, is a remake, or ratings aren't computable.
+        /// </summary>
+        public int? AceParticipantId { get; set; }
+
+        /// <summary>
         /// Gets or sets League of Legends Game Participants.
         /// </summary>
         public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
@@ -80,5 +92,11 @@ namespace GameOn.Domain
         /// Gets or sets League of Legends Timeline Frames.
         /// </summary>
         public virtual List<LoLGameTimelineFrame> LoLGameTimelineFrames { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the per-team objective counters (towers, dragons, heralds, barons...), mirrored
+        /// as-is from Riot's match-v5 <c>teams[]</c> payload.
+        /// </summary>
+        public virtual List<LoLGameTeam> LeagueOfLegendsGameTeams { get; set; } = null!;
     }
 }

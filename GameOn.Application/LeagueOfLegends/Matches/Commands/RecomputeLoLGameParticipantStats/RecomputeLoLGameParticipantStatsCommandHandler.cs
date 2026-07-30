@@ -55,6 +55,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGamePa
                 return 0;
             }
 
+            var games = await this.context.LeagueOfLegendsGames
+                .Where(x => matchIds.Contains(x.MatchId))
+                .ToDictionaryAsync(x => x.MatchId, cancellationToken);
+
             var lastFrameTimestamps = await this.context.LeagueOfLegendsGameTimelineFrames
                 .Where(f => matchIds.Contains(f.MatchId))
                 .GroupBy(f => f.MatchId)
@@ -74,6 +78,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGamePa
                     x.TotalGold,
                     x.TotalDamageDoneToChampions,
                     x.TotalDamageTaken,
+                    x.PhysicalDamageDoneToChampions,
+                    x.MagicDamageDoneToChampions,
+                    x.TrueDamageDoneToChampions,
+                    x.TimeEnemySpentControlled,
                 })
                 .ToListAsync(cancellationToken);
 
@@ -93,6 +101,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGamePa
                             TotalGold = frame.TotalGold,
                             TotalDamageDoneToChampions = frame.TotalDamageDoneToChampions,
                             TotalDamageTaken = frame.TotalDamageTaken,
+                            PhysicalDamageDoneToChampions = frame.PhysicalDamageDoneToChampions,
+                            MagicDamageDoneToChampions = frame.MagicDamageDoneToChampions,
+                            TrueDamageDoneToChampions = frame.TrueDamageDoneToChampions,
+                            TimeEnemySpentControlled = frame.TimeEnemySpentControlled,
                         };
                     });
 
@@ -113,10 +125,13 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGamePa
             foreach (var matchParticipants in participants.GroupBy(x => x.MatchId))
             {
                 var lastFrameTimestampMs = lastFrameTimestamps.GetValueOrDefault(matchParticipants.Key);
+                var matchParticipantsList = matchParticipants.ToList();
 
-                foreach (var teamParticipants in matchParticipants.GroupBy(x => x.TeamId))
+                foreach (var teamParticipants in matchParticipantsList.GroupBy(x => x.TeamId))
                 {
                     var teamKills = teamParticipants.Sum(x => x.Kills);
+                    var teamDamage = teamParticipants.Sum(p =>
+                        lastFrameLookup.TryGetValue((p.MatchId, p.Puuid), out var frame) ? frame.TotalDamageDoneToChampions : 0);
 
                     foreach (var participant in teamParticipants)
                     {
@@ -125,12 +140,23 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGamePa
                         participant.Stats = LoLGameParticipantStatCalculator.Compute(
                             participant,
                             teamKills,
+                            teamDamage,
                             lastFrame,
                             lastFrameTimestampMs,
                             wardsPlacedLookup.GetValueOrDefault((participant.MatchId, participant.Puuid)),
                             wardsKilledLookup.GetValueOrDefault((participant.MatchId, participant.Puuid)),
                             participant.Stats);
                     }
+                }
+
+                if (games.TryGetValue(matchParticipants.Key, out var game))
+                {
+                    var (mvpParticipantId, aceParticipantId) = LoLGameParticipantStatCalculator.DetermineMvpAndAce(
+                        matchParticipantsList,
+                        game.WinningTeamId,
+                        game.IsRemake);
+                    game.MvpParticipantId = mvpParticipantId;
+                    game.AceParticipantId = aceParticipantId;
                 }
             }
 

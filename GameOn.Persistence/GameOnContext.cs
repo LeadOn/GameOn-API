@@ -119,6 +119,11 @@ namespace GameOn.Persistence
         public DbSet<LoLGameTimelineEventAssist> LeagueOfLegendsGameTimelineEventAssists { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Game Teams.
+        /// </summary>
+        public DbSet<LoLGameTeam> LeagueOfLegendsGameTeams { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -698,6 +703,12 @@ namespace GameOn.Persistence
                 entity.Property(e => e.FrameInterval)
                     .HasColumnName("frame_interval");
 
+                entity.Property(e => e.MvpParticipantId)
+                    .HasColumnName("mvp_participant_id");
+
+                entity.Property(e => e.AceParticipantId)
+                    .HasColumnName("ace_participant_id");
+
                 entity.HasMany(e => e.LeagueOfLegendsGameParticipants)
                     .WithOne(f => f.Game)
                     .HasForeignKey(f => f.MatchId)
@@ -709,6 +720,92 @@ namespace GameOn.Persistence
                     .HasForeignKey(e => e.QueueId)
                     .HasConstraintName("FK_LoLGame_LoLQueue")
                     .OnDelete(DeleteBehavior.SetNull);
+
+                // Restrict (not Cascade/SetNull): LoLGame already cascades to LoLGameParticipant via
+                // FK_LoL_Games_Participants above, SQL Server refuses a second path back to the same
+                // table. UpdateLoLGameCommandHandler nulls both columns before removing old participants.
+                entity.HasOne<LoLGameParticipant>()
+                    .WithMany()
+                    .HasForeignKey(e => e.MvpParticipantId)
+                    .HasConstraintName("FK_LoLGame_Mvp_Participant")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<LoLGameParticipant>()
+                    .WithMany()
+                    .HasForeignKey(e => e.AceParticipantId)
+                    .HasConstraintName("FK_LoLGame_Ace_Participant")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<LoLGameTeam>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsGameTeam");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TeamId)
+                    .HasColumnName("team_id");
+
+                entity.Property(e => e.Win)
+                    .HasColumnName("win");
+
+                entity.Property(e => e.ChampionKills)
+                    .HasColumnName("champion_kills");
+
+                entity.Property(e => e.TowerKills)
+                    .HasColumnName("tower_kills");
+
+                entity.Property(e => e.InhibitorKills)
+                    .HasColumnName("inhibitor_kills");
+
+                entity.Property(e => e.DragonKills)
+                    .HasColumnName("dragon_kills");
+
+                entity.Property(e => e.RiftHeraldKills)
+                    .HasColumnName("rift_herald_kills");
+
+                entity.Property(e => e.BaronKills)
+                    .HasColumnName("baron_kills");
+
+                entity.Property(e => e.HordeKills)
+                    .HasColumnName("horde_kills");
+
+                entity.Property(e => e.FirstBlood)
+                    .HasColumnName("first_blood");
+
+                entity.Property(e => e.FirstTower)
+                    .HasColumnName("first_tower");
+
+                entity.Property(e => e.FirstInhibitor)
+                    .HasColumnName("first_inhibitor");
+
+                entity.Property(e => e.FirstDragon)
+                    .HasColumnName("first_dragon");
+
+                entity.Property(e => e.FirstBaron)
+                    .HasColumnName("first_baron");
+
+                entity.Property(e => e.FirstRiftHerald)
+                    .HasColumnName("first_rift_herald");
+
+                entity.Property(e => e.FirstHorde)
+                    .HasColumnName("first_horde");
+
+                entity.HasOne(e => e.Game)
+                    .WithMany(f => f.LeagueOfLegendsGameTeams)
+                    .HasForeignKey(e => e.MatchId)
+                    .HasConstraintName("FK_LoL_Game_Team")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<LoLQueue>(entity =>
@@ -867,6 +964,21 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.WardsKilled)
                     .HasColumnName("wards_killed");
+
+                entity.Property(e => e.PhysicalDamageToChampions)
+                    .HasColumnName("physical_damage_to_champions");
+
+                entity.Property(e => e.MagicDamageToChampions)
+                    .HasColumnName("magic_damage_to_champions");
+
+                entity.Property(e => e.TrueDamageToChampions)
+                    .HasColumnName("true_damage_to_champions");
+
+                entity.Property(e => e.TimeCcOthersSeconds)
+                    .HasColumnName("time_cc_others_seconds");
+
+                entity.Property(e => e.Rating)
+                    .HasColumnName("rating");
 
                 entity.Property(e => e.ComputedOn)
                     .HasColumnName("computed_on");
