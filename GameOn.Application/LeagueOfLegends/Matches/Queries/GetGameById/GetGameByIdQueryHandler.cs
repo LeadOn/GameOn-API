@@ -35,6 +35,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById
                 .ThenInclude(y => y.Stats)
                 .Include(x => x.LeagueOfLegendsGameParticipants)
                 .ThenInclude(y => y.Challenges)
+                .Include(x => x.LeagueOfLegendsGameTeams)
                 .FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
         }
     }

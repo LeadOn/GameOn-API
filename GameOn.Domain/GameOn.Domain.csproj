@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.2.4</Version>
-	<PackageReleaseNotes>Added way more data in LoL Games</PackageReleaseNotes>
+	<Version>7.3.1</Version>
+	<PackageReleaseNotes>Some data in LoL Games are directly calculated from API now.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
