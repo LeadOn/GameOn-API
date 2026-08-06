@@ -63,7 +63,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
             {
                 playerInDb.LolSummonerLevel = summonerIdFromRiot.SummonerLevel;
                 playerInDb.LolIconId = summonerIdFromRiot.ProfileIconId;
-                playerInDb.LolRefreshedOn = DateTime.Now;
+                playerInDb.LolRefreshedOn = DateTime.UtcNow;
 
                 // Updating player Rank
                 var playerRank = await this.leagueService.GetLeagueEntries(playerInDb.RiotGamesPUUID, cancellationToken);
@@ -87,7 +87,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
 
                         var playRank = new LeagueOfLegendsRankHistory
                         {
-                            CreatedOn = DateTime.Now,
+                            CreatedOn = DateTime.UtcNow,
                             FreshBlood = entry.FreshBlood,
                             HotStreak = entry.HotStreak,
                             Inactive = entry.Inactive,

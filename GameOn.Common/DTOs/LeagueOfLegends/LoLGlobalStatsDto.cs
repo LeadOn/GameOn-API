@@ -30,7 +30,7 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         public LoLFunStatDto? BiggestInter { get; set; }
 
         /// <summary>
-        /// Gets or sets the Highest Bounty award: highest bounty level reached in a single game.
+        /// Gets or sets the Highest Bounty award: biggest shutdown bounty an enemy cashed in on them.
         /// </summary>
         public LoLFunStatDto? HighestBounty { get; set; }
 

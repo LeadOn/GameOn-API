@@ -685,3 +685,6 @@ FodyWeavers.xsd
 # LoL backfill script progress files
 scripts/backfill_done.txt
 scripts/backfill_failed.txt
+
+# Local launch settings (contains machine-specific env/config)
+**/Properties/launchSettings.json

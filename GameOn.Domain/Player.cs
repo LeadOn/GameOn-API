@@ -69,7 +69,7 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets player's creation date.
         /// </summary>
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Gets or sets a value indicating whether gets or sets whether a player is archived or not.

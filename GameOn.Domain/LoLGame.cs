@@ -34,17 +34,17 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets Retrieved on Date.
         /// </summary>
-        public DateTime RetrievedOn { get; set; } = DateTime.Now;
+        public DateTime RetrievedOn { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Gets or sets Game start DateTime.
         /// </summary>
-        public DateTime GameStart { get; set; } = DateTime.Now;
+        public DateTime GameStart { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Gets or sets Game end DateTime.
         /// </summary>
-        public DateTime GameEnd { get; set; } = DateTime.Now;
+        public DateTime GameEnd { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Gets or sets Winning team ID.

@@ -72,7 +72,7 @@ namespace GameOn.Domain
         /// <summary>
         /// Gets or sets player's creation date.
         /// </summary>
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Gets or sets Tournaments won.

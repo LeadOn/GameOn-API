@@ -47,7 +47,7 @@ namespace GameOn.Application.FIFA.FifaGamePlayed.Commands.DeclareFifaGamePlayedS
             gameInDb.IsPlayed = true;
             gameInDb.TeamScore1 = request.ScoreDto.ScoreTeam1;
             gameInDb.TeamScore2 = request.ScoreDto.ScoreTeam2;
-            gameInDb.PlayedOn = DateTime.Now;
+            gameInDb.PlayedOn = DateTime.UtcNow;
 
             this.context.FifaGamesPlayed.Update(gameInDb);
             await this.context.SaveChangesAsync(cancellationToken);
