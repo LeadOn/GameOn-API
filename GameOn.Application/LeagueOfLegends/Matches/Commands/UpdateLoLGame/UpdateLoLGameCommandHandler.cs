@@ -103,7 +103,17 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     Assists = participant.Assists,
                     AllInPings = participant.AllInPings,
                     AssistMePings = participant.AssistMePings,
+                    BaitPings = participant.BaitPings,
+                    BasicPings = participant.BasicPings,
                     CommandPings = participant.CommandPings,
+                    DangerPings = participant.DangerPings,
+                    EnemyMissingPings = participant.EnemyMissingPings,
+                    EnemyVisionPings = participant.EnemyVisionPings,
+                    HoldPings = participant.HoldPings,
+                    NeedVisionPings = participant.NeedVisionPings,
+                    OnMyWayPings = participant.OnMyWayPings,
+                    PushPings = participant.PushPings,
+                    VisionClearedPings = participant.VisionClearedPings,
                     BaronKills = participant.BaronKills,
                     BountyLevel = participant.BountyLevel,
                     ConsumablesPurchased = participant.ConsumablesPurchased,
@@ -232,11 +242,10 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             matchInDb.GameVersion = matchFromRiot.Info.GameVersion;
             matchInDb.FrameInterval = timelineFromRiot.Info.FrameInterval;
 
-            matchInDb.GameStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            matchInDb.GameStart = matchInDb.GameStart.AddMilliseconds(matchFromRiot.Info.GameStartTimeStamp).ToLocalTime();
-
-            matchInDb.GameEnd = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            matchInDb.GameEnd = matchInDb.GameEnd.AddMilliseconds((double)matchFromRiot.Info.GameEndTimestamp).ToLocalTime();
+            // Riot timestamps are epoch milliseconds, and dates are persisted in UTC: converting to the
+            // server clock here would make the stored value depend on where the API happens to run.
+            matchInDb.GameStart = DateTime.UnixEpoch.AddMilliseconds(matchFromRiot.Info.GameStartTimeStamp);
+            matchInDb.GameEnd = DateTime.UnixEpoch.AddMilliseconds((double)matchFromRiot.Info.GameEndTimestamp);
 
             var queueExists = await this.context.LeagueOfLegendsQueues.AnyAsync(x => x.Id == matchFromRiot.Info.QueueId, cancellationToken);
             matchInDb.QueueId = queueExists ? matchFromRiot.Info.QueueId : null;

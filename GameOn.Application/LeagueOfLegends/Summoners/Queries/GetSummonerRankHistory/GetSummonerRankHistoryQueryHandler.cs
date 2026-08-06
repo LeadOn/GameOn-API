@@ -199,7 +199,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHi
                 _ => 30,
             };
 
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var since = now.AddDays(-days);
 
             var soloHistory = await this.context.LeagueOfLegendsRankHistory

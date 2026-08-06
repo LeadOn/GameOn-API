@@ -9,6 +9,7 @@ namespace GameOn.Persistence
     using GameOn.Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
+    using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
     /// <summary>
     /// GameOn database context.
@@ -1539,6 +1540,46 @@ namespace GameOn.Persistence
                     .HasConstraintName("FK_LoL_EventAssist_Participant")
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            ConfigureUtcDates(modelBuilder);
+        }
+
+        /// <summary>
+        /// Forces every date of the model through a UTC round-trip.
+        /// <para>
+        /// SQL Server datetime2 columns carry no offset, so EF materializes every date with an
+        /// <see cref="DateTimeKind.Unspecified"/> kind, and System.Text.Json then serializes it without the
+        /// trailing "Z" — leaving clients to guess the zone, and getting it wrong by their own UTC offset.
+        /// Everything is written in UTC, so the kind is restored on read and enforced on write.
+        /// </para>
+        /// </summary>
+        /// <param name="modelBuilder">Model builder.</param>
+        private static void ConfigureUtcDates(ModelBuilder modelBuilder)
+        {
+            var toUtc = new ValueConverter<DateTime, DateTime>(
+                v => v.Kind == DateTimeKind.Local ? v.ToUniversalTime() : DateTime.SpecifyKind(v, DateTimeKind.Utc),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            var nullableToUtc = new ValueConverter<DateTime?, DateTime?>(
+                v => v.HasValue
+                    ? (v.Value.Kind == DateTimeKind.Local ? v.Value.ToUniversalTime() : DateTime.SpecifyKind(v.Value, DateTimeKind.Utc))
+                    : v,
+                v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(toUtc);
+                    }
+                    else if (property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(nullableToUtc);
+                    }
+                }
+            }
         }
     }
 }
