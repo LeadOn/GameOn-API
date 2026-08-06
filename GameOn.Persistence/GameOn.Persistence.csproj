@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.3.1</Version>
-	<PackageReleaseNotes>Some data in LoL Games are directly calculated from API now.</PackageReleaseNotes>
+	<Version>7.3.2</Version>
+	<PackageReleaseNotes>Fixed date display issue and now fun stats are loaded on 7 days by default.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
