@@ -72,7 +72,7 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
                         {
                             playerInDb.LolSummonerLevel = summonerIdFromRiot.SummonerLevel;
                             playerInDb.LolIconId = summonerIdFromRiot.ProfileIconId;
-                            playerInDb.LolRefreshedOn = DateTime.Now;
+                            playerInDb.LolRefreshedOn = DateTime.UtcNow;
                         }
                     }
                 }

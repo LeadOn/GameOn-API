@@ -30,16 +30,77 @@ namespace GameOn.External.RiotGames.Models.DTOs
         public int Assists { get; set; }
 
         /// <summary>
+        /// Gets or sets bait pings.
+        /// </summary>
+        [JsonProperty("baitPings")]
+        public int BaitPings { get; set; }
+
+        /// <summary>
         /// Gets or sets baron kills.
         /// </summary>
         [JsonProperty("baronKills")]
         public int BaronKills { get; set; }
 
         /// <summary>
-        /// Gets or sets bounty level.
+        /// Gets or sets basic pings.
+        /// </summary>
+        [JsonProperty("basicPings")]
+        public int BasicPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets bounty level. Riot stopped returning this field on match-v5 in 2025,
+        /// so it stays at 0 on every game imported since: never rank anything on it.
         /// </summary>
         [JsonProperty("bountyLevel")]
         public int BountyLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets danger pings.
+        /// </summary>
+        [JsonProperty("dangerPings")]
+        public int DangerPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets enemy missing pings.
+        /// </summary>
+        [JsonProperty("enemyMissingPings")]
+        public int EnemyMissingPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets enemy vision pings.
+        /// </summary>
+        [JsonProperty("enemyVisionPings")]
+        public int EnemyVisionPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets hold pings.
+        /// </summary>
+        [JsonProperty("holdPings")]
+        public int HoldPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets need vision pings.
+        /// </summary>
+        [JsonProperty("needVisionPings")]
+        public int NeedVisionPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets on my way pings.
+        /// </summary>
+        [JsonProperty("onMyWayPings")]
+        public int OnMyWayPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets push pings.
+        /// </summary>
+        [JsonProperty("pushPings")]
+        public int PushPings { get; set; }
+
+        /// <summary>
+        /// Gets or sets vision cleared pings.
+        /// </summary>
+        [JsonProperty("visionClearedPings")]
+        public int VisionClearedPings { get; set; }
 
         /// <summary>
         /// Gets or sets Champ experience.
