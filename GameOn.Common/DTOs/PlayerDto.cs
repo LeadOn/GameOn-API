@@ -118,5 +118,29 @@ namespace GameOn.Common.DTOs
         /// Gets or sets current player's League of Legends Flex rank.
         /// </summary>
         public LeagueOfLegendsRankHistory? LeagueOfLegendsFlexRank { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the player's last 5 ranked Solo/Duo game results, oldest to newest (true = win).
+        /// Fewer than 5 entries when the player hasn't played that many ranked Solo/Duo games yet.
+        /// </summary>
+        public List<bool> RecentFormSolo { get; set; } = new List<bool>();
+
+        /// <summary>
+        /// Gets or sets the player's last 5 ranked Flex game results, oldest to newest (true = win).
+        /// Fewer than 5 entries when the player hasn't played that many ranked Flex games yet.
+        /// </summary>
+        public List<bool> RecentFormFlex { get; set; } = new List<bool>();
+
+        /// <summary>
+        /// Gets or sets the Solo/Duo LP change over the trailing 7 days (current LP minus the LP as of 7
+        /// days ago, on a continuous cross-tier scale). Null when there isn't a rank snapshot both now and
+        /// at least 7 days ago (e.g. a newly linked account, or a queue never played).
+        /// </summary>
+        public int? LpChange7DaysSolo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Flex LP change over the trailing 7 days. See <see cref="LpChange7DaysSolo"/>.
+        /// </summary>
+        public int? LpChange7DaysFlex { get; set; }
     }
 }
