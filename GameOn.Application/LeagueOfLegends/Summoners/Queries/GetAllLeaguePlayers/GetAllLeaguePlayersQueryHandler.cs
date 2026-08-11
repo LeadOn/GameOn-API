@@ -4,8 +4,10 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers
 {
+    using GameOn.Application.LeagueOfLegends.Summoners.Services;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
+    using GameOn.Domain;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +16,17 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
     /// </summary>
     public class GetAllLeaguePlayersQueryHandler : IRequestHandler<GetAllLeaguePlayersQuery, IEnumerable<PlayerDto>>
     {
+        // Match-v5 queue IDs for the two ranked queues (see GetLoLGlobalStatsQueryHandler, which uses the
+        // same constants). league-v4's RANKED_SOLO_5x5 / RANKED_FLEX_SR QueueType strings, used for the
+        // rank history below, don't line up with these — the two Riot APIs don't share identifiers.
+        private const int SoloQueueId = 420;
+        private const int FlexQueueId = 440;
+
+        private const string SoloQueueType = "RANKED_SOLO_5x5";
+        private const string FlexQueueType = "RANKED_FLEX_SR";
+
+        private const int RecentFormGameCount = 5;
+
         private readonly IApplicationDbContext context;
 
         /// <summary>
@@ -30,18 +43,88 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
         {
             var playersInDb = await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived && x.RiotGamesPUUID != null).Select(x => new PlayerDto(x)).ToListAsync(cancellationToken);
 
+            var playerIds = playersInDb.Select(x => x.Id).ToList();
+
+            // Every rank snapshot (league-v4's sparse change log, see UpdatePlayerSummonerCommandHandler:
+            // a row is only inserted when tier/rank/LP actually changed) for the tracked players and
+            // ranked queues, newest first so both the current rank and the 7-day baseline can be read off
+            // the same in-memory list per player/queue below.
+            var rankHistory = await this.context.LeagueOfLegendsRankHistory
+                .Where(x => playerIds.Contains(x.PlayerId) && (x.QueueType == SoloQueueType || x.QueueType == FlexQueueType))
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync(cancellationToken);
+
+            // Every ranked Solo/Duo or Flex participation for the tracked players, newest first, just
+            // enough to read off the last 5 results per player/queue below. Remakes and empty-champion
+            // placeholders (failed imports) are excluded, same filter as GetLoLGlobalStatsQueryHandler.
+            var recentGames = await this.context.LeagueOfLegendsGameParticipants
+                .Where(x => x.PlayerId != null
+                    && playerIds.Contains(x.PlayerId.Value)
+                    && x.ChampionName != string.Empty
+                    && !x.Game.IsRemake
+                    && (x.Game.QueueId == SoloQueueId || x.Game.QueueId == FlexQueueId))
+                .OrderByDescending(x => x.Game.GameStart)
+                .Select(x => new { x.PlayerId, x.Game.QueueId, x.Win })
+                .ToListAsync(cancellationToken);
+
+            var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
+
             foreach (var player in playersInDb)
             {
-                var soloRank = await this.context.LeagueOfLegendsRankHistory.OrderByDescending(x => x.CreatedOn).FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.QueueType == "RANKED_SOLO_5x5", cancellationToken);
+                var soloHistory = rankHistory.Where(x => x.PlayerId == player.Id && x.QueueType == SoloQueueType).ToList();
+                var flexHistory = rankHistory.Where(x => x.PlayerId == player.Id && x.QueueType == FlexQueueType).ToList();
 
-                player.LeagueOfLegendsSoloRank = soloRank;
+                player.LeagueOfLegendsSoloRank = soloHistory.FirstOrDefault();
+                player.LeagueOfLegendsFlexRank = flexHistory.FirstOrDefault();
 
-                var flexRank = await this.context.LeagueOfLegendsRankHistory.OrderByDescending(x => x.CreatedOn).FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.QueueType == "RANKED_FLEX_SR", cancellationToken);
+                player.LpChange7DaysSolo = GetLpChange7Days(soloHistory, sevenDaysAgo);
+                player.LpChange7DaysFlex = GetLpChange7Days(flexHistory, sevenDaysAgo);
 
-                player.LeagueOfLegendsFlexRank = flexRank;
+                // Newest first coming out of the query above; reversed to oldest-to-newest for display
+                // (left-to-right chronological, matching the front's form squares).
+                player.RecentFormSolo = recentGames
+                    .Where(x => x.PlayerId == player.Id && x.QueueId == SoloQueueId)
+                    .Take(RecentFormGameCount)
+                    .Select(x => x.Win)
+                    .Reverse()
+                    .ToList();
+
+                player.RecentFormFlex = recentGames
+                    .Where(x => x.PlayerId == player.Id && x.QueueId == FlexQueueId)
+                    .Take(RecentFormGameCount)
+                    .Select(x => x.Win)
+                    .Reverse()
+                    .ToList();
             }
 
             return playersInDb;
+        }
+
+        /// <summary>
+        /// Compares the most recent rank snapshot against the last one at or before <paramref name="sevenDaysAgo"/>.
+        /// </summary>
+        /// <param name="queueHistoryDescending">A single queue's rank history for one player, newest first.</param>
+        /// <param name="sevenDaysAgo">The 7-day-ago cutoff, in the same clock as <see cref="LeagueOfLegendsRankHistory.CreatedOn"/> (UTC).</param>
+        /// <returns>The LP change, or null when there's no snapshot on one side of the window or the tier/rank isn't placeable on the scale.</returns>
+        private static int? GetLpChange7Days(List<LeagueOfLegendsRankHistory> queueHistoryDescending, DateTime sevenDaysAgo)
+        {
+            var current = queueHistoryDescending.FirstOrDefault();
+            var baseline = queueHistoryDescending.FirstOrDefault(x => x.CreatedOn <= sevenDaysAgo);
+
+            if (current is null || baseline is null)
+            {
+                return null;
+            }
+
+            var currentLp = LoLRankScaleCalculator.NormalizedLp(current.Tier, current.Rank, current.LeaguePoints);
+            var baselineLp = LoLRankScaleCalculator.NormalizedLp(baseline.Tier, baseline.Rank, baseline.LeaguePoints);
+
+            if (currentLp is null || baselineLp is null)
+            {
+                return null;
+            }
+
+            return currentLp.Value - baselineLp.Value;
         }
     }
 }
