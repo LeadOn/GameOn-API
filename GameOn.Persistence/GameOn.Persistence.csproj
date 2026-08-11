@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.3.2</Version>
-	<PackageReleaseNotes>Fixed date display issue and now fun stats are loaded on 7 days by default.</PackageReleaseNotes>
+	<Version>7.3.3</Version>
+	<PackageReleaseNotes>Working on JungleDiff related routes.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
