@@ -14,5 +14,19 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         /// Gets or sets the squad's weekly activity recap.
         /// </summary>
         public LoLWeeklyActivityDto WeeklyActivity { get; set; } = new LoLWeeklyActivityDto();
+
+        /// <summary>
+        /// Gets or sets the "fact of the week" highlight: the crew member with the best net LP
+        /// progression this week. Null when no player has a comparable rank snapshot both this week
+        /// and last week on any ranked queue (e.g. nobody has played ranked yet this week).
+        /// </summary>
+        public LoLFactOfTheWeekDto? FactOfTheWeek { get; set; }
+
+        /// <summary>
+        /// Gets or sets the crew's fun stat awards over the last 7 rolling days (same computation as
+        /// <c>GET lol/Stats/global</c> with <see cref="LoLStatsPeriod.Week"/>, all queues). Individual
+        /// awards are null when nobody set a record in the window.
+        /// </summary>
+        public LoLGlobalStatsDto CrewRecords { get; set; } = new LoLGlobalStatsDto();
     }
 }
