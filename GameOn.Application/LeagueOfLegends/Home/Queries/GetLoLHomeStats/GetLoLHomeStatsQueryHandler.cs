@@ -58,6 +58,7 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                     && x.Game.GameStart >= lastWeekStart)
                 .Select(x => new
                 {
+                    PlayerId = x.PlayerId!.Value,
                     x.Win,
                     x.Game.GameStart,
                     x.Game.GameEnd,
@@ -92,6 +93,7 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                 .ToListAsync(cancellationToken);
 
             var netLpChangeThisWeek = 0;
+            var lpChangeByPlayer = new Dictionary<int, int>();
 
             foreach (var queueHistory in rankHistory.GroupBy(x => new { x.PlayerId, x.QueueType }))
             {
@@ -115,7 +117,52 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                     continue;
                 }
 
-                netLpChangeThisWeek += thisWeekLp.Value - lastWeekLp.Value;
+                var lpDelta = thisWeekLp.Value - lastWeekLp.Value;
+
+                netLpChangeThisWeek += lpDelta;
+                lpChangeByPlayer[queueHistory.Key.PlayerId] = lpChangeByPlayer.GetValueOrDefault(queueHistory.Key.PlayerId) + lpDelta;
+            }
+
+            // "Fact of the week": whoever gained the most LP this week, summed across their ranked queues.
+            // Always the current week's top gainer, whether or not it beats any past record. Deterministic
+            // tie-break on PlayerId, same convention as the global fun stats.
+            LoLFactOfTheWeekDto? factOfTheWeek = null;
+
+            if (lpChangeByPlayer.Count > 0)
+            {
+                var topGainer = lpChangeByPlayer.OrderByDescending(x => x.Value).ThenBy(x => x.Key).First();
+                var topGainerPlayer = await this.context.Players.FirstOrDefaultAsync(x => x.Id == topGainer.Key, cancellationToken);
+
+                if (topGainerPlayer is not null)
+                {
+                    var topGainerGames = thisWeek.Where(x => x.PlayerId == topGainer.Key).ToList();
+                    var topGainerWins = topGainerGames.Count(x => x.Win);
+
+                    var longestWinStreak = 0;
+                    var currentWinStreak = 0;
+
+                    foreach (var game in topGainerGames.OrderBy(x => x.GameStart))
+                    {
+                        if (!game.Win)
+                        {
+                            currentWinStreak = 0;
+                            continue;
+                        }
+
+                        currentWinStreak++;
+                        longestWinStreak = Math.Max(longestWinStreak, currentWinStreak);
+                    }
+
+                    factOfTheWeek = new LoLFactOfTheWeekDto
+                    {
+                        Player = topGainerPlayer,
+                        LpChange = topGainer.Value,
+                        GamesThisWeek = topGainerGames.Count,
+                        WinsThisWeek = topGainerWins,
+                        WinRateThisWeek = topGainerGames.Count > 0 ? Math.Round(100.0 * topGainerWins / topGainerGames.Count, 1) : 0,
+                        LongestWinStreakThisWeek = longestWinStreak,
+                    };
+                }
             }
 
             return new LoLHomeStatsDto
@@ -131,6 +178,7 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                     AverageGameDurationMinutesThisWeek = games > 0 ? Math.Round(totalPlaytimeMinutes / games, 1) : 0,
                     NetLpChangeThisWeek = netLpChangeThisWeek,
                 },
+                FactOfTheWeek = factOfTheWeek,
             };
         }
     }
