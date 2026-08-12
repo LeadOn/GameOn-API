@@ -21,5 +21,12 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         /// and last week on any ranked queue (e.g. nobody has played ranked yet this week).
         /// </summary>
         public LoLFactOfTheWeekDto? FactOfTheWeek { get; set; }
+
+        /// <summary>
+        /// Gets or sets the crew's fun stat awards over the last 7 rolling days (same computation as
+        /// <c>GET lol/Stats/global</c> with <see cref="LoLStatsPeriod.Week"/>, all queues). Individual
+        /// awards are null when nobody set a record in the window.
+        /// </summary>
+        public LoLGlobalStatsDto CrewRecords { get; set; } = new LoLGlobalStatsDto();
     }
 }

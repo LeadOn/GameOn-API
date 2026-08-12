@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
 {
+    using GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats;
     using GameOn.Application.LeagueOfLegends.Summoners.Services;
     using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Common.Interfaces;
@@ -26,14 +27,17 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
             TimeZoneInfo.TryFindSystemTimeZoneById("Europe/Paris", out var timeZone) ? timeZone : TimeZoneInfo.Utc;
 
         private readonly IApplicationDbContext context;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetLoLHomeStatsQueryHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
-        public GetLoLHomeStatsQueryHandler(IApplicationDbContext context)
+        /// <param name="mediator">MediatR interface, injected.</param>
+        public GetLoLHomeStatsQueryHandler(IApplicationDbContext context, ISender mediator)
         {
             this.context = context;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -165,6 +169,11 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                 }
             }
 
+            // "Records du crew": the same fun stat awards as GET lol/Stats/global, just scoped to a
+            // rolling 7-day window instead of recomputed here — the ranking/tie-break/zero-data logic
+            // already lives in GetLoLGlobalStatsQueryHandler and shouldn't be duplicated.
+            var crewRecords = await this.mediator.Send(new GetLoLGlobalStatsQuery { Period = LoLStatsPeriod.Week }, cancellationToken);
+
             return new LoLHomeStatsDto
             {
                 WeeklyActivity = new LoLWeeklyActivityDto
@@ -179,6 +188,7 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                     NetLpChangeThisWeek = netLpChangeThisWeek,
                 },
                 FactOfTheWeek = factOfTheWeek,
+                CrewRecords = crewRecords,
             };
         }
     }
