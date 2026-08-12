@@ -93,5 +93,11 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         /// Gets or sets the Cursed Patch award: game version with the worst win rate across all tracked players.
         /// </summary>
         public LoLFunStatDto? CursedPatch { get; set; }
+
+        /// <summary>
+        /// Gets or sets the crew's 5 most played champions over the queried period, most played first
+        /// (ties broken by win rate, then champion name for a stable order).
+        /// </summary>
+        public List<LoLChampionStatDto> TopChampions { get; set; } = new List<LoLChampionStatDto>();
     }
 }
