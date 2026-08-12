@@ -131,6 +131,20 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             {
                 TotalGamesAnalyzed = participants.Select(x => x.MatchId).Distinct().Count(),
                 TotalPlayersTracked = participants.Select(x => x.PlayerId).Distinct().Count(),
+                TopChampions = participants
+                    .GroupBy(x => x.ChampionName)
+                    .Select(g => new LoLChampionStatDto
+                    {
+                        ChampionName = g.Key,
+                        GamesPlayed = g.Count(),
+                        Wins = g.Count(x => x.Win),
+                        WinRate = Math.Round(100.0 * g.Count(x => x.Win) / g.Count(), 1),
+                    })
+                    .OrderByDescending(x => x.GamesPlayed)
+                    .ThenByDescending(x => x.WinRate)
+                    .ThenBy(x => x.ChampionName, StringComparer.Ordinal)
+                    .Take(5)
+                    .ToList(),
             };
 
             if (participants.Count == 0)

@@ -791,6 +791,27 @@
         }
       }
     },
+    "/lol/Home": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Get the League of Legends home page recap.",
+        "responses": {
+          "200": {
+            "description": "Home page recap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoLHomeStatsDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unknown error happened."
+          }
+        }
+      }
+    },
     "/lol/Match/player/{playerId}": {
       "get": {
         "tags": ["Match"],
@@ -3550,6 +3571,57 @@
         },
         "additionalProperties": false
       },
+      "LoLChampionStatDto": {
+        "type": "object",
+        "properties": {
+          "championName": {
+            "type": "string",
+            "nullable": true
+          },
+          "gamesPlayed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wins": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "winRate": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLFactOfTheWeekDto": {
+        "type": "object",
+        "properties": {
+          "player": {
+            "$ref": "#/components/schemas/Player"
+          },
+          "lpChange": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gamesThisWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "winsThisWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "winRateThisWeek": {
+            "type": "number",
+            "format": "double"
+          },
+          "longestWinStreakThisWeek": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "LoLFunStatDto": {
         "type": "object",
         "properties": {
@@ -3678,11 +3750,51 @@
             "type": "integer",
             "format": "int32"
           },
+          "baitPings": {
+            "type": "integer",
+            "format": "int32"
+          },
           "baronKills": {
             "type": "integer",
             "format": "int32"
           },
+          "basicPings": {
+            "type": "integer",
+            "format": "int32"
+          },
           "bountyLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dangerPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enemyMissingPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enemyVisionPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "holdPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "needVisionPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "onMyWayPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pushPings": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "visionClearedPings": {
             "type": "integer",
             "format": "int32"
           },
@@ -4984,6 +5096,28 @@
           },
           "cursedPatch": {
             "$ref": "#/components/schemas/LoLFunStatDto"
+          },
+          "topChampions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoLChampionStatDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoLHomeStatsDto": {
+        "type": "object",
+        "properties": {
+          "weeklyActivity": {
+            "$ref": "#/components/schemas/LoLWeeklyActivityDto"
+          },
+          "factOfTheWeek": {
+            "$ref": "#/components/schemas/LoLFactOfTheWeekDto"
+          },
+          "crewRecords": {
+            "$ref": "#/components/schemas/LoLGlobalStatsDto"
           }
         },
         "additionalProperties": false
@@ -5024,6 +5158,44 @@
         "enum": [0, 1, 2, 3, 4],
         "type": "integer",
         "format": "int32"
+      },
+      "LoLWeeklyActivityDto": {
+        "type": "object",
+        "properties": {
+          "gamesThisWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gamesLastWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "winsThisWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lossesThisWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "winRateThisWeek": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalPlaytimeMinutesThisWeek": {
+            "type": "number",
+            "format": "double"
+          },
+          "averageGameDurationMinutesThisWeek": {
+            "type": "number",
+            "format": "double"
+          },
+          "netLpChangeThisWeek": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "Platform": {
         "type": "object",
@@ -5248,6 +5420,30 @@
           },
           "leagueOfLegendsFlexRank": {
             "$ref": "#/components/schemas/LeagueOfLegendsRankHistory"
+          },
+          "recentFormSolo": {
+            "type": "array",
+            "items": {
+              "type": "boolean"
+            },
+            "nullable": true
+          },
+          "recentFormFlex": {
+            "type": "array",
+            "items": {
+              "type": "boolean"
+            },
+            "nullable": true
+          },
+          "lpChange7DaysSolo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "lpChange7DaysFlex": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5573,6 +5769,9 @@
     },
     {
       "name": "Highlight"
+    },
+    {
+      "name": "Home"
     },
     {
       "name": "Match"
