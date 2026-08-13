@@ -16,7 +16,7 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>7.3.4</Version>
+    <Version>7.3.5</Version>
     <PackageReleaseNotes>Working on JungleDiff related routes.</PackageReleaseNotes>
   </PropertyGroup>
 
