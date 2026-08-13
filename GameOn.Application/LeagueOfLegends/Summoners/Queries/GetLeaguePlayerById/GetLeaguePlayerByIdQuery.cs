@@ -23,5 +23,11 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
         /// Gets or sets the rolling time window for <see cref="PlayerDto.PerformanceStats"/>.
         /// </summary>
         public LoLStatsPeriod Period { get; set; } = LoLStatsPeriod.AllTime;
+
+        /// <summary>
+        /// Gets or sets the Riot queue IDs (see <see cref="Domain.LoLQueue"/>) to restrict
+        /// <see cref="PlayerDto.PerformanceStats"/> to. Null or empty means every queue.
+        /// </summary>
+        public List<int>? QueueIds { get; set; }
     }
 }

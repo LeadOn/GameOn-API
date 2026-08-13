@@ -121,14 +121,16 @@ namespace GameOn.Common.DTOs
         public LeagueOfLegendsRankHistory? LeagueOfLegendsFlexRank { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the player's last 5 ranked Solo/Duo game results, oldest to newest (true = win).
-        /// Fewer than 5 entries when the player hasn't played that many ranked Solo/Duo games yet.
+        /// Gets or sets the player's most recent ranked Solo/Duo game results, oldest to newest (true = win).
+        /// Fewer entries when the player hasn't played that many ranked Solo/Duo games yet, empty if none.
+        /// How many games back this goes depends on the endpoint (5 on <c>GET lol/summoner</c>, the ladder's
+        /// compact form; 8 on <c>GET lol/summoner/{id}</c>, the profile page's rank card).
         /// </summary>
         public List<bool> RecentFormSolo { get; set; } = new List<bool>();
 
         /// <summary>
-        /// Gets or sets the player's last 5 ranked Flex game results, oldest to newest (true = win).
-        /// Fewer than 5 entries when the player hasn't played that many ranked Flex games yet.
+        /// Gets or sets the player's most recent ranked Flex game results. See <see cref="RecentFormSolo"/>
+        /// for ordering, emptiness, and the per-endpoint game count.
         /// </summary>
         public List<bool> RecentFormFlex { get; set; } = new List<bool>();
 

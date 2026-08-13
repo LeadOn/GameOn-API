@@ -60,5 +60,27 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         /// Gets or sets the average vision score per game (Riot's <c>visionScore</c>, not a per-minute rate).
         /// </summary>
         public double AverageVisionScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the breakdown of every champion played in the period, most played first
+        /// (ties broken by win rate, then champion name for a stable order).
+        /// </summary>
+        public List<LoLChampionStatDto> ChampionStats { get; set; } = new List<LoLChampionStatDto>();
+
+        /// <summary>
+        /// Gets or sets the breakdown of roles played in the period, most played first (ties broken by
+        /// win rate, then team position for a stable order). Games whose role Riot could not resolve
+        /// (<c>teamPosition</c> empty — imports older than the Phase 1 Riot-data capture, or game modes
+        /// without a lane) are excluded from both the numerator and the denominator, so <see cref="LoLRoleStatDto.PlayRate"/>
+        /// reads against games with a resolved role only, not every game in the period.
+        /// </summary>
+        public List<LoLRoleStatDto> RoleStats { get; set; } = new List<LoLRoleStatDto>();
+
+        /// <summary>
+        /// Gets or sets the breakdown of games played alongside other tracked GameOn players in the period
+        /// (same match, same team), most played first (ties broken by win rate, then teammate ID for a
+        /// stable order). Teammates who aren't linked to a GameOn player are not counted.
+        /// </summary>
+        public List<LoLDuoStatDto> DuoStats { get; set; } = new List<LoLDuoStatDto>();
     }
 }
