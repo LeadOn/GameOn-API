@@ -29,5 +29,11 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         /// Gets or sets the win rate on this champion, as a percentage.
         /// </summary>
         public double WinRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the average KDA ratio on this champion (mean of each game's
+        /// <see cref="Domain.LoLGameParticipantStat.Kda"/>). 0 when no game in the group has calculated stats yet.
+        /// </summary>
+        public double Kda { get; set; }
     }
 }
