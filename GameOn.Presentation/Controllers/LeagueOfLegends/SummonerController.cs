@@ -59,6 +59,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// Get a summoner by its ID.
         /// </summary>
         /// <param name="id">Summoner ID.</param>
+        /// <param name="period">Rolling time window for <see cref="PlayerDto.PerformanceStats"/>. Defaults to all-time.</param>
         /// <returns>200 OK with Player if found, 404 if not found.</returns>
         [HttpGet]
         [Route("{id:int}")]
@@ -67,9 +68,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(200, "Summoner is found.", typeof(PlayerDto))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetSummonerById(int id)
+        public async Task<IActionResult> GetSummonerById(int id, LoLStatsPeriod? period)
         {
-            var playerInDb = await this.mediator.Send(new GetLeaguePlayerByIdQuery { PlayerId = id });
+            var playerInDb = await this.mediator.Send(new GetLeaguePlayerByIdQuery { PlayerId = id, Period = period ?? LoLStatsPeriod.AllTime });
 
             if (playerInDb is not null)
             {

@@ -4,6 +4,7 @@
 
 namespace GameOn.Common.DTOs
 {
+    using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Domain;
 
     /// <summary>
@@ -142,5 +143,11 @@ namespace GameOn.Common.DTOs
         /// Gets or sets the Flex LP change over the trailing 7 days. See <see cref="LpChange7DaysSolo"/>.
         /// </summary>
         public int? LpChange7DaysFlex { get; set; }
+
+        /// <summary>
+        /// Gets or sets the player's performance recap over the requested time window (see
+        /// <see cref="LoLStatsPeriod"/>), all queues combined. Null when the player has no game in the period.
+        /// </summary>
+        public LoLSummonerPerformanceStatsDto? PerformanceStats { get; set; }
     }
 }

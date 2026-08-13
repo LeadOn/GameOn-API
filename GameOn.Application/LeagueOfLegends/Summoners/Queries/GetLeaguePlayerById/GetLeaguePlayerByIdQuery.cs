@@ -5,6 +5,7 @@
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById
 {
     using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Domain;
     using MediatR;
 
@@ -17,5 +18,10 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
         /// Gets or sets Player ID.
         /// </summary>
         public int PlayerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rolling time window for <see cref="PlayerDto.PerformanceStats"/>.
+        /// </summary>
+        public LoLStatsPeriod Period { get; set; } = LoLStatsPeriod.AllTime;
     }
 }
