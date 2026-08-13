@@ -4,6 +4,8 @@
 
 namespace GameOn.External
 {
+    using GameOn.External.CommunityDragon.Implementations;
+    using GameOn.External.CommunityDragon.Interfaces;
     using GameOn.External.NetworkStorage.Implementations;
     using GameOn.External.NetworkStorage.Interfaces;
     using GameOn.External.RiotGames.Implementations;
@@ -29,6 +31,7 @@ namespace GameOn.External
             services.AddScoped<ILeagueService, LeagueV4Service>();
             services.AddScoped<IMatchService, MatchV5Service>();
             services.AddScoped<IQueueService, QueueService>();
+            services.AddScoped<ICommunityDragonQueueService, CommunityDragonQueueService>();
 
             // Adding connection to MinIO
             services.AddMinio(client =>

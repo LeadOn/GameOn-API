@@ -114,6 +114,7 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                     x.ConsumablesPurchased,
                     x.Win,
                     x.TeamId,
+                    Kda = x.Stats != null ? x.Stats.Kda : (double?)null,
                     x.Game.GameStart,
                     x.Game.GameVersion,
                     QueueMap = x.Game.Queue != null ? x.Game.Queue.Map : null,
@@ -139,6 +140,7 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                         GamesPlayed = g.Count(),
                         Wins = g.Count(x => x.Win),
                         WinRate = Math.Round(100.0 * g.Count(x => x.Win) / g.Count(), 1),
+                        Kda = Math.Round(g.Select(x => x.Kda).Where(x => x is not null).Select(x => x!.Value).DefaultIfEmpty(0).Average(), 2),
                     })
                     .OrderByDescending(x => x.GamesPlayed)
                     .ThenByDescending(x => x.WinRate)
