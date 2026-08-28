@@ -80,20 +80,18 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
                 player.LpChange7DaysSolo = GetLpChange7Days(soloHistory, sevenDaysAgo);
                 player.LpChange7DaysFlex = GetLpChange7Days(flexHistory, sevenDaysAgo);
 
-                // Newest first coming out of the query above; reversed to oldest-to-newest for display
-                // (left-to-right chronological, matching the front's form squares).
+                // Newest first coming out of the query above, and kept that way: the front renders the
+                // form squares most-recent first, so no side re-orders the series.
                 player.RecentFormSolo = recentGames
                     .Where(x => x.PlayerId == player.Id && x.QueueId == SoloQueueId)
                     .Take(RecentFormGameCount)
                     .Select(x => x.Win)
-                    .Reverse()
                     .ToList();
 
                 player.RecentFormFlex = recentGames
                     .Where(x => x.PlayerId == player.Id && x.QueueId == FlexQueueId)
                     .Take(RecentFormGameCount)
                     .Select(x => x.Win)
-                    .Reverse()
                     .ToList();
             }
 
