@@ -60,9 +60,9 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
 
                 playerInDb.LeagueOfLegendsFlexRank = flexRank;
 
-                // Newest first coming out of the query, reversed to oldest-to-newest for display
-                // (left-to-right chronological, matching the front's form squares). Remakes and
-                // empty-champion placeholders (failed imports) are excluded, same filter as
+                // Newest first coming out of the query, and kept that way: the front renders the form
+                // squares most-recent first, so no side re-orders the series. Remakes and empty-champion
+                // placeholders (failed imports) are excluded, same filter as
                 // GetAllLeaguePlayersQueryHandler / GetLoLGlobalStatsQueryHandler.
                 var recentRankedGames = await this.context.LeagueOfLegendsGameParticipants
                     .Where(x => x.PlayerId == playerInDb.Id
@@ -73,8 +73,8 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
                     .Select(x => new { x.Game.QueueId, x.Win })
                     .ToListAsync(cancellationToken);
 
-                playerInDb.RecentFormSolo = recentRankedGames.Where(x => x.QueueId == SoloQueueId).Take(RecentFormGameCount).Select(x => x.Win).Reverse().ToList();
-                playerInDb.RecentFormFlex = recentRankedGames.Where(x => x.QueueId == FlexQueueId).Take(RecentFormGameCount).Select(x => x.Win).Reverse().ToList();
+                playerInDb.RecentFormSolo = recentRankedGames.Where(x => x.QueueId == SoloQueueId).Take(RecentFormGameCount).Select(x => x.Win).ToList();
+                playerInDb.RecentFormFlex = recentRankedGames.Where(x => x.QueueId == FlexQueueId).Take(RecentFormGameCount).Select(x => x.Win).ToList();
 
                 playerInDb.PerformanceStats = await this.GetPerformanceStats(playerInDb.Id, request.Period, request.QueueIds, cancellationToken);
             }
