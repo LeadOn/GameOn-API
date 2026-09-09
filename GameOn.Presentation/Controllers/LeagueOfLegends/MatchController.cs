@@ -45,6 +45,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <param name="queues">Filter games by queue IDs, comma-separated (Riot queueId, see LoLQueue).</param>
         /// <param name="startDate">Only get games starting on or after this date (inclusive).</param>
         /// <param name="endDate">Only get games starting on or before this date (inclusive).</param>
+        /// <param name="teamPosition">Only get games where the player played this position (TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY).</param>
         /// <returns>200 OK with Player's game list.</returns>
         [HttpGet]
         [Route("player/{playerId:int}")]
@@ -53,9 +54,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(200, "Games played.", typeof(List<LoLGame>))]
         [SwaggerResponse(404, "Player not found / no Riot Games PUUID found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetLastGamesForUser(int playerId, int? page, int? size, bool rankedOnly = false, string? queues = null, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<IActionResult> GetLastGamesForUser(int playerId, int? page, int? size, bool rankedOnly = false, string? queues = null, DateTime? startDate = null, DateTime? endDate = null, string? teamPosition = null)
         {
-            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { PlayerId = playerId, Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueIds = ParseQueueIds(queues), StartDate = startDate, EndDate = endDate });
+            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { PlayerId = playerId, Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueIds = ParseQueueIds(queues), StartDate = startDate, EndDate = endDate, TeamPosition = teamPosition });
 
             if (lastGames is not null)
             {

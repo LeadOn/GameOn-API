@@ -11,7 +11,7 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
     public class LoLHomeStatsDto
     {
         /// <summary>
-        /// Gets or sets the squad's weekly activity recap.
+        /// Gets or sets the squad's weekly activity recap, over ranked games only (Solo/Duo and Flex).
         /// </summary>
         public LoLWeeklyActivityDto WeeklyActivity { get; set; } = new LoLWeeklyActivityDto();
 
@@ -23,9 +23,9 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         public LoLFactOfTheWeekDto? FactOfTheWeek { get; set; }
 
         /// <summary>
-        /// Gets or sets the crew's fun stat awards over the last 7 rolling days (same computation as
-        /// <c>GET lol/Stats/global</c> with <see cref="LoLStatsPeriod.Week"/>, all queues). Individual
-        /// awards are null when nobody set a record in the window.
+        /// Gets or sets the crew's fun stat awards over the last rolling month, ranked queues only (same
+        /// computation as <c>GET lol/Stats/global</c> with <see cref="LoLStatsPeriod.Month"/> and
+        /// <c>RankedOnly</c>). Individual awards are null when nobody set a record in the window.
         /// </summary>
         public LoLGlobalStatsDto CrewRecords { get; set; } = new LoLGlobalStatsDto();
     }

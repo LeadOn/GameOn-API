@@ -61,6 +61,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <param name="id">Summoner ID.</param>
         /// <param name="period">Rolling time window for <see cref="PlayerDto.PerformanceStats"/>. Defaults to all-time.</param>
         /// <param name="queues">Restrict <see cref="PlayerDto.PerformanceStats"/> to these queue IDs, comma-separated (Riot queueId, see LoLQueue).</param>
+        /// <param name="teamPosition">Restrict <see cref="PlayerDto.PerformanceStats"/> to games played at this position (TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY). Defaults to every role.</param>
         /// <returns>200 OK with Player if found, 404 if not found.</returns>
         [HttpGet]
         [Route("{id:int}")]
@@ -69,9 +70,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(200, "Summoner is found.", typeof(PlayerDto))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetSummonerById(int id, LoLStatsPeriod? period, string? queues = null)
+        public async Task<IActionResult> GetSummonerById(int id, LoLStatsPeriod? period, string? queues = null, string? teamPosition = null)
         {
-            var playerInDb = await this.mediator.Send(new GetLeaguePlayerByIdQuery { PlayerId = id, Period = period ?? LoLStatsPeriod.AllTime, QueueIds = ParseQueueIds(queues) });
+            var playerInDb = await this.mediator.Send(new GetLeaguePlayerByIdQuery { PlayerId = id, Period = period ?? LoLStatsPeriod.AllTime, QueueIds = ParseQueueIds(queues), TeamPosition = teamPosition });
 
             if (playerInDb is not null)
             {

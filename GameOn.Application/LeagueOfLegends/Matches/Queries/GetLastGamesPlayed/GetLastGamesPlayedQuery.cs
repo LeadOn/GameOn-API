@@ -47,5 +47,12 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
         /// Gets or sets the upper bound (inclusive) of the game start date range to filter by.
         /// </summary>
         public DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Riot team position (TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY) the player must
+        /// have played to keep a game. Null or empty means every role. Only applies when
+        /// <see cref="PlayerId"/> is set: without a player there is no single role to filter on.
+        /// </summary>
+        public string? TeamPosition { get; set; }
     }
 }

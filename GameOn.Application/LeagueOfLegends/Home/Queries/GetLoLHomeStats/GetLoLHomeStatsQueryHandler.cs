@@ -16,10 +16,11 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
     /// </summary>
     public class GetLoLHomeStatsQueryHandler : IRequestHandler<GetLoLHomeStatsQuery, LoLHomeStatsDto>
     {
-        // Matched against LoLQueue.Map + Description (synced from Riot) to keep only games against real
-        // opponents. Duplicated from GetLoLGlobalStatsQueryHandler: worth factoring out into a shared
-        // LoL query helper once a third Home stat block needs the same tracked-participant filter.
-        private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
+        // Match-v5 queue ids of the two ranked ladders the home page reports on: Ranked Solo/Duo (420)
+        // and Ranked Flex SR (440). An explicit whitelist rather than the keyword exclusion used by
+        // GetLoLGlobalStatsQueryHandler: normals, ARAMs, bots, customs and tutorials are all out anyway.
+        private const int RankedSoloQueueId = 420;
+        private const int RankedFlexQueueId = 440;
 
         // "This week" / "last week" are calendar weeks (Monday 00:00 to Sunday 23:59:59) on the players'
         // wall clock, not the UTC clock LoLGame.GameStart is stored in (see GetLoLGlobalStatsQueryHandler).
@@ -50,14 +51,13 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
             var thisWeekStart = TimeZoneInfo.ConvertTimeToUtc(mondayThisWeekLocal, PlayersTimeZone);
             var lastWeekStart = TimeZoneInfo.ConvertTimeToUtc(mondayLastWeekLocal, PlayersTimeZone);
 
-            // Every game participation linked to a GameOn player over the last two calendar weeks, with
-            // just enough game context to exclude remakes and bot/custom/tutorial queues below. Games
-            // whose queue could not be resolved (LoLGame.Queue == null) are dropped entirely: without a
-            // LoLQueue row there is no way to tell a real game from a bot or custom one.
-            var participants = (await this.context.LeagueOfLegendsGameParticipants
+            // Every ranked game participation linked to a GameOn player over the last two calendar weeks,
+            // with just enough game context to compute the activity recap. Rows with an empty champion
+            // name are placeholders left by failed imports, and remakes never count as played games.
+            var participants = await this.context.LeagueOfLegendsGameParticipants
                 .Where(x => x.PlayerId != null
                     && x.ChampionName != string.Empty
-                    && x.Game.Queue != null
+                    && (x.Game.QueueId == RankedSoloQueueId || x.Game.QueueId == RankedFlexQueueId)
                     && !x.Game.IsRemake
                     && x.Game.GameStart >= lastWeekStart)
                 .Select(x => new
@@ -66,15 +66,9 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                     x.Win,
                     x.Game.GameStart,
                     x.Game.GameEnd,
-                    QueueMap = x.Game.Queue!.Map,
-                    QueueDescription = x.Game.Queue!.Description,
                     StatsGameDurationSeconds = x.Stats != null ? x.Stats.GameDurationSeconds : (int?)null,
                 })
-                .ToListAsync(cancellationToken))
-                .Where(x => !ExcludedQueueTypeKeywords.Any(keyword =>
-                    ((x.QueueMap ?? string.Empty) + " " + (x.QueueDescription ?? string.Empty))
-                        .Contains(keyword, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
+                .ToListAsync(cancellationToken);
 
             var thisWeek = participants.Where(x => x.GameStart >= thisWeekStart).ToList();
             var lastWeek = participants.Where(x => x.GameStart < thisWeekStart).ToList();
@@ -169,10 +163,14 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                 }
             }
 
-            // "Records du crew": the same fun stat awards as GET lol/Stats/global, just scoped to a
-            // rolling 7-day window instead of recomputed here — the ranking/tie-break/zero-data logic
-            // already lives in GetLoLGlobalStatsQueryHandler and shouldn't be duplicated.
-            var crewRecords = await this.mediator.Send(new GetLoLGlobalStatsQuery { Period = LoLStatsPeriod.Week }, cancellationToken);
+            // "Records du crew": the same fun stat awards as GET lol/Stats/global, just scoped to the
+            // ranked queues over a rolling month instead of recomputed here — the ranking/tie-break/
+            // zero-data logic already lives in GetLoLGlobalStatsQueryHandler and shouldn't be duplicated.
+            // Deliberately a wider window than the calendar week used by the activity recap above: a
+            // single week rarely holds enough ranked games for the awards to be meaningful.
+            var crewRecords = await this.mediator.Send(
+                new GetLoLGlobalStatsQuery { RankedOnly = true, Period = LoLStatsPeriod.Month },
+                cancellationToken);
 
             return new LoLHomeStatsDto
             {
