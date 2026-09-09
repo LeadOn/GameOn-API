@@ -76,13 +76,13 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
                 playerInDb.RecentFormSolo = recentRankedGames.Where(x => x.QueueId == SoloQueueId).Take(RecentFormGameCount).Select(x => x.Win).ToList();
                 playerInDb.RecentFormFlex = recentRankedGames.Where(x => x.QueueId == FlexQueueId).Take(RecentFormGameCount).Select(x => x.Win).ToList();
 
-                playerInDb.PerformanceStats = await this.GetPerformanceStats(playerInDb.Id, request.Period, request.QueueIds, cancellationToken);
+                playerInDb.PerformanceStats = await this.GetPerformanceStats(playerInDb.Id, request.Period, request.QueueIds, request.TeamPosition, cancellationToken);
             }
 
             return playerInDb;
         }
 
-        private async Task<LoLSummonerPerformanceStatsDto?> GetPerformanceStats(int playerId, LoLStatsPeriod period, List<int>? queueIds, CancellationToken cancellationToken)
+        private async Task<LoLSummonerPerformanceStatsDto?> GetPerformanceStats(int playerId, LoLStatsPeriod period, List<int>? queueIds, string? teamPosition, CancellationToken cancellationToken)
         {
             // GameStart is stored in UTC (see GetLoLGlobalStatsQueryHandler), so the cutoff uses the same clock.
             DateTime? since = period switch
@@ -107,6 +107,16 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
             if (queueIds is { Count: > 0 })
             {
                 query = query.Where(x => x.Game.QueueId.HasValue && queueIds.Contains(x.Game.QueueId.Value));
+            }
+
+            // Riot writes the position in upper case (TOP, JUNGLE, ...), so the caller's value is
+            // normalized rather than trusted as-is. Games Riot could not assign a role to keep an empty
+            // TeamPosition and are therefore excluded by this filter, as intended.
+            var normalizedTeamPosition = NormalizeTeamPosition(teamPosition);
+
+            if (normalizedTeamPosition is not null)
+            {
+                query = query.Where(x => x.TeamPosition == normalizedTeamPosition);
             }
 
             var games = (await query
@@ -227,6 +237,18 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
                     .ThenBy(x => x.Player.Id)
                     .ToList(),
             };
+        }
+
+        /// <summary>
+        /// Normalizes a caller-supplied team position to the upper-case form Riot stores.
+        /// Duplicated from <see cref="Matches.Queries.GetLastGamesPlayed.GetLastGamesPlayedQueryHandler"/>:
+        /// worth factoring out into a shared helper if a third caller shows up.
+        /// </summary>
+        /// <param name="teamPosition">Raw team position coming from the query.</param>
+        /// <returns>Normalized team position, or null when no filter was asked for.</returns>
+        private static string? NormalizeTeamPosition(string? teamPosition)
+        {
+            return string.IsNullOrWhiteSpace(teamPosition) ? null : teamPosition.Trim().ToUpperInvariant();
         }
     }
 }

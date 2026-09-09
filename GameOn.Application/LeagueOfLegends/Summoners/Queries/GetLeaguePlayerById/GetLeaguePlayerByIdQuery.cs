@@ -29,5 +29,11 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
         /// <see cref="PlayerDto.PerformanceStats"/> to. Null or empty means every queue.
         /// </summary>
         public List<int>? QueueIds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Riot team position (TOP, JUNGLE, MIDDLE, BOTTOM, UTILITY) to restrict
+        /// <see cref="PlayerDto.PerformanceStats"/> to. Null or empty means every role.
+        /// </summary>
+        public string? TeamPosition { get; set; }
     }
 }

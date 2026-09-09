@@ -99,6 +99,18 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                     .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges)
                     .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId));
 
+                // Riot writes the position in upper case (TOP, JUNGLE, ...), so the caller's value is
+                // normalized rather than trusted as-is. Games Riot could not assign a role to keep an
+                // empty TeamPosition and are therefore excluded by this filter, as intended. The clause
+                // is applied to the same query the count and the page are built from, so pagination
+                // stays consistent with the filtered set.
+                var teamPosition = NormalizeTeamPosition(request.TeamPosition);
+
+                if (teamPosition is not null)
+                {
+                    query = query.Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId && y.TeamPosition == teamPosition));
+                }
+
                 if (request.RankedGamesOnly == true)
                 {
                     query = query.Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId) && x.Queue != null && x.Queue.Description != null && x.Queue.Description.Contains("Rank"));
@@ -133,6 +145,18 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
                     Total = count,
                 };
             }
+        }
+
+        /// <summary>
+        /// Normalizes a caller-supplied team position to the upper-case form Riot stores.
+        /// Duplicated from <see cref="Summoners.Queries.GetLeaguePlayerById.GetLeaguePlayerByIdQueryHandler"/>:
+        /// worth factoring out into a shared helper if a third caller shows up.
+        /// </summary>
+        /// <param name="teamPosition">Raw team position coming from the query.</param>
+        /// <returns>Normalized team position, or null when no filter was asked for.</returns>
+        private static string? NormalizeTeamPosition(string? teamPosition)
+        {
+            return string.IsNullOrWhiteSpace(teamPosition) ? null : teamPosition.Trim().ToUpperInvariant();
         }
     }
 }
