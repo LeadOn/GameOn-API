@@ -38,6 +38,7 @@ namespace GameOn.Common.DTOs
             this.CreatedOn = player.CreatedOn;
             this.Archived = player.Archived;
             this.LolIconId = player.LolIconId;
+            this.PrimaryPlayerId = player.PrimaryPlayerId;
         }
 
         /// <summary>
@@ -84,6 +85,12 @@ namespace GameOn.Common.DTOs
         /// Gets or sets player's LOL Summoner's level.
         /// </summary>
         public long? LolSummonerLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID of the player this account is a smurf of, or null when it is a primary
+        /// account. Set on the entries of <see cref="SmurfAccounts"/>, null on the member holding them.
+        /// </summary>
+        public int? PrimaryPlayerId { get; set; }
 
         /// <summary>
         /// Gets or sets Lol Icon ID.
@@ -148,8 +155,18 @@ namespace GameOn.Common.DTOs
 
         /// <summary>
         /// Gets or sets the player's performance recap over the requested time window (see
-        /// <see cref="LoLStatsPeriod"/>), all queues combined. Null when the player has no game in the period.
+        /// <see cref="LoLStatsPeriod"/>), all queues combined. Null when the player has no game in the
+        /// period. Covers this account alone: a smurf's games are never counted towards its owner.
         /// </summary>
         public LoLSummonerPerformanceStatsDto? PerformanceStats { get; set; }
+
+        /// <summary>
+        /// Gets or sets the other Riot accounts this player owns, each with its own rank. Informational
+        /// only: accounts stay fully independent everywhere else — their games, records and stats are
+        /// never merged into this player's. Only served by <c>GET lol/summoner/{id}</c>, and only
+        /// identity, level, icon and rank fields are filled in. Empty for a player with no smurf, and
+        /// for a smurf account itself.
+        /// </summary>
+        public List<PlayerDto> SmurfAccounts { get; set; } = new List<PlayerDto>();
     }
 }

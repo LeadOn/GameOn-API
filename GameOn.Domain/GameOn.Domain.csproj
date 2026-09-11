@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.3.7</Version>
-	<PackageReleaseNotes>Updated dependencies.</PackageReleaseNotes>
+	<Version>7.4.0</Version>
+	<PackageReleaseNotes>Added smurff support.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

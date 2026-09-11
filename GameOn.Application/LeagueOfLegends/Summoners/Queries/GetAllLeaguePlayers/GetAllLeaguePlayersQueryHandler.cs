@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers
 {
+    using GameOn.Application.Common.Players;
     using GameOn.Application.LeagueOfLegends.Summoners.Services;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
@@ -41,7 +42,18 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
         /// <inheritdoc />
         public async Task<IEnumerable<PlayerDto>> Handle(GetAllLeaguePlayersQuery request, CancellationToken cancellationToken)
         {
-            var playersInDb = await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived && x.RiotGamesPUUID != null).Select(x => new PlayerDto(x)).ToListAsync(cancellationToken);
+            // One entry per account, smurfs included: rank, LP delta and recent form are per account by
+            // nature — a smurf sits on its own ladder — so merging them into the owner's card would be
+            // meaningless. Each entry carries PrimaryPlayerId, which is what a caller needs to nest a
+            // smurf under its owner; IncludeSmurfs = false drops them for callers that want members only.
+            var playersQuery = this.context.Players.Include(x => x.TournamentsWon).AsQueryable();
+
+            if (!request.IncludeSmurfs)
+            {
+                playersQuery = playersQuery.PrimariesOnly();
+            }
+
+            var playersInDb = await playersQuery.Where(x => x.Archived == request.Archived && x.RiotGamesPUUID != null).Select(x => new PlayerDto(x)).ToListAsync(cancellationToken);
 
             var playerIds = playersInDb.Select(x => x.Id).ToList();
 

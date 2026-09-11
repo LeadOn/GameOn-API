@@ -6,6 +6,8 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
+    using GameOn.Application.LeagueOfLegends.Summoners.Commands.LinkSmurfAccount;
+    using GameOn.Application.LeagueOfLegends.Summoners.Commands.UnlinkSmurfAccount;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerRanks;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummonerAdmin;
@@ -43,6 +45,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// Get all league of legends players in database.
         /// </summary>
         /// <param name="archived">If true, get archived players.</param>
+        /// <param name="includeSmurfs">If false, only primary accounts are returned. Defaults to true: smurf accounts hold their own rank and are listed alongside their owner, tagged with <see cref="PlayerDto.PrimaryPlayerId"/>.</param>
         /// <returns>200 OK with Player list.</returns>
         [HttpGet]
         [Route("")]
@@ -50,9 +53,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerOperation(Summary = "Get all League of Legends players in database.")]
         [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetAll(bool? archived)
+        public async Task<IActionResult> GetAll(bool? archived, bool? includeSmurfs)
         {
-            return this.Ok(await this.mediator.Send(new GetAllLeaguePlayersQuery { Archived = archived ?? false }));
+            return this.Ok(await this.mediator.Send(new GetAllLeaguePlayersQuery { Archived = archived ?? false, IncludeSmurfs = includeSmurfs ?? true }));
         }
 
         /// <summary>
@@ -194,6 +197,71 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         {
             await this.mediator.Send(new UpdateAllPlayerRanksCommand());
             return this.NoContent();
+        }
+
+        /// <summary>
+        /// Attach a Riot account to a player as one of their smurfs.
+        /// </summary>
+        /// <param name="playerId">ID of the player the account belongs to.</param>
+        /// <param name="riotGamesNickname">Riot Games Nickname (game name) of the smurf account.</param>
+        /// <param name="riotGamesTagLine">Riot Games Tag Line of the smurf account (ex: EUW).</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{playerId:int}/smurfs")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Link a smurf account to a player.", Description = "Creates the account if that Riot ID isn't known yet, pulls its rank and recent games, and re-attaches the games it already played with GameOn members.")]
+        [SwaggerResponse(200, "Account linked.", typeof(LinkSmurfAccountResultDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(404, "Player or Riot account not found.")]
+        [SwaggerResponse(409, "Account cannot be linked to that player.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> LinkSmurfAccount(int playerId, string riotGamesNickname, string riotGamesTagLine)
+        {
+            var result = await this.mediator.Send(new LinkSmurfAccountCommand
+            {
+                PrimaryPlayerId = playerId,
+                RiotGamesNickname = riotGamesNickname,
+                RiotGamesTagLine = riotGamesTagLine,
+            });
+
+            return result.Status switch
+            {
+                LinkSmurfAccountStatus.Linked => this.Ok(result),
+                LinkSmurfAccountStatus.PrimaryNotFound => this.NotFound("Player not found."),
+                LinkSmurfAccountStatus.RiotAccountNotFound => this.NotFound("Riot Games account not found."),
+                LinkSmurfAccountStatus.PrimaryIsSmurf => this.Conflict("That player is already a smurf account: link the smurf to its primary account instead."),
+                _ => this.Conflict("That Riot account is already used by another player: unlink it first."),
+            };
+        }
+
+        /// <summary>
+        /// Detach a smurf account from the player it belongs to. The account, its rank history and its
+        /// games are kept; it simply stops being counted as part of that player.
+        /// </summary>
+        /// <param name="smurfId">ID of the smurf account to detach.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("smurfs/{smurfId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Unlink a smurf account from its player.")]
+        [SwaggerResponse(200, "Account detached.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(404, "Smurf account not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UnlinkSmurfAccount(int smurfId)
+        {
+            var smurfAccount = await this.mediator.Send(new UnlinkSmurfAccountCommand { SmurfPlayerId = smurfId });
+
+            if (smurfAccount is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(smurfAccount);
         }
 
         /// <summary>

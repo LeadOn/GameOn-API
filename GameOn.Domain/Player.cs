@@ -67,6 +67,13 @@ namespace GameOn.Domain
         public DateTime? LolRefreshedOn { get; set; }
 
         /// <summary>
+        /// Gets or sets the ID of the account this player is a smurf of, or null when this player is
+        /// a primary account (a real person). Smurf rows hold their own Riot account, rank history and
+        /// game participations; reads roll them up to the primary account they point at.
+        /// </summary>
+        public int? PrimaryPlayerId { get; set; }
+
+        /// <summary>
         /// Gets or sets player's creation date.
         /// </summary>
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
@@ -116,5 +123,18 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the primary account this player is a smurf of.
+        /// </summary>
+        [JsonIgnore]
+        public virtual Player? PrimaryPlayer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the smurf accounts attached to this player. Never more than one level deep:
+        /// a smurf cannot itself hold smurfs.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<Player> SmurfAccounts { get; set; } = null!;
     }
 }
