@@ -17,5 +17,13 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
         /// Gets or sets a value indicating whether a player is archived or not.
         /// </summary>
         public bool Archived { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether smurf accounts are listed alongside the members they
+        /// belong to. On by default: each account holds its own rank, and this list is a ladder of ranks.
+        /// Entries carry <see cref="PlayerDto.PrimaryPlayerId"/>, so a caller can nest them under their
+        /// owner, or ask for primary accounts only by turning this off.
+        /// </summary>
+        public bool IncludeSmurfs { get; set; } = true;
     }
 }

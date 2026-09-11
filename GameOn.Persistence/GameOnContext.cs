@@ -193,6 +193,19 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.LolRefreshedOn)
                     .HasColumnName("lol_refreshed_on");
+
+                entity.Property(e => e.PrimaryPlayerId)
+                    .HasColumnName("primary_player_id");
+
+                entity.HasIndex(e => e.PrimaryPlayerId);
+
+                // Self-referencing: a smurf account points at the primary account it belongs to.
+                // Restrict rather than cascade, both because SQL Server refuses cascades on a self
+                // reference and because unlinking a smurf must never delete its games and rank history.
+                entity.HasOne(e => e.PrimaryPlayer)
+                    .WithMany(e => e.SmurfAccounts)
+                    .HasForeignKey(e => e.PrimaryPlayerId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Tournament>(entity =>

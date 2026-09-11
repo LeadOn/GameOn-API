@@ -98,6 +98,8 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             // Every game participation linked to a GameOn player, with its game context.
             // Rows with an empty champion name are placeholders left by failed imports and are excluded,
             // as are remakes (LoLGame.IsRemake) and games without real opponents (bots, customs, tutorials).
+            // Every account stands on its own here, smurfs included: a smurf is a separate account with
+            // its own games and its own records, and Player.PrimaryPlayerId only says who it belongs to.
             var participants = (await participantsQuery
                 .Select(x => new
                 {

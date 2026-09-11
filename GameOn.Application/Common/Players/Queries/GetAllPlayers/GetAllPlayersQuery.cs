@@ -16,5 +16,13 @@ namespace GameOn.Application.Common.Players.Queries.GetAllPlayers
         /// Gets or sets a value indicating whether a player is archived or not.
         /// </summary>
         public bool Archived { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether smurf accounts are listed alongside the members they
+        /// belong to. On by default, so that linking an account never makes it silently vanish from a
+        /// list: entries carry <see cref="Player.PrimaryPlayerId"/> and the caller decides. Turn it off
+        /// for pickers that must offer people rather than accounts (teams, tournament subscriptions).
+        /// </summary>
+        public bool IncludeSmurfs { get; set; } = true;
     }
 }

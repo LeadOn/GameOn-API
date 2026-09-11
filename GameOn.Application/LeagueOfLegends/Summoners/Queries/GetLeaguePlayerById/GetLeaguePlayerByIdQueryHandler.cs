@@ -60,6 +60,11 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
 
                 playerInDb.LeagueOfLegendsFlexRank = flexRank;
 
+                // Informational only: the other accounts this player owns, listed with their own rank.
+                // Nothing below aggregates them — every stat on this profile is that of the requested
+                // account alone.
+                playerInDb.SmurfAccounts = await this.GetSmurfAccounts(playerInDb.Id, cancellationToken);
+
                 // Newest first coming out of the query, and kept that way: the front renders the form
                 // squares most-recent first, so no side re-orders the series. Remakes and empty-champion
                 // placeholders (failed imports) are excluded, same filter as
@@ -80,6 +85,43 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
             }
 
             return playerInDb;
+        }
+
+        /// <summary>
+        /// The smurf accounts attached to a player, each carrying its own current Solo/Duo and Flex rank.
+        /// Empty for a player with no smurf, and for a smurf account itself (nesting is one level deep).
+        /// </summary>
+        /// <param name="playerId">Primary account ID.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+        /// <returns>The player's smurf accounts, oldest first.</returns>
+        private async Task<List<PlayerDto>> GetSmurfAccounts(int playerId, CancellationToken cancellationToken)
+        {
+            var smurfAccounts = await this.context.Players
+                .Where(x => x.PrimaryPlayerId == playerId)
+                .OrderBy(x => x.Id)
+                .Select(x => new PlayerDto(x))
+                .ToListAsync(cancellationToken);
+
+            if (smurfAccounts.Count == 0)
+            {
+                return smurfAccounts;
+            }
+
+            var smurfAccountIds = smurfAccounts.Select(x => x.Id).ToList();
+
+            // Newest first, so the first match per account and queue below is that account's current rank.
+            var ranks = await this.context.LeagueOfLegendsRankHistory
+                .Where(x => smurfAccountIds.Contains(x.PlayerId) && (x.QueueType == SoloQueueType || x.QueueType == FlexQueueType))
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync(cancellationToken);
+
+            foreach (var smurfAccount in smurfAccounts)
+            {
+                smurfAccount.LeagueOfLegendsSoloRank = ranks.FirstOrDefault(x => x.PlayerId == smurfAccount.Id && x.QueueType == SoloQueueType);
+                smurfAccount.LeagueOfLegendsFlexRank = ranks.FirstOrDefault(x => x.PlayerId == smurfAccount.Id && x.QueueType == FlexQueueType);
+            }
+
+            return smurfAccounts;
         }
 
         private async Task<LoLSummonerPerformanceStatsDto?> GetPerformanceStats(int playerId, LoLStatsPeriod period, List<int>? queueIds, string? teamPosition, CancellationToken cancellationToken)
@@ -161,7 +203,9 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
             var matchIds = matchInfoByMatchId.Keys.ToList();
 
             // Every other GameOn-tracked participant in those same matches. Bots/unlinked players
-            // (PlayerId null) can't be credited as a duo, and the player themselves is excluded.
+            // (PlayerId null) can't be credited as a duo, and the player themselves is excluded. Duos are
+            // per account: playing with someone's main and with their smurf counts as two partners, which
+            // is what they were on the Rift.
             var teammateParticipations = await this.context.LeagueOfLegendsGameParticipants
                 .Where(x => matchIds.Contains(x.MatchId) && x.PlayerId != null && x.PlayerId.Value != playerId)
                 .Select(x => new { x.MatchId, x.TeamId, PlayerId = x.PlayerId!.Value })

@@ -89,6 +89,7 @@ namespace GameOn.Presentation.Controllers.Common
         /// Get all players in database.
         /// </summary>
         /// <param name="archived">If true, get archived players.</param>
+        /// <param name="includeSmurfs">If false, only primary accounts are returned. Defaults to true: smurf accounts are listed like any other, tagged with their owner's ID in <see cref="Player.PrimaryPlayerId"/>.</param>
         /// <returns>200 OK with Player list.</returns>
         [HttpGet]
         [Route("")]
@@ -96,9 +97,9 @@ namespace GameOn.Presentation.Controllers.Common
         [SwaggerOperation(Summary = "Get all players in database.")]
         [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetAll(bool? archived)
+        public async Task<IActionResult> GetAll(bool? archived, bool? includeSmurfs)
         {
-            return this.Ok(await this.mediator.Send(new GetAllPlayersQuery { Archived = archived ?? false }));
+            return this.Ok(await this.mediator.Send(new GetAllPlayersQuery { Archived = archived ?? false, IncludeSmurfs = includeSmurfs ?? true }));
         }
 
         /// <summary>

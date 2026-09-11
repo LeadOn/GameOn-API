@@ -47,7 +47,12 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
         /// <inheritdoc />
         public async Task<Player> Handle(UpdatePlayerSummonerCommand request, CancellationToken cancellationToken)
         {
-            var playerInDb = await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == request.Player.KeycloakId);
+            // Resolved by ID whenever the caller has one, and only otherwise by Keycloak ID: smurf
+            // accounts have no Keycloak identity, and a null-matching lookup would happily refresh some
+            // unrelated player that also has none.
+            var playerInDb = request.Player.Id != 0
+                ? await this.context.Players.FirstOrDefaultAsync(x => x.Id == request.Player.Id, cancellationToken)
+                : await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId != null && x.KeycloakId == request.Player.KeycloakId, cancellationToken);
 
             if (playerInDb == null)
             {

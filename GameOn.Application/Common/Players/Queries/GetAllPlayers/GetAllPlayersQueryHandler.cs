@@ -28,7 +28,17 @@ namespace GameOn.Application.Common.Players.Queries.GetAllPlayers
         /// <inheritdoc />
         public async Task<IEnumerable<Player>> Handle(GetAllPlayersQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.Players.Include(x => x.TournamentsWon).Where(x => x.Archived == request.Archived).ToListAsync(cancellationToken);
+            // Every account by default, smurfs included and tagged with PrimaryPlayerId: a list that
+            // silently drops rows is how a linked account looks like lost data everywhere it was
+            // displayed. Callers that need people rather than accounts ask for it explicitly.
+            var playersQuery = this.context.Players.Include(x => x.TournamentsWon).AsQueryable();
+
+            if (!request.IncludeSmurfs)
+            {
+                playersQuery = playersQuery.PrimariesOnly();
+            }
+
+            return await playersQuery.Where(x => x.Archived == request.Archived).ToListAsync(cancellationToken);
         }
     }
 }
