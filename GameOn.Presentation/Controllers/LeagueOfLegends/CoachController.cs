@@ -4,10 +4,10 @@
 
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
-    using GameOn.Application.LeagueOfLegends.Coach.Commands.GenerateLoLCoachReport;
+    using GameOn.Application.LeagueOfLegends.Coach.Commands.EnqueueLoLCoachReport;
+    using GameOn.Application.LeagueOfLegends.Coach.Queries.GetLoLCoachQueueStatus;
     using GameOn.Application.LeagueOfLegends.Coach.Queries.GetLoLCoachReport;
     using GameOn.Common.DTOs.LeagueOfLegends;
-    using GameOn.External.Llm.Exceptions;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -17,8 +17,17 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     /// AI Coach Controller.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A report is never written on its own: reading is free and open, writing costs a call to the model and
     /// therefore requires an explicit, authenticated request.
+    /// </para>
+    /// <para>
+    /// Neither route ever calls the model. Asking for an analysis puts it in a line that a single background
+    /// consumer works through, and both routes answer 202 with the place in that line while it waits. Holding
+    /// the connection open instead - which is what this controller used to do - only ever worked for one
+    /// player at a time: a generation takes about fifty seconds against a provider that allows five calls a
+    /// minute, so a second simultaneous click could do nothing but fail.
+    /// </para>
     /// </remarks>
     [ApiController]
     [Route("lol/[controller]")]
@@ -36,82 +45,86 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         }
 
         /// <summary>
-        /// Gets the AI coach report already written for a player on a game, without generating anything.
+        /// Gets the AI coach report already written for a player on a game, without asking for anything.
         /// </summary>
         /// <param name="matchId">Match ID.</param>
         /// <param name="playerId">GameOn! Player ID.</param>
-        /// <returns>200 OK with the report, 404 if none has been generated yet.</returns>
+        /// <returns>200 OK with the report, 202 with its place in the line, or 404 if nobody has asked.</returns>
         [HttpGet]
         [Route("{matchId}/player/{playerId:int}")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Gets an existing AI coach report.", Description = "Never triggers a generation. A 404 simply means nobody has asked for this analysis yet - the front should offer the button rather than treat it as an error.")]
+        [SwaggerOperation(Summary = "Gets an existing AI coach report, or its place in the queue.", Description = "Never queues anything. Poll this while a 202 is coming back. A 404 means nobody has asked for this analysis yet - the front should offer the button rather than treat it as an error.")]
         [SwaggerResponse(200, "Coach report.", typeof(LoLCoachReportDto))]
+        [SwaggerResponse(202, "Analysis requested and waiting.", typeof(LoLCoachQueueStatusDto))]
         [SwaggerResponse(404, "No coach report generated yet for this match and player.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetReport(string matchId, int playerId)
         {
             var report = await this.mediator.Send(new GetLoLCoachReportQuery { MatchId = matchId, PlayerId = playerId });
 
-            if (report is null)
+            if (report is not null)
             {
-                return this.NotFound();
+                return this.Ok(report);
             }
 
-            return this.Ok(report);
+            var queued = await this.mediator.Send(new GetLoLCoachQueueStatusQuery { MatchId = matchId, PlayerId = playerId });
+
+            if (queued is not null)
+            {
+                return this.Accepted(queued);
+            }
+
+            return this.NotFound();
         }
 
         /// <summary>
-        /// Generates the AI coach report for a player on a game, or returns the one already stored.
+        /// Asks for the AI coach report of a player on a game, or returns the one already stored.
         /// </summary>
         /// <param name="matchId">Match ID.</param>
         /// <param name="playerId">GameOn! Player ID.</param>
         /// <param name="force">Regenerate even if a report already exists. Administrators only.</param>
-        /// <returns>200 OK with the report.</returns>
+        /// <returns>200 OK with the stored report, or 202 with its place in the line.</returns>
         [HttpPost]
         [Route("{matchId}/player/{playerId:int}")]
         [Authorize]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Generates the AI coach report for a player on a game.", Description = "Blocks for as long as the model takes, roughly fifteen seconds - the front should show a spinner. A second call returns the stored report instantly instead of paying for it again.")]
-        [SwaggerResponse(200, "Coach report.", typeof(LoLCoachReportDto))]
+        [SwaggerOperation(Summary = "Asks for the AI coach report of a player on a game.", Description = "Returns immediately. A stored report comes back as 200; anything else is queued and comes back as 202 with a position and an estimated wait, which the front should poll the GET route for. Pressing twice does not buy two slots.")]
+        [SwaggerResponse(200, "Coach report, already stored.", typeof(LoLCoachReportDto))]
+        [SwaggerResponse(202, "Analysis queued.", typeof(LoLCoachQueueStatusDto))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(404, "Match not found, or this player did not play it.")]
-        [SwaggerResponse(429, "The coach is busy or the provider quota is exhausted. Retry shortly.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> Generate(string matchId, int playerId, bool force = false)
         {
-            LoLCoachReportDto? report;
+            // Regenerating throws away an answer that already exists and pays for it again, so the flag is
+            // honoured only for administrators - any caller may pass it, nobody else gets it.
+            var forceRegenerate = force && this.User.IsInRole("gameon_admin");
 
-            // The one place in this codebase that catches a domain exception, and reluctantly: the global
-            // exception middleware the conventions assume does not actually exist in Program.cs, so without this
-            // a provider quota refusal would reach the caller as a bare 500 - reported as a defect when it is
-            // simply "come back in a minute". Remove this the day that middleware is written.
-            try
+            if (!forceRegenerate)
             {
-                report = await this.mediator.Send(new GenerateLoLCoachReportCommand
+                // A stored report is served without ever touching the line: the cache is what guarantees the
+                // same analysis is never paid for twice.
+                var existing = await this.mediator.Send(new GetLoLCoachReportQuery { MatchId = matchId, PlayerId = playerId });
+
+                if (existing is not null)
                 {
-                    MatchId = matchId,
-                    PlayerId = playerId,
-
-                    // Regenerating throws away an answer that already exists and pays for it again, so the flag
-                    // is honoured only for administrators - any caller may pass it, nobody else gets it.
-                    ForceRegenerate = force && this.User.IsInRole("gameon_admin"),
-                });
+                    return this.Ok(existing);
+                }
             }
-            catch (LlmTransientException)
+
+            var queued = await this.mediator.Send(new EnqueueLoLCoachReportCommand
             {
-                this.Response.Headers.RetryAfter = "30";
+                MatchId = matchId,
+                PlayerId = playerId,
+                ForceRegenerate = forceRegenerate,
+            });
 
-                return this.StatusCode(
-                    StatusCodes.Status429TooManyRequests,
-                    new { Error = "Le coach est déjà en train d'analyser une partie, ou le quota du modèle est épuisé. Réessaie dans un instant." });
-            }
-
-            if (report is null)
+            if (queued is null)
             {
                 return this.NotFound();
             }
 
-            return this.Ok(report);
+            return this.Accepted(queued);
         }
     }
 }

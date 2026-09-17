@@ -45,11 +45,25 @@ namespace GameOn.External.Llm.Implementations
 
         /// <summary>
         /// Caps the whole process to one generation at a time. Nothing else in this codebase throttles calls to
-        /// the provider, and the free tier's allowance is per minute: since a generation holds for roughly
-        /// fifteen seconds, serialising them mechanically keeps the rate near four per minute, far below any
-        /// published limit, without having to track a sliding window.
+        /// the provider.
         /// </summary>
+        /// <remarks>
+        /// On its own this is not a rate limit, and it was wrong to treat it as one: it paces calls only as
+        /// long as every call is slow. A refusal comes back in about three hundred milliseconds where a
+        /// generation holds for the better part of a minute, so the moment the provider starts saying no, the
+        /// lock turns over two hundred times a minute instead of four and the first refusal becomes a burst of
+        /// them. <see cref="MinimumInterval"/> is what actually holds the rate down.
+        /// </remarks>
         private static readonly SemaphoreSlim GenerationLock = new SemaphoreSlim(1, 1);
+
+        /// <summary>
+        /// Floor on the delay between two calls leaving this process, counted from when each one is sent and
+        /// applied whatever its outcome - a refusal costs a slot exactly like a generation, which is the whole
+        /// point. Set from <c>LLM_MIN_INTERVAL_SECONDS</c>; the default of twelve seconds is the free tier's
+        /// five requests per minute expressed as a spacing.
+        /// </summary>
+        private static readonly TimeSpan MinimumInterval = TimeSpan.FromSeconds(
+            int.TryParse(Environment.GetEnvironmentVariable("LLM_MIN_INTERVAL_SECONDS"), out var interval) ? interval : 12);
 
         /// <summary>
         /// How long a caller waits for the slot before being turned away. Deliberately shorter than the
@@ -57,6 +71,12 @@ namespace GameOn.External.Llm.Implementations
         /// refused here, with a status the UI can act on, rather than holding a connection open for nothing.
         /// </summary>
         private static readonly TimeSpan QueueWait = TimeSpan.FromSeconds(30);
+
+        /// <summary>
+        /// Earliest instant the next call may be sent. Only ever read or written while
+        /// <see cref="GenerationLock"/> is held, so it needs no synchronisation of its own.
+        /// </summary>
+        private static DateTimeOffset nextSlotAvailableOn = DateTimeOffset.MinValue;
 
         private readonly IHttpClientFactory httpClientFactory;
         private readonly string apiKey;
@@ -110,6 +130,17 @@ namespace GameOn.External.Llm.Implementations
 
             try
             {
+                // Waiting here rather than before taking the lock is deliberate: the pacing has to apply to the
+                // process as a whole, and only the holder of the lock can know when the previous call went out.
+                var pacing = nextSlotAvailableOn - DateTimeOffset.UtcNow;
+
+                if (pacing > TimeSpan.Zero)
+                {
+                    await Task.Delay(pacing, cancellationToken);
+                }
+
+                nextSlotAvailableOn = DateTimeOffset.UtcNow + MinimumInterval;
+
                 var client = this.httpClientFactory.CreateClient(HttpClientName);
                 var request = new HttpRequestMessage(HttpMethod.Post, InteractionsUrl)
                 {
