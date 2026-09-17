@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>7.4.0</Version>
-    <PackageReleaseNotes>Added smurff support.</PackageReleaseNotes>
+    <Version>7.5.0</Version>
+    <PackageReleaseNotes>Added rAImmus AI assistant.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
