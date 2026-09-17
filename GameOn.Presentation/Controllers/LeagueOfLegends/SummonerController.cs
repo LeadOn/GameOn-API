@@ -104,9 +104,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetRankHistory(int id, int? limit, LoLRankHistoryGranularity? granularity, int? days)
         {
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new GetSummonerRankHistoryQuery { PlayerId = id, Limit = limit, Granularity = granularity, Days = days }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
@@ -125,9 +125,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         {
             var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = id });
 
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
@@ -146,9 +146,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         {
             var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
 
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
@@ -178,9 +178,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
             playerInDb.RiotGamesNickname = riotGamesNickname;
             playerInDb.RiotGamesTagLine = riotGamesTagLine;
 
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerAdminCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>

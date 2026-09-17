@@ -28,9 +28,9 @@ namespace GameOn.External.RiotGames.Implementations
         public async Task<AccountDto> GetAccountPuuid(string tagLine, string nickname, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/riot/account/v1/accounts/by-riot-id/{nickname}/{tagLine}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+#pragma warning disable CS8603 // Possible null reference return.
             return await RunRequest<AccountDto>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

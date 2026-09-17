@@ -60,9 +60,9 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
             }
 
             // Getting its league summoners ID
-#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
+#pragma warning disable CS8604 // Possible null reference argument.
             var summonerIdFromRiot = await this.summonerService.GetSummonerByPuuid(playerInDb.RiotGamesPUUID, cancellationToken);
-#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
+#pragma warning restore CS8604 // Possible null reference argument.
 
             if (summonerIdFromRiot is not null)
             {

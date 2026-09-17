@@ -1,4 +1,4 @@
-// <copyright file="GetLeaguePlayerByIdQueryHandler.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GetLeaguePlayerByIdQueryHandler.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -15,11 +15,6 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
     /// </summary>
     public class GetLeaguePlayerByIdQueryHandler : IRequestHandler<GetLeaguePlayerByIdQuery, PlayerDto?>
     {
-        // Matched against LoLQueue.Map + Description (synced from Riot) to keep only games against real
-        // opponents. Duplicated from GetLoLGlobalStatsQueryHandler: worth factoring out into a shared
-        // helper if a third caller shows up.
-        private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
-
         // Match-v5 queue IDs for the two ranked queues (see GetAllLeaguePlayersQueryHandler, which uses
         // the same constants). league-v4's RANKED_SOLO_5x5 / RANKED_FLEX_SR QueueType strings, used for
         // the rank snapshots below, don't line up with these — the two Riot APIs don't share identifiers.
@@ -33,6 +28,11 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
         // row in GetAllLeaguePlayersQueryHandler — same data, different display, so a different count here
         // is intentional rather than a drift to reconcile.
         private const int RecentFormGameCount = 8;
+
+        // Matched against LoLQueue.Map + Description (synced from Riot) to keep only games against real
+        // opponents. Duplicated from GetLoLGlobalStatsQueryHandler: worth factoring out into a shared
+        // helper if a third caller shows up.
+        private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
 
         private readonly IApplicationDbContext context;
 
@@ -85,6 +85,18 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
             }
 
             return playerInDb;
+        }
+
+        /// <summary>
+        /// Normalizes a caller-supplied team position to the upper-case form Riot stores.
+        /// Duplicated from <see cref="Matches.Queries.GetLastGamesPlayed.GetLastGamesPlayedQueryHandler"/>:
+        /// worth factoring out into a shared helper if a third caller shows up.
+        /// </summary>
+        /// <param name="teamPosition">Raw team position coming from the query.</param>
+        /// <returns>Normalized team position, or null when no filter was asked for.</returns>
+        private static string? NormalizeTeamPosition(string? teamPosition)
+        {
+            return string.IsNullOrWhiteSpace(teamPosition) ? null : teamPosition.Trim().ToUpperInvariant();
         }
 
         /// <summary>
@@ -281,18 +293,6 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
                     .ThenBy(x => x.Player.Id)
                     .ToList(),
             };
-        }
-
-        /// <summary>
-        /// Normalizes a caller-supplied team position to the upper-case form Riot stores.
-        /// Duplicated from <see cref="Matches.Queries.GetLastGamesPlayed.GetLastGamesPlayedQueryHandler"/>:
-        /// worth factoring out into a shared helper if a third caller shows up.
-        /// </summary>
-        /// <param name="teamPosition">Raw team position coming from the query.</param>
-        /// <returns>Normalized team position, or null when no filter was asked for.</returns>
-        private static string? NormalizeTeamPosition(string? teamPosition)
-        {
-            return string.IsNullOrWhiteSpace(teamPosition) ? null : teamPosition.Trim().ToUpperInvariant();
         }
     }
 }
