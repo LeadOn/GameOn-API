@@ -32,6 +32,7 @@ namespace GameOn.External
             services.AddScoped<IMatchService, MatchV5Service>();
             services.AddScoped<IQueueService, QueueService>();
             services.AddScoped<ICommunityDragonQueueService, CommunityDragonQueueService>();
+            services.AddScoped<ICommunityDragonChampionService, CommunityDragonChampionService>();
 
             // Adding connection to MinIO
             services.AddMinio(client =>
