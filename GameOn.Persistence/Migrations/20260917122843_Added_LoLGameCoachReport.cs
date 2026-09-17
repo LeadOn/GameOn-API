@@ -1,0 +1,66 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace GameOn.Persistence.Migrations
+{
+    /// <inheritdoc />
+    public partial class Added_LoLGameCoachReport : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "LeagueOfLegendsGameCoachReport",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    match_id = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    puuid = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    player_id = table.Column<int>(type: "int", nullable: true),
+                    prompt_version = table.Column<int>(type: "int", nullable: false),
+                    model_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    summary = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    rating = table.Column<double>(type: "float", nullable: true),
+                    content_json = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    generated_on = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeagueOfLegendsGameCoachReport", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_LoL_Game_Coach_Report_Game",
+                        column: x => x.match_id,
+                        principalTable: "LeagueOfLegendsGame",
+                        principalColumn: "match_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LoL_Game_Coach_Report_Player",
+                        column: x => x.player_id,
+                        principalTable: "Player",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeagueOfLegendsGameCoachReport_player_id",
+                table: "LeagueOfLegendsGameCoachReport",
+                column: "player_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LoL_Game_Coach_Report_Match_Puuid",
+                table: "LeagueOfLegendsGameCoachReport",
+                columns: new[] { "match_id", "puuid" },
+                unique: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "LeagueOfLegendsGameCoachReport");
+        }
+    }
+}

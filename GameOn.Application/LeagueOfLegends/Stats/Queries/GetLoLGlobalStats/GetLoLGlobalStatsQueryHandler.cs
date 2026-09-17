@@ -1,4 +1,4 @@
-// <copyright file="GetLoLGlobalStatsQueryHandler.cs" company="LeadOn's Corp'">
+﻿// <copyright file="GetLoLGlobalStatsQueryHandler.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -27,8 +27,12 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
         // Below it, the player was AFK and would win the Pacifist award by default.
         private const int MinimumLevelForPacifist = 8;
 
-        // Matched against LoLQueue.Map + Description (synced from Riot) to keep only games against real opponents.
-        private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
+        // Matched against LoLQueue.Map + Description to keep only games against real opponents. The
+        // referential is bilingual: Riot's own queues.json is in English, while the entries missing
+        // from it are completed from Community Dragon in French (see SyncQueuesCommandHandler), which
+        // is where the custom game queues (3100 blind, 3110 draft, 3140 practice tool) come from --
+        // hence "personnalis", which covers "partie personnalisée" and "personnalisé".
+        private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom", "personnalis", "entraînement" };
 
         // LoLGame.GameStart is stored in the API server clock, and the production container runs in UTC
         // (no TZ set in the Dockerfile), so stored values are UTC. Awards that reason about the hour of

@@ -5,11 +5,13 @@
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportCustomLoLGame;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameTimelineByMatchId;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed;
+    using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
     using MediatR;
@@ -178,6 +180,32 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
             await this.mediator.Send(new ImportLoLGamesCommand { MatchIDs = new List<string> { matchId }, Player = connectedPlayer, ExecuteUpdate = executeUpdate });
 
             return this.NoContent();
+        }
+
+        /// <summary>
+        /// Import a custom game from a League client payload.
+        /// </summary>
+        /// <param name="command">The game (and, ideally, its timeline) as captured on the League client.</param>
+        /// <returns>200 OK with a summary of what was imported.</returns>
+        /// <remarks>
+        /// Custom games are unreachable through the Riot Games API: they never show up in match-v5's
+        /// match list, and fetching one by ID answers 404 or an empty Abort_Unexpected stub. The only
+        /// source left is the League client's own match history, which scripts/fetch_custom_games_lcu.py
+        /// dumps and posts here.
+        /// </remarks>
+        [HttpPost]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("custom/import")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Import a custom game from a League client payload.")]
+        [SwaggerResponse(200, "Imported game summary.", typeof(ImportCustomLoLGameResultDto))]
+        [SwaggerResponse(400, "Invalid payload.")]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> ImportCustomMatch([FromBody] ImportCustomLoLGameCommand command)
+        {
+            return this.Ok(await this.mediator.Send(command));
         }
 
         /// <summary>
