@@ -1,4 +1,4 @@
-﻿// <copyright file="GameOnContext.cs" company="LeadOn's Corp'">
+// <copyright file="GameOnContext.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -103,6 +103,11 @@ namespace GameOn.Persistence
         /// Gets or sets LoL Game Participant Challenges.
         /// </summary>
         public DbSet<LoLGameParticipantChallenge> LeagueOfLegendsGameParticipantChallenges { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets LoL Game Coach Reports.
+        /// </summary>
+        public DbSet<LoLGameCoachReport> LeagueOfLegendsGameCoachReports { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets LoL Queues.
@@ -1002,6 +1007,69 @@ namespace GameOn.Persistence
                     .HasForeignKey<LoLGameParticipantStat>(e => e.LoLGameParticipantId)
                     .HasConstraintName("FK_LoL_Game_Participant_Stat")
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameCoachReport>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsGameCoachReport");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Puuid)
+                    .HasColumnName("puuid")
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id");
+
+                entity.Property(e => e.PromptVersion)
+                    .HasColumnName("prompt_version");
+
+                entity.Property(e => e.ModelName)
+                    .HasColumnName("model_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Summary)
+                    .HasColumnName("summary")
+                    .HasMaxLength(2000);
+
+                entity.Property(e => e.Rating)
+                    .HasColumnName("rating");
+
+                entity.Property(e => e.ContentJson)
+                    .HasColumnName("content_json");
+
+                entity.Property(e => e.GeneratedOn)
+                    .HasColumnName("generated_on");
+
+                // One report per player per game. This is what makes the table a cache rather than a log:
+                // asking twice for the same analysis serves the stored one instead of paying for it again.
+                entity.HasIndex(e => new { e.MatchId, e.Puuid })
+                    .IsUnique()
+                    .HasDatabaseName("IX_LoL_Game_Coach_Report_Match_Puuid");
+
+                entity.HasOne(e => e.Game)
+                    .WithMany()
+                    .HasForeignKey(e => e.MatchId)
+                    .HasConstraintName("FK_LoL_Game_Coach_Report_Game")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Player)
+                    .WithMany()
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_LoL_Game_Coach_Report_Player")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<LoLGameParticipantChallenge>(entity =>

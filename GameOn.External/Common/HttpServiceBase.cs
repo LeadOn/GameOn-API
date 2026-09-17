@@ -1,9 +1,10 @@
-﻿// <copyright file="HttpServiceBase.cs" company="LeadOn's Corp'">
+// <copyright file="HttpServiceBase.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 namespace GameOn.External.Common
 {
     using System.Net;
+    using GameOn.External.Common.Exceptions;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -19,10 +20,11 @@ namespace GameOn.External.Common
         /// <param name="message"><see cref="HttpRequestMessage"/> settings of the request.</param>
         /// <param name="cancellationToken">Token to stop all async execution.</param>
         /// <returns>Retrieved data from the response body.</returns>
-        /// <exception cref="NotImplementedException">Unknown exception.</exception>
-        /// <exception cref="Exception">An unknown exception occured.</exception>
+        /// <exception cref="ExternalApiException">The third party answered with a status we don't handle.</exception>
         protected static async Task<TResponse?> RunRequest<TResponse>(HttpClient client, HttpRequestMessage message, CancellationToken cancellationToken = default)
         {
+            var requestUri = ExternalApiException.Redact(message.RequestUri?.ToString() ?? string.Empty);
+
             var response = await client.SendAsync(message, cancellationToken);
 
             switch (response.StatusCode)
@@ -34,16 +36,29 @@ namespace GameOn.External.Common
                     {
                         if (response.Content is null)
                         {
-                            throw new NotImplementedException();
+                            throw new ExternalApiException(response.StatusCode, requestUri, "Empty response content.");
                         }
 
-                        var responseBody = await response.Content.ReadAsStringAsync();
+                        var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                        return JsonConvert.DeserializeObject<TResponse>(responseBody ?? throw new Exception("No content retrieved."));
+                        if (responseBody is null)
+                        {
+                            throw new ExternalApiException(response.StatusCode, requestUri, "No content retrieved.");
+                        }
+
+                        return JsonConvert.DeserializeObject<TResponse>(responseBody);
                     }
 
                 default:
-                    throw new NotImplementedException();
+                    {
+                        // The payload is what tells a rotated key apart from a rate limit or a stale identifier,
+                        // so it travels with the exception instead of being dropped on the floor.
+                        var errorBody = response.Content is null
+                            ? string.Empty
+                            : await response.Content.ReadAsStringAsync(cancellationToken);
+
+                        throw new ExternalApiException(response.StatusCode, requestUri, errorBody);
+                    }
             }
         }
     }

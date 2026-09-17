@@ -21,7 +21,10 @@
         "S3_BUCKET_NAME": "",
         "S3_PP_BASE_PATH": "",
         "S3_TP_BASE_PATH": "",
-        "DEFAULT_PROFILE_PIC": ""
+        "DEFAULT_PROFILE_PIC": "",
+        "GEMINI_API_KEY": "",
+        "GEMINI_MODEL": "",
+        "LLM_TIMEOUT_SECONDS": ""
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"
