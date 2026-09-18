@@ -42,6 +42,8 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
         /// <inheritdoc />
         public async Task<IEnumerable<PlayerDto>> Handle(GetAllLeaguePlayersQuery request, CancellationToken cancellationToken)
         {
+            // Crew accounts only unless the caller asks otherwise: this list is the crew's ladder, and an
+            // account outside the crew is one whose numbers we deliberately stopped counting.
             // One entry per account, smurfs included: rank, LP delta and recent form are per account by
             // nature — a smurf sits on its own ladder — so merging them into the owner's card would be
             // meaningless. Each entry carries PrimaryPlayerId, which is what a caller needs to nest a
@@ -51,6 +53,11 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
             if (!request.IncludeSmurfs)
             {
                 playersQuery = playersQuery.PrimariesOnly();
+            }
+
+            if (!request.IncludeOutOfCrew)
+            {
+                playersQuery = playersQuery.InCrewOnly();
             }
 
             var playersInDb = await playersQuery.Where(x => x.Archived == request.Archived && x.RiotGamesPUUID != null).Select(x => new PlayerDto(x)).ToListAsync(cancellationToken);

@@ -51,15 +51,29 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
             var thisWeekStart = TimeZoneInfo.ConvertTimeToUtc(mondayThisWeekLocal, PlayersTimeZone);
             var lastWeekStart = TimeZoneInfo.ConvertTimeToUtc(mondayLastWeekLocal, PlayersTimeZone);
 
-            // Every ranked game participation linked to a GameOn player over the last two calendar weeks,
-            // with just enough game context to compute the activity recap. Rows with an empty champion
-            // name are placeholders left by failed imports, and remakes never count as played games.
-            var participants = await this.context.LeagueOfLegendsGameParticipants
+            // Every ranked game participation linked to a tracked account over the last two calendar
+            // weeks, with just enough game context to compute the activity recap. Rows with an empty
+            // champion name are placeholders left by failed imports, and remakes never count as played
+            // games. Which accounts are tracked is decided by the two flags below, applied here and to
+            // the rank snapshots alike so that every block of the page describes the same roster.
+            var participantsQuery = this.context.LeagueOfLegendsGameParticipants
                 .Where(x => x.PlayerId != null
                     && x.ChampionName != string.Empty
                     && (x.Game.QueueId == RankedSoloQueueId || x.Game.QueueId == RankedFlexQueueId)
                     && !x.Game.IsRemake
-                    && x.Game.GameStart >= lastWeekStart)
+                    && x.Game.GameStart >= lastWeekStart);
+
+            if (!request.IncludeOutOfCrew)
+            {
+                participantsQuery = participantsQuery.Where(x => x.Player.InCrew);
+            }
+
+            if (!request.IncludeSmurfs)
+            {
+                participantsQuery = participantsQuery.Where(x => x.Player.PrimaryPlayerId == null);
+            }
+
+            var participants = await participantsQuery
                 .Select(x => new
                 {
                     PlayerId = x.PlayerId!.Value,
@@ -83,10 +97,24 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
                 ? x.StatsGameDurationSeconds.Value
                 : Math.Max(0, (x.GameEnd - x.GameStart).TotalSeconds)) / 60.0;
 
-            // Rank snapshots over the same two calendar weeks, per player and per ranked queue (Solo/Duo
-            // and Flex are tracked and compared separately, since their ladders are independent).
-            var rankHistory = await this.context.LeagueOfLegendsRankHistory
-                .Where(x => x.CreatedOn >= lastWeekStart)
+            // Rank snapshots over the same two calendar weeks, per tracked account and per ranked queue
+            // (Solo/Duo and Flex are tracked and compared separately, since their ladders are
+            // independent). The same two flags as the participations above apply, so the net LP of the
+            // week and the fact of the week both describe the same roster as the activity recap.
+            var rankHistoryQuery = this.context.LeagueOfLegendsRankHistory
+                .Where(x => x.CreatedOn >= lastWeekStart);
+
+            if (!request.IncludeOutOfCrew)
+            {
+                rankHistoryQuery = rankHistoryQuery.Where(x => x.Player.InCrew);
+            }
+
+            if (!request.IncludeSmurfs)
+            {
+                rankHistoryQuery = rankHistoryQuery.Where(x => x.Player.PrimaryPlayerId == null);
+            }
+
+            var rankHistory = await rankHistoryQuery
                 .Select(x => new { x.PlayerId, x.QueueType, x.Tier, x.Rank, x.LeaguePoints, x.CreatedOn })
                 .ToListAsync(cancellationToken);
 
@@ -169,7 +197,13 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
             // Deliberately a wider window than the calendar week used by the activity recap above: a
             // single week rarely holds enough ranked games for the awards to be meaningful.
             var crewRecords = await this.mediator.Send(
-                new GetLoLGlobalStatsQuery { RankedOnly = true, Period = LoLStatsPeriod.Month },
+                new GetLoLGlobalStatsQuery
+                {
+                    RankedOnly = true,
+                    Period = LoLStatsPeriod.Month,
+                    IncludeSmurfs = request.IncludeSmurfs,
+                    IncludeOutOfCrew = request.IncludeOutOfCrew,
+                },
                 cancellationToken);
 
             return new LoLHomeStatsDto

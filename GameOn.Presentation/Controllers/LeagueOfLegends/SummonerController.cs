@@ -7,6 +7,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.LinkSmurfAccount;
+    using GameOn.Application.LeagueOfLegends.Summoners.Commands.SetCrewMembership;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UnlinkSmurfAccount;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerRanks;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
@@ -46,6 +47,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// </summary>
         /// <param name="archived">If true, get archived players.</param>
         /// <param name="includeSmurfs">If false, only primary accounts are returned. Defaults to true: smurf accounts hold their own rank and are listed alongside their owner, tagged with <see cref="PlayerDto.PrimaryPlayerId"/>.</param>
+        /// <param name="includeOutOfCrew">If true, accounts outside the crew are listed too. Defaults to false: this list is the crew's ladder, and an account outside the crew is one whose numbers we stopped counting. Every entry carries <see cref="PlayerDto.InCrew"/>.</param>
         /// <returns>200 OK with Player list.</returns>
         [HttpGet]
         [Route("")]
@@ -53,9 +55,14 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerOperation(Summary = "Get all League of Legends players in database.")]
         [SwaggerResponse(200, "Players in database.", typeof(List<Player>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetAll(bool? archived, bool? includeSmurfs)
+        public async Task<IActionResult> GetAll(bool? archived, bool? includeSmurfs, bool? includeOutOfCrew)
         {
-            return this.Ok(await this.mediator.Send(new GetAllLeaguePlayersQuery { Archived = archived ?? false, IncludeSmurfs = includeSmurfs ?? true }));
+            return this.Ok(await this.mediator.Send(new GetAllLeaguePlayersQuery
+            {
+                Archived = archived ?? false,
+                IncludeSmurfs = includeSmurfs ?? true,
+                IncludeOutOfCrew = includeOutOfCrew ?? false,
+            }));
         }
 
         /// <summary>
@@ -104,9 +111,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> GetRankHistory(int id, int? limit, LoLRankHistoryGranularity? granularity, int? days)
         {
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new GetSummonerRankHistoryQuery { PlayerId = id, Limit = limit, Granularity = granularity, Days = days }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
@@ -125,9 +132,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         {
             var playerInDb = await this.mediator.Send(new GetPlayerByIdQuery { PlayerId = id });
 
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
@@ -146,9 +153,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         {
             var playerInDb = await this.mediator.Send(new GetConnectedPlayerQuery { ConnectedPlayer = this.User.GetConnectedPlayer() });
 
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
@@ -178,9 +185,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
             playerInDb.RiotGamesNickname = riotGamesNickname;
             playerInDb.RiotGamesTagLine = riotGamesTagLine;
 
-#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new UpdatePlayerSummonerAdminCommand { Player = playerInDb }));
-#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
 
         /// <summary>
@@ -197,6 +204,34 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         {
             await this.mediator.Send(new UpdateAllPlayerRanksCommand());
             return this.NoContent();
+        }
+
+        /// <summary>
+        /// Move an account in or out of the crew.
+        /// </summary>
+        /// <param name="id">ID of the account to move.</param>
+        /// <param name="inCrew">True to put the account in the crew, false to take it out.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{id:int}/crew")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Move an account in or out of the crew.", Description = "Crew accounts are refreshed automatically and are the only ones counted by the lists and the stats. An account outside the crew keeps its history and stays refreshable on demand, it simply stops weighing on the crew's numbers. Taking a player out also takes their smurf accounts out; putting them back does not put the smurfs back.")]
+        [SwaggerResponse(200, "Membership updated.", typeof(SetCrewMembershipResultDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(404, "Account not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> SetCrewMembership(int id, bool inCrew)
+        {
+            var result = await this.mediator.Send(new SetCrewMembershipCommand { PlayerId = id, InCrew = inCrew });
+
+            if (result is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(result);
         }
 
         /// <summary>

@@ -32,27 +32,27 @@ namespace GameOn.External.RiotGames.Implementations
         public async Task<IEnumerable<string>> GetLastGamesPlayed(string puuid, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/lol/match/v5/matches/by-puuid/{puuid}/ids?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+#pragma warning disable CS8603 // Possible null reference return.
             return await RunRequest<IEnumerable<string>>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         /// <inheritdoc />
         public async Task<MatchDto> GetGameById(string matchId, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/lol/match/v5/matches/{matchId}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+#pragma warning disable CS8603 // Possible null reference return.
             return await RunRequest<MatchDto>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         /// <inheritdoc />
         public async Task<TimelineDto> GetGameTimelineById(string matchId, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_ACCOUNT_API_ROUTE")}/lol/match/v5/matches/{matchId}/timeline?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+#pragma warning disable CS8603 // Possible null reference return.
             return await RunRequest<TimelineDto>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

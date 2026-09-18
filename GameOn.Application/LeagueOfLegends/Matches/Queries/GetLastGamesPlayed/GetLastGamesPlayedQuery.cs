@@ -54,5 +54,21 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
         /// <see cref="PlayerId"/> is set: without a player there is no single role to filter on.
         /// </summary>
         public string? TeamPosition { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a game played on a smurf account alone belongs to the
+        /// shared history. Defaults to true. Note this decides whether a game is <em>listed</em>, not
+        /// which participants it shows: a listed game always carries its full roster. Only applies when
+        /// <see cref="PlayerId"/> is null -- an account's own history is about that account, whatever it
+        /// is.
+        /// </summary>
+        public bool IncludeSmurfs { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a game played by tracked accounts outside the crew
+        /// alone belongs to the shared history. Defaults to false, for the same reason as everywhere
+        /// else: this list is the crew's history. Only applies when <see cref="PlayerId"/> is null.
+        /// </summary>
+        public bool IncludeOutOfCrew { get; set; }
     }
 }

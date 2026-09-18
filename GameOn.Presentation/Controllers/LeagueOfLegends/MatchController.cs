@@ -79,6 +79,8 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <param name="queues">Filter games by queue IDs, comma-separated (Riot queueId, see LoLQueue).</param>
         /// <param name="startDate">Only get games starting on or after this date (inclusive).</param>
         /// <param name="endDate">Only get games starting on or before this date (inclusive).</param>
+        /// <param name="includeSmurfs">If false, a game played on a smurf account alone is left out of the shared history. Defaults to true. Decides whether a game is listed, not which participants it shows.</param>
+        /// <param name="includeOutOfCrew">If true, a game played by tracked accounts outside the crew alone is listed too. Defaults to false: this list is the crew's history.</param>
         /// <returns>200 OK with game list.</returns>
         [HttpGet]
         [Route("last")]
@@ -86,9 +88,9 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerOperation(Summary = "Get last games played.")]
         [SwaggerResponse(200, "Games played.", typeof(List<LoLGame>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetLastGamesPlayed(int? page, int? size, bool rankedOnly = false, string? queues = null, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<IActionResult> GetLastGamesPlayed(int? page, int? size, bool rankedOnly = false, string? queues = null, DateTime? startDate = null, DateTime? endDate = null, bool includeSmurfs = true, bool includeOutOfCrew = false)
         {
-            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueIds = ParseQueueIds(queues), StartDate = startDate, EndDate = endDate });
+            var lastGames = await this.mediator.Send(new GetLastGamesPlayedQuery { Page = page ?? 1, NumberOfResults = size ?? 10, RankedGamesOnly = rankedOnly, QueueIds = ParseQueueIds(queues), StartDate = startDate, EndDate = endDate, IncludeSmurfs = includeSmurfs, IncludeOutOfCrew = includeOutOfCrew });
 
             if (lastGames is not null)
             {

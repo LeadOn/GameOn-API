@@ -41,8 +41,24 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
             if (request.PlayerId is null)
             {
+                // The crew's game history, so a game only belongs here if at least one account matching the
+                // two flags below played it. Games imported for an account that has since left the crew
+                // stay in the database and on that account's own profile (the PlayerId branch below), they
+                // just stop showing up in the shared history. A game played by a crew member alongside an
+                // account outside the crew is still a crew game and stays.
+                // The flags decide whether a game is *listed*, never which participants it carries: a
+                // listed game always ships its full roster, smurfs and outsiders included.
+                // Both conditions live inside one Any on purpose. Split into two Where clauses they would
+                // mean "some participant is in the crew AND some participant is a primary account", which
+                // two different people satisfy -- not "one account is both", which is the question asked.
+                var includeSmurfs = request.IncludeSmurfs;
+                var includeOutOfCrew = request.IncludeOutOfCrew;
+
                 query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats)
-                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges);
+                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges)
+                    .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId != null
+                        && (includeOutOfCrew || y.Player.InCrew)
+                        && (includeSmurfs || y.Player.PrimaryPlayerId == null)));
 
                 if (request.RankedGamesOnly == true)
                 {

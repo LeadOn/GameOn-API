@@ -1,4 +1,4 @@
-// <copyright file="CommunityDragonQueueService.cs" company="LeadOn's Corp'">
+﻿// <copyright file="CommunityDragonQueueService.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -28,9 +28,9 @@ namespace GameOn.External.CommunityDragon.Implementations
         public async Task<IEnumerable<CommunityDragonQueueDto>> GetQueues(CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/fr_fr/v1/queues.json");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+#pragma warning disable CS8603 // Possible null reference return.
             return await RunRequest<IEnumerable<CommunityDragonQueueDto>>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

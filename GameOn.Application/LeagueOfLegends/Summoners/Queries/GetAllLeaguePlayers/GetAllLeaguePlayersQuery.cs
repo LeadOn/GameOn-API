@@ -25,5 +25,13 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
         /// owner, or ask for primary accounts only by turning this off.
         /// </summary>
         public bool IncludeSmurfs { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether accounts outside the crew are listed too. Off by
+        /// default: the point of <see cref="Player.InCrew"/> is that this list describes the active crew.
+        /// Turned on, the list also returns the accounts we only refresh on demand, each carrying
+        /// <see cref="PlayerDto.InCrew"/> so the caller can tell them apart.
+        /// </summary>
+        public bool IncludeOutOfCrew { get; set; } = false;
     }
 }

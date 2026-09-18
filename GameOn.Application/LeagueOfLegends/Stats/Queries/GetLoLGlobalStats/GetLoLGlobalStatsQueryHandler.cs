@@ -85,6 +85,15 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             var participantsQuery = this.context.LeagueOfLegendsGameParticipants
                 .Where(x => x.PlayerId != null && x.ChampionName != string.Empty && x.Game.Queue != null);
 
+            // Crew participations only, unless the caller asks otherwise: an account outside the crew is
+            // one whose numbers we deliberately stopped counting, so it never wins an award and never
+            // weighs on a champion's win rate. Its games stay in the database and on its own profile,
+            // they just leave this dataset.
+            if (!request.IncludeOutOfCrew)
+            {
+                participantsQuery = participantsQuery.Where(x => x.Player.InCrew);
+            }
+
             if (matchQueueId is not null)
             {
                 participantsQuery = participantsQuery.Where(x => x.Game.QueueId == matchQueueId);
@@ -97,6 +106,16 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             if (since is not null)
             {
                 participantsQuery = participantsQuery.Where(x => x.Game.GameStart >= since);
+            }
+
+            // Smurfs are accounts like any other here: they hold their own games and win awards in their
+            // own name, since a record is about a game played, not about the person who played it.
+            // IncludeSmurfs = false answers the other reading -- one record per member -- by dropping the
+            // secondary accounts entirely rather than merging them into their owner, which would mix two
+            // ladders and two champion pools into one meaningless card.
+            if (!request.IncludeSmurfs)
+            {
+                participantsQuery = participantsQuery.Where(x => x.Player.PrimaryPlayerId == null);
             }
 
             // Every game participation linked to a GameOn player, with its game context.
@@ -166,8 +185,15 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
             var trackedMatchIds = participants.Select(x => x.MatchId).Distinct().ToList();
 
             // Rank history snapshots, used for the LP drop award. Snapshots are ranked by nature,
-            // so the RankedOnly flag doesn't apply here.
+            // so the RankedOnly flag doesn't apply here. Restricted to the crew like the participations
+            // above, and by the same flag: the awards describe the crew, not every account the database
+            // happens to hold.
             var rankHistoryQuery = this.context.LeagueOfLegendsRankHistory.AsQueryable();
+
+            if (!request.IncludeOutOfCrew)
+            {
+                rankHistoryQuery = rankHistoryQuery.Where(x => x.Player.InCrew);
+            }
 
             if (rankQueueType is not null)
             {
@@ -179,18 +205,63 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                 rankHistoryQuery = rankHistoryQuery.Where(x => x.CreatedOn >= since);
             }
 
+            // Same reading as the participations above: without smurfs, the LP drop award is about the
+            // members' own ladders only. Left out of sync, a smurf could win it while its games were
+            // already excluded from every other award.
+            if (!request.IncludeSmurfs)
+            {
+                rankHistoryQuery = rankHistoryQuery.Where(x => x.Player.PrimaryPlayerId == null);
+            }
+
             var rankHistory = await rankHistoryQuery
                 .Select(x => new { x.PlayerId, x.QueueType, x.Tier, x.Rank, x.LeaguePoints, x.CreatedOn })
                 .ToListAsync(cancellationToken);
 
-            // Last timeline frame of each game, for every participant (cumulative stats = end of game values).
-            var lastFrames = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
-                .Where(x => trackedMatchIds.Contains(x.TimelineFrame.MatchId)
-                    && x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames.Max(f => f.Timestamp))
+            // Timeline frames of the tracked games, reduced to the three frames the awards need: the last
+            // one of each game, the one right before it, and the first one at or after the 20 minutes mark.
+            // Picking them with correlated MAX/MIN subqueries over the frame table made SQL Server rescan
+            // that table for every row of the (ten times larger) frame participant table, which times out
+            // on the whole history. Frames are cheap to list on their own, so the three targets are
+            // resolved here and their participant rows fetched by foreign key afterwards.
+            var frames = await this.context.LeagueOfLegendsGameTimelineFrames
+                .Where(x => trackedMatchIds.Contains(x.MatchId))
+                .Select(x => new { x.Id, x.MatchId, x.Timestamp })
+                .ToListAsync(cancellationToken);
+
+            var lastFrameIds = new HashSet<int>();
+            var previousFrameIds = new HashSet<int>();
+            var frameAt20Ids = new HashSet<int>();
+
+            foreach (var game in frames.GroupBy(x => x.MatchId))
+            {
+                var ordered = game.OrderBy(x => x.Timestamp).ToList();
+
+                lastFrameIds.Add(ordered[^1].Id);
+
+                // Second to last frame, for the squirrel award: between it and the final frame, current
+                // gold can only grow faster than total gold earned if the player sold items.
+                if (ordered.Count > 1)
+                {
+                    previousFrameIds.Add(ordered[^2].Id);
+                }
+
+                // First frame at or after the 20 minutes mark, for the comeback award.
+                var frameAt20 = ordered.FirstOrDefault(x => x.Timestamp >= TwentyMinutesInMs);
+
+                if (frameAt20 is not null)
+                {
+                    frameAt20Ids.Add(frameAt20.Id);
+                }
+            }
+
+            var neededFrameIds = lastFrameIds.Concat(previousFrameIds).Concat(frameAt20Ids).Distinct().ToList();
+            var frameById = frames.ToDictionary(x => x.Id);
+
+            var frameParticipants = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
+                .Where(x => neededFrameIds.Contains(x.LoLGameTimelineFrameId))
                 .Select(x => new
                 {
-                    x.TimelineFrame.MatchId,
-                    x.TimelineFrame.Timestamp,
+                    x.LoLGameTimelineFrameId,
                     x.ParticipantId,
                     x.ParticipantPUUID,
                     x.Level,
@@ -203,25 +274,45 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                 })
                 .ToListAsync(cancellationToken);
 
-            // Second to last frame of each game, for the squirrel award: between it and the final frame,
-            // current gold can only grow faster than total gold earned if the player sold items.
-            var previousFrames = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
-                .Where(x => trackedMatchIds.Contains(x.TimelineFrame.MatchId)
-                    && x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames
-                        .Where(f => f.Timestamp < x.TimelineFrame.Game.LoLGameTimelineFrames.Max(m => m.Timestamp))
-                        .Max(f => f.Timestamp))
-                .Select(x => new { x.TimelineFrame.MatchId, x.ParticipantPUUID, x.CurrentGold, x.TotalGold })
-                .ToListAsync(cancellationToken);
+            // Last timeline frame of each game, for every participant (cumulative stats = end of game values).
+            var lastFrames = frameParticipants
+                .Where(x => lastFrameIds.Contains(x.LoLGameTimelineFrameId))
+                .Select(x => new
+                {
+                    MatchId = frameById[x.LoLGameTimelineFrameId].MatchId,
+                    Timestamp = frameById[x.LoLGameTimelineFrameId].Timestamp,
+                    x.ParticipantId,
+                    x.ParticipantPUUID,
+                    x.Level,
+                    x.CurrentGold,
+                    x.TotalGold,
+                    x.TotalDamageTaken,
+                    x.TotalDamageDoneToChampions,
+                    x.TimeEnemySpentControlled,
+                    x.JungleMinionsKilled,
+                })
+                .ToList();
 
-            // First timeline frame at or after the 20 minutes mark, for the comeback award.
-            var framesAt20 = await this.context.LeagueOfLegendsGameTimelineFrameParticipants
-                .Where(x => trackedMatchIds.Contains(x.TimelineFrame.MatchId)
-                    && x.TimelineFrame.Timestamp >= TwentyMinutesInMs
-                    && x.TimelineFrame.Timestamp == x.TimelineFrame.Game.LoLGameTimelineFrames
-                        .Where(f => f.Timestamp >= TwentyMinutesInMs)
-                        .Min(f => f.Timestamp))
-                .Select(x => new { x.TimelineFrame.MatchId, x.ParticipantPUUID, x.TotalGold })
-                .ToListAsync(cancellationToken);
+            var previousFrames = frameParticipants
+                .Where(x => previousFrameIds.Contains(x.LoLGameTimelineFrameId))
+                .Select(x => new
+                {
+                    MatchId = frameById[x.LoLGameTimelineFrameId].MatchId,
+                    x.ParticipantPUUID,
+                    x.CurrentGold,
+                    x.TotalGold,
+                })
+                .ToList();
+
+            var framesAt20 = frameParticipants
+                .Where(x => frameAt20Ids.Contains(x.LoLGameTimelineFrameId))
+                .Select(x => new
+                {
+                    MatchId = frameById[x.LoLGameTimelineFrameId].MatchId,
+                    x.ParticipantPUUID,
+                    x.TotalGold,
+                })
+                .ToList();
 
             // Real team of every participant of the tracked games, tracked or not. Timeline frames only
             // carry a participant index, and deriving the side from it (1-5 = blue) only holds on 5v5
