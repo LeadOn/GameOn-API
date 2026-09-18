@@ -1,4 +1,4 @@
-// <copyright file="ProcessLoLCoachQueueJob.cs" company="LeadOn's Corp'">
+﻿// <copyright file="ProcessLoLCoachQueueJob.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -25,7 +25,13 @@ namespace GameOn.Application.Services.Jobs
     /// allowance without anything having to track a sliding window. Nothing is ever generated on a schedule or
     /// by scanning the database: this loop only ever writes what somebody pressed a button for.
     /// </remarks>
+    // False positive: StyleCop 1.1.118 predates C# 12 primary constructors and does not recognise
+    // the ") : Base" shape on a class declaration. Removing the space to satisfy SA1009 immediately
+    // trips SA1024 ("colon should be preceded by a space") on the very next column, verified: the two
+    // rules contradict each other here and no source formatting satisfies both.
+#pragma warning disable SA1009 // Closing parenthesis should not be followed by a space.
     public class ProcessLoLCoachQueueJob(IServiceScopeFactory serviceScopeFactory, ILoLCoachQueue queue, ILogger<ProcessLoLCoachQueueJob> logger) : BackgroundService
+#pragma warning restore SA1009 // Closing parenthesis should not be followed by a space.
     {
         /// <summary>
         /// How many refusals a single analysis may collect before it is dropped. Without a ceiling, one

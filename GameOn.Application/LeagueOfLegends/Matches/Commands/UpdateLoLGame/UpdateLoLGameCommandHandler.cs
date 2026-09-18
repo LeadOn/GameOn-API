@@ -163,7 +163,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                     foreach (var prop in frame.ParticipantFrames.GetType().GetProperties())
                     {
                         var participant = prop.GetValue(frame.ParticipantFrames, null) as ParticipantFrameDto;
-    #pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
+    #pragma warning disable CS8602 // Dereference of a possibly null reference.
                         var puuid = timelineFromRiot.Info.Participants.First(x => x.ParticipantId == participant.ParticipantId).PUUID;
                         frameInDb.LoLGameTimelineFrameParticipants.Add(new LoLGameTimelineFrameParticipant
                         {
@@ -217,7 +217,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
                             PowerRegen = participant.ChampionStats.PowerRegen,
                             SpellVamp = participant.ChampionStats.SpellVamp,
                         });
-    #pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
+    #pragma warning restore CS8602 // Dereference of a possibly null reference.
                     }
                 }
 

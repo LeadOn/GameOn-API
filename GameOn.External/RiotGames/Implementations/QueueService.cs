@@ -1,4 +1,4 @@
-// <copyright file="QueueService.cs" company="LeadOn's Corp'">
+﻿// <copyright file="QueueService.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -28,9 +28,9 @@ namespace GameOn.External.RiotGames.Implementations
         public async Task<IEnumerable<QueueDto>> GetQueues(CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "https://static.developer.riotgames.com/docs/lol/queues.json");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+#pragma warning disable CS8603 // Possible null reference return.
             return await RunRequest<IEnumerable<QueueDto>>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

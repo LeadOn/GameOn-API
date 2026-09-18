@@ -75,21 +75,14 @@ namespace GameOn.External.NetworkStorage.Implementations
                 await this.minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(bucketName));
             }
 
-            try
-            {
-                // Upload file to bucket
-                await this.minioClient.PutObjectAsync(
-                    new PutObjectArgs()
-                        .WithBucket(bucketName)
-                        .WithObject(filePath)
-                        .WithContentType(file.ContentType)
-                        .WithStreamData(file.OpenReadStream())
-                        .WithObjectSize(file.Length));
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            // Upload file to bucket
+            await this.minioClient.PutObjectAsync(
+                new PutObjectArgs()
+                    .WithBucket(bucketName)
+                    .WithObject(filePath)
+                    .WithContentType(file.ContentType)
+                    .WithStreamData(file.OpenReadStream())
+                    .WithObjectSize(file.Length));
         }
 
         /// <inheritdoc />

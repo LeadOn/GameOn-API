@@ -28,9 +28,9 @@ namespace GameOn.External.RiotGames.Implementations
         public async Task<SummonerDto> GetSummonerByPuuid(string puuid, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/summoner/v4/summoners/by-puuid/{puuid}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+#pragma warning disable CS8603 // Possible null reference return.
             return await RunRequest<SummonerDto>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

@@ -114,6 +114,7 @@ Le projet est découpé en 6 projets distincts. Respecte strictement les fronti�
 > - **Accès Data :** Ne jamais injecter `GameOnContext` dans la couche Presentation ou dans les Handlers. Toujours passer par les interfaces de Repositories.
 > - **Couplage :** La couche `Domain` ne doit jamais référencer `Persistence` ou `Presentation`.
 > - **Style :** Respecter strictement `stylecop.json`. Ne pas supprimer les règles de style pour "gagner du temps".
+> - **Langue des commentaires :** **tout commentaire de code est en anglais, sans exception.** Ça couvre les `//`, les `///` de documentation XML, le libellé accolé à un `#pragma warning`, et les commentaires des scripts Python de `scripts/`. Piège principal : le quick-fix « Supprimer l'avertissement » de Visual Studio en locale française recopie le message Roslyn traduit (`// Déréférencement d'une éventuelle référence null.`) — le remplacer par le libellé anglais officiel (`// Dereference of a possibly null reference.`). En revanche, les **chaînes de caractères** destinées aux joueurs restent en français (prompt de Raimmus, brief du coach, descriptions de tournoi), et cette documentation Markdown aussi.
 
 ---
 
