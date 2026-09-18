@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <ApplicationIcon>gameon-icon.ico</ApplicationIcon>
-    <Version>7.5.0</Version>
-    <PackageReleaseNotes>Added rAImmus AI assistant.</PackageReleaseNotes>
+    <Version>7.6.0</Version>
+    <PackageReleaseNotes>Added crew membership tracking.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
