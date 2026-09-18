@@ -181,6 +181,12 @@ namespace GameOn.Persistence
                     .HasDefaultValue(false)
                     .HasColumnName("archived");
 
+                // No HasDefaultValue here on purpose: EF omits a property equal to its CLR default from
+                // the INSERT, so a database default of true would silently drag every new account into
+                // the crew. Existing rows were flipped to true by the migration instead.
+                entity.Property(e => e.InCrew)
+                    .HasColumnName("in_crew");
+
                 entity.Property(e => e.RiotGamesNickname)
                     .HasColumnName("riot_games_nickname")
                     .HasMaxLength(150);
