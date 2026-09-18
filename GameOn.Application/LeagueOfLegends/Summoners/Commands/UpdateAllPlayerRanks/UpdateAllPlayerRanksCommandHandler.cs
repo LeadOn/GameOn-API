@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerRanks
 {
+    using GameOn.Application.Common.Players;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Common.Interfaces;
     using MediatR;
@@ -31,7 +32,15 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerR
         /// <inheritdoc />
         public async Task Handle(UpdateAllPlayerRanksCommand request, CancellationToken cancellationToken)
         {
-            foreach (var playerInDb in await this.context.Players.Where(x => x.RiotGamesPUUID != null && x.RiotGamesPUUID != string.Empty).ToListAsync(cancellationToken))
+            // Crew accounts only: this is the automatic refresh, and an account outside the crew is one
+            // we deliberately stopped tracking. It stays refreshable on demand through
+            // PATCH lol/Summoner/{id}, which goes straight to UpdatePlayerSummonerCommand.
+            var playersToRefresh = await this.context.Players
+                .InCrewOnly()
+                .Where(x => x.RiotGamesPUUID != null && x.RiotGamesPUUID != string.Empty)
+                .ToListAsync(cancellationToken);
+
+            foreach (var playerInDb in playersToRefresh)
             {
                 await this.mediator.Send(new UpdatePlayerSummonerCommand { Player = playerInDb }, cancellationToken);
             }

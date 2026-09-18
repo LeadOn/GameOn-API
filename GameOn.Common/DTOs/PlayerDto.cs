@@ -39,6 +39,7 @@ namespace GameOn.Common.DTOs
             this.Archived = player.Archived;
             this.LolIconId = player.LolIconId;
             this.PrimaryPlayerId = player.PrimaryPlayerId;
+            this.InCrew = player.InCrew;
         }
 
         /// <summary>
@@ -111,6 +112,12 @@ namespace GameOn.Common.DTOs
         /// Gets or sets a value indicating whether gets or sets whether a player is archived or not.
         /// </summary>
         public bool Archived { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this account belongs to the crew. Accounts outside the
+        /// crew are refreshed on demand only and are left out of the lists and the stats.
+        /// </summary>
+        public bool InCrew { get; set; } = false;
 
         /// <summary>
         /// Gets or sets Tournaments won.

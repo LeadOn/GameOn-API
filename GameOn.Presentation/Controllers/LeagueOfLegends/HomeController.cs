@@ -31,6 +31,8 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// <summary>
         /// Get the aggregated recap powering the League of Legends home page.
         /// </summary>
+        /// <param name="includeSmurfs">If false, smurf accounts are left out of every block of the recap. Defaults to true: a smurf's games were played, so they weigh on the week like any other.</param>
+        /// <param name="includeOutOfCrew">If true, accounts outside the crew count towards every block of the recap too. Defaults to false: this page is the crew's dashboard.</param>
         /// <returns>200 OK with the home page recap.</returns>
         [HttpGet]
         [Route("")]
@@ -38,9 +40,13 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerOperation(Summary = "Get the League of Legends home page recap.")]
         [SwaggerResponse(200, "Home page recap.", typeof(LoLHomeStatsDto))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetHomeStats()
+        public async Task<IActionResult> GetHomeStats(bool includeSmurfs = true, bool includeOutOfCrew = false)
         {
-            return this.Ok(await this.mediator.Send(new GetLoLHomeStatsQuery()));
+            return this.Ok(await this.mediator.Send(new GetLoLHomeStatsQuery
+            {
+                IncludeSmurfs = includeSmurfs,
+                IncludeOutOfCrew = includeOutOfCrew,
+            }));
         }
     }
 }

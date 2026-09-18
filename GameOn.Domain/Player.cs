@@ -84,6 +84,14 @@ namespace GameOn.Domain
         public bool Archived { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets a value indicating whether this account belongs to the crew. Crew accounts are
+        /// refreshed automatically and are the only ones counted by the lists and the stats; the others
+        /// are still refreshed on demand, they just stop weighing on numbers meant to describe the crew.
+        /// Defaults to false so a brand new account never lands in the stats before someone says it should.
+        /// </summary>
+        public bool InCrew { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets Tournaments won.
         /// </summary>
         public virtual List<Tournament> TournamentsWon { get; set; } = null!;
