@@ -11,7 +11,7 @@ namespace GameOn.Application.Services.Jobs
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Background service that refreshes League of Legends summoner ranks every 30 minutes.
+    /// Background service that refreshes League of Legends summoner ranks every 20 minutes.
     /// </summary>
     // False positive: StyleCop 1.1.118 predates C# 12 primary constructors and does not recognise
     // the ") : Base" shape on a class declaration. Removing the space to satisfy SA1009 immediately
@@ -21,7 +21,7 @@ namespace GameOn.Application.Services.Jobs
     public class RefreshLeagueSummonerRanksJob(IServiceScopeFactory serviceScopeFactory, ILogger<RefreshLeagueSummonerRanksJob> logger) : BackgroundService
 #pragma warning restore SA1009 // Closing parenthesis should not be followed by a space.
     {
-        private readonly PeriodicTimer timer = new (TimeSpan.FromMinutes(30));
+        private readonly PeriodicTimer timer = new (TimeSpan.FromMinutes(20));
 
         /// <inheritdoc/>
         public override void Dispose()

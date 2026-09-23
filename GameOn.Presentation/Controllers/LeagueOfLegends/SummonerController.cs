@@ -14,6 +14,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummonerAdmin;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlayers;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById;
+    using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankChanges;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
     using GameOn.Common.DTOs;
     using GameOn.Common.DTOs.LeagueOfLegends;
@@ -114,6 +115,25 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
 #pragma warning disable CS8601 // Possible null reference assignment.
             return this.Ok(await this.mediator.Send(new GetSummonerRankHistoryQuery { PlayerId = id, Limit = limit, Granularity = granularity, Days = days }));
 #pragma warning restore CS8601 // Possible null reference assignment.
+        }
+
+        /// <summary>
+        /// Get the LP won or lost in each of the summoner's last ranked games.
+        /// </summary>
+        /// <param name="id">Summoner ID.</param>
+        /// <param name="queue">Queue restriction: All (both ranked queues), Solo or Flex.</param>
+        /// <param name="limit">How many of the most recent games to return. Defaults to 50.</param>
+        /// <param name="days">How many days back to look. No restriction when omitted.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpGet]
+        [Route("{id:int}/rank/changes")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get the LP won or lost in each of the summoner's last ranked games, oldest first.")]
+        [SwaggerResponse(200, "Ranked games with their LP change (null when it couldn't be attributed).", typeof(List<LoLGameRankChangeDto>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetRankChanges(int id, LoLQueueFilter queue = LoLQueueFilter.All, int? limit = null, int? days = null)
+        {
+            return this.Ok(await this.mediator.Send(new GetSummonerRankChangesQuery { PlayerId = id, Queue = queue, Limit = limit, Days = days }));
         }
 
         /// <summary>

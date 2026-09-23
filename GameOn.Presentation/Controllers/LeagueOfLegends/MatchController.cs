@@ -7,6 +7,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportCustomLoLGame;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGameRankChanges;
     using GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameById;
     using GameOn.Application.LeagueOfLegends.Matches.Queries.GetGameTimelineByMatchId;
@@ -208,6 +209,30 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         public async Task<IActionResult> ImportCustomMatch([FromBody] ImportCustomLoLGameCommand command)
         {
             return this.Ok(await this.mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Recompute the LP won or lost in each ranked game from the stored rank snapshots.
+        /// </summary>
+        /// <param name="playerId">Only recompute this player's games. Every player when omitted.</param>
+        /// <returns>200 OK with what the run changed.</returns>
+        /// <remarks>
+        /// The rank refresh already keeps the last week up to date on its own. This is the backfill for
+        /// the history that predates the feature, and a way to rerun it after a change to the rules.
+        /// Reads nothing from Riot.
+        /// </remarks>
+        [HttpPost]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("rank-changes/recompute")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Recompute the LP won or lost in each ranked game.")]
+        [SwaggerResponse(200, "Recomputation summary.", typeof(RecomputeLoLGameRankChangesResultDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> RecomputeRankChanges(int? playerId = null)
+        {
+            return this.Ok(await this.mediator.Send(new RecomputeLoLGameRankChangesCommand { PlayerId = playerId }));
         }
 
         /// <summary>

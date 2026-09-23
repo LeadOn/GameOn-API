@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
 {
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGameRankChanges;
     using GameOn.Application.LeagueOfLegends.Matches.Services;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -19,16 +20,19 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
     {
         private readonly IApplicationDbContext context;
         private readonly IMatchService matchService;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateLoLGameCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
         /// <param name="matchService">Riot Games Match Service, injected.</param>
-        public UpdateLoLGameCommandHandler(IApplicationDbContext context, IMatchService matchService)
+        /// <param name="mediator">Mediator interface, injected.</param>
+        public UpdateLoLGameCommandHandler(IApplicationDbContext context, IMatchService matchService, ISender mediator)
         {
             this.context = context;
             this.matchService = matchService;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -280,6 +284,20 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Commands.UpdateLoLGame
             matchInDb.AceParticipantId = aceParticipantId;
 
             await this.context.SaveChangesAsync(cancellationToken);
+
+            // Participants were just deleted and recreated, and their LP changes went with them (cascade).
+            // Put back from the snapshots, which a game import never touches. Bounded to this game's own
+            // window: a backfill re-importing years of games must not recompute years of history each time.
+            if (matchInDb.QueueId is not null && LoLGameRankChangeCalculator.RankedQueueTypes.ContainsKey(matchInDb.QueueId.Value))
+            {
+                foreach (var playerId in participantsInDb.Where(x => x.PlayerId is not null).Select(x => x.PlayerId!.Value).Distinct())
+                {
+                    await this.mediator.Send(
+                        new RecomputeLoLGameRankChangesCommand { PlayerId = playerId, Since = matchInDb.GameEnd, Until = matchInDb.GameEnd },
+                        cancellationToken);
+                }
+            }
+
             return matchInDb;
         }
 

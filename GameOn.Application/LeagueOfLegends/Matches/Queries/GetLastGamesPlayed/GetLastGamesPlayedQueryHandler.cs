@@ -56,6 +56,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
                 query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats)
                     .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges)
+                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.RankChange)
                     .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId != null
                         && (includeOutOfCrew || y.Player.InCrew)
                         && (includeSmurfs || y.Player.PrimaryPlayerId == null)));
@@ -113,6 +114,7 @@ namespace GameOn.Application.LeagueOfLegends.Matches.Queries.GetLastGamesPlayed
 
                 query = query.Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Stats)
                     .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.Challenges)
+                    .Include(x => x.LeagueOfLegendsGameParticipants).ThenInclude(y => y.RankChange)
                     .Where(x => x.LeagueOfLegendsGameParticipants.Any(y => y.PlayerId == request.PlayerId));
 
                 // Riot writes the position in upper case (TOP, JUNGLE, ...), so the caller's value is

@@ -105,6 +105,11 @@ namespace GameOn.Persistence
         public DbSet<LoLGameParticipantChallenge> LeagueOfLegendsGameParticipantChallenges { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets LoL Game Participant Rank Changes.
+        /// </summary>
+        public DbSet<LoLGameParticipantRankChange> LeagueOfLegendsGameParticipantRankChanges { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets LoL Game Coach Reports.
         /// </summary>
         public DbSet<LoLGameCoachReport> LeagueOfLegendsGameCoachReports { get; set; } = null!;
@@ -1216,6 +1221,52 @@ namespace GameOn.Persistence
                     .WithOne(p => p.Challenges)
                     .HasForeignKey<LoLGameParticipantChallenge>(e => e.LoLGameParticipantId)
                     .HasConstraintName("FK_LoL_Game_Participant_Challenge")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LoLGameParticipantRankChange>(entity =>
+            {
+                entity.ToTable("LeagueOfLegendsGameParticipantRankChange");
+
+                entity.Property(e => e.LoLGameParticipantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("lol_game_participant_id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.LoLGameParticipantId);
+
+                entity.Property(e => e.LeaguePointsChange)
+                    .HasColumnName("league_points_change");
+
+                entity.Property(e => e.TierBefore)
+                    .HasColumnName("tier_before")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.RankBefore)
+                    .HasColumnName("rank_before")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.LeaguePointsBefore)
+                    .HasColumnName("league_points_before");
+
+                entity.Property(e => e.TierAfter)
+                    .HasColumnName("tier_after")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.RankAfter)
+                    .HasColumnName("rank_after")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.LeaguePointsAfter)
+                    .HasColumnName("league_points_after");
+
+                entity.Property(e => e.ComputedOn)
+                    .HasColumnName("computed_on");
+
+                entity.HasOne(e => e.Participant)
+                    .WithOne(p => p.RankChange)
+                    .HasForeignKey<LoLGameParticipantRankChange>(e => e.LoLGameParticipantId)
+                    .HasConstraintName("FK_LoL_Game_Participant_Rank_Change")
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
