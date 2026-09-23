@@ -47,5 +47,11 @@ namespace GameOn.Domain
         /// Gets or sets Riot's own derived "challenges" stats for this participant.
         /// </summary>
         public virtual LoLGameParticipantChallenge? Challenges { get; set; }
+
+        /// <summary>
+        /// Gets or sets the league points won or lost in this game. Only ever set on a tracked player's
+        /// ranked game, and null whenever the change can't be pinned on this game alone.
+        /// </summary>
+        public virtual LoLGameParticipantRankChange? RankChange { get; set; }
     }
 }
