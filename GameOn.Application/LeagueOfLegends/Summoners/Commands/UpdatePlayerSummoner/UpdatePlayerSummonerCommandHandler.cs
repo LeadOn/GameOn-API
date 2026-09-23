@@ -127,6 +127,9 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
                 }
             }
 
+            // After the import, so that the games it just brought in are taken into account.
+            await this.SyncRiotIdFromLatestGame(playerInDb, cancellationToken);
+
             this.context.Players.Update(playerInDb);
             await this.context.SaveChangesAsync(cancellationToken);
 
@@ -138,6 +141,56 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
                 cancellationToken);
 
             return playerInDb;
+        }
+
+        /// <summary>
+        /// Brings the player's Riot ID in line with the one its most recent game was played under.
+        /// </summary>
+        /// <remarks>
+        /// A Riot ID can be renamed at will while the PUUID stays the same, so nothing else in a refresh
+        /// ever notices a rename, and summoner-v4 no longer returns any name. Every imported game, however,
+        /// records the Riot ID each participant played under, which makes the latest one the freshest name
+        /// we hold without an extra account-v1 call. A rename therefore only shows up once a game has been
+        /// played under the new name.
+        /// </remarks>
+        /// <param name="playerInDb">Player being refreshed, updated in place.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+        /// <returns><see cref="Task"/>.</returns>
+        private async Task SyncRiotIdFromLatestGame(Player playerInDb, CancellationToken cancellationToken)
+        {
+            // Matched on the PUUID too, not just the player ID: a player re-linked to another Riot account
+            // keeps the games of the previous one, whose name must not come back.
+            var participations = this.context.LeagueOfLegendsGameParticipants
+                .Where(x => x.PlayerId == playerInDb.Id && x.Puuid == playerInDb.RiotGamesPUUID);
+
+            var latestRiotId = await participations
+                .Where(x => x.RiotIdGameName != string.Empty && x.RiotIdTagLine != string.Empty)
+                .OrderByDescending(x => x.Game.GameStart)
+                .Select(x => new { x.RiotIdGameName, x.RiotIdTagLine })
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (latestRiotId is null
+                || (latestRiotId.RiotIdGameName == playerInDb.RiotGamesNickname && latestRiotId.RiotIdTagLine == playerInDb.RiotGamesTagLine))
+            {
+                return;
+            }
+
+            // Only a Riot ID the account has already been seen under in some game is known to be stale. One
+            // that no game shows was set by hand (profile update, admin route, smurf link — the last two
+            // refresh right after writing it) for a rename not played under yet: it is newer than anything
+            // the games know, and overwriting it would undo that request. Under SQL Server's default
+            // case-insensitive collation, the lookup also lets a mere casing difference be corrected.
+            var isKnownStale = string.IsNullOrEmpty(playerInDb.RiotGamesNickname)
+                || string.IsNullOrEmpty(playerInDb.RiotGamesTagLine)
+                || await participations.AnyAsync(
+                    x => x.RiotIdGameName == playerInDb.RiotGamesNickname && x.RiotIdTagLine == playerInDb.RiotGamesTagLine,
+                    cancellationToken);
+
+            if (isKnownStale)
+            {
+                playerInDb.RiotGamesNickname = latestRiotId.RiotIdGameName;
+                playerInDb.RiotGamesTagLine = latestRiotId.RiotIdTagLine;
+            }
         }
     }
 }
