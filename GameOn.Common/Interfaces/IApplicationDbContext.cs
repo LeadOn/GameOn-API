@@ -99,6 +99,11 @@ namespace GameOn.Common.Interfaces
         public DbSet<LoLGameParticipantChallenge> LeagueOfLegendsGameParticipantChallenges { get; set; }
 
         /// <summary>
+        /// Gets or sets LoL Game Participant Rank Changes.
+        /// </summary>
+        public DbSet<LoLGameParticipantRankChange> LeagueOfLegendsGameParticipantRankChanges { get; set; }
+
+        /// <summary>
         /// Gets or sets LoL Game Coach Reports.
         /// </summary>
         public DbSet<LoLGameCoachReport> LeagueOfLegendsGameCoachReports { get; set; }

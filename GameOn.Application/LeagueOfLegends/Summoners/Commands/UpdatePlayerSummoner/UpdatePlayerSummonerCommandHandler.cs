@@ -5,6 +5,7 @@
 namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner
 {
     using GameOn.Application.LeagueOfLegends.Matches.Commands.ImportLoLGames;
+    using GameOn.Application.LeagueOfLegends.Matches.Commands.RecomputeLoLGameRankChanges;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
@@ -82,10 +83,16 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
                             .OrderByDescending(x => x.CreatedOn)
                             .FirstOrDefaultAsync(cancellationToken);
 
+                        // The win/loss counters are compared too, not just the rank: a game that leaves the
+                        // LP where it was (a loss at 0 LP under demotion protection) must still get its own
+                        // snapshot, or it merges with the next game and neither can have its LP attributed
+                        // (see LoLGameRankChangeCalculator).
                         if (lastEntry is not null
                             && lastEntry.Tier == entry.Tier
                             && lastEntry.Rank == entry.Rank
-                            && lastEntry.LeaguePoints == entry.LeaguePoints)
+                            && lastEntry.LeaguePoints == entry.LeaguePoints
+                            && lastEntry.Wins == entry.Wins
+                            && lastEntry.Losses == entry.Losses)
                         {
                             continue;
                         }
@@ -122,6 +129,14 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSumm
 
             this.context.Players.Update(playerInDb);
             await this.context.SaveChangesAsync(cancellationToken);
+
+            // Run after both the snapshot and the games are saved, since either can be the missing half of
+            // a game's LP: the snapshot of a game already imported through a duo partner's refresh, or a
+            // game match-v5 only serves a refresh after league-v4 moved. A week back covers any such lag.
+            await this.mediator.Send(
+                new RecomputeLoLGameRankChangesCommand { PlayerId = playerInDb.Id, Since = DateTime.UtcNow.AddDays(-7) },
+                cancellationToken);
+
             return playerInDb;
         }
     }
