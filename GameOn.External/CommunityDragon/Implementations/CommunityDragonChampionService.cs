@@ -23,6 +23,15 @@ namespace GameOn.External.CommunityDragon.Implementations
         private static readonly SemaphoreSlim CacheLock = new SemaphoreSlim(1, 1);
         private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(24);
 
+        // Community Dragon's alias follows Data Dragon's ID, and match-v5 disagrees with it on a few
+        // champions: these are spelled the match-v5 way, since LoLGameParticipant.ChampionName is the
+        // convention everything else keys on. Same list as the one the front keeps the other way round
+        // to build image URLs (JungleDiff's lol-champion.ts).
+        private static readonly IReadOnlyDictionary<string, string> MatchV5Aliases = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["Fiddlesticks"] = "FiddleSticks",
+        };
+
         private static IReadOnlyDictionary<int, string>? cachedChampions;
         private static DateTime cachedOn = DateTime.MinValue;
 
@@ -61,7 +70,7 @@ namespace GameOn.External.CommunityDragon.Implementations
                 cachedChampions = (champions ?? Enumerable.Empty<CommunityDragonChampionDto>())
                     .Where(x => x.Id > 0 && !string.IsNullOrWhiteSpace(x.Alias))
                     .GroupBy(x => x.Id)
-                    .ToDictionary(x => x.Key, x => x.First().Alias!);
+                    .ToDictionary(x => x.Key, x => MatchV5Aliases.GetValueOrDefault(x.First().Alias!, x.First().Alias!));
 
                 cachedOn = DateTime.UtcNow;
 

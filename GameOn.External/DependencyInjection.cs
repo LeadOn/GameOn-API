@@ -33,6 +33,7 @@ namespace GameOn.External
             services.AddScoped<ILeagueService, LeagueV4Service>();
             services.AddScoped<IMatchService, MatchV5Service>();
             services.AddScoped<IQueueService, QueueService>();
+            services.AddScoped<ISpectatorService, SpectatorV5Service>();
             services.AddScoped<ICommunityDragonQueueService, CommunityDragonQueueService>();
             services.AddScoped<ICommunityDragonChampionService, CommunityDragonChampionService>();
 

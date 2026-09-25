@@ -33,6 +33,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         /// </summary>
         /// <param name="includeSmurfs">If false, smurf accounts are left out of every block of the recap. Defaults to true: a smurf's games were played, so they weigh on the week like any other.</param>
         /// <param name="includeOutOfCrew">If true, accounts outside the crew count towards every block of the recap too. Defaults to false: this page is the crew's dashboard.</param>
+        /// <param name="window">Window of the weekly activity and the fact of the week: CalendarWeek (default, Monday 00:00 Europe/Paris to now, against the previous full week) or Last7Days (six days ago 00:00 Europe/Paris to now, against the seven days before). The crew records always cover the rolling month.</param>
         /// <returns>200 OK with the home page recap.</returns>
         [HttpGet]
         [Route("")]
@@ -40,12 +41,13 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
         [SwaggerOperation(Summary = "Get the League of Legends home page recap.")]
         [SwaggerResponse(200, "Home page recap.", typeof(LoLHomeStatsDto))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetHomeStats(bool includeSmurfs = true, bool includeOutOfCrew = false)
+        public async Task<IActionResult> GetHomeStats(bool includeSmurfs = true, bool includeOutOfCrew = false, LoLHomeWindow window = LoLHomeWindow.CalendarWeek)
         {
             return this.Ok(await this.mediator.Send(new GetLoLHomeStatsQuery
             {
                 IncludeSmurfs = includeSmurfs,
                 IncludeOutOfCrew = includeOutOfCrew,
+                Window = window,
             }));
         }
     }

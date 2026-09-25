@@ -6,6 +6,7 @@ namespace GameOn.Application
 {
     using System.Reflection;
     using GameOn.Application.LeagueOfLegends.Coach.Services;
+    using GameOn.Application.LeagueOfLegends.Live.Services;
     using GameOn.Application.Services.Jobs;
     using GameOn.Common.Exceptions;
     using GameOn.Common.Interfaces;
@@ -35,6 +36,10 @@ namespace GameOn.Application
             // through it - that single consumer is what keeps calls to the model inside the provider's
             // allowance.
             services.AddSingleton<ILoLCoachQueue, LoLCoachQueue>();
+
+            // Spectator-v5 answers are shared by every request, which is the whole point: one Riot call per
+            // account per minute at most, however many people have the home page open.
+            services.AddSingleton<ILoLLiveGameCache, LoLLiveGameCache>();
             services.AddHostedService<RefreshLeagueSummonerRanksJob>();
             services.AddHostedService<RefreshLeagueQueuesJob>();
             services.AddHostedService<ProcessLoLCoachQueueJob>();

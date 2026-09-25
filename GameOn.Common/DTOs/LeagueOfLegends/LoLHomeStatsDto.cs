@@ -11,21 +11,24 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
     public class LoLHomeStatsDto
     {
         /// <summary>
-        /// Gets or sets the squad's weekly activity recap, over ranked games only (Solo/Duo and Flex).
+        /// Gets or sets the squad's weekly activity recap, over ranked games only (Solo/Duo and Flex), on the
+        /// window picked by <see cref="LoLHomeWindow"/> (the current calendar week by default).
         /// </summary>
         public LoLWeeklyActivityDto WeeklyActivity { get; set; } = new LoLWeeklyActivityDto();
 
         /// <summary>
         /// Gets or sets the "fact of the week" highlight: the crew member with the best net LP
-        /// progression this week. Null when no player has a comparable rank snapshot both this week
-        /// and last week on any ranked queue (e.g. nobody has played ranked yet this week).
+        /// progression this week, on the same window as <see cref="WeeklyActivity"/>. Null when no player
+        /// has a comparable rank snapshot both this week and last week on any ranked queue (e.g. nobody has
+        /// played ranked yet this week).
         /// </summary>
         public LoLFactOfTheWeekDto? FactOfTheWeek { get; set; }
 
         /// <summary>
         /// Gets or sets the crew's fun stat awards over the last rolling month, ranked queues only (same
         /// computation as <c>GET lol/Stats/global</c> with <see cref="LoLStatsPeriod.Month"/> and
-        /// <c>RankedOnly</c>). Individual awards are null when nobody set a record in the window.
+        /// <c>RankedOnly</c>). Individual awards are null when nobody set a record in the window. Unaffected
+        /// by <see cref="LoLHomeWindow"/>: always the rolling month.
         /// </summary>
         public LoLGlobalStatsDto CrewRecords { get; set; } = new LoLGlobalStatsDto();
     }
