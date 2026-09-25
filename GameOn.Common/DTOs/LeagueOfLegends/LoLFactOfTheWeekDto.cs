@@ -7,9 +7,11 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
     using GameOn.Domain;
 
     /// <summary>
-    /// LoLFactOfTheWeekDto class. Highlights the crew member with the best net LP progression this
-    /// calendar week (Monday to now, Europe/Paris clock), across every ranked queue they play. Always
-    /// the top gainer of the current week, whether or not it happens to be a personal or crew best.
+    /// LoLFactOfTheWeekDto class. Highlights the crew member with the best net LP progression this week,
+    /// across every ranked queue they play. "This week" is the window picked by <see cref="LoLHomeWindow"/>
+    /// (the current calendar week by default, or the last seven days), compared against the window before
+    /// it, exactly like <see cref="LoLWeeklyActivityDto"/>. Always the top gainer of the current window,
+    /// whether or not it happens to be a personal or crew best.
     /// </summary>
     public class LoLFactOfTheWeekDto
     {
@@ -27,7 +29,7 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
         public int LpChange { get; set; }
 
         /// <summary>
-        /// Gets or sets the number of games the player played this week (all queues except bot/custom/tutorial).
+        /// Gets or sets the number of ranked games (Solo/Duo and Flex) the player played this week.
         /// </summary>
         public int GamesThisWeek { get; set; }
 

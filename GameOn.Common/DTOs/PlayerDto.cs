@@ -161,6 +161,16 @@ namespace GameOn.Common.DTOs
         public int? LpChange7DaysFlex { get; set; }
 
         /// <summary>
+        /// Gets or sets the champion this account played the most over the last rolling month, every queue
+        /// combined, as Riot's internal name (ex: "MonkeyKing" for Wukong). Same computation as the first
+        /// entry of <see cref="LoLSummonerPerformanceStatsDto.ChampionStats"/> on <c>GET lol/summoner/{id}</c>
+        /// with <c>period=Month</c>: same games and same exclusions (remakes, bot and tutorial queues), ties
+        /// broken by win rate then champion name. Null when the account has no game over the month. Only
+        /// served by <c>GET lol/summoner</c>; null on every other route.
+        /// </summary>
+        public string? MainChampionName { get; set; }
+
+        /// <summary>
         /// Gets or sets the player's performance recap over the requested time window (see
         /// <see cref="LoLStatsPeriod"/>), all queues combined. Null when the player has no game in the
         /// period. Covers this account alone: a smurf's games are never counted towards its owner.

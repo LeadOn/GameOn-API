@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerById
 {
+    using GameOn.Application.LeagueOfLegends.Summoners.Services;
     using GameOn.Common.DTOs;
     using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Common.Interfaces;
@@ -28,11 +29,6 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
         // row in GetAllLeaguePlayersQueryHandler — same data, different display, so a different count here
         // is intentional rather than a drift to reconcile.
         private const int RecentFormGameCount = 8;
-
-        // Matched against LoLQueue.Map + Description (synced from Riot) to keep only games against real
-        // opponents. Duplicated from GetLoLGlobalStatsQueryHandler: worth factoring out into a shared
-        // helper if a third caller shows up.
-        private static readonly string[] ExcludedQueueTypeKeywords = { "Co-op", "Bot", "Tutorial", "Custom" };
 
         private readonly IApplicationDbContext context;
 
@@ -191,9 +187,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetLeaguePlayerBy
                     x.VisionScore,
                 })
                 .ToListAsync(cancellationToken))
-                .Where(x => !ExcludedQueueTypeKeywords.Any(keyword =>
-                    ((x.QueueMap ?? string.Empty) + " " + (x.QueueDescription ?? string.Empty))
-                        .Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+                .Where(x => !LoLPerformanceQueueFilter.IsExcluded(x.QueueMap, x.QueueDescription))
                 .ToList();
 
             if (games.Count == 0)
