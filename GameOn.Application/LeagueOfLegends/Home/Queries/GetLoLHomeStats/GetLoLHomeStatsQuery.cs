@@ -13,6 +13,13 @@ namespace GameOn.Application.LeagueOfLegends.Home.Queries.GetLoLHomeStats
     public class GetLoLHomeStatsQuery : IRequest<LoLHomeStatsDto>
     {
         /// <summary>
+        /// Gets or sets the window of the "this week" blocks (weekly activity and fact of the week).
+        /// Defaults to <see cref="LoLHomeWindow.CalendarWeek"/>, the historical behavior. The crew records
+        /// ignore it and always cover the rolling month.
+        /// </summary>
+        public LoLHomeWindow Window { get; set; } = LoLHomeWindow.CalendarWeek;
+
+        /// <summary>
         /// Gets or sets a value indicating whether smurf accounts count towards the recap. Defaults to
         /// true: a smurf's games were played, so they weigh on the week like any other. Set to false to
         /// read the page as one entry per member instead. Applies to every block, the crew records

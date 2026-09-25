@@ -5,6 +5,7 @@
 namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
 {
     using System.Globalization;
+    using GameOn.Common.DTOs;
     using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -153,25 +154,55 @@ namespace GameOn.Application.LeagueOfLegends.Stats.Queries.GetLoLGlobalStats
                             .Contains(keyword, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
-            var result = new LoLGlobalStatsDto
-            {
-                TotalGamesAnalyzed = participants.Select(x => x.MatchId).Distinct().Count(),
-                TotalPlayersTracked = participants.Select(x => x.PlayerId).Distinct().Count(),
-                TopChampions = participants
-                    .GroupBy(x => x.ChampionName)
-                    .Select(g => new LoLChampionStatDto
+            var topChampions = participants
+                .GroupBy(x => x.ChampionName)
+                .Select(g => new
+                {
+                    Stat = new LoLCrewChampionStatDto
                     {
                         ChampionName = g.Key,
                         GamesPlayed = g.Count(),
                         Wins = g.Count(x => x.Win),
                         WinRate = Math.Round(100.0 * g.Count(x => x.Win) / g.Count(), 1),
                         Kda = Math.Round(g.Select(x => x.Kda).Where(x => x is not null).Select(x => x!.Value).DefaultIfEmpty(0).Average(), 2),
-                    })
-                    .OrderByDescending(x => x.GamesPlayed)
-                    .ThenByDescending(x => x.WinRate)
-                    .ThenBy(x => x.ChampionName, StringComparer.Ordinal)
-                    .Take(5)
-                    .ToList(),
+                    },
+
+                    // Who played it the most, within the very same games. Per account like every award:
+                    // with smurfs included, a main and its smurf compete separately. Ties go to the one who
+                    // won more on it, then to the lowest ID, so that the pick doesn't flip between refreshes.
+                    TopPlayer = g
+                        .GroupBy(x => x.PlayerId)
+                        .Select(p => new { PlayerId = p.Key, GamesPlayed = p.Count(), Wins = p.Count(x => x.Win) })
+                        .OrderByDescending(p => p.GamesPlayed)
+                        .ThenByDescending(p => p.Wins)
+                        .ThenBy(p => p.PlayerId)
+                        .First(),
+                })
+                .OrderByDescending(x => x.Stat.GamesPlayed)
+                .ThenByDescending(x => x.Stat.WinRate)
+                .ThenBy(x => x.Stat.ChampionName, StringComparer.Ordinal)
+                .Take(5)
+                .ToList();
+
+            var topChampionPlayerIds = topChampions.Select(x => x.TopPlayer.PlayerId).Distinct().ToList();
+            var topChampionPlayers = await this.context.Players
+                .Where(x => topChampionPlayerIds.Contains(x.Id))
+                .ToDictionaryAsync(x => x.Id, cancellationToken);
+
+            foreach (var topChampion in topChampions)
+            {
+                topChampion.Stat.TopPlayer = new LoLChampionTopPlayerDto
+                {
+                    Player = new PlayerDto(topChampionPlayers[topChampion.TopPlayer.PlayerId]),
+                    GamesPlayed = topChampion.TopPlayer.GamesPlayed,
+                };
+            }
+
+            var result = new LoLGlobalStatsDto
+            {
+                TotalGamesAnalyzed = participants.Select(x => x.MatchId).Distinct().Count(),
+                TotalPlayersTracked = participants.Select(x => x.PlayerId).Distinct().Count(),
+                TopChampions = topChampions.Select(x => x.Stat).ToList(),
             };
 
             if (participants.Count == 0)

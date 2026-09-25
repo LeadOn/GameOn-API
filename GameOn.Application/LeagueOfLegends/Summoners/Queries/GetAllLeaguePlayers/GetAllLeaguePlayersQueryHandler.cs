@@ -88,6 +88,8 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
 
             var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
 
+            var mainChampionByPlayer = await this.GetMainChampions(playerIds, cancellationToken);
+
             foreach (var player in playersInDb)
             {
                 var soloHistory = rankHistory.Where(x => x.PlayerId == player.Id && x.QueueType == SoloQueueType).ToList();
@@ -112,6 +114,8 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
                     .Take(RecentFormGameCount)
                     .Select(x => x.Win)
                     .ToList();
+
+                player.MainChampionName = mainChampionByPlayer.GetValueOrDefault(player.Id);
             }
 
             return playersInDb;
@@ -142,6 +146,64 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Queries.GetAllLeaguePlaye
             }
 
             return currentLp.Value - baselineLp.Value;
+        }
+
+        /// <summary>
+        /// The champion each account played the most over the last rolling month, every queue combined: the
+        /// first entry of <c>PerformanceStats.ChampionStats</c> that <c>GET lol/summoner/{id}?period=Month</c>
+        /// would return, for the whole list at once. Same cutoff, same games (see
+        /// <see cref="LoLPerformanceQueueFilter"/>) and same ordering as GetLeaguePlayerByIdQueryHandler.
+        /// </summary>
+        /// <param name="playerIds">Accounts to look up.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+        /// <returns>Main champion name by player ID. Accounts without any game over the month are absent.</returns>
+        private async Task<Dictionary<int, string>> GetMainChampions(List<int> playerIds, CancellationToken cancellationToken)
+        {
+            // period=Month on the profile, to the tick: a calendar month back, in UTC like GameStart.
+            var monthAgo = DateTime.UtcNow.AddMonths(-1);
+
+            // The queue exclusion is resolved on the queue referential (a few dozen rows) rather than on every
+            // game, so that it runs in SQL and only the games that count come back.
+            var excludedQueueIds = (await this.context.LeagueOfLegendsQueues
+                    .Select(x => new { x.Id, x.Map, x.Description })
+                    .ToListAsync(cancellationToken))
+                .Where(x => LoLPerformanceQueueFilter.IsExcluded(x.Map, x.Description))
+                .Select(x => x.Id)
+                .ToList();
+
+            // One query for the whole list. Grouped in memory rather than in SQL, like on the profile: SQL
+            // Server's case-insensitive collation would fold two spellings of a champion name into one group
+            // and return either spelling, where the profile keeps them apart.
+            var games = await this.context.LeagueOfLegendsGameParticipants
+                .Where(x => x.PlayerId != null
+                    && playerIds.Contains(x.PlayerId.Value)
+                    && x.ChampionName != string.Empty
+                    && x.Game.Queue != null
+                    && !x.Game.IsRemake
+                    && x.Game.GameStart >= monthAgo
+                    && !excludedQueueIds.Contains(x.Game.QueueId!.Value))
+                .Select(x => new { PlayerId = x.PlayerId!.Value, x.ChampionName, x.Win })
+                .ToListAsync(cancellationToken);
+
+            // Most games first, then the best win rate (rounded as the profile displays it, so that a tie
+            // there is a tie here), then the name, ordinal: the exact ordering of ChampionStats.
+            return games
+                .GroupBy(x => x.PlayerId)
+                .ToDictionary(
+                    player => player.Key,
+                    player => player
+                        .GroupBy(x => x.ChampionName)
+                        .Select(champion => new
+                        {
+                            ChampionName = champion.Key,
+                            GamesPlayed = champion.Count(),
+                            WinRate = Math.Round(100.0 * champion.Count(x => x.Win) / champion.Count(), 1),
+                        })
+                        .OrderByDescending(x => x.GamesPlayed)
+                        .ThenByDescending(x => x.WinRate)
+                        .ThenBy(x => x.ChampionName, StringComparer.Ordinal)
+                        .First()
+                        .ChampionName);
         }
     }
 }

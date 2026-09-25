@@ -96,8 +96,10 @@ namespace GameOn.Common.DTOs.LeagueOfLegends
 
         /// <summary>
         /// Gets or sets the crew's 5 most played champions over the queried period, most played first
-        /// (ties broken by win rate, then champion name for a stable order).
+        /// (ties broken by win rate, then champion name for a stable order). Each entry also names the account
+        /// that played the champion the most (<see cref="LoLCrewChampionStatDto.TopPlayer"/>). Empty when no
+        /// game matches the filters.
         /// </summary>
-        public List<LoLChampionStatDto> TopChampions { get; set; } = new List<LoLChampionStatDto>();
+        public List<LoLCrewChampionStatDto> TopChampions { get; set; } = new List<LoLCrewChampionStatDto>();
     }
 }
