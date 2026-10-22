@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.8.0</Version>
-	<PackageReleaseNotes>Added LoL Rank per game + better summoner refresh mechanism.</PackageReleaseNotes>
+	<Version>7.8.1</Version>
+	<PackageReleaseNotes>Updated NuGet packages + fixed vulnerable System.Security.Cryptography.Pkcs dependency.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

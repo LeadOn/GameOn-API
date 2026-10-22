@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.8.0</Version>
-	<PackageReleaseNotes>Added LoL Rank per game + better summoner refresh mechanism.</PackageReleaseNotes>
+	<Version>7.8.1</Version>
+	<PackageReleaseNotes>Updated NuGet packages + fixed vulnerable System.Security.Cryptography.Pkcs dependency.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,13 +44,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.12">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -58,6 +58,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>
