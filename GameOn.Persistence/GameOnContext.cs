@@ -135,6 +135,11 @@ namespace GameOn.Persistence
         public DbSet<LoLGameTeam> LeagueOfLegendsGameTeams { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets Valorant Rank History.
+        /// </summary>
+        public DbSet<ValorantRankHistory> ValorantRankHistory { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -231,6 +236,20 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.ValorantRefreshedOn)
                     .HasColumnName("valorant_refreshed_on");
+
+                entity.Property(e => e.ValorantPeakTierId)
+                    .HasColumnName("valorant_peak_tier_id");
+
+                entity.Property(e => e.ValorantPeakTierName)
+                    .HasColumnName("valorant_peak_tier_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ValorantPeakRr)
+                    .HasColumnName("valorant_peak_rr");
+
+                entity.Property(e => e.ValorantPeakSeasonShort)
+                    .HasColumnName("valorant_peak_season_short")
+                    .HasMaxLength(20);
 
                 entity.Property(e => e.PrimaryPlayerId)
                     .HasColumnName("primary_player_id");
@@ -706,6 +725,77 @@ namespace GameOn.Persistence
                       .WithMany(f => f.LeagueOfLegendsRankHistory)
                       .HasConstraintName("FK_Player_LoLRankHistory")
                       .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ValorantRankHistory>(entity =>
+            {
+                entity.ToTable("ValorantRankHistory");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id")
+                    .IsRequired();
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.SeasonId)
+                    .HasColumnName("season_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.SeasonShort)
+                    .HasColumnName("season_short")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.TierId)
+                    .HasColumnName("tier_id");
+
+                entity.Property(e => e.TierName)
+                    .HasColumnName("tier_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.RankedRating)
+                    .HasColumnName("ranked_rating");
+
+                entity.Property(e => e.Elo)
+                    .HasColumnName("elo");
+
+                entity.Property(e => e.LastChange)
+                    .HasColumnName("last_change");
+
+                entity.Property(e => e.RefundedRr)
+                    .HasColumnName("refunded_rr");
+
+                entity.Property(e => e.WasDerankProtected)
+                    .HasColumnName("was_derank_protected");
+
+                entity.Property(e => e.MapId)
+                    .HasColumnName("map_id")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.MapName)
+                    .HasColumnName("map_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnName("created_on")
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
+
+                entity.HasIndex(e => new { e.PlayerId, e.CreatedOn });
+                entity.HasIndex(e => new { e.PlayerId, e.MatchId });
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.ValorantRankHistory)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_Player_ValorantRankHistory")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<LoLGame>(entity =>

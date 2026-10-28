@@ -5,10 +5,12 @@
 namespace GameOn.External.HenrikDev.Implementations
 {
     using System;
+    using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using GameOn.External.Common;
+    using GameOn.External.Common.Exceptions;
     using GameOn.External.HenrikDev.Interfaces;
     using GameOn.External.HenrikDev.Models.DTOs;
 
@@ -36,8 +38,16 @@ namespace GameOn.External.HenrikDev.Implementations
             var encodedName = Uri.EscapeDataString(gameName);
             var encodedTag = Uri.EscapeDataString(tagLine);
             var request = CreateRequest($"{GetBaseUrl()}/valorant/v2/account/{encodedName}/{encodedTag}");
-            var response = await RunRequest<HenrikDevResponseDto<ValorantAccountDto>>(this.client, request, cancellationToken);
-            return response?.Data;
+
+            try
+            {
+                var response = await RunRequest<HenrikDevResponseDto<ValorantAccountDto>>(this.client, request, cancellationToken);
+                return response?.Data;
+            }
+            catch (ExternalApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
         }
 
         /// <inheritdoc/>
@@ -45,8 +55,16 @@ namespace GameOn.External.HenrikDev.Implementations
         {
             var encodedPuuid = Uri.EscapeDataString(valorantPuuid);
             var request = CreateRequest($"{GetBaseUrl()}/valorant/v2/by-puuid/account/{encodedPuuid}");
-            var response = await RunRequest<HenrikDevResponseDto<ValorantAccountDto>>(this.client, request, cancellationToken);
-            return response?.Data;
+
+            try
+            {
+                var response = await RunRequest<HenrikDevResponseDto<ValorantAccountDto>>(this.client, request, cancellationToken);
+                return response?.Data;
+            }
+            catch (ExternalApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
         }
 
         private static string GetBaseUrl()

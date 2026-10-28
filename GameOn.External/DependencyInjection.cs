@@ -39,6 +39,7 @@ namespace GameOn.External
             services.AddScoped<ICommunityDragonQueueService, CommunityDragonQueueService>();
             services.AddScoped<ICommunityDragonChampionService, CommunityDragonChampionService>();
             services.AddScoped<IValorantAccountService, ValorantAccountService>();
+            services.AddScoped<IValorantMmrService, ValorantMmrService>();
 
             // The provider is picked at startup rather than at compile time: switching to the self-hosted box,
             // or falling back off it, is an environment variable and a restart rather than a deployment.

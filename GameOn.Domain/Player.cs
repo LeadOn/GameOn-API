@@ -98,6 +98,26 @@ namespace GameOn.Domain
         public DateTime? ValorantRefreshedOn { get; set; }
 
         /// <summary>
+        /// Gets or sets player's all-time peak Valorant competitive tier ID.
+        /// </summary>
+        public int? ValorantPeakTierId { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's all-time peak Valorant competitive tier name.
+        /// </summary>
+        public string? ValorantPeakTierName { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Ranked Rating (RR) at their all-time peak Valorant tier.
+        /// </summary>
+        public int? ValorantPeakRr { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Valorant Act/Season short code (e.g. e9a3) in which the peak rank was achieved.
+        /// </summary>
+        public string? ValorantPeakSeasonShort { get; set; }
+
+        /// <summary>
         /// Gets or sets the ID of the account this player is a smurf of, or null when this player is
         /// a primary account (a real person). Smurf rows hold their own Riot account, rank history and
         /// game participations; reads roll them up to the primary account they point at.
@@ -162,6 +182,12 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual List<LoLGameParticipant> LeagueOfLegendsGameParticipants { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Rank History.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<ValorantRankHistory> ValorantRankHistory { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the primary account this player is a smurf of.

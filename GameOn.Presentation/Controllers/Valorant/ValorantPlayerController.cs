@@ -8,11 +8,15 @@ namespace GameOn.Presentation.Controllers.Valorant
     using System.Threading.Tasks;
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
+    using GameOn.Application.Valorant.Players.Commands.UpdateAllValorantPlayerRanks;
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer;
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin;
     using GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers;
     using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerById;
+    using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerRankHistory;
     using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.LeagueOfLegends;
+    using GameOn.Domain;
     using GameOn.Presentation.Classes;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -68,7 +72,7 @@ namespace GameOn.Presentation.Controllers.Valorant
         [HttpGet]
         [Route("{id:int}")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get a Valorant player by its ID.", Description = "Get a Valorant player by its ID, and retrieve its account information and player card URLs.")]
+        [SwaggerOperation(Summary = "Get a Valorant player by its ID.", Description = "Get a Valorant player by its ID, and retrieve its account information, current rank, peak rank, and player card URLs.")]
         [SwaggerResponse(200, "Valorant player is found.", typeof(PlayerDto))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
@@ -85,14 +89,39 @@ namespace GameOn.Presentation.Controllers.Valorant
         }
 
         /// <summary>
-        /// Refresh Valorant player profile by ID.
+        /// Get a Valorant player's rank and MMR history.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <param name="limit">Maximum number of entries to return when <paramref name="granularity"/> is omitted. Defaults to 50.</param>
+        /// <param name="granularity">When set, only the last rank snapshot of each period (Day/Week/Month) is returned, with carry-forward across idle periods.</param>
+        /// <param name="days">How many days back to look when <paramref name="granularity"/> is set.</param>
+        /// <returns>200 OK with rank history entries, oldest first.</returns>
+        [HttpGet]
+        [Route("{id:int}/rank")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get a Valorant player's rank history.")]
+        [SwaggerResponse(200, "List of Valorant rank history entries.", typeof(List<ValorantRankHistory>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetRankHistory(int id, int? limit, LoLRankHistoryGranularity? granularity, int? days)
+        {
+            return this.Ok(await this.mediator.Send(new GetValorantPlayerRankHistoryQuery
+            {
+                PlayerId = id,
+                Limit = limit,
+                Granularity = granularity,
+                Days = days,
+            }));
+        }
+
+        /// <summary>
+        /// Refresh Valorant player profile and rank by ID.
         /// </summary>
         /// <param name="id">Player ID.</param>
         /// <returns>200 OK with updated PlayerDto, 404 if not found.</returns>
         [HttpPatch]
         [Route("{id:int}")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Refresh user Valorant profile by ID.")]
+        [SwaggerOperation(Summary = "Refresh user Valorant profile and rank by ID.")]
         [SwaggerResponse(200, "Updated Valorant profile.", typeof(PlayerDto))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
@@ -109,14 +138,14 @@ namespace GameOn.Presentation.Controllers.Valorant
         }
 
         /// <summary>
-        /// Refresh Valorant profile of connected player.
+        /// Refresh Valorant profile and rank of connected player.
         /// </summary>
         /// <returns>200 OK with updated PlayerDto.</returns>
         [HttpPatch]
         [Authorize]
         [Route("me")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Refresh current user Valorant profile.")]
+        [SwaggerOperation(Summary = "Refresh current user Valorant profile and rank.")]
         [SwaggerResponse(200, "Updated Valorant profile.", typeof(PlayerDto))]
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(404, "Player not found.")]
@@ -163,6 +192,22 @@ namespace GameOn.Presentation.Controllers.Valorant
             playerInDb.RiotGamesTagLine = riotGamesTagLine;
 
             return this.Ok(await this.mediator.Send(new UpdateValorantPlayerAdminCommand { Player = playerInDb }));
+        }
+
+        /// <summary>
+        /// Refresh Valorant profile and rank of every crew member.
+        /// </summary>
+        /// <returns>204 No Content.</returns>
+        [HttpPatch]
+        [Route("ranks")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Refresh every crew member's Valorant profile and rank.")]
+        [SwaggerResponse(204, "Updated Valorant profiles and ranks.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UpdateAllRanks()
+        {
+            await this.mediator.Send(new UpdateAllValorantPlayerRanksCommand());
+            return this.NoContent();
         }
     }
 }
