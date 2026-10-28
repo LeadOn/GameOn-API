@@ -43,6 +43,7 @@ namespace GameOn.Application
             services.AddHostedService<RefreshLeagueSummonerRanksJob>();
             services.AddHostedService<RefreshLeagueQueuesJob>();
             services.AddHostedService<ProcessLoLCoachQueueJob>();
+            services.AddHostedService<RefreshValorantPlayerRanksJob>();
             return services;
         }
     }

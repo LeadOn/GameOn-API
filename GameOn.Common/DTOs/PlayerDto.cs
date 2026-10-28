@@ -1,4 +1,4 @@
-﻿// <copyright file="PlayerDto.cs" company="LeadOn's Corp'">
+// <copyright file="PlayerDto.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -40,6 +40,28 @@ namespace GameOn.Common.DTOs
             this.LolIconId = player.LolIconId;
             this.PrimaryPlayerId = player.PrimaryPlayerId;
             this.InCrew = player.InCrew;
+            this.ValorantPuuid = player.ValorantPuuid;
+            this.ValorantAccountLevel = player.ValorantAccountLevel;
+            this.ValorantPlayerCardId = player.ValorantPlayerCardId;
+            this.ValorantPlayerTitleId = player.ValorantPlayerTitleId;
+            this.ValorantRegion = player.ValorantRegion;
+            this.ValorantRefreshedOn = player.ValorantRefreshedOn;
+            this.ValorantPeakTierId = player.ValorantPeakTierId;
+            this.ValorantPeakTierName = player.ValorantPeakTierName;
+            this.ValorantPeakRr = player.ValorantPeakRr;
+            this.ValorantPeakSeasonShort = player.ValorantPeakSeasonShort;
+
+            if (player.ValorantPeakTierId is >= 3 and <= 27)
+            {
+                this.ValorantPeakRankIconUrl = $"https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/{player.ValorantPeakTierId}/largeicon.png";
+            }
+
+            if (!string.IsNullOrWhiteSpace(player.ValorantPlayerCardId) && player.ValorantPlayerCardId != Guid.Empty.ToString())
+            {
+                this.ValorantPlayerCardSmallUrl = $"https://media.valorant-api.com/playercards/{player.ValorantPlayerCardId}/smallart.png";
+                this.ValorantPlayerCardWideUrl = $"https://media.valorant-api.com/playercards/{player.ValorantPlayerCardId}/wideart.png";
+                this.ValorantPlayerCardLargeUrl = $"https://media.valorant-api.com/playercards/{player.ValorantPlayerCardId}/largeart.png";
+            }
         }
 
         /// <summary>
@@ -102,6 +124,91 @@ namespace GameOn.Common.DTOs
         /// Gets or sets player's LOL refreshed on datetime.
         /// </summary>
         public DateTime? LolRefreshedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant PUUID.
+        /// </summary>
+        public string? ValorantPuuid { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant account level.
+        /// </summary>
+        public int? ValorantAccountLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's equipped Valorant player card UUID.
+        /// </summary>
+        public string? ValorantPlayerCardId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the square thumbnail URL of the player's equipped Valorant player card
+        /// (<c>smallart.png</c> on <c>media.valorant-api.com</c>), or null when no card is set.
+        /// </summary>
+        public string? ValorantPlayerCardSmallUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the horizontal banner URL of the player's equipped Valorant player card
+        /// (<c>wideart.png</c> on <c>media.valorant-api.com</c>), or null when no card is set.
+        /// </summary>
+        public string? ValorantPlayerCardWideUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full-height vertical banner URL of the player's equipped Valorant player card
+        /// (<c>largeart.png</c> on <c>media.valorant-api.com</c>), or null when no card is set.
+        /// </summary>
+        public string? ValorantPlayerCardLargeUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's equipped Valorant player title UUID.
+        /// </summary>
+        public string? ValorantPlayerTitleId { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant region affinity (e.g. eu, na, ap, kr, latam, br).
+        /// </summary>
+        public string? ValorantRegion { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant profile refreshed on datetime.
+        /// </summary>
+        public DateTime? ValorantRefreshedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's all-time peak Valorant competitive tier ID.
+        /// </summary>
+        public int? ValorantPeakTierId { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's all-time peak Valorant competitive tier name.
+        /// </summary>
+        public string? ValorantPeakTierName { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Ranked Rating (RR) at their all-time peak Valorant tier.
+        /// </summary>
+        public int? ValorantPeakRr { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Valorant Act/Season short code (e.g. e9a3) in which the peak rank was achieved.
+        /// </summary>
+        public string? ValorantPeakSeasonShort { get; set; }
+
+        /// <summary>
+        /// Gets or sets the large rank icon URL for the player's all-time peak Valorant tier on
+        /// <c>media.valorant-api.com</c>, or null when no peak rank is set.
+        /// </summary>
+        public string? ValorantPeakRankIconUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the player's most recent Valorant rank snapshot.
+        /// </summary>
+        public ValorantRankHistory? ValorantCurrentRank { get; set; }
+
+        /// <summary>
+        /// Gets or sets the player's Valorant Elo/RR change over the trailing 7 days (current Elo minus
+        /// the Elo as of 7 days ago). Null when there isn't a rank snapshot both now and at least 7 days ago.
+        /// </summary>
+        public int? RrChange7DaysValorant { get; set; }
 
         /// <summary>
         /// Gets or sets player's creation date.

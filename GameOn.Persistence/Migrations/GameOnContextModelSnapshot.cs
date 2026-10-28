@@ -17,7 +17,7 @@ namespace GameOn.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -1962,6 +1962,52 @@ namespace GameOn.Persistence.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("riot_games_tag_line");
 
+                    b.Property<int?>("ValorantAccountLevel")
+                        .HasColumnType("int")
+                        .HasColumnName("valorant_account_level");
+
+                    b.Property<int?>("ValorantPeakRr")
+                        .HasColumnType("int")
+                        .HasColumnName("valorant_peak_rr");
+
+                    b.Property<string>("ValorantPeakSeasonShort")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("valorant_peak_season_short");
+
+                    b.Property<int?>("ValorantPeakTierId")
+                        .HasColumnType("int")
+                        .HasColumnName("valorant_peak_tier_id");
+
+                    b.Property<string>("ValorantPeakTierName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("valorant_peak_tier_name");
+
+                    b.Property<string>("ValorantPlayerCardId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("valorant_player_card_id");
+
+                    b.Property<string>("ValorantPlayerTitleId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("valorant_player_title_id");
+
+                    b.Property<string>("ValorantPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("valorant_puuid");
+
+                    b.Property<DateTime?>("ValorantRefreshedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("valorant_refreshed_on");
+
+                    b.Property<string>("ValorantRegion")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("valorant_region");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PrimaryPlayerId");
@@ -2124,6 +2170,89 @@ namespace GameOn.Persistence.Migrations
                     b.HasIndex("TournamentId");
 
                     b.ToTable("TournamentPlayer", (string)null);
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValorantRankHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Utc))
+                        .HasColumnName("created_on");
+
+                    b.Property<int>("Elo")
+                        .HasColumnType("int")
+                        .HasColumnName("elo");
+
+                    b.Property<int>("LastChange")
+                        .HasColumnType("int")
+                        .HasColumnName("last_change");
+
+                    b.Property<string>("MapId")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("map_id");
+
+                    b.Property<string>("MapName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("map_name");
+
+                    b.Property<string>("MatchId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("match_id");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int")
+                        .HasColumnName("player_id");
+
+                    b.Property<int>("RankedRating")
+                        .HasColumnType("int")
+                        .HasColumnName("ranked_rating");
+
+                    b.Property<int>("RefundedRr")
+                        .HasColumnType("int")
+                        .HasColumnName("refunded_rr");
+
+                    b.Property<string>("SeasonId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("season_id");
+
+                    b.Property<string>("SeasonShort")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("season_short");
+
+                    b.Property<int>("TierId")
+                        .HasColumnType("int")
+                        .HasColumnName("tier_id");
+
+                    b.Property<string>("TierName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("tier_name");
+
+                    b.Property<bool>("WasDerankProtected")
+                        .HasColumnType("bit")
+                        .HasColumnName("was_derank_protected");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId", "CreatedOn");
+
+                    b.HasIndex("PlayerId", "MatchId");
+
+                    b.ToTable("ValorantRankHistory", (string)null);
                 });
 
             modelBuilder.Entity("GameOn.Domain.FifaGamePlayed", b =>
@@ -2491,6 +2620,18 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Tournament");
                 });
 
+            modelBuilder.Entity("GameOn.Domain.ValorantRankHistory", b =>
+                {
+                    b.HasOne("GameOn.Domain.Player", "Player")
+                        .WithMany("ValorantRankHistory")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Player_ValorantRankHistory");
+
+                    b.Navigation("Player");
+                });
+
             modelBuilder.Entity("GameOn.Domain.FifaGamePlayed", b =>
                 {
                     b.Navigation("Highlights");
@@ -2564,6 +2705,8 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("TournamentPlayed");
 
                     b.Navigation("TournamentsWon");
+
+                    b.Navigation("ValorantRankHistory");
                 });
 
             modelBuilder.Entity("GameOn.Domain.Season", b =>

@@ -16,8 +16,8 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<RepositoryUrl>https://github.com/LeadOn/GameOn-API</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>7.8.1</Version>
-	<PackageReleaseNotes>Updated NuGet packages + fixed vulnerable System.Security.Cryptography.Pkcs dependency.</PackageReleaseNotes>
+	<Version>7.9.0</Version>
+	<PackageReleaseNotes>Added Valorant player profile and rank history tracking.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -24,7 +24,8 @@
         "DEFAULT_PROFILE_PIC": "",
         "GEMINI_API_KEY": "",
         "GEMINI_MODEL": "",
-        "LLM_TIMEOUT_SECONDS": ""
+        "LLM_TIMEOUT_SECONDS": "",
+        "HENRIKDEV_API_KEY": ""
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5184"

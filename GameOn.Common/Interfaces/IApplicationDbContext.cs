@@ -1,4 +1,4 @@
-﻿// <copyright file="IApplicationDbContext.cs" company="LeadOn's Corp'">
+// <copyright file="IApplicationDbContext.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -127,6 +127,11 @@ namespace GameOn.Common.Interfaces
         /// Gets or sets LoL Game Teams.
         /// </summary>
         public DbSet<LoLGameTeam> LeagueOfLegendsGameTeams { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Rank History.
+        /// </summary>
+        public DbSet<ValorantRankHistory> ValorantRankHistory { get; set; }
 
         /// <summary>
         /// Returns Database object from DbContext.
