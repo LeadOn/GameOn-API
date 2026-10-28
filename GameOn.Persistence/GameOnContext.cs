@@ -210,6 +210,28 @@ namespace GameOn.Persistence
                 entity.Property(e => e.LolRefreshedOn)
                     .HasColumnName("lol_refreshed_on");
 
+                entity.Property(e => e.ValorantPuuid)
+                    .HasColumnName("valorant_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValorantAccountLevel)
+                    .HasColumnName("valorant_account_level");
+
+                entity.Property(e => e.ValorantPlayerCardId)
+                    .HasColumnName("valorant_player_card_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValorantPlayerTitleId)
+                    .HasColumnName("valorant_player_title_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValorantRegion)
+                    .HasColumnName("valorant_region")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.ValorantRefreshedOn)
+                    .HasColumnName("valorant_refreshed_on");
+
                 entity.Property(e => e.PrimaryPlayerId)
                     .HasColumnName("primary_player_id");
 

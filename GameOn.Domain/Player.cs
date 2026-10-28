@@ -1,4 +1,4 @@
-﻿// <copyright file="Player.cs" company="LeadOn's Corp'">
+// <copyright file="Player.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -65,6 +65,37 @@ namespace GameOn.Domain
         /// Gets or sets player's LOL refreshed on datetime.
         /// </summary>
         public DateTime? LolRefreshedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant PUUID (36-char Riot account UUID used by Valorant endpoints,
+        /// distinct from the API-key-encrypted <see cref="RiotGamesPUUID"/>).
+        /// </summary>
+        public string? ValorantPuuid { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant account level.
+        /// </summary>
+        public int? ValorantAccountLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's equipped Valorant player card UUID.
+        /// </summary>
+        public string? ValorantPlayerCardId { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's equipped Valorant player title UUID.
+        /// </summary>
+        public string? ValorantPlayerTitleId { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant region affinity (e.g. eu, na, ap, kr, latam, br).
+        /// </summary>
+        public string? ValorantRegion { get; set; }
+
+        /// <summary>
+        /// Gets or sets player's Valorant profile refreshed on datetime.
+        /// </summary>
+        public DateTime? ValorantRefreshedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the ID of the account this player is a smurf of, or null when this player is

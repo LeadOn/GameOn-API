@@ -1,4 +1,4 @@
-﻿// <copyright file="DependencyInjection.cs" company="LeadOn's Corp'">
+// <copyright file="DependencyInjection.cs" company="LeadOn's Corp'">
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,8 @@ namespace GameOn.External
 {
     using GameOn.External.CommunityDragon.Implementations;
     using GameOn.External.CommunityDragon.Interfaces;
+    using GameOn.External.HenrikDev.Implementations;
+    using GameOn.External.HenrikDev.Interfaces;
     using GameOn.External.Llm.Implementations;
     using GameOn.External.Llm.Interfaces;
     using GameOn.External.NetworkStorage.Implementations;
@@ -36,6 +38,7 @@ namespace GameOn.External
             services.AddScoped<ISpectatorService, SpectatorV5Service>();
             services.AddScoped<ICommunityDragonQueueService, CommunityDragonQueueService>();
             services.AddScoped<ICommunityDragonChampionService, CommunityDragonChampionService>();
+            services.AddScoped<IValorantAccountService, ValorantAccountService>();
 
             // The provider is picked at startup rather than at compile time: switching to the self-hosted box,
             // or falling back off it, is an environment variable and a restart rather than a deployment.

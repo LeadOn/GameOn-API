@@ -17,7 +17,7 @@ namespace GameOn.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -1961,6 +1961,34 @@ namespace GameOn.Persistence.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("riot_games_tag_line");
+
+                    b.Property<int?>("ValorantAccountLevel")
+                        .HasColumnType("int")
+                        .HasColumnName("valorant_account_level");
+
+                    b.Property<string>("ValorantPlayerCardId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("valorant_player_card_id");
+
+                    b.Property<string>("ValorantPlayerTitleId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("valorant_player_title_id");
+
+                    b.Property<string>("ValorantPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("valorant_puuid");
+
+                    b.Property<DateTime?>("ValorantRefreshedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("valorant_refreshed_on");
+
+                    b.Property<string>("ValorantRegion")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("valorant_region");
 
                     b.HasKey("Id");
 
