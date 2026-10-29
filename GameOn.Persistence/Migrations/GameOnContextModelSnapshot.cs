@@ -17,7 +17,7 @@ namespace GameOn.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -2172,6 +2172,642 @@ namespace GameOn.Persistence.Migrations
                     b.ToTable("TournamentPlayer", (string)null);
                 });
 
+            modelBuilder.Entity("GameOn.Domain.ValGame", b =>
+                {
+                    b.Property<string>("MatchId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("match_id");
+
+                    b.Property<int?>("AceParticipantId")
+                        .HasColumnType("int")
+                        .HasColumnName("ace_participant_id");
+
+                    b.Property<string>("Cluster")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("cluster");
+
+                    b.Property<DateTime>("GameEnd")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Utc))
+                        .HasColumnName("game_end");
+
+                    b.Property<long>("GameLengthMs")
+                        .HasColumnType("bigint")
+                        .HasColumnName("game_length_ms");
+
+                    b.Property<DateTime>("GameStart")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Utc))
+                        .HasColumnName("game_start");
+
+                    b.Property<string>("GameVersion")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("game_version");
+
+                    b.Property<bool>("IsCompleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_completed");
+
+                    b.Property<bool>("IsRemake")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_remake");
+
+                    b.Property<string>("MapId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("map_id");
+
+                    b.Property<string>("MapName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("map_name");
+
+                    b.Property<int?>("MvpParticipantId")
+                        .HasColumnType("int")
+                        .HasColumnName("mvp_participant_id");
+
+                    b.Property<string>("Platform")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("platform");
+
+                    b.Property<string>("QueueId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("queue_id");
+
+                    b.Property<string>("QueueModeType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("queue_mode_type");
+
+                    b.Property<string>("QueueName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("queue_name");
+
+                    b.Property<string>("Region")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("region");
+
+                    b.Property<DateTime>("RetrievedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(1999, 5, 21, 0, 0, 0, 0, DateTimeKind.Utc))
+                        .HasColumnName("retrieved_on");
+
+                    b.Property<string>("SeasonId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("season_id");
+
+                    b.Property<string>("SeasonShort")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("season_short");
+
+                    b.Property<string>("WinningTeamId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("winning_team_id");
+
+                    b.HasKey("MatchId");
+
+                    b.HasIndex("AceParticipantId");
+
+                    b.HasIndex("GameStart");
+
+                    b.HasIndex("MvpParticipantId");
+
+                    b.HasIndex("QueueId");
+
+                    b.ToTable("ValorantGame", (string)null);
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameKill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AssistantPuuids")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("assistant_puuids");
+
+                    b.Property<int>("AssistantsCount")
+                        .HasColumnType("int")
+                        .HasColumnName("assistants_count");
+
+                    b.Property<string>("KillerPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("killer_puuid");
+
+                    b.Property<string>("KillerTeam")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("killer_team");
+
+                    b.Property<string>("MatchId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("match_id");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("round_number");
+
+                    b.Property<bool>("SecondaryFireMode")
+                        .HasColumnType("bit")
+                        .HasColumnName("secondary_fire_mode");
+
+                    b.Property<int>("TimeInMatchMs")
+                        .HasColumnType("int")
+                        .HasColumnName("time_in_match_ms");
+
+                    b.Property<int>("TimeInRoundMs")
+                        .HasColumnType("int")
+                        .HasColumnName("time_in_round_ms");
+
+                    b.Property<string>("VictimPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("victim_puuid");
+
+                    b.Property<string>("VictimTeam")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("victim_team");
+
+                    b.Property<string>("WeaponId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("weapon_id");
+
+                    b.Property<string>("WeaponName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("weapon_name");
+
+                    b.Property<string>("WeaponType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("weapon_type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId", "RoundNumber");
+
+                    b.ToTable("ValorantGameKill", (string)null);
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameParticipant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Ability1Casts")
+                        .HasColumnType("int")
+                        .HasColumnName("ability1_casts");
+
+                    b.Property<int>("Ability2Casts")
+                        .HasColumnType("int")
+                        .HasColumnName("ability2_casts");
+
+                    b.Property<int>("AccountLevel")
+                        .HasColumnType("int")
+                        .HasColumnName("account_level");
+
+                    b.Property<double>("AfkRounds")
+                        .HasColumnType("float")
+                        .HasColumnName("afk_rounds");
+
+                    b.Property<string>("AgentId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("agent_id");
+
+                    b.Property<string>("AgentName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("agent_name");
+
+                    b.Property<int>("Assists")
+                        .HasColumnType("int")
+                        .HasColumnName("assists");
+
+                    b.Property<int>("Bodyshots")
+                        .HasColumnType("int")
+                        .HasColumnName("bodyshots");
+
+                    b.Property<int>("DamageDealt")
+                        .HasColumnType("int")
+                        .HasColumnName("damage_dealt");
+
+                    b.Property<int>("DamageReceived")
+                        .HasColumnType("int")
+                        .HasColumnName("damage_received");
+
+                    b.Property<int>("Deaths")
+                        .HasColumnType("int")
+                        .HasColumnName("deaths");
+
+                    b.Property<double>("FriendlyFireIncoming")
+                        .HasColumnType("float")
+                        .HasColumnName("friendly_fire_incoming");
+
+                    b.Property<double>("FriendlyFireOutgoing")
+                        .HasColumnType("float")
+                        .HasColumnName("friendly_fire_outgoing");
+
+                    b.Property<int>("GrenadeCasts")
+                        .HasColumnType("int")
+                        .HasColumnName("grenade_casts");
+
+                    b.Property<int>("Headshots")
+                        .HasColumnType("int")
+                        .HasColumnName("headshots");
+
+                    b.Property<int>("Kills")
+                        .HasColumnType("int")
+                        .HasColumnName("kills");
+
+                    b.Property<int>("Legshots")
+                        .HasColumnType("int")
+                        .HasColumnName("legshots");
+
+                    b.Property<double>("LoadoutValueAverage")
+                        .HasColumnType("float")
+                        .HasColumnName("loadout_value_average");
+
+                    b.Property<int>("LoadoutValueOverall")
+                        .HasColumnType("int")
+                        .HasColumnName("loadout_value_overall");
+
+                    b.Property<string>("MatchId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("match_id");
+
+                    b.Property<string>("PartyId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("party_id");
+
+                    b.Property<string>("Platform")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("platform");
+
+                    b.Property<string>("PlayerCardId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("player_card_id");
+
+                    b.Property<int?>("PlayerId")
+                        .HasColumnType("int")
+                        .HasColumnName("player_id");
+
+                    b.Property<string>("PlayerTitleId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("player_title_id");
+
+                    b.Property<int?>("PostGameRankedRating")
+                        .HasColumnType("int")
+                        .HasColumnName("post_game_ranked_rating");
+
+                    b.Property<int?>("PostGameTierId")
+                        .HasColumnType("int")
+                        .HasColumnName("post_game_tier_id");
+
+                    b.Property<string>("PostGameTierName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("post_game_tier_name");
+
+                    b.Property<string>("Puuid")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("puuid");
+
+                    b.Property<string>("RiotIdGameName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("riot_id_game_name");
+
+                    b.Property<string>("RiotIdTagLine")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("riot_id_tagline");
+
+                    b.Property<double>("RoundsInSpawn")
+                        .HasColumnType("float")
+                        .HasColumnName("rounds_in_spawn");
+
+                    b.Property<int?>("RrChange")
+                        .HasColumnType("int")
+                        .HasColumnName("rr_change");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int")
+                        .HasColumnName("score");
+
+                    b.Property<long>("SessionPlaytimeMs")
+                        .HasColumnType("bigint")
+                        .HasColumnName("session_playtime_ms");
+
+                    b.Property<double>("SpentAverage")
+                        .HasColumnType("float")
+                        .HasColumnName("spent_average");
+
+                    b.Property<int>("SpentOverall")
+                        .HasColumnType("int")
+                        .HasColumnName("spent_overall");
+
+                    b.Property<string>("TeamId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("team_id");
+
+                    b.Property<int>("TierId")
+                        .HasColumnType("int")
+                        .HasColumnName("tier_id");
+
+                    b.Property<string>("TierName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("tier_name");
+
+                    b.Property<int>("UltimateCasts")
+                        .HasColumnType("int")
+                        .HasColumnName("ultimate_casts");
+
+                    b.Property<bool>("Win")
+                        .HasColumnType("bit")
+                        .HasColumnName("win");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("MatchId", "Puuid")
+                        .HasName("AK_ValGameParticipant_MatchId_Puuid");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("Puuid");
+
+                    b.ToTable("ValorantGameParticipant", (string)null);
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameParticipantStat", b =>
+                {
+                    b.Property<int>("ValGameParticipantId")
+                        .HasColumnType("int")
+                        .HasColumnName("val_game_participant_id");
+
+                    b.Property<int>("Aces")
+                        .HasColumnType("int")
+                        .HasColumnName("aces");
+
+                    b.Property<double>("Acs")
+                        .HasColumnType("float")
+                        .HasColumnName("acs");
+
+                    b.Property<double>("Adr")
+                        .HasColumnType("float")
+                        .HasColumnName("adr");
+
+                    b.Property<int>("ClutchesWon")
+                        .HasColumnType("int")
+                        .HasColumnName("clutches_won");
+
+                    b.Property<DateTime>("ComputedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("computed_on");
+
+                    b.Property<double>("DamageDeltaPerRound")
+                        .HasColumnType("float")
+                        .HasColumnName("damage_delta_per_round");
+
+                    b.Property<int>("DoubleKills")
+                        .HasColumnType("int")
+                        .HasColumnName("double_kills");
+
+                    b.Property<double>("EconRating")
+                        .HasColumnType("float")
+                        .HasColumnName("econ_rating");
+
+                    b.Property<int>("FirstDeaths")
+                        .HasColumnType("int")
+                        .HasColumnName("first_deaths");
+
+                    b.Property<int>("FirstKills")
+                        .HasColumnType("int")
+                        .HasColumnName("first_kills");
+
+                    b.Property<double>("HeadshotPercent")
+                        .HasColumnType("float")
+                        .HasColumnName("headshot_percent");
+
+                    b.Property<double>("KastPercent")
+                        .HasColumnType("float")
+                        .HasColumnName("kast_percent");
+
+                    b.Property<double>("KdRatio")
+                        .HasColumnType("float")
+                        .HasColumnName("kd_ratio");
+
+                    b.Property<double>("Kda")
+                        .HasColumnType("float")
+                        .HasColumnName("kda");
+
+                    b.Property<double>("KillParticipationPercent")
+                        .HasColumnType("float")
+                        .HasColumnName("kill_participation_percent");
+
+                    b.Property<int>("KnifeKills")
+                        .HasColumnType("int")
+                        .HasColumnName("knife_kills");
+
+                    b.Property<int>("QuadraKills")
+                        .HasColumnType("int")
+                        .HasColumnName("quadra_kills");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float")
+                        .HasColumnName("rating");
+
+                    b.Property<int>("RoundsPlayed")
+                        .HasColumnType("int")
+                        .HasColumnName("rounds_played");
+
+                    b.Property<int>("SpikeDefuses")
+                        .HasColumnType("int")
+                        .HasColumnName("spike_defuses");
+
+                    b.Property<int>("SpikePlants")
+                        .HasColumnType("int")
+                        .HasColumnName("spike_plants");
+
+                    b.Property<int>("TripleKills")
+                        .HasColumnType("int")
+                        .HasColumnName("triple_kills");
+
+                    b.HasKey("ValGameParticipantId");
+
+                    b.ToTable("ValorantGameParticipantStat", (string)null);
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameRound", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Ceremony")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("ceremony");
+
+                    b.Property<string>("CeremonyPlayerPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("ceremony_player_puuid");
+
+                    b.Property<string>("CeremonyTeam")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("ceremony_team");
+
+                    b.Property<string>("DefusePlayerPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("defuse_player_puuid");
+
+                    b.Property<int?>("DefuseTimeMs")
+                        .HasColumnType("int")
+                        .HasColumnName("defuse_time_ms");
+
+                    b.Property<string>("FirstBloodPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("first_blood_puuid");
+
+                    b.Property<string>("FirstBloodTeam")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("first_blood_team");
+
+                    b.Property<string>("MatchId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("match_id");
+
+                    b.Property<string>("PlantPlayerPuuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("plant_player_puuid");
+
+                    b.Property<string>("PlantSite")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("plant_site");
+
+                    b.Property<int?>("PlantTimeMs")
+                        .HasColumnType("int")
+                        .HasColumnName("plant_time_ms");
+
+                    b.Property<string>("Result")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("result");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("round_number");
+
+                    b.Property<string>("WinningTeam")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("winning_team");
+
+                    b.Property<string>("WinningTeamRole")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("winning_team_role");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId", "RoundNumber");
+
+                    b.ToTable("ValorantGameRound", (string)null);
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameTeam", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("MatchId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("match_id");
+
+                    b.Property<int>("RoundsLost")
+                        .HasColumnType("int")
+                        .HasColumnName("rounds_lost");
+
+                    b.Property<int>("RoundsWon")
+                        .HasColumnType("int")
+                        .HasColumnName("rounds_won");
+
+                    b.Property<string>("TeamId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("team_id");
+
+                    b.Property<bool>("Won")
+                        .HasColumnType("bit")
+                        .HasColumnName("won");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId");
+
+                    b.ToTable("ValorantGameTeam", (string)null);
+                });
+
             modelBuilder.Entity("GameOn.Domain.ValorantRankHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -2620,6 +3256,89 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Tournament");
                 });
 
+            modelBuilder.Entity("GameOn.Domain.ValGame", b =>
+                {
+                    b.HasOne("GameOn.Domain.ValGameParticipant", null)
+                        .WithMany()
+                        .HasForeignKey("AceParticipantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_ValGame_Ace_Participant");
+
+                    b.HasOne("GameOn.Domain.ValGameParticipant", null)
+                        .WithMany()
+                        .HasForeignKey("MvpParticipantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_ValGame_Mvp_Participant");
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameKill", b =>
+                {
+                    b.HasOne("GameOn.Domain.ValGame", "Game")
+                        .WithMany("ValorantGameKills")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Val_Games_Kills");
+
+                    b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameParticipant", b =>
+                {
+                    b.HasOne("GameOn.Domain.ValGame", "Game")
+                        .WithMany("ValorantGameParticipants")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Val_Games_Participants");
+
+                    b.HasOne("GameOn.Domain.Player", "Player")
+                        .WithMany("ValorantGameParticipants")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_Player_Val_Game_Participant");
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameParticipantStat", b =>
+                {
+                    b.HasOne("GameOn.Domain.ValGameParticipant", "Participant")
+                        .WithOne("Stats")
+                        .HasForeignKey("GameOn.Domain.ValGameParticipantStat", "ValGameParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Val_Game_Participant_Stat");
+
+                    b.Navigation("Participant");
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameRound", b =>
+                {
+                    b.HasOne("GameOn.Domain.ValGame", "Game")
+                        .WithMany("ValorantGameRounds")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Val_Games_Rounds");
+
+                    b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameTeam", b =>
+                {
+                    b.HasOne("GameOn.Domain.ValGame", "Game")
+                        .WithMany("ValorantGameTeams")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Val_Games_Teams");
+
+                    b.Navigation("Game");
+                });
+
             modelBuilder.Entity("GameOn.Domain.ValorantRankHistory", b =>
                 {
                     b.HasOne("GameOn.Domain.Player", "Player")
@@ -2706,6 +3425,8 @@ namespace GameOn.Persistence.Migrations
 
                     b.Navigation("TournamentsWon");
 
+                    b.Navigation("ValorantGameParticipants");
+
                     b.Navigation("ValorantRankHistory");
                 });
 
@@ -2719,6 +3440,22 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Games");
 
                     b.Navigation("Players");
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGame", b =>
+                {
+                    b.Navigation("ValorantGameKills");
+
+                    b.Navigation("ValorantGameParticipants");
+
+                    b.Navigation("ValorantGameRounds");
+
+                    b.Navigation("ValorantGameTeams");
+                });
+
+            modelBuilder.Entity("GameOn.Domain.ValGameParticipant", b =>
+                {
+                    b.Navigation("Stats");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,7 +17,7 @@ GameOn.Persistence	EF Core + SQL Server (GameOnContext)
 GameOn.External	Client Riot Games API + stockage S3
 GameOn.Common	DTOs, interfaces, exceptions partagés entre couches
 Domaine métier
-Deux jeux sont supportés :
+Trois jeux sont supportés :
 
 FIFA / Soccer
 
@@ -33,6 +33,14 @@ LeagueOfLegendsRankHistory — suivi du rang
 LoLQueue — types de queue Riot normalisés (Id = queueId Riot, clé naturelle), synchronisés quotidiennement depuis `queues.json` ; `LoLGame.QueueId` la référence en FK nullable. L'ancien `LoLGame.QueueType` (string, dictionnaire en dur) a été entièrement supprimé (colonne + propriété + migration)
 LoLGameParticipantStat — stats de performance dérivées par participant (KDA, CS/min, gold/min, dégâts/min, kill participation %, wards posés/détruits), relation 1:1 à clé partagée avec `LoLGameParticipant` (`LoLGameParticipant.Stats`). Calculées via `LoLGameParticipantStatCalculator` (partagé entre l'import live et le backfill), à partir des données déjà en base (dernière frame de timeline + kills d'équipe + events de wards) — aucun appel Riot supplémentaire. Préfère désormais `Kda`/`KillParticipation` de Riot (voir `LoLGameParticipantChallenge`) quand disponibles plutôt que de les recalculer
 LoLGameParticipantChallenge — miroir 1:1 (clé partagée) de l'objet `challenges` de Riot (~120 stats déjà calculées par Riot : KDA, kill participation, dégâts/min, solo kills...), stocké tel quel sans recalcul. `ParticipantDto.RiotChallenges`/`TeamPosition`/`IndividualPosition`/`VisionScore` sont désormais capturés depuis l'API Riot (auparavant silencieusement jetés par la désérialisation Newtonsoft, `MissingMemberHandling.Ignore` par défaut)
+
+Valorant
+
+ValorantRankHistory — suivi du rang compétitif, RR, Elo continu, delta de RR (`LastChange`), protection de démotion et remboursement RR par partie classée (`MatchId`)
+ValGame / ValGameTeam / ValGameParticipant — historique de parties Valorant, équipes (`Red`/`Blue`), participants liés aux joueurs GameOn! (`PlayerId`), premades (`PartyId`), agents, rangs et delta de RR post-game (`RrChange`)
+ValGameParticipantStat — stats de performance dérivées par participant (1:1 à clé partagée avec `ValGameParticipant` : ACS, ADR, Damage Delta/Round, KDA, K/D, Kill Participation %, HS %, KAST %, First Kills/Deaths, Multi-kills/Aces, Clutches, Spike Plants/Defuses, Knife Kills, Econ Rating, et Rating GameOn! `/10` servant à élire le MVP et l'ACE), calculées via `ValGameParticipantStatCalculator`
+ValGameRound / ValGameKill — timeline des rounds (résultat, cérémonie, first blood, plant/defuse) et des kills (arme, assistants, timestamps)
+
 Commun
 
 Player — joueurs (authentifiés via JWT)
@@ -49,6 +57,7 @@ Les erreurs ne sont jamais catchées dans les handlers — elles remontent via d
 
 Intégrations externes
 Riot Games API — récupération des données LoL (matches, summoners, rangs)
+HenrikDev API (`api.henrikdev.xyz`, clé `HENRIKDEV_API_KEY`) + `valorant-api.com` — récupération des comptes, rangs/MMR et matchs Valorant (sans nécessiter de clé de production Riot Valorant)
 S3 — stockage des photos de profil et logos de tournois
 JWT — authentification des joueurs
 
@@ -115,6 +124,7 @@ Le projet est découpé en 6 projets distincts. Respecte strictement les fronti�
 > - **Couplage :** La couche `Domain` ne doit jamais référencer `Persistence` ou `Presentation`.
 > - **Style :** Respecter strictement `stylecop.json`. Ne pas supprimer les règles de style pour "gagner du temps".
 > - **Langue des commentaires :** **tout commentaire de code est en anglais, sans exception.** Ça couvre les `//`, les `///` de documentation XML, le libellé accolé à un `#pragma warning`, et les commentaires des scripts Python de `scripts/`. Piège principal : le quick-fix « Supprimer l'avertissement » de Visual Studio en locale française recopie le message Roslyn traduit (`// Déréférencement d'une éventuelle référence null.`) — le remplacer par le libellé anglais officiel (`// Dereference of a possibly null reference.`). En revanche, les **chaînes de caractères** destinées aux joueurs restent en français (prompt de Raimmus, brief du coach, descriptions de tournoi), et cette documentation Markdown aussi.
+- **Commits Git :** toujours commiter au nom de l'utilisateur (`Valentin Virot <virot.valentin@gmail.com>`) et **ne jamais indiquer qu'une IA a participé** (aucun `Co-authored-by`, aucun trailer, aucune mention d'agent/IA dans le message de commit).
 
 ---
 
@@ -275,3 +285,40 @@ Le projet est découpé en 6 projets distincts. Respecte strictement les fronti�
 - **`GET lol/live`** (anonyme, `includeSmurfs` défaut `true`, `includeOutOfCrew` défaut `false`, comptes archivés jamais) : spectator-v5 via `ISpectatorService`/`SpectatorV5Service` (`GameOn.External`, 404 → `null`). Il n'existe **aucun limiteur de débit** devant les clients Riot, donc le budget est tenu par `LoLLiveGameCache` (singleton) : au plus un appel par compte et par **60 s**, quel que soit le trafic, et zéro quand personne ne regarde. Un seul verrou pour tous les rafraîchissements. Un appel répond pour toute une premade (les autres comptes suivis trouvés dans la même partie ne sont pas réinterrogés). Sur un **429** : fin du tour, 60 s sans appeler Riot, les dernières réponses connues restent servies (d'où `RetrievedOn`). Toute autre erreur sur un compte (PUUID d'une autre clé → 400, 5xx, timeout) : loggée, compte affiché « pas en partie » jusqu'au tour suivant, sans faire tomber la liste. `GameStart` est `null` et `GameLengthSeconds` 0 pendant l'écran de chargement (`gameStartTime = 0` chez Riot). Pas de rôle (le spectator n'en donne pas).
 - **Nom de champion du live** : `ICommunityDragonChampionService` (déjà utilisé par l'import LCU, caché 24 h) plutôt que `champion.json` de Data Dragon. Même référentiel d'IDs, alias = convention match-v5. ⚠️ Community Dragon écrit `Fiddlesticks` là où match-v5 écrit `FiddleSticks` (cf. `lol-champion.ts` de JungleDiff) : une table `MatchV5Aliases` corrige ça **dans le service**, donc l'import LCU des customs stocke désormais `FiddleSticks` lui aussi, comme match-v5.
 - Pas de FluentValidation ajoutée : le repo n'en contient aucune (ni package, ni behavior MediatR), contrairement à ce que décrit ce fichier.
+
+✅ **Support Valorant — Phase 1 : Profil joueur, Rang actuel, Peak Rank & Historique MMR** (2026-10-28, branche `features/valorant/initial-implementation`, commité en `d649e00` et `da05a76`, version `7.9.0`, migrations `20261028123455_Added_Valorant_Profile_Fields_In_Players` et `20261028134851_Added_Valorant_Rank_History` appliquées en base et testées) :
+
+- **Pourquoi HenrikDev (`api.henrikdev.xyz`)** : Riot bloque `VAL-MATCH-V1` et `VAL-RANKED-V1` tant qu'on n'a pas de Production API Key Valorant. De plus, `Player.RiotGamesPUUID` (`ACCOUNT-V1`, 78 caractères) est chiffré par clé API Riot, alors que HenrikDev utilise le PUUID Valorant brut de 36 caractères (`Player.ValorantPuuid`). Le premier refresh résout le compte via `GET /valorant/v2/account/{name}/{tag}` (depuis `RiotGamesNickname` + `RiotGamesTagLine`) et stocke `ValorantPuuid` ; tous les refresh suivants passent par `by-puuid` (`v2/by-puuid/account/{puuid}`, `v3/by-puuid/mmr/{region}/pc/{puuid}`, `v2/by-puuid/mmr-history/{region}/pc/{puuid}`).
+- **Champs ajoutés sur `Player` & `PlayerDto`** : `ValorantPuuid`, `ValorantAccountLevel`, `ValorantPlayerCardId` (+ URLs `ValorantPlayerCardSmallUrl`/`WideUrl`/`LargeUrl` sur `media.valorant-api.com`), `ValorantPlayerTitleId`, `ValorantRegion`, `ValorantRefreshedOn`, Peak Rank historique (`ValorantPeakTierId`, `ValorantPeakTierName`, `ValorantPeakRr`, `ValorantPeakSeasonShort`, `ValorantPeakRankIconUrl`), `ValorantCurrentRank` (`ValorantRankHistory?`) et `RrChange7DaysValorant` (`int?`, différence d'`Elo` sur 7 jours glissants).
+- **Entité `ValorantRankHistory`** (table `ValorantRankHistory`) : stocke chaque entrée de `v2/mmr-history` dédoublonnée par `(PlayerId, MatchId)` (`TierId`, `TierName`, `RankedRating`, `Elo`, `LastChange`, `RefundedRr`, `WasDerankProtected`, `SeasonId`, `SeasonShort`, `MapId`, `MapName`, `CreatedOn`, + `RankIconUrl` calculé). Si `v3/mmr` remonte un rang actuel différent de la dernière entrée connue, un snapshot complémentaire (`MatchId = null`) est enregistré.
+- **Routes `ValorantPlayerController` (`/val/player`)** :
+  - `GET /val/player` (`archived`, `includeSmurfs`, `includeOutOfCrew`) → `GetAllValorantPlayersQuery`
+  - `GET /val/player/{playerId}` → `GetValorantPlayerByIdQuery`
+  - `GET /val/player/{playerId}/rank` (`limit`, `granularity`, `days`) → `GetValorantPlayerRankHistoryQuery`
+  - `PATCH /val/player/me` & `PATCH /val/player/{playerId}` → `UpdateValorantPlayerCommand`
+  - `PATCH /val/player/admin` (`gameon_admin`) → `UpdateValorantPlayerAdminCommand`
+  - `PATCH /val/player/ranks` → `UpdateAllValorantPlayerRanksCommand` + job de fond `RefreshValorantPlayerRanksJob` (toutes les 30 min, 2 s d'écart entre chaque membre du crew ayant un `ValorantPuuid`).
+
+🟡 **Support Valorant — Phase 2 : Historique des parties, Rounds, Kills & Stats dérivées** (2026-10-29, branche `features/valorant/initial-implementation`, migration `20261028225836_Added_Valorant_Matches` générée, appliquée en base et testée en direct sur l'API locale ; pas encore commité) :
+
+- **Client HenrikDev v4 (`IValorantMatchService` / `ValorantMatchService`)** :
+  - `GetLastMatchesByPuuid(region, valorantPuuid, size = 10, mode = null)` → `GET /valorant/v4/by-puuid/matches/{region}/pc/{puuid}?size={size}` (renvoie directement les 10 derniers matchs complets avec métadonnées, équipes, joueurs, rounds et kills en un seul appel HTTP).
+  - `GetMatchById(region, matchId)` → `GET /valorant/v4/match/{region}/{matchId}`.
+- **Modèle de données (`GameOn.Domain` / `GameOnContext`)** :
+  - `ValGame` (table `ValorantGame`, PK `MatchId`) : `MapId`, `MapName`, `MapSplashUrl`, `MapListViewIconUrl`, `GameVersion`, `Region`, `Cluster`, `Platform`, `QueueId` (normalisé en `"custom"` quand `queue.id` est vide sur une Custom Game), `QueueName`, `QueueModeType`, `SeasonId`, `SeasonShort`, `GameStart`, `GameLengthMs`, `GameEnd`, `RetrievedOn`, `IsCompleted`, `IsRemake` (`true` si match `competitive`/`unrated` terminé en $\le 3$ rounds), `WinningTeamId`, `MvpParticipantId`, `AceParticipantId`.
+  - `ValGameTeam` (table `ValorantGameTeam`) : `TeamId` (`"Red"`/`"Blue"`), `Won`, `RoundsWon`, `RoundsLost`.
+  - `ValGameParticipant` (table `ValorantGameParticipant`, clé alternative `(MatchId, Puuid)`) : relié automatiquement à `PlayerId` si `Puuid` correspond à un joueur GameOn!, `PartyId` (UUID de premade), `AgentId`/`AgentName`/`AgentIconUrl`, `TierId`/`TierName`/`TierIconUrl`, stats brutes (`Score`, `Kills`, `Deaths`, `Assists`, `Headshots`, `Bodyshots`, `Legshots`, `DamageDealt`, `DamageReceived`), sorts (`GrenadeCasts`, `Ability1Casts`, `Ability2Casts`, `UltimateCasts`), économie (`SpentOverall`/`Average`, `LoadoutValueOverall`/`Average`), comportement (`AfkRounds`, `RoundsInSpawn`, `FriendlyFireIncoming`/`Outgoing`, `SessionPlaytimeMs`), `Win`, et croisement automatique avec `ValorantRankHistory` (`RrChange`, `PostGameTierId`, `PostGameTierName`, `PostGameRankedRating`).
+  - `ValGameParticipantStat` (table `ValorantGameParticipantStat`, 1:1 à clé partagée `ValGameParticipantId`), calculée par `ValGameParticipantStatCalculator` : `RoundsPlayed`, `Acs`, `Kda`, `KdRatio`, `KillParticipationPercent`, `Adr`, `DamageDeltaPerRound`, `HeadshotPercent`, `FirstKills`, `FirstDeaths`, `KastPercent` (Kill, Assist, Survived, ou Traded sous 5000 ms), `DoubleKills`, `TripleKills`, `QuadraKills`, `Aces`, `ClutchesWon` (`CeremonyClutch`), `SpikePlants`, `SpikeDefuses`, `KnifeKills`, `EconRating`, `Rating` (`/10`, servant aussi à élire `MvpParticipantId` et `AceParticipantId`).
+  - `ValGameRound` (table `ValorantGameRound`) & `ValGameKill` (table `ValorantGameKill`) : timeline complète round par round et kills horodatés.
+- **Synchro & Routes (`ValorantMatchController` sous `/val/match`)** :
+  - `UpsertValorantMatchesCommand` : insère les nouveaux matchs (et met à jour les liens `PlayerId`/`RrChange` sur les matchs déjà en base, ou ré-importe intégralement si `OverwriteExisting = true`). Appelé automatiquement à chaque refresh joueur dans `UpdateValorantPlayerCommandHandler`.
+  - `PlayerDto` enrichi avec `RecentFormValorant` (5 derniers résultats classés sur `GET /val/player`, 8 sur `GET /val/player/{id}`), `MainAgentName` et `MainAgentIconUrl` (agent le plus joué sur les 30 derniers jours, hors remakes et hors Custom Games).
+  - `GET /val/match/last` (`page`, `size`, `rankedOnly`, `queues`, `startDate`, `endDate`, `includeSmurfs`, `includeOutOfCrew`) → `GetLastValGamesPlayedQuery`.
+  - `GET /val/match/player/{playerId}` (`page`, `size`, `rankedOnly`, `queues`, `agentName`, `startDate`, `endDate`, `refresh`) → `GetLastValGamesPlayedQuery` (si le joueur n'a encore aucun match en base ou si `refresh=true`, synchronise d'abord ses 10 derniers matchs depuis HenrikDev).
+  - `GET /val/match/{matchId}` → `GetValGameByIdQuery`.
+  - `GET /val/match/{matchId}/rounds` → `GetValGameTimelineByMatchIdQuery` (`ValGameTimelineDto` : `Rounds` + `Kills`).
+  - `POST /val/match/{matchId}/update` → `UpdateValGameCommand`.
+- **Reste à faire pour la Phase 3 (après validation et commit de la Phase 2)** :
+  1. Stats agrégées sur le profil joueur (`ValorantPlayerPerformanceStatsDto` sur `GET /val/player/{id}` avec filtres `period`, `queue`, `agentName` : moyennes ACS/ADR/KDA/HS%/KAST%, `AgentStats[]`, `MapStats[]`, `DuoStats[]` avec détection premade via `PartyId`).
+  2. Stats globales & awards du crew (`GET /val/stats/global` : `TopAgents[]`, `TopMaps[]`, awards `Sharpshooter`, `BodyshotEnjoyer`, `HighestCombatScore`, `EntryKing`, `FirstBloodVictim`, `BiggestInter`, `SpikeCarrier`, `KnifeAssassin`, `NightOwl`, streaks).
+  3. Page Home Valorant (`GET /val/home` : `WeeklyActivity`, `FactOfTheWeek`, `CrewRecords`).

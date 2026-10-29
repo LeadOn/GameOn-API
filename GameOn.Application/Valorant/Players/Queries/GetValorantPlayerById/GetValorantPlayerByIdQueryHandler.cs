@@ -50,6 +50,34 @@ namespace GameOn.Application.Valorant.Players.Queries.GetValorantPlayerById
 
                 playerInDb.ValorantCurrentRank = playerHistory.FirstOrDefault();
                 playerInDb.RrChange7DaysValorant = GetRrChange7Days(playerHistory, DateTime.UtcNow.AddDays(-7));
+                playerInDb.RecentFormValorant = await this.context.ValorantGameParticipants
+                    .Where(x => x.PlayerId == playerInDb.Id && x.Game.QueueId == "competitive" && !x.Game.IsRemake)
+                    .OrderByDescending(x => x.Game.GameStart)
+                    .Take(8)
+                    .Select(x => x.Win)
+                    .ToListAsync(cancellationToken);
+
+                var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+                var mainAgent = await this.context.ValorantGameParticipants
+                    .Where(x => x.PlayerId == playerInDb.Id && x.AgentName != null && !x.Game.IsRemake && x.Game.QueueId != "custom" && x.Game.GameStart >= thirtyDaysAgo)
+                    .GroupBy(x => new { x.AgentName, x.AgentId })
+                    .Select(g => new
+                    {
+                        g.Key.AgentName,
+                        g.Key.AgentId,
+                        Games = g.Count(),
+                        Wins = g.Count(x => x.Win),
+                    })
+                    .OrderByDescending(x => x.Games)
+                    .ThenByDescending(x => x.Wins)
+                    .ThenBy(x => x.AgentName)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                playerInDb.MainAgentName = mainAgent?.AgentName;
+                playerInDb.MainAgentIconUrl = string.IsNullOrWhiteSpace(mainAgent?.AgentId)
+                    ? null
+                    : $"https://media.valorant-api.com/agents/{mainAgent.AgentId}/displayicon.png";
+
                 playerInDb.SmurfAccounts = await this.GetSmurfAccounts(playerInDb.Id, cancellationToken);
             }
 

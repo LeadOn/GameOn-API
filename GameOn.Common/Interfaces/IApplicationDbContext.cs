@@ -134,6 +134,36 @@ namespace GameOn.Common.Interfaces
         public DbSet<ValorantRankHistory> ValorantRankHistory { get; set; }
 
         /// <summary>
+        /// Gets or sets Valorant Games.
+        /// </summary>
+        public DbSet<ValGame> ValorantGames { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Teams.
+        /// </summary>
+        public DbSet<ValGameTeam> ValorantGameTeams { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Participants.
+        /// </summary>
+        public DbSet<ValGameParticipant> ValorantGameParticipants { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Participant Stats.
+        /// </summary>
+        public DbSet<ValGameParticipantStat> ValorantGameParticipantStats { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Rounds.
+        /// </summary>
+        public DbSet<ValGameRound> ValorantGameRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Kills.
+        /// </summary>
+        public DbSet<ValGameKill> ValorantGameKills { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>

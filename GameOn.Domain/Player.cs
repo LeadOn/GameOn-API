@@ -190,6 +190,12 @@ namespace GameOn.Domain
         public virtual List<ValorantRankHistory> ValorantRankHistory { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets Valorant Game Participants.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<ValGameParticipant> ValorantGameParticipants { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the primary account this player is a smurf of.
         /// </summary>
         [JsonIgnore]

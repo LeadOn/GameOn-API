@@ -10,6 +10,7 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using GameOn.Application.Valorant.Matches.Commands.UpsertValorantMatches;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -26,6 +27,8 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
         private readonly IApplicationDbContext context;
         private readonly IValorantAccountService valorantAccountService;
         private readonly IValorantMmrService valorantMmrService;
+        private readonly IValorantMatchService valorantMatchService;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateValorantPlayerCommandHandler"/> class.
@@ -33,14 +36,20 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
         /// <param name="context">DbContext, injected.</param>
         /// <param name="valorantAccountService">Valorant Account Service, injected.</param>
         /// <param name="valorantMmrService">Valorant MMR Service, injected.</param>
+        /// <param name="valorantMatchService">Valorant Match Service, injected.</param>
+        /// <param name="mediator">MediatR sender, injected.</param>
         public UpdateValorantPlayerCommandHandler(
             IApplicationDbContext context,
             IValorantAccountService valorantAccountService,
-            IValorantMmrService valorantMmrService)
+            IValorantMmrService valorantMmrService,
+            IValorantMatchService valorantMatchService,
+            ISender mediator)
         {
             this.context = context;
             this.valorantAccountService = valorantAccountService;
             this.valorantMmrService = valorantMmrService;
+            this.valorantMatchService = valorantMatchService;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -85,6 +94,9 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
                 }
             }
 
+            this.context.Players.Update(playerInDb);
+            await this.context.SaveChangesAsync(cancellationToken);
+
             if (!string.IsNullOrWhiteSpace(playerInDb.ValorantPuuid))
             {
                 var region = string.IsNullOrWhiteSpace(playerInDb.ValorantRegion) ? "eu" : playerInDb.ValorantRegion;
@@ -99,10 +111,21 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
                 }
 
                 await this.SyncRankHistory(playerInDb.Id, region, playerInDb.ValorantPuuid, mmr, cancellationToken);
-            }
+                await this.context.SaveChangesAsync(cancellationToken);
 
-            this.context.Players.Update(playerInDb);
-            await this.context.SaveChangesAsync(cancellationToken);
+                var recentMatches = await this.valorantMatchService.GetLastMatchesByPuuid(
+                    region,
+                    playerInDb.ValorantPuuid,
+                    size: 10,
+                    cancellationToken: cancellationToken);
+
+                if (recentMatches.Count > 0)
+                {
+                    await this.mediator.Send(
+                        new UpsertValorantMatchesCommand { Matches = recentMatches },
+                        cancellationToken);
+                }
+            }
 
             var dto = new PlayerDto(playerInDb);
             var playerRanks = await this.context.ValorantRankHistory
@@ -113,6 +136,34 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
 
             dto.ValorantCurrentRank = playerRanks.FirstOrDefault();
             dto.RrChange7DaysValorant = ComputeRrChange7Days(playerRanks, DateTime.UtcNow.AddDays(-7));
+
+            dto.RecentFormValorant = await this.context.ValorantGameParticipants
+                .Where(x => x.PlayerId == playerInDb.Id && x.Game.QueueId == "competitive" && !x.Game.IsRemake)
+                .OrderByDescending(x => x.Game.GameStart)
+                .Take(8)
+                .Select(x => x.Win)
+                .ToListAsync(cancellationToken);
+
+            var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+            var mainAgent = await this.context.ValorantGameParticipants
+                .Where(x => x.PlayerId == playerInDb.Id && x.AgentName != null && !x.Game.IsRemake && x.Game.QueueId != "custom" && x.Game.GameStart >= thirtyDaysAgo)
+                .GroupBy(x => new { x.AgentName, x.AgentId })
+                .Select(g => new
+                {
+                    g.Key.AgentName,
+                    g.Key.AgentId,
+                    Games = g.Count(),
+                    Wins = g.Count(x => x.Win),
+                })
+                .OrderByDescending(x => x.Games)
+                .ThenByDescending(x => x.Wins)
+                .ThenBy(x => x.AgentName)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            dto.MainAgentName = mainAgent?.AgentName;
+            dto.MainAgentIconUrl = string.IsNullOrWhiteSpace(mainAgent?.AgentId)
+                ? null
+                : $"https://media.valorant-api.com/agents/{mainAgent.AgentId}/displayicon.png";
 
             return dto;
         }

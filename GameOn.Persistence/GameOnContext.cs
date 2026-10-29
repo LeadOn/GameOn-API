@@ -140,6 +140,36 @@ namespace GameOn.Persistence
         public DbSet<ValorantRankHistory> ValorantRankHistory { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets Valorant Games.
+        /// </summary>
+        public DbSet<ValGame> ValorantGames { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Teams.
+        /// </summary>
+        public DbSet<ValGameTeam> ValorantGameTeams { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Participants.
+        /// </summary>
+        public DbSet<ValGameParticipant> ValorantGameParticipants { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Participant Stats.
+        /// </summary>
+        public DbSet<ValGameParticipantStat> ValorantGameParticipantStats { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Rounds.
+        /// </summary>
+        public DbSet<ValGameRound> ValorantGameRounds { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Kills.
+        /// </summary>
+        public DbSet<ValGameKill> ValorantGameKills { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -1789,6 +1819,552 @@ namespace GameOn.Persistence
                     .HasPrincipalKey(p => new { p.MatchId, p.Puuid })
                     .HasConstraintName("FK_LoL_EventAssist_Participant")
                     .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ValGame>(entity =>
+            {
+                entity.ToTable("ValorantGame");
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.HasKey(e => e.MatchId);
+
+                entity.Property(e => e.MapId)
+                    .HasColumnName("map_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MapName)
+                    .HasColumnName("map_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.GameVersion)
+                    .HasColumnName("game_version")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Region)
+                    .HasColumnName("region")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Cluster)
+                    .HasColumnName("cluster")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Platform)
+                    .HasColumnName("platform")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.QueueId)
+                    .HasColumnName("queue_id")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QueueName)
+                    .HasColumnName("queue_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.QueueModeType)
+                    .HasColumnName("queue_mode_type")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SeasonId)
+                    .HasColumnName("season_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.SeasonShort)
+                    .HasColumnName("season_short")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.RetrievedOn)
+                    .HasColumnName("retrieved_on")
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
+
+                entity.Property(e => e.GameStart)
+                    .HasColumnName("game_start")
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
+
+                entity.Property(e => e.GameLengthMs)
+                    .HasColumnName("game_length_ms");
+
+                entity.Property(e => e.GameEnd)
+                    .HasColumnName("game_end")
+                    .HasDefaultValue(new DateTime(1999, 5, 21, 00, 00, 00));
+
+                entity.Property(e => e.IsCompleted)
+                    .HasColumnName("is_completed")
+                    .HasDefaultValue(true);
+
+                entity.Property(e => e.IsRemake)
+                    .HasColumnName("is_remake")
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.WinningTeamId)
+                    .HasColumnName("winning_team_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MvpParticipantId)
+                    .HasColumnName("mvp_participant_id");
+
+                entity.Property(e => e.AceParticipantId)
+                    .HasColumnName("ace_participant_id");
+
+                entity.HasIndex(e => e.GameStart);
+                entity.HasIndex(e => e.QueueId);
+
+                entity.HasMany(e => e.ValorantGameParticipants)
+                    .WithOne(f => f.Game)
+                    .HasForeignKey(f => f.MatchId)
+                    .HasConstraintName("FK_Val_Games_Participants")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.ValorantGameTeams)
+                    .WithOne(f => f.Game)
+                    .HasForeignKey(f => f.MatchId)
+                    .HasConstraintName("FK_Val_Games_Teams")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.ValorantGameRounds)
+                    .WithOne(f => f.Game)
+                    .HasForeignKey(f => f.MatchId)
+                    .HasConstraintName("FK_Val_Games_Rounds")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.ValorantGameKills)
+                    .WithOne(f => f.Game)
+                    .HasForeignKey(f => f.MatchId)
+                    .HasConstraintName("FK_Val_Games_Kills")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne<ValGameParticipant>()
+                    .WithMany()
+                    .HasForeignKey(e => e.MvpParticipantId)
+                    .HasConstraintName("FK_ValGame_Mvp_Participant")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<ValGameParticipant>()
+                    .WithMany()
+                    .HasForeignKey(e => e.AceParticipantId)
+                    .HasConstraintName("FK_ValGame_Ace_Participant")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ValGameTeam>(entity =>
+            {
+                entity.ToTable("ValorantGameTeam");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TeamId)
+                    .HasColumnName("team_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Won)
+                    .HasColumnName("won");
+
+                entity.Property(e => e.RoundsWon)
+                    .HasColumnName("rounds_won");
+
+                entity.Property(e => e.RoundsLost)
+                    .HasColumnName("rounds_lost");
+            });
+
+            modelBuilder.Entity<ValGameParticipant>(entity =>
+            {
+                entity.ToTable("ValorantGameParticipant");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id");
+
+                entity.Property(e => e.Puuid)
+                    .HasColumnName("puuid")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RiotIdGameName)
+                    .HasColumnName("riot_id_game_name")
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.RiotIdTagLine)
+                    .HasColumnName("riot_id_tagline")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.TeamId)
+                    .HasColumnName("team_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PartyId)
+                    .HasColumnName("party_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Platform)
+                    .HasColumnName("platform")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.AccountLevel)
+                    .HasColumnName("account_level");
+
+                entity.Property(e => e.PlayerCardId)
+                    .HasColumnName("player_card_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PlayerTitleId)
+                    .HasColumnName("player_title_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.AgentId)
+                    .HasColumnName("agent_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.AgentName)
+                    .HasColumnName("agent_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.TierId)
+                    .HasColumnName("tier_id");
+
+                entity.Property(e => e.TierName)
+                    .HasColumnName("tier_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Score)
+                    .HasColumnName("score");
+
+                entity.Property(e => e.Kills)
+                    .HasColumnName("kills");
+
+                entity.Property(e => e.Deaths)
+                    .HasColumnName("deaths");
+
+                entity.Property(e => e.Assists)
+                    .HasColumnName("assists");
+
+                entity.Property(e => e.Headshots)
+                    .HasColumnName("headshots");
+
+                entity.Property(e => e.Bodyshots)
+                    .HasColumnName("bodyshots");
+
+                entity.Property(e => e.Legshots)
+                    .HasColumnName("legshots");
+
+                entity.Property(e => e.DamageDealt)
+                    .HasColumnName("damage_dealt");
+
+                entity.Property(e => e.DamageReceived)
+                    .HasColumnName("damage_received");
+
+                entity.Property(e => e.GrenadeCasts)
+                    .HasColumnName("grenade_casts");
+
+                entity.Property(e => e.Ability1Casts)
+                    .HasColumnName("ability1_casts");
+
+                entity.Property(e => e.Ability2Casts)
+                    .HasColumnName("ability2_casts");
+
+                entity.Property(e => e.UltimateCasts)
+                    .HasColumnName("ultimate_casts");
+
+                entity.Property(e => e.SpentOverall)
+                    .HasColumnName("spent_overall");
+
+                entity.Property(e => e.SpentAverage)
+                    .HasColumnName("spent_average");
+
+                entity.Property(e => e.LoadoutValueOverall)
+                    .HasColumnName("loadout_value_overall");
+
+                entity.Property(e => e.LoadoutValueAverage)
+                    .HasColumnName("loadout_value_average");
+
+                entity.Property(e => e.AfkRounds)
+                    .HasColumnName("afk_rounds");
+
+                entity.Property(e => e.RoundsInSpawn)
+                    .HasColumnName("rounds_in_spawn");
+
+                entity.Property(e => e.FriendlyFireIncoming)
+                    .HasColumnName("friendly_fire_incoming");
+
+                entity.Property(e => e.FriendlyFireOutgoing)
+                    .HasColumnName("friendly_fire_outgoing");
+
+                entity.Property(e => e.SessionPlaytimeMs)
+                    .HasColumnName("session_playtime_ms");
+
+                entity.Property(e => e.Win)
+                    .HasColumnName("win");
+
+                entity.Property(e => e.RrChange)
+                    .HasColumnName("rr_change");
+
+                entity.Property(e => e.PostGameTierId)
+                    .HasColumnName("post_game_tier_id");
+
+                entity.Property(e => e.PostGameTierName)
+                    .HasColumnName("post_game_tier_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PostGameRankedRating)
+                    .HasColumnName("post_game_ranked_rating");
+
+                entity.HasAlternateKey(e => new { e.MatchId, e.Puuid })
+                    .HasName("AK_ValGameParticipant_MatchId_Puuid");
+
+                entity.HasIndex(e => e.PlayerId);
+                entity.HasIndex(e => e.Puuid);
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.ValorantGameParticipants)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_Player_Val_Game_Participant")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<ValGameParticipantStat>(entity =>
+            {
+                entity.ToTable("ValorantGameParticipantStat");
+
+                entity.Property(e => e.ValGameParticipantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("val_game_participant_id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.ValGameParticipantId);
+
+                entity.Property(e => e.RoundsPlayed)
+                    .HasColumnName("rounds_played");
+
+                entity.Property(e => e.Acs)
+                    .HasColumnName("acs");
+
+                entity.Property(e => e.Kda)
+                    .HasColumnName("kda");
+
+                entity.Property(e => e.KdRatio)
+                    .HasColumnName("kd_ratio");
+
+                entity.Property(e => e.KillParticipationPercent)
+                    .HasColumnName("kill_participation_percent");
+
+                entity.Property(e => e.Adr)
+                    .HasColumnName("adr");
+
+                entity.Property(e => e.DamageDeltaPerRound)
+                    .HasColumnName("damage_delta_per_round");
+
+                entity.Property(e => e.HeadshotPercent)
+                    .HasColumnName("headshot_percent");
+
+                entity.Property(e => e.FirstKills)
+                    .HasColumnName("first_kills");
+
+                entity.Property(e => e.FirstDeaths)
+                    .HasColumnName("first_deaths");
+
+                entity.Property(e => e.KastPercent)
+                    .HasColumnName("kast_percent");
+
+                entity.Property(e => e.DoubleKills)
+                    .HasColumnName("double_kills");
+
+                entity.Property(e => e.TripleKills)
+                    .HasColumnName("triple_kills");
+
+                entity.Property(e => e.QuadraKills)
+                    .HasColumnName("quadra_kills");
+
+                entity.Property(e => e.Aces)
+                    .HasColumnName("aces");
+
+                entity.Property(e => e.ClutchesWon)
+                    .HasColumnName("clutches_won");
+
+                entity.Property(e => e.SpikePlants)
+                    .HasColumnName("spike_plants");
+
+                entity.Property(e => e.SpikeDefuses)
+                    .HasColumnName("spike_defuses");
+
+                entity.Property(e => e.KnifeKills)
+                    .HasColumnName("knife_kills");
+
+                entity.Property(e => e.EconRating)
+                    .HasColumnName("econ_rating");
+
+                entity.Property(e => e.Rating)
+                    .HasColumnName("rating");
+
+                entity.Property(e => e.ComputedOn)
+                    .HasColumnName("computed_on");
+
+                entity.HasOne(e => e.Participant)
+                    .WithOne(p => p.Stats)
+                    .HasForeignKey<ValGameParticipantStat>(e => e.ValGameParticipantId)
+                    .HasConstraintName("FK_Val_Game_Participant_Stat")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ValGameRound>(entity =>
+            {
+                entity.ToTable("ValorantGameRound");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RoundNumber)
+                    .HasColumnName("round_number");
+
+                entity.Property(e => e.Result)
+                    .HasColumnName("result")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Ceremony)
+                    .HasColumnName("ceremony")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.WinningTeam)
+                    .HasColumnName("winning_team")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.WinningTeamRole)
+                    .HasColumnName("winning_team_role")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FirstBloodPuuid)
+                    .HasColumnName("first_blood_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.FirstBloodTeam)
+                    .HasColumnName("first_blood_team")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CeremonyPlayerPuuid)
+                    .HasColumnName("ceremony_player_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CeremonyTeam)
+                    .HasColumnName("ceremony_team")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PlantTimeMs)
+                    .HasColumnName("plant_time_ms");
+
+                entity.Property(e => e.PlantSite)
+                    .HasColumnName("plant_site")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.PlantPlayerPuuid)
+                    .HasColumnName("plant_player_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.DefuseTimeMs)
+                    .HasColumnName("defuse_time_ms");
+
+                entity.Property(e => e.DefusePlayerPuuid)
+                    .HasColumnName("defuse_player_puuid")
+                    .HasMaxLength(100);
+
+                entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
+            });
+
+            modelBuilder.Entity<ValGameKill>(entity =>
+            {
+                entity.ToTable("ValorantGameKill");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RoundNumber)
+                    .HasColumnName("round_number");
+
+                entity.Property(e => e.TimeInRoundMs)
+                    .HasColumnName("time_in_round_ms");
+
+                entity.Property(e => e.TimeInMatchMs)
+                    .HasColumnName("time_in_match_ms");
+
+                entity.Property(e => e.KillerPuuid)
+                    .HasColumnName("killer_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.KillerTeam)
+                    .HasColumnName("killer_team")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.VictimPuuid)
+                    .HasColumnName("victim_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.VictimTeam)
+                    .HasColumnName("victim_team")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.AssistantsCount)
+                    .HasColumnName("assistants_count");
+
+                entity.Property(e => e.AssistantPuuids)
+                    .HasColumnName("assistant_puuids")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.WeaponId)
+                    .HasColumnName("weapon_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.WeaponName)
+                    .HasColumnName("weapon_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.WeaponType)
+                    .HasColumnName("weapon_type")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SecondaryFireMode)
+                    .HasColumnName("secondary_fire_mode");
+
+                entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
             });
 
             ConfigureUtcDates(modelBuilder);

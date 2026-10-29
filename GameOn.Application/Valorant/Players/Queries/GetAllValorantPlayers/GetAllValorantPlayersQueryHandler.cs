@@ -65,6 +65,18 @@ namespace GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers
                 .ThenByDescending(x => x.Id)
                 .ToListAsync(cancellationToken);
 
+            var competitiveParticipations = await this.context.ValorantGameParticipants
+                .Where(x => x.PlayerId != null && playerIds.Contains(x.PlayerId.Value) && x.Game.QueueId == "competitive" && !x.Game.IsRemake)
+                .OrderByDescending(x => x.Game.GameStart)
+                .Select(x => new { PlayerId = x.PlayerId!.Value, x.Win })
+                .ToListAsync(cancellationToken);
+
+            var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+            var recentAgentParticipations = await this.context.ValorantGameParticipants
+                .Where(x => x.PlayerId != null && playerIds.Contains(x.PlayerId.Value) && x.AgentName != null && !x.Game.IsRemake && x.Game.QueueId != "custom" && x.Game.GameStart >= thirtyDaysAgo)
+                .Select(x => new { PlayerId = x.PlayerId!.Value, x.AgentName, x.AgentId, x.Win })
+                .ToListAsync(cancellationToken);
+
             var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
 
             foreach (var player in playersInDb)
@@ -72,6 +84,31 @@ namespace GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers
                 var history = rankHistory.Where(x => x.PlayerId == player.Id).ToList();
                 player.ValorantCurrentRank = history.FirstOrDefault();
                 player.RrChange7DaysValorant = GetRrChange7Days(history, sevenDaysAgo);
+                player.RecentFormValorant = competitiveParticipations
+                    .Where(x => x.PlayerId == player.Id)
+                    .Take(5)
+                    .Select(x => x.Win)
+                    .ToList();
+
+                var mainAgent = recentAgentParticipations
+                    .Where(x => x.PlayerId == player.Id)
+                    .GroupBy(x => new { x.AgentName, x.AgentId })
+                    .Select(g => new
+                    {
+                        g.Key.AgentName,
+                        g.Key.AgentId,
+                        Games = g.Count(),
+                        Wins = g.Count(x => x.Win),
+                    })
+                    .OrderByDescending(x => x.Games)
+                    .ThenByDescending(x => x.Wins)
+                    .ThenBy(x => x.AgentName)
+                    .FirstOrDefault();
+
+                player.MainAgentName = mainAgent?.AgentName;
+                player.MainAgentIconUrl = string.IsNullOrWhiteSpace(mainAgent?.AgentId)
+                    ? null
+                    : $"https://media.valorant-api.com/agents/{mainAgent.AgentId}/displayicon.png";
             }
 
             return playersInDb;

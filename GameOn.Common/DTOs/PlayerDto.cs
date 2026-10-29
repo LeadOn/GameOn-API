@@ -211,6 +211,21 @@ namespace GameOn.Common.DTOs
         public int? RrChange7DaysValorant { get; set; }
 
         /// <summary>
+        /// Gets or sets the player's most recent ranked Valorant game results, newest to oldest (true = win).
+        /// </summary>
+        public List<bool> RecentFormValorant { get; set; } = new List<bool>();
+
+        /// <summary>
+        /// Gets or sets the Valorant agent this account played the most over the last rolling month.
+        /// </summary>
+        public string? MainAgentName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the square icon URL on <c>media.valorant-api.com</c> for <see cref="MainAgentName"/>.
+        /// </summary>
+        public string? MainAgentIconUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets player's creation date.
         /// </summary>
         public DateTime CreatedOn { get; set; } = DateTime.Now;
