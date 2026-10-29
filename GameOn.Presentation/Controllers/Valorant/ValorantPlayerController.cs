@@ -4,7 +4,9 @@
 
 namespace GameOn.Presentation.Controllers.Valorant
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
@@ -68,17 +70,28 @@ namespace GameOn.Presentation.Controllers.Valorant
         /// Get a Valorant player by its ID.
         /// </summary>
         /// <param name="id">Player ID.</param>
+        /// <param name="period">Rolling time window of the performance stats: AllTime, Week, Month, ThreeMonths or SixMonths.</param>
+        /// <param name="queues">Comma-separated queue IDs the performance stats are restricted to (e.g. "competitive,unrated"). Every counted queue when omitted; customs and deathmatch modes never count.</param>
+        /// <param name="agentName">Agent the performance stats are restricted to (e.g. "Jett").</param>
         /// <returns>200 OK with PlayerDto if found, 404 if not found.</returns>
         [HttpGet]
         [Route("{id:int}")]
         [Produces("application/json")]
-        [SwaggerOperation(Summary = "Get a Valorant player by its ID.", Description = "Get a Valorant player by its ID, and retrieve its account information, current rank, peak rank, and player card URLs.")]
+        [SwaggerOperation(Summary = "Get a Valorant player by its ID.", Description = "Get a Valorant player by its ID, and retrieve its account information, current rank, peak rank, player card URLs and performance stats.")]
         [SwaggerResponse(200, "Valorant player is found.", typeof(PlayerDto))]
         [SwaggerResponse(404, "Player not found.")]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, LoLStatsPeriod period = LoLStatsPeriod.AllTime, string? queues = null, string? agentName = null)
         {
-            var playerInDb = await this.mediator.Send(new GetValorantPlayerByIdQuery { PlayerId = id });
+            var playerInDb = await this.mediator.Send(new GetValorantPlayerByIdQuery
+            {
+                PlayerId = id,
+                Period = period,
+                Queues = string.IsNullOrWhiteSpace(queues)
+                    ? null
+                    : queues.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList(),
+                AgentName = agentName,
+            });
 
             if (playerInDb is not null)
             {

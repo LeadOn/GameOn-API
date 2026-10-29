@@ -5,6 +5,7 @@
 namespace GameOn.Common.DTOs
 {
     using GameOn.Common.DTOs.LeagueOfLegends;
+    using GameOn.Common.DTOs.Valorant;
     using GameOn.Domain;
 
     /// <summary>
@@ -224,6 +225,13 @@ namespace GameOn.Common.DTOs
         /// Gets or sets the square icon URL on <c>media.valorant-api.com</c> for <see cref="MainAgentName"/>.
         /// </summary>
         public string? MainAgentIconUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the account's Valorant performance recap over the requested filters (period, queues,
+        /// agent). Null when the account has no counted game. Covers this account alone: a smurf's games are
+        /// never counted towards its owner. Only served by <c>GET val/player/{id}</c>; null on every other route.
+        /// </summary>
+        public ValorantPlayerPerformanceStatsDto? ValorantPerformanceStats { get; set; }
 
         /// <summary>
         /// Gets or sets player's creation date.
