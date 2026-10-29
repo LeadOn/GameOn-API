@@ -13,6 +13,7 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateAllValorantPlayerRa
     using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// UpdateAllValorantPlayerRanksCommandHandler class.
@@ -21,16 +22,19 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateAllValorantPlayerRa
     {
         private readonly IApplicationDbContext context;
         private readonly ISender mediator;
+        private readonly ILogger<UpdateAllValorantPlayerRanksCommandHandler> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateAllValorantPlayerRanksCommandHandler"/> class.
         /// </summary>
         /// <param name="context">DbContext, injected.</param>
         /// <param name="mediator">Mediator interface, injected.</param>
-        public UpdateAllValorantPlayerRanksCommandHandler(IApplicationDbContext context, ISender mediator)
+        /// <param name="logger">Logger, injected.</param>
+        public UpdateAllValorantPlayerRanksCommandHandler(IApplicationDbContext context, ISender mediator, ILogger<UpdateAllValorantPlayerRanksCommandHandler> logger)
         {
             this.context = context;
             this.mediator = mediator;
+            this.logger = logger;
         }
 
         /// <inheritdoc />
@@ -44,9 +48,21 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateAllValorantPlayerRa
 
             foreach (var playerInDb in playersToRefresh)
             {
-                await this.mediator.Send(new UpdateValorantPlayerCommand { Player = playerInDb }, cancellationToken);
+                // One account failing (HenrikDev down, an unknown Riot ID answered with a 5xx...) must not
+                // cost every account after it its refresh: this is a batch, not a single request, so the
+                // failure is logged and the round moves on. The HenrikDev quota itself is handled upstream,
+                // by the rate limit handler, which holds requests back instead of letting them fail.
+                try
+                {
+                    await this.mediator.Send(new UpdateValorantPlayerCommand { Player = playerInDb }, cancellationToken);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    this.logger.LogError(ex, "Valorant refresh failed for player {PlayerId}, moving on to the next one.", playerInDb.Id);
+                }
 
-                // Paced so a full crew refresh stays well within HenrikDev's per-minute rate limit.
+                // Spreads a full crew refresh over time rather than draining the shared quota in one burst,
+                // which would leave a player's manual refresh waiting for the window to reset.
                 await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
             }
         }

@@ -299,7 +299,7 @@ Le projet est découpé en 6 projets distincts. Respecte strictement les fronti�
   - `PATCH /val/player/admin` (`gameon_admin`) → `UpdateValorantPlayerAdminCommand`
   - `PATCH /val/player/ranks` → `UpdateAllValorantPlayerRanksCommand` + job de fond `RefreshValorantPlayerRanksJob` (toutes les 30 min, 2 s d'écart entre chaque membre du crew ayant un `ValorantPuuid`).
 
-✅ **Support Valorant — Phase 2 : Historique des parties, Rounds, Kills & Stats dérivées** (2026-10-29, commité directement sur `master` en `2f1038e`, **pas encore poussé** ; migration `20261028225836_Added_Valorant_Matches` appliquée en base et testée en direct sur l'API locale) :
+✅ **Support Valorant — Phase 2 : Historique des parties, Rounds, Kills & Stats dérivées** (2026-10-29, commité directement sur `master` en `2f1038e` et poussé ; migration `20261028225836_Added_Valorant_Matches` appliquée en base et testée en direct sur l'API locale) :
 
 - ✅ La première version de ce commit (`785253a`) embarquait une chaîne de connexion en dur avec le mot de passe `sa` de la base de dev dans `GameOnContext.connectionString` — même accident que celui réparé par `608464e Removed local connection string`. Correctif fondu dans le commit par l'utilisateur (amend → `2f1038e`, puis rebase de `features/valorant/stats`) **avant tout push** : `git log -S` ne le retrouve plus sur aucune branche. Il ne subsiste que dans le reflog local. ⚠️ Pour Claude Code : la réécriture d'historique (`commit --amend`, rebase) est bloquée en mode auto, c'est à l'utilisateur de la lancer.
 
@@ -320,7 +320,8 @@ Le projet est découpé en 6 projets distincts. Respecte strictement les fronti�
   - `GET /val/match/{matchId}` → `GetValGameByIdQuery`.
   - `GET /val/match/{matchId}/rounds` → `GetValGameTimelineByMatchIdQuery` (`ValGameTimelineDto` : `Rounds` + `Kills`).
   - `POST /val/match/{matchId}/update` → `UpdateValGameCommand`.
-🟡 **Support Valorant — Phase 3 : Stats de profil, Records du crew & Home** (2026-10-29, commité sur la branche `features/valorant/stats` tirée de `master`, compilé sans nouveau warning et testé en direct sur `gameondev2` ; **pas encore poussé ni déployé**). Aucune migration : tout est calculé depuis les tables de la Phase 2. Aucun appel HenrikDev sur ces trois routes.
+
+🟡 **Support Valorant — Phase 3 : Stats de profil, Records du crew & Home** (2026-10-29, commité sur la branche `features/valorant/stats` tirée de `master`, compilé sans nouveau warning et testé en direct sur `gameondev2` ; poussé, PR #192 vers `master`, pas encore déployé). Aucune migration : tout est calculé depuis les tables de la Phase 2. Aucun appel HenrikDev sur ces trois routes.
 
 - **Socle partagé (`GameOn.Application/Valorant/Matches/Services/`)** :
   - `ValStatsQueueFilter.CountedGamesOnly()` décide quelles parties comptent, pour les trois routes : remakes exclus, et files `custom`, `deathmatch`, `hurm` (Team Deathmatch chez HenrikDev) et `unknown` exclues — pas de rounds, de spike ni d'économie, donc ACS/ADR/KAST/first kills n'y veulent rien dire. Ce filtre n'est **pas** appliqué à `MainAgentName` de la Phase 2 (qui n'exclut que `custom`), laissé tel quel.
@@ -336,4 +337,9 @@ Le projet est découpé en 6 projets distincts. Respecte strictement les fronti�
   - ⚠️ Effet visible constaté sur `gameondev2` : des jours avec `netRrChange` non nul et `games = 0`. L'historique MMR connaît des matchs classés qui n'ont jamais été importés en `ValGame` (le premier import n'a ramené que les 10 dernières parties). Ça ne se reproduit pas en régime normal (refresh toutes les 30 min, 10 matchs à chaque fois), mais l'historique antérieur restera troué tant qu'on ne backfill pas les matchs.
   - `RefundedRr` n'est **pas** ajouté au RR net (on ne sait pas si `LastChange` l'inclut déjà).
 - Vérifié sur `gameondev2` (3 comptes Valorant, 10 parties pour `LeadOn`) : les filtres `agentName`, `queues` et `period` du profil, les deux fenêtres de la home et les flags de roster répondent de façon cohérente, en 0,2-0,6 s.
-- **Reste à faire** : pousser (`master` puis `features/valorant/stats`), déployer, puis brancher le front.
+- **Reste à faire** : fusionner la PR #192, déployer, puis brancher le front.
+
+🟡 **Crash de l'API sur un 429 HenrikDev corrigé** (2026-10-29, branche `fix/henrikdev-rate-limit`), compilé, pas encore testé en conditions réelles ni déployé. Deux causes cumulées :
+
+- **Les jobs de fond arrêtaient l'hôte** : `BackgroundServiceExceptionBehavior` vaut `StopHost` par défaut, donc une exception qui sortait d'un `ExecuteAsync` éteignait toute l'API. `RefreshValorantPlayerRanksJob`, `RefreshLeagueSummonerRanksJob` et `RefreshLeagueQueuesJob` attrapent maintenant l'erreur de chaque tick, la loguent et réessaient au tick suivant (les deux jobs LoL avaient exactement le même risque face à un 429/5xx de Riot). `UpdateAllValorantPlayerRanksCommandHandler` isole aussi chaque joueur : un compte en échec n'empêche plus le refresh des suivants.
+- **Le job dépassait le quota HenrikDev** : la clé est limitée à **30 req/min** (vérifié dans les en-têtes `x-ratelimit-limit: 30`, `x-ratelimit-reset` en secondes). Un refresh joueur coûte 4 appels (account, mmr, mmr-history, matches), et les 2 s d'écart entre joueurs donnaient ~60 req/min. Les trois services HenrikDev sont maintenant des typed clients qui passent par `HenrikDevRateLimitHandler` (`GameOn.External/HenrikDev/RateLimiting/`) : quand `x-ratelimit-remaining` tombe à 0 ou qu'un 429 revient quand même, toutes les requêtes suivantes attendent la réinitialisation de la fenêtre au lieu de partir chercher un refus. L'état (`HenrikDevRateLimitState`) est un singleton, parce que le quota appartient à la clé : le job et un refresh manuel tirent sur le même seau. Une requête utilisateur peut donc attendre jusqu'à ~60 s si le job vient de vider la fenêtre.
