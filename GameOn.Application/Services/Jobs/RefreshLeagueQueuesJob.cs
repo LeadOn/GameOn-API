@@ -39,9 +39,19 @@ namespace GameOn.Application.Services.Jobs
             {
                 logger.LogInformation("RefreshLeagueQueuesJob tick at {Time} — refreshing queue types.", DateTimeOffset.UtcNow);
 
-                using var scope = serviceScopeFactory.CreateScope();
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                await mediator.Send(new SyncQueuesCommand(), stoppingToken);
+                // An exception escaping ExecuteAsync stops the whole host (BackgroundServiceExceptionBehavior
+                // defaults to StopHost), so a third party hiccup on one tick would take the API down with it.
+                // The tick is logged and skipped, and the next one tries again.
+                try
+                {
+                    using var scope = serviceScopeFactory.CreateScope();
+                    var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                    await mediator.Send(new SyncQueuesCommand(), stoppingToken);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    logger.LogError(ex, "RefreshLeagueQueuesJob tick failed, retrying on the next one.");
+                }
             }
         }
     }

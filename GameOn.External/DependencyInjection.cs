@@ -8,6 +8,7 @@ namespace GameOn.External
     using GameOn.External.CommunityDragon.Interfaces;
     using GameOn.External.HenrikDev.Implementations;
     using GameOn.External.HenrikDev.Interfaces;
+    using GameOn.External.HenrikDev.RateLimiting;
     using GameOn.External.Llm.Implementations;
     using GameOn.External.Llm.Interfaces;
     using GameOn.External.NetworkStorage.Implementations;
@@ -38,9 +39,14 @@ namespace GameOn.External
             services.AddScoped<ISpectatorService, SpectatorV5Service>();
             services.AddScoped<ICommunityDragonQueueService, CommunityDragonQueueService>();
             services.AddScoped<ICommunityDragonChampionService, CommunityDragonChampionService>();
-            services.AddScoped<IValorantAccountService, ValorantAccountService>();
-            services.AddScoped<IValorantMmrService, ValorantMmrService>();
-            services.AddScoped<IValorantMatchService, ValorantMatchService>();
+
+            // Typed clients rather than the ambient HttpClient: every HenrikDev call has to go through the
+            // rate limit handler, whose state is shared because the quota belongs to the key.
+            services.AddSingleton<HenrikDevRateLimitState>();
+            services.AddTransient<HenrikDevRateLimitHandler>();
+            services.AddHttpClient<IValorantAccountService, ValorantAccountService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
+            services.AddHttpClient<IValorantMmrService, ValorantMmrService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
+            services.AddHttpClient<IValorantMatchService, ValorantMatchService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
 
             // The provider is picked at startup rather than at compile time: switching to the self-hosted box,
             // or falling back off it, is an environment variable and a restart rather than a deployment.
