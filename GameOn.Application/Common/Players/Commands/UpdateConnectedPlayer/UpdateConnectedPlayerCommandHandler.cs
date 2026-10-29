@@ -4,6 +4,7 @@
 
 namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 {
+    using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
@@ -18,6 +19,7 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
         private readonly IApplicationDbContext context;
         private readonly IAccountService accountService;
         private readonly ISummonerService summonerService;
+        private readonly ISender mediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateConnectedPlayerCommandHandler"/> class.
@@ -25,11 +27,13 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
         /// <param name="context">DbContext, injected.</param>
         /// <param name="accountService">Riot Games Account Service, injected.</param>
         /// <param name="summonerService">League of Legends Summoner Service, injected.</param>
-        public UpdateConnectedPlayerCommandHandler(IApplicationDbContext context, IAccountService accountService, ISummonerService summonerService)
+        /// <param name="mediator">MediatR sender, injected.</param>
+        public UpdateConnectedPlayerCommandHandler(IApplicationDbContext context, IAccountService accountService, ISummonerService summonerService, ISender mediator)
         {
             this.context = context;
             this.accountService = accountService;
             this.summonerService = summonerService;
+            this.mediator = mediator;
         }
 
         /// <inheritdoc />
@@ -44,6 +48,8 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 
             playerInDb.FullName = request.Player.FullName;
             playerInDb.Nickname = request.Player.Nickname;
+
+            var syncValorant = false;
 
             if (request.Player.RiotGamesNickname is not null && request.Player.RiotGamesTagLine is not null)
             {
@@ -61,6 +67,18 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 
                     if (puuidFromRiot is not null)
                     {
+                        // A different Riot account (a rename keeps the PUUID) means the stored Valorant PUUID
+                        // belongs to the previous one: dropped so the Valorant refresh resolves the new Riot ID
+                        // instead of refreshing the old account and writing its name back over this one.
+                        if (playerInDb.RiotGamesPUUID != puuidFromRiot.Puuid)
+                        {
+                            playerInDb.ValorantPuuid = null;
+                        }
+
+                        // Only when the Valorant account still has to be found: a plain profile edit must not
+                        // spend the shared HenrikDev quota, the background job keeps known accounts fresh.
+                        syncValorant = playerInDb.ValorantPuuid is null;
+
                         playerInDb.RiotGamesNickname = puuidFromRiot.GameName;
                         playerInDb.RiotGamesTagLine = puuidFromRiot.TagLine;
                         playerInDb.RiotGamesPUUID = puuidFromRiot.Puuid;
@@ -80,6 +98,15 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 
             this.context.Players.Update(playerInDb);
             await this.context.SaveChangesAsync(cancellationToken);
+
+            // Without this the Valorant account is never found: the background refresh only covers crew
+            // members, and a newly registered account starts outside the crew. Same tracked entity, so the
+            // returned player carries the Valorant fields. No Valorant account (HenrikDev 404) is a no-op.
+            if (syncValorant)
+            {
+                await this.mediator.Send(new UpdateValorantPlayerCommand { Player = playerInDb }, cancellationToken);
+            }
+
             return playerInDb;
         }
     }
