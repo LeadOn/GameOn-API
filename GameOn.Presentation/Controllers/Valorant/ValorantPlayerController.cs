@@ -53,6 +53,7 @@ namespace GameOn.Presentation.Controllers.Valorant
         /// <param name="archived">If true, get archived players.</param>
         /// <param name="includeSmurfs">If false, only primary accounts are returned. Defaults to true.</param>
         /// <param name="includeOutOfCrew">If true, accounts outside the crew are listed too. Defaults to false.</param>
+        /// <param name="includeWithoutValorant">If false, only accounts with Valorant data (a Valorant PUUID and at least one rank snapshot or stored game) are listed, leaving League of Legends-only players out. Defaults to true.</param>
         /// <returns>200 OK with PlayerDto list.</returns>
         [HttpGet]
         [Route("")]
@@ -60,13 +61,14 @@ namespace GameOn.Presentation.Controllers.Valorant
         [SwaggerOperation(Summary = "Get all Valorant players in database.")]
         [SwaggerResponse(200, "Valorant players in database.", typeof(List<PlayerDto>))]
         [SwaggerResponse(500, "Unknown error happened.")]
-        public async Task<IActionResult> GetAll(bool? archived, bool? includeSmurfs, bool? includeOutOfCrew)
+        public async Task<IActionResult> GetAll(bool? archived, bool? includeSmurfs, bool? includeOutOfCrew, bool? includeWithoutValorant)
         {
             return this.Ok(await this.mediator.Send(new GetAllValorantPlayersQuery
             {
                 Archived = archived ?? false,
                 IncludeSmurfs = includeSmurfs ?? true,
                 IncludeOutOfCrew = includeOutOfCrew ?? false,
+                IncludeWithoutValorant = includeWithoutValorant ?? true,
             }));
         }
 
