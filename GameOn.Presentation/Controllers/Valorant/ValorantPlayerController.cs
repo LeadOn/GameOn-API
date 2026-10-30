@@ -8,8 +8,11 @@ namespace GameOn.Presentation.Controllers.Valorant
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using GameOn.Application.Common.Players.Commands.SetCrewMembership;
+    using GameOn.Application.Common.Players.Commands.UnlinkSmurfAccount;
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
+    using GameOn.Application.Valorant.Players.Commands.LinkValorantSmurfAccount;
     using GameOn.Application.Valorant.Players.Commands.UpdateAllValorantPlayerRanks;
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer;
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin;
@@ -17,6 +20,7 @@ namespace GameOn.Presentation.Controllers.Valorant
     using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerById;
     using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerRankHistory;
     using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.Common;
     using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
@@ -191,6 +195,7 @@ namespace GameOn.Presentation.Controllers.Valorant
         [SwaggerResponse(401, "Unauthorized.")]
         [SwaggerResponse(403, "Not enough roles.")]
         [SwaggerResponse(404, "Player not found.")]
+        [SwaggerResponse(409, "Riot ID already used by another player, nothing was saved.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> UpdateValorantPlayer(int playerId, string riotGamesNickname, string riotGamesTagLine)
         {
@@ -204,7 +209,106 @@ namespace GameOn.Presentation.Controllers.Valorant
             playerInDb.RiotGamesNickname = riotGamesNickname;
             playerInDb.RiotGamesTagLine = riotGamesTagLine;
 
-            return this.Ok(await this.mediator.Send(new UpdateValorantPlayerAdminCommand { Player = playerInDb }));
+            var result = await this.mediator.Send(new UpdateValorantPlayerAdminCommand { Player = playerInDb });
+
+            return result.Status switch
+            {
+                RiotIdUpdateStatus.Updated => this.Ok(result.Player),
+                _ => this.Conflict("That Riot ID is already used by another player."),
+            };
+        }
+
+        /// <summary>
+        /// Move an account in or out of the crew (Admin only). The crew is shared by every game.
+        /// </summary>
+        /// <param name="id">Account ID.</param>
+        /// <param name="inCrew">True to put the account in the crew, false to take it out.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{id:int}/crew")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Move an account in or out of the crew.", Description = "Same membership as PATCH /lol/Summoner/{id}/crew: the crew is shared by League of Legends and Valorant. Crew accounts are refreshed automatically and are the only ones counted by the lists and the stats. Taking a player out also takes their smurf accounts out; putting them back does not put the smurfs back.")]
+        [SwaggerResponse(200, "Membership updated.", typeof(SetCrewMembershipResultDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(404, "Account not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> SetCrewMembership(int id, bool inCrew)
+        {
+            var result = await this.mediator.Send(new SetCrewMembershipCommand { PlayerId = id, InCrew = inCrew });
+
+            if (result is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(result);
+        }
+
+        /// <summary>
+        /// Attach a Riot account to a player as one of their smurfs (Admin only).
+        /// </summary>
+        /// <param name="playerId">ID of the player the account belongs to.</param>
+        /// <param name="riotGamesNickname">Riot Games Nickname (game name) of the smurf account.</param>
+        /// <param name="riotGamesTagLine">Riot Games Tag Line of the smurf account (ex: EUW).</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPost]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{playerId:int}/smurfs")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Link a smurf account to a player.", Description = "Resolves the Riot ID through HenrikDev, creates the account if it isn't known yet (outside the crew), re-attaches the Valorant games already stored for it, then pulls its rank and recent games. The link is shared with League of Legends.")]
+        [SwaggerResponse(200, "Account linked.", typeof(LinkSmurfAccountResultDto))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(404, "Player or Riot account not found.")]
+        [SwaggerResponse(409, "Account cannot be linked to that player.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> LinkSmurfAccount(int playerId, string riotGamesNickname, string riotGamesTagLine)
+        {
+            var result = await this.mediator.Send(new LinkValorantSmurfAccountCommand
+            {
+                PrimaryPlayerId = playerId,
+                RiotGamesNickname = riotGamesNickname,
+                RiotGamesTagLine = riotGamesTagLine,
+            });
+
+            return result.Status switch
+            {
+                LinkSmurfAccountStatus.Linked => this.Ok(result),
+                LinkSmurfAccountStatus.PrimaryNotFound => this.NotFound("Player not found."),
+                LinkSmurfAccountStatus.RiotAccountNotFound => this.NotFound("Riot Games account not found."),
+                LinkSmurfAccountStatus.PrimaryIsSmurf => this.Conflict("That player is already a smurf account: link the smurf to its primary account instead."),
+                _ => this.Conflict("That Riot account is already used by another player: unlink it first."),
+            };
+        }
+
+        /// <summary>
+        /// Detach a smurf account from the player it belongs to (Admin only). The account, its rank
+        /// history and its games are kept; it simply stops being counted as part of that player.
+        /// </summary>
+        /// <param name="smurfId">ID of the smurf account to detach.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpDelete]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("smurfs/{smurfId:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Unlink a smurf account from its player.", Description = "Same link as DELETE /lol/Summoner/smurfs/{smurfId}: it is shared with League of Legends.")]
+        [SwaggerResponse(200, "Account detached.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(404, "Smurf account not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> UnlinkSmurfAccount(int smurfId)
+        {
+            var smurfAccount = await this.mediator.Send(new UnlinkSmurfAccountCommand { SmurfPlayerId = smurfId });
+
+            if (smurfAccount is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(smurfAccount);
         }
 
         /// <summary>

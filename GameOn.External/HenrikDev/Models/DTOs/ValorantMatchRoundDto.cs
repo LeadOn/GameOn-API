@@ -4,6 +4,7 @@
 
 namespace GameOn.External.HenrikDev.Models.DTOs
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -70,5 +71,11 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("defuse")]
         public ValorantMatchSpikeEventDto? Defuse { get; set; }
+
+        /// <summary>
+        /// Gets or sets each player's numbers for the round: buy, combat score, hits and damage.
+        /// </summary>
+        [JsonProperty("stats")]
+        public List<ValorantMatchRoundPlayerStatsDto> Stats { get; set; } = new List<ValorantMatchRoundPlayerStatsDto>();
     }
 }

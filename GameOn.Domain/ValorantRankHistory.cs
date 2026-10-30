@@ -109,6 +109,14 @@ namespace GameOn.Domain
             : null;
 
         /// <summary>
+        /// Gets or sets a value indicating whether <see cref="MatchId"/> is a match stored in database, so a
+        /// client only links to matches that actually open. The MMR history knows ranked matches that were
+        /// never imported. Not persisted: filled by the rank history read only.
+        /// </summary>
+        [NotMapped]
+        public bool MatchStored { get; set; }
+
+        /// <summary>
         /// Gets or sets the player this rank entry belongs to.
         /// </summary>
         [JsonIgnore]

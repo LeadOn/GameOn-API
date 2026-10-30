@@ -164,6 +164,11 @@ namespace GameOn.Common.Interfaces
         public DbSet<ValGameKill> ValorantGameKills { get; set; }
 
         /// <summary>
+        /// Gets or sets Valorant Game Round Player Stats.
+        /// </summary>
+        public DbSet<ValGameRoundPlayerStat> ValorantGameRoundPlayerStats { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>

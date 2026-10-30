@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Common.DTOs.LeagueOfLegends
+namespace GameOn.Common.DTOs.Common
 {
     using GameOn.Domain;
 

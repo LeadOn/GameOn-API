@@ -52,11 +52,19 @@ namespace GameOn.Application.Valorant.Matches.Queries.GetValGameTimelineByMatchI
                 .ThenBy(x => x.Id)
                 .ToListAsync(cancellationToken);
 
+            var roundPlayerStats = await this.context.ValorantGameRoundPlayerStats
+                .Where(x => x.MatchId == request.MatchId)
+                .OrderBy(x => x.RoundNumber)
+                .ThenBy(x => x.Team)
+                .ThenBy(x => x.Puuid)
+                .ToListAsync(cancellationToken);
+
             return new ValGameTimelineDto
             {
                 MatchId = request.MatchId,
                 Rounds = rounds,
                 Kills = kills,
+                RoundPlayerStats = roundPlayerStats,
             };
         }
     }

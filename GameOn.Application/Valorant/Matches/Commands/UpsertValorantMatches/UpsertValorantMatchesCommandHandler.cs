@@ -98,11 +98,13 @@ namespace GameOn.Application.Valorant.Matches.Commands.UpsertValorantMatches
                     var oldTeams = await this.context.ValorantGameTeams.Where(x => x.MatchId == matchId).ToListAsync(cancellationToken);
                     var oldRounds = await this.context.ValorantGameRounds.Where(x => x.MatchId == matchId).ToListAsync(cancellationToken);
                     var oldKills = await this.context.ValorantGameKills.Where(x => x.MatchId == matchId).ToListAsync(cancellationToken);
+                    var oldRoundPlayerStats = await this.context.ValorantGameRoundPlayerStats.Where(x => x.MatchId == matchId).ToListAsync(cancellationToken);
 
                     this.context.ValorantGameParticipants.RemoveRange(oldParticipants);
                     this.context.ValorantGameTeams.RemoveRange(oldTeams);
                     this.context.ValorantGameRounds.RemoveRange(oldRounds);
                     this.context.ValorantGameKills.RemoveRange(oldKills);
+                    this.context.ValorantGameRoundPlayerStats.RemoveRange(oldRoundPlayerStats);
                     await this.context.SaveChangesAsync(cancellationToken);
 
                     gameInDb = existingGame;
@@ -191,6 +193,31 @@ namespace GameOn.Application.Valorant.Matches.Commands.UpsertValorantMatches
                     SecondaryFireMode = k.SecondaryFireMode,
                 }).ToList();
 
+                var roundPlayerStatsInDb = matchDto.Rounds
+                    .SelectMany(r => r.Stats
+                        .Where(x => !string.IsNullOrWhiteSpace(x.Player?.Puuid))
+                        .Select(x => new ValGameRoundPlayerStat
+                        {
+                            MatchId = matchId,
+                            RoundNumber = r.Id,
+                            Puuid = x.Player!.Puuid!,
+                            Team = x.Player.Team,
+                            LoadoutValue = x.Economy?.LoadoutValue ?? 0,
+                            Remaining = x.Economy?.Remaining ?? 0,
+                            WeaponId = x.Economy?.Weapon?.Id,
+                            WeaponName = x.Economy?.Weapon?.Name,
+                            ArmorId = x.Economy?.Armor?.Id,
+                            ArmorName = x.Economy?.Armor?.Name,
+                            Score = x.Stats?.Score ?? 0,
+                            Kills = x.Stats?.Kills ?? 0,
+                            Headshots = x.Stats?.Headshots ?? 0,
+                            Bodyshots = x.Stats?.Bodyshots ?? 0,
+                            Legshots = x.Stats?.Legshots ?? 0,
+                            Damage = x.DamageEvents.Sum(d => d.Damage),
+                            WasAfk = x.WasAfk,
+                        }))
+                    .ToList();
+
                 var participantsInDb = new List<ValGameParticipant>();
 
                 foreach (var p in matchDto.Players.Where(x => !string.IsNullOrWhiteSpace(x.Puuid)))
@@ -256,6 +283,7 @@ namespace GameOn.Application.Valorant.Matches.Commands.UpsertValorantMatches
                 this.context.ValorantGameTeams.AddRange(teamsInDb);
                 this.context.ValorantGameRounds.AddRange(roundsInDb);
                 this.context.ValorantGameKills.AddRange(killsInDb);
+                this.context.ValorantGameRoundPlayerStats.AddRange(roundPlayerStatsInDb);
                 this.context.ValorantGameParticipants.AddRange(participantsInDb);
 
                 // Flush to assign SQL Server identity IDs on participantsInDb before computing stats and MVP/ACE FKs.

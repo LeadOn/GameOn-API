@@ -2,9 +2,9 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.SetCrewMembership
+namespace GameOn.Application.Common.Players.Commands.SetCrewMembership
 {
-    using GameOn.Common.DTOs.LeagueOfLegends;
+    using GameOn.Common.DTOs.Common;
     using MediatR;
 
     /// <summary>

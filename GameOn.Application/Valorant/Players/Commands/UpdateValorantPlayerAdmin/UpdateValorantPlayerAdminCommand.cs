@@ -4,14 +4,14 @@
 
 namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin
 {
-    using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.Valorant;
     using GameOn.Domain;
     using MediatR;
 
     /// <summary>
     /// UpdateValorantPlayerAdminCommand class.
     /// </summary>
-    public class UpdateValorantPlayerAdminCommand : IRequest<PlayerDto>
+    public class UpdateValorantPlayerAdminCommand : IRequest<UpdateValorantPlayerAdminResultDto>
     {
         /// <summary>
         /// Gets or sets the player to update.

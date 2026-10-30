@@ -5,6 +5,7 @@
 namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 {
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer;
+    using GameOn.Common.DTOs.Common;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
@@ -14,7 +15,7 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
     /// <summary>
     /// UpdateConnectedPlayerCommandHandler class.
     /// </summary>
-    public class UpdateConnectedPlayerCommandHandler : IRequestHandler<UpdateConnectedPlayerCommand, Player>
+    public class UpdateConnectedPlayerCommandHandler : IRequestHandler<UpdateConnectedPlayerCommand, UpdateConnectedPlayerResultDto>
     {
         private readonly IApplicationDbContext context;
         private readonly IAccountService accountService;
@@ -37,7 +38,7 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
         }
 
         /// <inheritdoc />
-        public async Task<Player> Handle(UpdateConnectedPlayerCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateConnectedPlayerResultDto> Handle(UpdateConnectedPlayerCommand request, CancellationToken cancellationToken)
         {
             var playerInDb = await this.context.Players.FirstOrDefaultAsync(x => x.KeycloakId == request.Player.KeycloakId, cancellationToken);
 
@@ -56,9 +57,11 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
                 // First, checking if player isn't already present in DB
                 var playersWithRiotCombo = await this.context.Players.FirstOrDefaultAsync(x => x.RiotGamesNickname == request.Player.RiotGamesNickname && x.RiotGamesTagLine == request.Player.RiotGamesTagLine, cancellationToken);
 
+                // Refused as a whole, names included: answering with the unchanged account looked exactly
+                // like a successful save to the clients.
                 if (playersWithRiotCombo is not null && playersWithRiotCombo.Id != playerInDb.Id)
                 {
-                    return playerInDb;
+                    return new UpdateConnectedPlayerResultDto { Status = RiotIdUpdateStatus.RiotIdTaken };
                 }
                 else
                 {
@@ -107,7 +110,7 @@ namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
                 await this.mediator.Send(new UpdateValorantPlayerCommand { Player = playerInDb }, cancellationToken);
             }
 
-            return playerInDb;
+            return new UpdateConnectedPlayerResultDto { Status = RiotIdUpdateStatus.Updated, Player = playerInDb };
         }
     }
 }

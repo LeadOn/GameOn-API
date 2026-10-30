@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Common.DTOs.LeagueOfLegends
+namespace GameOn.Common.DTOs.Common
 {
     /// <summary>
     /// Outcome of a smurf account link attempt. Every refusal is named rather than collapsed into a null

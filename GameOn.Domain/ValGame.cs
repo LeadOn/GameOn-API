@@ -156,5 +156,11 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual List<ValGameKill> ValorantGameKills { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets each player's round-by-round buy, score and damage.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<ValGameRoundPlayerStat> ValorantGameRoundPlayerStats { get; set; } = null!;
     }
 }

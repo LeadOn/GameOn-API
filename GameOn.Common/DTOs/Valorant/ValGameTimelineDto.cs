@@ -26,5 +26,11 @@ namespace GameOn.Common.DTOs.Valorant
         /// Gets or sets the kill events of the match, ordered by round and timestamp.
         /// </summary>
         public List<ValGameKill> Kills { get; set; } = new List<ValGameKill>();
+
+        /// <summary>
+        /// Gets or sets each player's buy, combat score, hits and damage per round, ordered by round, team
+        /// and PUUID. Empty for matches imported before round stats were stored, until they are re-imported.
+        /// </summary>
+        public List<ValGameRoundPlayerStat> RoundPlayerStats { get; set; } = new List<ValGameRoundPlayerStat>();
     }
 }
