@@ -4,11 +4,11 @@
 
 namespace GameOn.Presentation.Controllers.LeagueOfLegends
 {
+    using GameOn.Application.Common.Players.Commands.SetCrewMembership;
+    using GameOn.Application.Common.Players.Commands.UnlinkSmurfAccount;
     using GameOn.Application.Common.Players.Queries.GetConnectedPlayer;
     using GameOn.Application.Common.Players.Queries.GetPlayerById;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.LinkSmurfAccount;
-    using GameOn.Application.LeagueOfLegends.Summoners.Commands.SetCrewMembership;
-    using GameOn.Application.LeagueOfLegends.Summoners.Commands.UnlinkSmurfAccount;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdateAllPlayerRanks;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummonerAdmin;
@@ -17,6 +17,7 @@ namespace GameOn.Presentation.Controllers.LeagueOfLegends
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankChanges;
     using GameOn.Application.LeagueOfLegends.Summoners.Queries.GetSummonerRankHistory;
     using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.Common;
     using GameOn.Common.DTOs.LeagueOfLegends;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;

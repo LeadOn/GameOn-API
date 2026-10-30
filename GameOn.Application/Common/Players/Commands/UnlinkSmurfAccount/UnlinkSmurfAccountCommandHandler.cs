@@ -2,7 +2,7 @@
 // Copyright (c) LeadOn's Corp'. All rights reserved.
 // </copyright>
 
-namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.UnlinkSmurfAccount
+namespace GameOn.Application.Common.Players.Commands.UnlinkSmurfAccount
 {
     using GameOn.Common.Interfaces;
     using GameOn.Domain;

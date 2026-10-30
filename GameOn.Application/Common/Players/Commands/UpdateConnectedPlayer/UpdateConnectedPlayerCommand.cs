@@ -5,13 +5,13 @@
 namespace GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer
 {
     using GameOn.Common.DTOs;
-    using GameOn.Domain;
+    using GameOn.Common.DTOs.Common;
     using MediatR;
 
     /// <summary>
     /// UpdateConnectedPlayerCommand class.
     /// </summary>
-    public class UpdateConnectedPlayerCommand : IRequest<Player>
+    public class UpdateConnectedPlayerCommand : IRequest<UpdateConnectedPlayerResultDto>
     {
         /// <summary>
         /// Gets or sets Update player DTO.

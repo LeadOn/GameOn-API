@@ -8,7 +8,8 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin
     using System.Threading;
     using System.Threading.Tasks;
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer;
-    using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.Common;
+    using GameOn.Common.DTOs.Valorant;
     using GameOn.Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin
     /// <summary>
     /// UpdateValorantPlayerAdminCommandHandler class.
     /// </summary>
-    public class UpdateValorantPlayerAdminCommandHandler : IRequestHandler<UpdateValorantPlayerAdminCommand, PlayerDto>
+    public class UpdateValorantPlayerAdminCommandHandler : IRequestHandler<UpdateValorantPlayerAdminCommand, UpdateValorantPlayerAdminResultDto>
     {
         private readonly IApplicationDbContext context;
         private readonly ISender mediator;
@@ -35,7 +36,7 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin
         }
 
         /// <inheritdoc />
-        public async Task<PlayerDto> Handle(UpdateValorantPlayerAdminCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateValorantPlayerAdminResultDto> Handle(UpdateValorantPlayerAdminCommand request, CancellationToken cancellationToken)
         {
             var playerInDb = request.Player.Id != 0
                 ? await this.context.Players.FirstOrDefaultAsync(x => x.Id == request.Player.Id, cancellationToken)
@@ -54,7 +55,7 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin
 
                 if (existingPlayer is not null && existingPlayer.Id != playerInDb.Id)
                 {
-                    return new PlayerDto(playerInDb);
+                    return new UpdateValorantPlayerAdminResultDto { Status = RiotIdUpdateStatus.RiotIdTaken };
                 }
 
                 playerInDb.RiotGamesNickname = request.Player.RiotGamesNickname;
@@ -65,7 +66,11 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin
                 await this.context.SaveChangesAsync(cancellationToken);
             }
 
-            return await this.mediator.Send(new UpdateValorantPlayerCommand { Player = playerInDb }, cancellationToken);
+            return new UpdateValorantPlayerAdminResultDto
+            {
+                Status = RiotIdUpdateStatus.Updated,
+                Player = await this.mediator.Send(new UpdateValorantPlayerCommand { Player = playerInDb }, cancellationToken),
+            };
         }
     }
 }

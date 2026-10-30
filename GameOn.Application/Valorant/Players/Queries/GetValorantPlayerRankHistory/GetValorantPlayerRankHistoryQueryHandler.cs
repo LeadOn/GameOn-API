@@ -35,24 +35,32 @@ namespace GameOn.Application.Valorant.Players.Queries.GetValorantPlayerRankHisto
         /// <inheritdoc />
         public async Task<IEnumerable<ValorantRankHistory>> Handle(GetValorantPlayerRankHistoryQuery request, CancellationToken cancellationToken)
         {
+            List<ValorantRankHistory> entries;
+
             if (request.Granularity is not null)
             {
-                return await this.GetBucketedHistory(request, cancellationToken);
+                entries = await this.GetBucketedHistory(request, cancellationToken);
+            }
+            else
+            {
+                var limit = request.Limit ?? 50;
+
+                var recentEntries = await this.context.ValorantRankHistory
+                    .Where(x => x.PlayerId == request.PlayerId)
+                    .OrderByDescending(x => x.CreatedOn)
+                    .ThenByDescending(x => x.Id)
+                    .Take(limit)
+                    .ToListAsync(cancellationToken);
+
+                entries = recentEntries
+                    .OrderBy(x => x.CreatedOn)
+                    .ThenBy(x => x.Id)
+                    .ToList();
             }
 
-            var limit = request.Limit ?? 50;
+            await this.FlagStoredMatches(entries, cancellationToken);
 
-            var recentEntries = await this.context.ValorantRankHistory
-                .Where(x => x.PlayerId == request.PlayerId)
-                .OrderByDescending(x => x.CreatedOn)
-                .ThenByDescending(x => x.Id)
-                .Take(limit)
-                .ToListAsync(cancellationToken);
-
-            return recentEntries
-                .OrderBy(x => x.CreatedOn)
-                .ThenBy(x => x.Id)
-                .ToList();
+            return entries;
         }
 
         private static long GetBucketKey(DateTime date, LoLRankHistoryGranularity granularity)
@@ -134,7 +142,36 @@ namespace GameOn.Application.Valorant.Players.Queries.GetValorantPlayerRankHisto
             return results;
         }
 
-        private async Task<IEnumerable<ValorantRankHistory>> GetBucketedHistory(GetValorantPlayerRankHistoryQuery request, CancellationToken cancellationToken)
+        /// <summary>
+        /// Sets <see cref="ValorantRankHistory.MatchStored"/> on every entry. Runs after bucketing, so a
+        /// bucket (or a carried-forward one) is flagged on the match of the point it actually shows: its last.
+        /// </summary>
+        private async Task FlagStoredMatches(List<ValorantRankHistory> entries, CancellationToken cancellationToken)
+        {
+            var matchIds = entries
+                .Where(x => !string.IsNullOrEmpty(x.MatchId))
+                .Select(x => x.MatchId!)
+                .Distinct()
+                .ToList();
+
+            if (matchIds.Count == 0)
+            {
+                return;
+            }
+
+            var storedMatchIds = (await this.context.ValorantGames
+                .Where(x => matchIds.Contains(x.MatchId))
+                .Select(x => x.MatchId)
+                .ToListAsync(cancellationToken))
+                .ToHashSet();
+
+            foreach (var entry in entries)
+            {
+                entry.MatchStored = entry.MatchId is not null && storedMatchIds.Contains(entry.MatchId);
+            }
+        }
+
+        private async Task<List<ValorantRankHistory>> GetBucketedHistory(GetValorantPlayerRankHistoryQuery request, CancellationToken cancellationToken)
         {
             var granularity = request.Granularity!.Value;
 

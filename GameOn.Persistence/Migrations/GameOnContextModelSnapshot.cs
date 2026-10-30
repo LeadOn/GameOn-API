@@ -2768,6 +2768,99 @@ namespace GameOn.Persistence.Migrations
                     b.ToTable("ValorantGameRound", (string)null);
                 });
 
+            modelBuilder.Entity("GameOn.Domain.ValGameRoundPlayerStat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ArmorId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("armor_id");
+
+                    b.Property<string>("ArmorName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("armor_name");
+
+                    b.Property<int>("Bodyshots")
+                        .HasColumnType("int")
+                        .HasColumnName("bodyshots");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int")
+                        .HasColumnName("damage");
+
+                    b.Property<int>("Headshots")
+                        .HasColumnType("int")
+                        .HasColumnName("headshots");
+
+                    b.Property<int>("Kills")
+                        .HasColumnType("int")
+                        .HasColumnName("kills");
+
+                    b.Property<int>("Legshots")
+                        .HasColumnType("int")
+                        .HasColumnName("legshots");
+
+                    b.Property<int>("LoadoutValue")
+                        .HasColumnType("int")
+                        .HasColumnName("loadout_value");
+
+                    b.Property<string>("MatchId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("match_id");
+
+                    b.Property<string>("Puuid")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("puuid");
+
+                    b.Property<int>("Remaining")
+                        .HasColumnType("int")
+                        .HasColumnName("remaining");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("round_number");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int")
+                        .HasColumnName("score");
+
+                    b.Property<string>("Team")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("team");
+
+                    b.Property<bool>("WasAfk")
+                        .HasColumnType("bit")
+                        .HasColumnName("was_afk");
+
+                    b.Property<string>("WeaponId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("weapon_id");
+
+                    b.Property<string>("WeaponName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("weapon_name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId", "RoundNumber");
+
+                    b.ToTable("ValorantGameRoundPlayerStat", (string)null);
+                });
+
             modelBuilder.Entity("GameOn.Domain.ValGameTeam", b =>
                 {
                     b.Property<int>("Id")
@@ -3327,6 +3420,18 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("Game");
                 });
 
+            modelBuilder.Entity("GameOn.Domain.ValGameRoundPlayerStat", b =>
+                {
+                    b.HasOne("GameOn.Domain.ValGame", "Game")
+                        .WithMany("ValorantGameRoundPlayerStats")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Val_Games_Round_Player_Stats");
+
+                    b.Navigation("Game");
+                });
+
             modelBuilder.Entity("GameOn.Domain.ValGameTeam", b =>
                 {
                     b.HasOne("GameOn.Domain.ValGame", "Game")
@@ -3447,6 +3552,8 @@ namespace GameOn.Persistence.Migrations
                     b.Navigation("ValorantGameKills");
 
                     b.Navigation("ValorantGameParticipants");
+
+                    b.Navigation("ValorantGameRoundPlayerStats");
 
                     b.Navigation("ValorantGameRounds");
 

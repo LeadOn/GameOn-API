@@ -4,8 +4,9 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.LinkSmurfAccount
 {
+    using GameOn.Application.Common.Players;
     using GameOn.Application.LeagueOfLegends.Summoners.Commands.UpdatePlayerSummoner;
-    using GameOn.Common.DTOs.LeagueOfLegends;
+    using GameOn.Common.DTOs.Common;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
     using GameOn.External.RiotGames.Interfaces;
@@ -44,9 +45,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.LinkSmurfAccount
                 return new LinkSmurfAccountResultDto { Status = LinkSmurfAccountStatus.PrimaryNotFound };
             }
 
-            // No chains: a smurf of a smurf would make every read that rolls up to PrimaryPlayerId
-            // resolve to an account instead of a person, which the single-level rollup doesn't handle.
-            if (primaryPlayer.PrimaryPlayerId is not null)
+            if (!SmurfAccountRules.CanHoldSmurfs(primaryPlayer))
             {
                 return new LinkSmurfAccountResultDto { Status = LinkSmurfAccountStatus.PrimaryIsSmurf };
             }
@@ -80,18 +79,7 @@ namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.LinkSmurfAccount
             }
             else
             {
-                // Already known: only rows that are free to be claimed can be attached. A registered
-                // player (they can log in), an account that holds smurfs of its own, and one already
-                // attached elsewhere are all refused — silently swallowing a real member's stats into
-                // someone else's profile is far worse than making the admin unlink first.
-                var holdsSmurfs = await this.context.Players.AnyAsync(x => x.PrimaryPlayerId == existingAccount.Id, cancellationToken);
-
-                var available = existingAccount.Id != primaryPlayer.Id
-                    && existingAccount.KeycloakId is null
-                    && !holdsSmurfs
-                    && (existingAccount.PrimaryPlayerId is null || existingAccount.PrimaryPlayerId == primaryPlayer.Id);
-
-                if (!available)
+                if (!await SmurfAccountRules.IsAvailableAsSmurf(this.context, existingAccount, primaryPlayer, cancellationToken))
                 {
                     return new LinkSmurfAccountResultDto { Status = LinkSmurfAccountStatus.AccountNotAvailable };
                 }

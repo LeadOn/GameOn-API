@@ -4,6 +4,7 @@
 
 namespace GameOn.Presentation.Controllers.Common
 {
+    using GameOn.Application.Common.Players.Commands.SetPlayerArchived;
     using GameOn.Application.Common.Players.Commands.UpdateConnectedPlayer;
     using GameOn.Application.Common.Players.Commands.UpdatePlayer;
     using GameOn.Application.Common.Players.Commands.UpdatePlayerProfilePicture;
@@ -13,6 +14,7 @@ namespace GameOn.Presentation.Controllers.Common
     using GameOn.Application.Common.Players.Queries.GetPlayerStats;
     using GameOn.Application.Common.Players.Queries.GetProfilePicture;
     using GameOn.Common.DTOs;
+    using GameOn.Common.DTOs.Common;
     using GameOn.Domain;
     using GameOn.External.NetworkStorage.Interfaces;
     using GameOn.Presentation.Classes;
@@ -131,6 +133,7 @@ namespace GameOn.Presentation.Controllers.Common
         [SwaggerOperation(Summary = "Update current user profile.", Description = "Updates current user profile in database.")]
         [SwaggerResponse(200, "Updated user profile.", typeof(Player))]
         [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(409, "Riot ID already used by another player, nothing was saved.")]
         [SwaggerResponse(500, "Unknown error happened.")]
         public async Task<IActionResult> UpdateConnectedUser([FromBody] UpdatePlayerDto update)
         {
@@ -138,7 +141,13 @@ namespace GameOn.Presentation.Controllers.Common
 
             update.KeycloakId = this.User.GetConnectedPlayer().KeycloakId;
 
-            return this.Ok(await this.mediator.Send(new UpdateConnectedPlayerCommand { Player = update }));
+            var result = await this.mediator.Send(new UpdateConnectedPlayerCommand { Player = update });
+
+            return result.Status switch
+            {
+                RiotIdUpdateStatus.Updated => this.Ok(result.Player),
+                _ => this.Conflict("That Riot ID is already used by another player."),
+            };
         }
 
         /// <summary>
@@ -157,6 +166,34 @@ namespace GameOn.Presentation.Controllers.Common
         public async Task<IActionResult> UpdateUser([FromBody] UpdatePlayerDto update)
         {
             return this.Ok(await this.mediator.Send(new UpdatePlayerCommand { Player = update }));
+        }
+
+        /// <summary>
+        /// Archive or restore a player (admin only).
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <param name="archived">True to archive the player, false to restore them.</param>
+        /// <returns>IActionResult object.</returns>
+        [HttpPatch]
+        [Authorize(Roles = "gameon_admin")]
+        [Route("{id:int}/archived")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Archive or restore a player (Admin only).", Description = "Only changes the archived flag, for every game: unlike PATCH /player, nothing else on the account is rewritten.")]
+        [SwaggerResponse(200, "Archived flag updated.", typeof(Player))]
+        [SwaggerResponse(401, "Unauthorized.")]
+        [SwaggerResponse(403, "Not enough roles.")]
+        [SwaggerResponse(404, "Player not found.")]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> SetArchived(int id, bool archived)
+        {
+            var playerInDb = await this.mediator.Send(new SetPlayerArchivedCommand { PlayerId = id, Archived = archived });
+
+            if (playerInDb is null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(playerInDb);
         }
 
         /// <summary>

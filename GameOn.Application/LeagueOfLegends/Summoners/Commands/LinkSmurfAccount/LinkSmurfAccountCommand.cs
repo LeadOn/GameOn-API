@@ -4,7 +4,7 @@
 
 namespace GameOn.Application.LeagueOfLegends.Summoners.Commands.LinkSmurfAccount
 {
-    using GameOn.Common.DTOs.LeagueOfLegends;
+    using GameOn.Common.DTOs.Common;
     using MediatR;
 
     /// <summary>
