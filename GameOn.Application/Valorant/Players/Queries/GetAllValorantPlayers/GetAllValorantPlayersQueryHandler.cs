@@ -47,6 +47,15 @@ namespace GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers
                 playersQuery = playersQuery.InCrewOnly();
             }
 
+            // A Riot ID alone is a League of Legends account as much as a Valorant one, and a resolved
+            // Valorant PUUID with nothing behind it would only render an empty row.
+            if (!request.IncludeWithoutValorant)
+            {
+                playersQuery = playersQuery.Where(x => x.ValorantPuuid != null
+                    && (this.context.ValorantRankHistory.Any(r => r.PlayerId == x.Id)
+                        || this.context.ValorantGameParticipants.Any(p => p.PlayerId == x.Id)));
+            }
+
             var playersInDb = await playersQuery
                 .Where(x => x.Archived == request.Archived
                     && (x.ValorantPuuid != null || (x.RiotGamesNickname != null && x.RiotGamesTagLine != null)))

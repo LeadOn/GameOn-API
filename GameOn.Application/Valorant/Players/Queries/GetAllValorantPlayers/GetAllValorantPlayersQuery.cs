@@ -29,5 +29,12 @@ namespace GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers
         /// are listed too.
         /// </summary>
         public bool IncludeOutOfCrew { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether accounts with a Riot ID but no Valorant data are listed
+        /// too. Defaults to true. When false, an account needs a Valorant PUUID and at least one rank
+        /// snapshot or stored game: a League of Legends-only player is left out.
+        /// </summary>
+        public bool IncludeWithoutValorant { get; set; } = true;
     }
 }
