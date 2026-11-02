@@ -17,7 +17,7 @@ namespace GameOn.External.RiotGames.Interfaces
         /// </summary>
         /// <param name="puuid">PUUID of the player.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
-        /// <returns><see cref="AccountDto"/>.</returns>
-        Task<SummonerDto> GetSummonerByPuuid(string puuid, CancellationToken cancellationToken);
+        /// <returns><see cref="SummonerDto"/>, or null when the account has never played League of Legends.</returns>
+        Task<SummonerDto?> GetSummonerByPuuid(string puuid, CancellationToken cancellationToken);
     }
 }
