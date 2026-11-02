@@ -4,7 +4,9 @@
 
 namespace GameOn.External.HenrikDev.Models.DTOs
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Match metadata object from HenrikDev Valorant v4 matches endpoint.
@@ -82,5 +84,17 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("mvp")]
         public ValorantMatchPlayerRefDto? Mvp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR penalty of each party (HenrikDev's spelling).
+        /// </summary>
+        [JsonProperty("party_rr_penaltys")]
+        public List<ValorantMatchPartyRrPenaltyDto> PartyRrPenalties { get; set; } = new List<ValorantMatchPartyRrPenaltyDto>();
+
+        /// <summary>
+        /// Gets or sets the Premier match information, kept as raw JSON.
+        /// </summary>
+        [JsonProperty("premier")]
+        public JToken? Premier { get; set; }
     }
 }

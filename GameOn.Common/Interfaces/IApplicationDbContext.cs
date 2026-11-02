@@ -169,6 +169,46 @@ namespace GameOn.Common.Interfaces
         public DbSet<ValGameRoundPlayerStat> ValorantGameRoundPlayerStats { get; set; }
 
         /// <summary>
+        /// Gets or sets Valorant Game Participant Performances.
+        /// </summary>
+        public DbSet<ValGameParticipantPerformance> ValorantGameParticipantPerformances { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Event Player Locations.
+        /// </summary>
+        public DbSet<ValGameEventPlayerLocation> ValorantGameEventPlayerLocations { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Round Damages.
+        /// </summary>
+        public DbSet<ValGameRoundDamage> ValorantGameRoundDamages { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Game Participant Accolades.
+        /// </summary>
+        public DbSet<ValGameParticipantAccolade> ValorantGameParticipantAccolades { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Season Results.
+        /// </summary>
+        public DbSet<ValorantSeasonResult> ValorantSeasonResults { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Agent Masteries.
+        /// </summary>
+        public DbSet<ValorantAgentMastery> ValorantAgentMasteries { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Accolade Summaries.
+        /// </summary>
+        public DbSet<ValorantAccoladeSummary> ValorantAccoladeSummaries { get; set; }
+
+        /// <summary>
+        /// Gets or sets Valorant Premier Teams.
+        /// </summary>
+        public DbSet<ValorantPremierTeam> ValorantPremierTeams { get; set; }
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade" /> object.</returns>

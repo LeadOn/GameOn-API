@@ -16,6 +16,10 @@ namespace GameOn.External.HenrikDev.RateLimiting
 
         private DateTime blockedUntil = DateTime.MinValue;
 
+        private int? remaining;
+
+        private DateTime windowResetsAt = DateTime.MinValue;
+
         /// <summary>
         /// Gets how long a caller has to wait before its request may leave, <see cref="TimeSpan.Zero"/> when
         /// the bucket still has room.
@@ -27,6 +31,44 @@ namespace GameOn.External.HenrikDev.RateLimiting
             {
                 var wait = this.blockedUntil - DateTime.UtcNow;
                 return wait > TimeSpan.Zero ? wait : TimeSpan.Zero;
+            }
+        }
+
+        /// <summary>
+        /// Gets how long a low-priority caller (backfill, daily extras) has to wait: on top of the hard block, it
+        /// also waits for the next window whenever the bucket is down to its last <paramref name="reserve"/>
+        /// requests, which stay for the regular refresh and the players' clicks.
+        /// </summary>
+        /// <param name="reserve">Requests of the window a low-priority caller must leave untouched.</param>
+        /// <returns>Remaining wait.</returns>
+        public TimeSpan GetLowPriorityWait(int reserve)
+        {
+            lock (this.sync)
+            {
+                var now = DateTime.UtcNow;
+                var wait = this.blockedUntil - now;
+
+                if (this.remaining is { } left && left <= reserve && this.windowResetsAt > now)
+                {
+                    var untilReset = this.windowResetsAt - now;
+                    wait = untilReset > wait ? untilReset : wait;
+                }
+
+                return wait > TimeSpan.Zero ? wait : TimeSpan.Zero;
+            }
+        }
+
+        /// <summary>
+        /// Records the bucket state read on the last response.
+        /// </summary>
+        /// <param name="remainingRequests">Requests left in the window, null when the header was absent.</param>
+        /// <param name="reset">Time until the window resets.</param>
+        public void Report(int? remainingRequests, TimeSpan reset)
+        {
+            lock (this.sync)
+            {
+                this.remaining = remainingRequests;
+                this.windowResetsAt = DateTime.UtcNow + reset;
             }
         }
 

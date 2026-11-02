@@ -6,11 +6,11 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using GameOn.Application.Valorant.Matches.Commands.UpsertValorantMatches;
+    using GameOn.Application.Valorant.Players.Services;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -18,12 +18,24 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
     using GameOn.External.HenrikDev.Models.DTOs;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// UpdateValorantPlayerCommandHandler class.
     /// </summary>
     public class UpdateValorantPlayerCommandHandler : IRequestHandler<UpdateValorantPlayerCommand, PlayerDto>
     {
+        /// <summary>
+        /// Matches per HenrikDev page (v4 caps the page size at 10).
+        /// </summary>
+        private const int MatchPageSize = 10;
+
+        /// <summary>
+        /// Pages read at most by one refresh when every match of a page is unknown.
+        /// </summary>
+        private const int MaxGapPages = 3;
+
         private readonly IApplicationDbContext context;
         private readonly IValorantAccountService valorantAccountService;
         private readonly IValorantMmrService valorantMmrService;
@@ -108,23 +120,19 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
                     playerInDb.ValorantPeakTierName = mmr.Peak.Tier.Name;
                     playerInDb.ValorantPeakRr = mmr.Peak.Rr;
                     playerInDb.ValorantPeakSeasonShort = mmr.Peak.Season?.Short;
+                    playerInDb.ValorantPeakRankingSchema = mmr.Peak.RankingSchema;
+                }
+
+                if (mmr is not null)
+                {
+                    ApplyMmrStanding(playerInDb, mmr);
+                    await this.SyncSeasonResults(playerInDb.Id, mmr, cancellationToken);
                 }
 
                 await this.SyncRankHistory(playerInDb.Id, region, playerInDb.ValorantPuuid, mmr, cancellationToken);
                 await this.context.SaveChangesAsync(cancellationToken);
 
-                var recentMatches = await this.valorantMatchService.GetLastMatchesByPuuid(
-                    region,
-                    playerInDb.ValorantPuuid,
-                    size: 10,
-                    cancellationToken: cancellationToken);
-
-                if (recentMatches.Count > 0)
-                {
-                    await this.mediator.Send(
-                        new UpsertValorantMatchesCommand { Matches = recentMatches },
-                        cancellationToken);
-                }
+                await this.ImportRecentMatches(region, playerInDb.ValorantPuuid, cancellationToken);
             }
 
             var dto = new PlayerDto(playerInDb);
@@ -168,17 +176,6 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
             return dto;
         }
 
-        private static DateTime ParseUtcDate(string? rawDate)
-        {
-            if (!string.IsNullOrWhiteSpace(rawDate)
-                && DateTimeOffset.TryParse(rawDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var parsed))
-            {
-                return parsed.UtcDateTime;
-            }
-
-            return DateTime.UtcNow;
-        }
-
         private static int? ComputeRrChange7Days(List<ValorantRankHistory> historyDescending, DateTime sevenDaysAgo)
         {
             var current = historyDescending.FirstOrDefault(x => x.TierId >= 3 && x.Elo > 0);
@@ -192,65 +189,124 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
             return current.Elo - baseline.Elo;
         }
 
+        private static void ApplyMmrStanding(Player player, ValorantMmrDto mmr)
+        {
+            var current = mmr.Current;
+
+            if (current is not null)
+            {
+                player.ValorantRankProtectionShields = current.RankProtectionShields;
+                player.ValorantRankProtectionStatus = current.RankProtectionStatus;
+                player.ValorantIsAtRankProtectedTier = current.IsAtRankProtectedTier;
+                player.ValorantGamesNeededForRating = current.GamesNeededForRating;
+                player.ValorantGamesNeededForLeaderboard = current.GamesNeededForLeaderboard;
+                player.ValorantLeaderboardRank = current.LeaderboardPlacement?.Rank;
+                player.ValorantLeaderboardUpdatedOn = current.LeaderboardPlacement is null
+                    ? null
+                    : ValorantRankHistorySync.ParseUtcDate(current.LeaderboardPlacement.UpdatedAt);
+            }
+
+            player.ValorantIsActRankBadgeHidden = mmr.RankedState?.IsActRankBadgeHidden;
+            player.ValorantIsLeaderboardAnonymized = mmr.RankedState?.IsLeaderboardAnonymized;
+            player.ValorantLifetimePrestigeJson = mmr.LifetimePrestige is null || mmr.LifetimePrestige.Type == JTokenType.Null
+                ? null
+                : mmr.LifetimePrestige.ToString(Formatting.None);
+        }
+
+        private async Task SyncSeasonResults(int playerId, ValorantMmrDto mmr, CancellationToken cancellationToken)
+        {
+            var seasonal = mmr.Seasonal
+                .Where(x => !string.IsNullOrWhiteSpace(x.Season?.Id))
+                .GroupBy(x => x.Season!.Id, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.Last())
+                .ToList();
+
+            if (seasonal.Count == 0)
+            {
+                return;
+            }
+
+            var stored = await this.context.ValorantSeasonResults
+                .Where(x => x.PlayerId == playerId)
+                .ToListAsync(cancellationToken);
+
+            var bySeasonId = stored.ToDictionary(x => x.SeasonId, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var act in seasonal)
+            {
+                if (!bySeasonId.TryGetValue(act.Season!.Id, out var row))
+                {
+                    row = new ValorantSeasonResult { PlayerId = playerId, SeasonId = act.Season.Id };
+                    this.context.ValorantSeasonResults.Add(row);
+                }
+
+                row.SeasonShort = act.Season.Short;
+                row.ActRankTierId = act.ActRank?.Id;
+                row.ActRankTierName = act.ActRank?.Name;
+                row.EndTierId = act.EndTier?.Id;
+                row.EndTierName = act.EndTier?.Name;
+                row.EndRr = act.EndRr;
+                row.Games = act.Games;
+                row.Wins = act.Wins;
+                row.WinsWithPlacements = act.WinsWithPlacements;
+                row.GamesNeededForRating = act.GamesNeededForRating;
+                row.LeaderboardRank = act.LeaderboardPlacement?.Rank;
+                row.RankingSchema = act.RankingSchema;
+                row.ActWinsJson = JsonConvert.SerializeObject(act.ActWins.Select(x => x.Id));
+                row.PrestigeJson = act.Prestige is null || act.Prestige.Type == JTokenType.Null ? null : act.Prestige.ToString(Formatting.None);
+                row.RefreshedOn = DateTime.UtcNow;
+            }
+        }
+
+        /// <summary>
+        /// Imports the player's latest matches. When the whole first page is unknown, the refresh missed some
+        /// (redeploy, quota refusal), so it keeps paging until it reaches a match already stored, up to
+        /// <see cref="MaxGapPages"/> pages: holes get filled without waiting for a backfill.
+        /// </summary>
+        private async Task ImportRecentMatches(string region, string valorantPuuid, CancellationToken cancellationToken)
+        {
+            for (var page = 0; page < MaxGapPages; page++)
+            {
+                var matches = await this.valorantMatchService.GetLastMatchesByPuuid(
+                    region,
+                    valorantPuuid,
+                    size: MatchPageSize,
+                    start: page * MatchPageSize,
+                    cancellationToken: cancellationToken);
+
+                if (matches.Count == 0)
+                {
+                    return;
+                }
+
+                var matchIds = matches
+                    .Select(x => x.Metadata?.MatchId)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => x!)
+                    .ToList();
+
+                var knownCount = await this.context.ValorantGames.CountAsync(x => matchIds.Contains(x.MatchId), cancellationToken);
+
+                await this.mediator.Send(new UpsertValorantMatchesCommand { Matches = matches }, cancellationToken);
+
+                if (knownCount > 0 || matches.Count < MatchPageSize)
+                {
+                    return;
+                }
+            }
+        }
+
         private async Task SyncRankHistory(int playerId, string region, string valorantPuuid, ValorantMmrDto? mmr, CancellationToken cancellationToken)
         {
             var mmrHistory = await this.valorantMmrService.GetMmrHistoryByPuuid(region, valorantPuuid, cancellationToken);
 
-            var existingEntries = await this.context.ValorantRankHistory
-                .Where(x => x.PlayerId == playerId)
-                .OrderByDescending(x => x.CreatedOn)
-                .ThenByDescending(x => x.Id)
-                .ToListAsync(cancellationToken);
+            var entries = await ValorantRankHistorySync.Upsert(
+                this.context,
+                playerId,
+                mmrHistory?.History ?? new List<ValorantMmrHistoryEntryDto>(),
+                cancellationToken);
 
-            var knownMatchIds = new HashSet<string>(
-                existingEntries.Where(x => !string.IsNullOrWhiteSpace(x.MatchId)).Select(x => x.MatchId!),
-                StringComparer.OrdinalIgnoreCase);
-
-            ValorantRankHistory? newestEntry = existingEntries.FirstOrDefault();
-
-            if (mmrHistory?.History is { Count: > 0 })
-            {
-                // HenrikDev returns newest first; inserting oldest first keeps IDs ordered with CreatedOn.
-                var chronologicalEntries = mmrHistory.History
-                    .Select(entry => new { Entry = entry, ParsedDate = ParseUtcDate(entry.Date) })
-                    .OrderBy(x => x.ParsedDate)
-                    .ToList();
-
-                foreach (var item in chronologicalEntries)
-                {
-                    var entry = item.Entry;
-
-                    if (string.IsNullOrWhiteSpace(entry.MatchId) || !knownMatchIds.Add(entry.MatchId))
-                    {
-                        continue;
-                    }
-
-                    var rankEntry = new ValorantRankHistory
-                    {
-                        PlayerId = playerId,
-                        MatchId = entry.MatchId,
-                        SeasonId = entry.Season?.Id,
-                        SeasonShort = entry.Season?.Short,
-                        TierId = entry.Tier?.Id ?? 0,
-                        TierName = entry.Tier?.Name ?? "Unranked",
-                        RankedRating = entry.Rr,
-                        Elo = entry.Elo,
-                        LastChange = entry.LastChange,
-                        RefundedRr = entry.RefundedRr,
-                        WasDerankProtected = entry.WasDerankProtected,
-                        MapId = entry.Map?.Id,
-                        MapName = entry.Map?.Name,
-                        CreatedOn = item.ParsedDate,
-                    };
-
-                    this.context.ValorantRankHistory.Add(rankEntry);
-
-                    if (newestEntry is null || rankEntry.CreatedOn >= newestEntry.CreatedOn)
-                    {
-                        newestEntry = rankEntry;
-                    }
-                }
-            }
+            var newestEntry = entries.LastOrDefault();
 
             // If v3/mmr reports a current standing that differs from the newest entry we hold (e.g. a season
             // reset or an account whose match history rolled off), record a standalone snapshot.

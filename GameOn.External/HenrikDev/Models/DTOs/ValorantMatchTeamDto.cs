@@ -34,5 +34,17 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("rounds")]
         public ValorantMatchTeamRoundsDto? Rounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the team MVP elected by Riot.
+        /// </summary>
+        [JsonProperty("mvp")]
+        public ValorantMatchPlayerRefDto? Mvp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Premier roster, on Premier matches only.
+        /// </summary>
+        [JsonProperty("premier_roster")]
+        public ValorantMatchPremierRosterDto? PremierRoster { get; set; }
     }
 }

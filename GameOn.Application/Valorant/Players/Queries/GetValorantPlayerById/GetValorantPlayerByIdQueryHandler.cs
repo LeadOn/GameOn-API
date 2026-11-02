@@ -181,6 +181,8 @@ namespace GameOn.Application.Valorant.Players.Queries.GetValorantPlayerById
             var draws = lines.Count(x => x.IsDraw);
             var totalPlaytimeSeconds = lines.Sum(x => x.GameLengthMs) / 1000.0;
             var linesWithStats = lines.Where(x => x.HasStats).ToList();
+            var riotScores = lines.Where(x => x.RiotPerformanceScore is not null).Select(x => x.RiotPerformanceScore!.Value).ToList();
+            var (attack, defense) = ValPerformanceMath.Sides(lines);
 
             return new ValorantPlayerPerformanceStatsDto
             {
@@ -204,7 +206,56 @@ namespace GameOn.Application.Valorant.Players.Queries.GetValorantPlayerById
                 AgentStats = ValPerformanceMath.AgentStats<ValAgentStatDto>(lines).Select(x => x.Stat).ToList(),
                 MapStats = ValPerformanceMath.MapStats(lines),
                 DuoStats = await this.GetDuoStats(playerId, lines, cancellationToken),
+                AverageRiotPerformanceScore = riotScores.Count > 0 ? Math.Round(riotScores.Average(), 1) : null,
+                Attack = attack,
+                Defense = defense,
+                BuyTypes = ValPerformanceMath.BuyTypes(lines),
+                Clutches = ValPerformanceMath.Clutches(lines),
+                Trades = ValPerformanceMath.Trades(lines),
+                Weapons = await this.GetWeaponStats(query, cancellationToken),
             };
+        }
+
+        private async Task<List<ValWeaponStatDto>> GetWeaponStats(IQueryable<ValGameParticipant> participations, CancellationToken cancellationToken)
+        {
+            // Joined on the filtered participations rather than a list of match IDs, which would blow SQL Server's
+            // 2,100 parameter limit on a long history.
+            var kills = await (
+                from kill in this.context.ValorantGameKills
+                join participation in participations
+                    on new { kill.MatchId, Puuid = kill.KillerPuuid } equals new { participation.MatchId, Puuid = (string?)participation.Puuid }
+                where kill.VictimPuuid != kill.KillerPuuid
+                select new { kill.WeaponId, kill.WeaponName, kill.WeaponType, kill.DistanceMeters })
+                .ToListAsync(cancellationToken);
+
+            if (kills.Count == 0)
+            {
+                return new List<ValWeaponStatDto>();
+            }
+
+            return kills
+                .GroupBy(x => new { x.WeaponId, x.WeaponName, x.WeaponType })
+                .Select(g =>
+                {
+                    var distances = g.Where(x => x.DistanceMeters is not null).Select(x => x.DistanceMeters!.Value).ToList();
+                    var isWeapon = string.Equals(g.Key.WeaponType, "Weapon", StringComparison.OrdinalIgnoreCase)
+                        && Guid.TryParse(g.Key.WeaponId, out _);
+
+                    return new ValWeaponStatDto
+                    {
+                        WeaponId = g.Key.WeaponId,
+                        WeaponName = g.Key.WeaponName,
+                        WeaponType = g.Key.WeaponType,
+                        Kills = g.Count(),
+                        KillSharePercent = Math.Round(100.0 * g.Count() / kills.Count, 1),
+                        AverageDistanceMeters = distances.Count > 0 ? Math.Round(distances.Average(), 1) : null,
+                        LongestDistanceMeters = distances.Count > 0 ? Math.Round(distances.Max(), 1) : null,
+                        IconUrl = isWeapon ? $"https://media.valorant-api.com/weapons/{g.Key.WeaponId}/killstreamicon.png" : null,
+                    };
+                })
+                .OrderByDescending(x => x.Kills)
+                .ThenBy(x => x.WeaponName, StringComparer.Ordinal)
+                .ToList();
         }
 
         private async Task<List<ValDuoStatDto>> GetDuoStats(int playerId, List<ValPerformanceLine> lines, CancellationToken cancellationToken)

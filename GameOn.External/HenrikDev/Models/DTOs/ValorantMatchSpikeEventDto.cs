@@ -4,6 +4,7 @@
 
 namespace GameOn.External.HenrikDev.Models.DTOs
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -28,5 +29,17 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("player")]
         public ValorantMatchPlayerRefDto? Player { get; set; }
+
+        /// <summary>
+        /// Gets or sets where the spike was planted or defused.
+        /// </summary>
+        [JsonProperty("location")]
+        public ValorantMatchLocationDto? Location { get; set; }
+
+        /// <summary>
+        /// Gets or sets where every living player stood at that moment.
+        /// </summary>
+        [JsonProperty("player_locations")]
+        public List<ValorantMatchPlayerLocationDto> PlayerLocations { get; set; } = new List<ValorantMatchPlayerLocationDto>();
     }
 }

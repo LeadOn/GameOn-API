@@ -123,6 +123,146 @@ namespace GameOn.Domain
         public double Rating { get; set; }
 
         /// <summary>
+        /// Gets or sets the rounds played on attack, null when sides cannot be told.
+        /// </summary>
+        public int? AttackRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rounds won on attack.
+        /// </summary>
+        public int? AttackRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kills made on attack.
+        /// </summary>
+        public int? AttackKills { get; set; }
+
+        /// <summary>
+        /// Gets or sets the deaths on attack.
+        /// </summary>
+        public int? AttackDeaths { get; set; }
+
+        /// <summary>
+        /// Gets or sets the combat score earned on attack.
+        /// </summary>
+        public int? AttackScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rounds played on defense, null when sides cannot be told.
+        /// </summary>
+        public int? DefenseRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rounds won on defense.
+        /// </summary>
+        public int? DefenseRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kills made on defense.
+        /// </summary>
+        public int? DefenseKills { get; set; }
+
+        /// <summary>
+        /// Gets or sets the deaths on defense.
+        /// </summary>
+        public int? DefenseDeaths { get; set; }
+
+        /// <summary>
+        /// Gets or sets the combat score earned on defense.
+        /// </summary>
+        public int? DefenseScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pistol rounds played, null outside standard modes (competitive, unrated, premier).
+        /// </summary>
+        public int? PistolRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pistol rounds won.
+        /// </summary>
+        public int? PistolRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the eco rounds played (loadout under 2,000 credits, pistol rounds excluded).
+        /// </summary>
+        public int? EcoRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the eco rounds won.
+        /// </summary>
+        public int? EcoRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the force-buy rounds played (loadout from 2,000 to 3,899 credits).
+        /// </summary>
+        public int? ForceBuyRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the force-buy rounds won.
+        /// </summary>
+        public int? ForceBuyRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full-buy rounds played (loadout of 3,900 credits or more).
+        /// </summary>
+        public int? FullBuyRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full-buy rounds won.
+        /// </summary>
+        public int? FullBuyRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kills that avenged a teammate killed less than 5 seconds earlier.
+        /// </summary>
+        public int TradeKills { get; set; }
+
+        /// <summary>
+        /// Gets or sets the deaths a teammate avenged less than 5 seconds later.
+        /// </summary>
+        public int TradedDeaths { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rounds where the participant ended up last alive against at least one enemy.
+        /// </summary>
+        public int ClutchAttempts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the 1v1 clutches won.
+        /// </summary>
+        public int Clutch1v1Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets the 1v2 clutches won.
+        /// </summary>
+        public int Clutch1v2Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets the 1v3 clutches won.
+        /// </summary>
+        public int Clutch1v3Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets the 1v4 clutches won.
+        /// </summary>
+        public int Clutch1v4Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets the 1v5 clutches won.
+        /// </summary>
+        public int Clutch1v5Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets the average distance of the participant's kills, in meters, null without positions.
+        /// </summary>
+        public double? AverageKillDistanceMeters { get; set; }
+
+        /// <summary>
+        /// Gets or sets the distance of the participant's longest kill, in meters.
+        /// </summary>
+        public double? LongestKillDistanceMeters { get; set; }
+
+        /// <summary>
         /// Gets or sets the UTC timestamp when these stats were last computed.
         /// </summary>
         public DateTime ComputedOn { get; set; } = DateTime.UtcNow;

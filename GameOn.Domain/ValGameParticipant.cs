@@ -4,6 +4,7 @@
 
 namespace GameOn.Domain
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Text.Json.Serialization;
 
@@ -234,6 +235,36 @@ namespace GameOn.Domain
         public int? PostGameRankedRating { get; set; }
 
         /// <summary>
+        /// Gets or sets the team number (1 or 2).
+        /// </summary>
+        public int? TeamNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR penalty factor applied to the participant's party (e.g. 0.25), null when unknown.
+        /// </summary>
+        public double? PartyRrPenalty { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Riot elected the participant MVP of the match.
+        /// </summary>
+        public bool IsRiotMatchMvp { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Riot elected the participant MVP of their team.
+        /// </summary>
+        public bool IsRiotTeamMvp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the agent mastery (bloomline) level shown in game, null when none.
+        /// </summary>
+        public int? BloomlineLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the equipped level border UUID.
+        /// </summary>
+        public string? PreferredLevelBorderId { get; set; }
+
+        /// <summary>
         /// Gets the agent square icon URL on <c>media.valorant-api.com</c>, or null when no agent UUID is set.
         /// </summary>
         [NotMapped]
@@ -272,5 +303,16 @@ namespace GameOn.Domain
         /// Gets or sets the derived performance stats for this participant.
         /// </summary>
         public virtual ValGameParticipantStat? Stats { get; set; }
+
+        /// <summary>
+        /// Gets or sets Riot's own performance rating for this participant, null when Riot did not rate the
+        /// match (skirmish, custom, matches from before the rating existed).
+        /// </summary>
+        public virtual ValGameParticipantPerformance? Performance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the accolades (end-of-game gold stars) earned in this match.
+        /// </summary>
+        public virtual List<ValGameParticipantAccolade> Accolades { get; set; } = new List<ValGameParticipantAccolade>();
     }
 }

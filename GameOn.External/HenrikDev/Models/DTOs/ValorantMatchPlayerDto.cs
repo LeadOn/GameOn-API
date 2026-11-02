@@ -100,5 +100,17 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("economy")]
         public ValorantMatchEconomyDto? Economy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the team number (1 or 2).
+        /// </summary>
+        [JsonProperty("team_number")]
+        public int? TeamNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets Riot's performance rating, null on modes Riot does not rate.
+        /// </summary>
+        [JsonProperty("performance")]
+        public ValorantMatchPerformanceDto? Performance { get; set; }
     }
 }

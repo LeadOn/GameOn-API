@@ -35,6 +35,10 @@ namespace GameOn.Application.Valorant.Matches.Queries.GetValGameById
                 .ThenInclude(y => y.Player)
                 .Include(x => x.ValorantGameParticipants)
                 .ThenInclude(y => y.Stats)
+                .Include(x => x.ValorantGameParticipants)
+                .ThenInclude(y => y.Performance)
+                .Include(x => x.ValorantGameParticipants)
+                .ThenInclude(y => y.Accolades)
                 .Include(x => x.ValorantGameTeams)
                 .FirstOrDefaultAsync(x => x.MatchId == request.MatchId, cancellationToken);
         }

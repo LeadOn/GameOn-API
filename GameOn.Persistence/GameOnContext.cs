@@ -175,6 +175,46 @@ namespace GameOn.Persistence
         public DbSet<ValGameRoundPlayerStat> ValorantGameRoundPlayerStats { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets Valorant Game Participant Performances.
+        /// </summary>
+        public DbSet<ValGameParticipantPerformance> ValorantGameParticipantPerformances { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Event Player Locations.
+        /// </summary>
+        public DbSet<ValGameEventPlayerLocation> ValorantGameEventPlayerLocations { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Round Damages.
+        /// </summary>
+        public DbSet<ValGameRoundDamage> ValorantGameRoundDamages { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Game Participant Accolades.
+        /// </summary>
+        public DbSet<ValGameParticipantAccolade> ValorantGameParticipantAccolades { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Season Results.
+        /// </summary>
+        public DbSet<ValorantSeasonResult> ValorantSeasonResults { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Agent Masteries.
+        /// </summary>
+        public DbSet<ValorantAgentMastery> ValorantAgentMasteries { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Accolade Summaries.
+        /// </summary>
+        public DbSet<ValorantAccoladeSummary> ValorantAccoladeSummaries { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets Valorant Premier Teams.
+        /// </summary>
+        public DbSet<ValorantPremierTeam> ValorantPremierTeams { get; set; } = null!;
+
+        /// <summary>
         /// Returns Database object from DbContext.
         /// </summary>
         /// <returns><see cref="DatabaseFacade"/>.</returns>
@@ -285,6 +325,55 @@ namespace GameOn.Persistence
                 entity.Property(e => e.ValorantPeakSeasonShort)
                     .HasColumnName("valorant_peak_season_short")
                     .HasMaxLength(20);
+
+                entity.Property(e => e.ValorantRankProtectionShields)
+                    .HasColumnName("valorant_rank_protection_shields");
+
+                entity.Property(e => e.ValorantRankProtectionStatus)
+                    .HasColumnName("valorant_rank_protection_status")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValorantIsAtRankProtectedTier)
+                    .HasColumnName("valorant_is_at_rank_protected_tier");
+
+                entity.Property(e => e.ValorantGamesNeededForRating)
+                    .HasColumnName("valorant_games_needed_for_rating");
+
+                entity.Property(e => e.ValorantGamesNeededForLeaderboard)
+                    .HasColumnName("valorant_games_needed_for_leaderboard");
+
+                entity.Property(e => e.ValorantLeaderboardRank)
+                    .HasColumnName("valorant_leaderboard_rank");
+
+                entity.Property(e => e.ValorantLeaderboardUpdatedOn)
+                    .HasColumnName("valorant_leaderboard_updated_on");
+
+                entity.Property(e => e.ValorantIsActRankBadgeHidden)
+                    .HasColumnName("valorant_is_act_rank_badge_hidden");
+
+                entity.Property(e => e.ValorantIsLeaderboardAnonymized)
+                    .HasColumnName("valorant_is_leaderboard_anonymized");
+
+                entity.Property(e => e.ValorantPeakRankingSchema)
+                    .HasColumnName("valorant_peak_ranking_schema")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValorantLifetimePrestigeJson)
+                    .HasColumnName("valorant_lifetime_prestige_json");
+
+                entity.Property(e => e.ValorantPremierTeamId)
+                    .HasColumnName("valorant_premier_team_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValorantPremierRole)
+                    .HasColumnName("valorant_premier_role")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValorantExtrasRefreshedOn)
+                    .HasColumnName("valorant_extras_refreshed_on");
+
+                entity.Property(e => e.ValorantPremierJoinedOn)
+                    .HasColumnName("valorant_premier_joined_on");
 
                 entity.Property(e => e.PrimaryPlayerId)
                     .HasColumnName("primary_player_id");
@@ -818,6 +907,44 @@ namespace GameOn.Persistence
                 entity.Property(e => e.MapName)
                     .HasColumnName("map_name")
                     .HasMaxLength(50);
+
+                entity.Property(e => e.QueueId)
+                    .HasColumnName("queue_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MatchLengthMs)
+                    .HasColumnName("match_length_ms");
+
+                entity.Property(e => e.TierBeforeId)
+                    .HasColumnName("tier_before_id");
+
+                entity.Property(e => e.TierBeforeName)
+                    .HasColumnName("tier_before_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RrBeforeUpdate)
+                    .HasColumnName("rr_before_update");
+
+                entity.Property(e => e.RrPerformanceBonus)
+                    .HasColumnName("rr_performance_bonus");
+
+                entity.Property(e => e.RrPenalty)
+                    .HasColumnName("rr_penalty");
+
+                entity.Property(e => e.AfkPenalty)
+                    .HasColumnName("afk_penalty");
+
+                entity.Property(e => e.NewMapIncentiveRrForgiven)
+                    .HasColumnName("new_map_incentive_rr_forgiven");
+
+                entity.Property(e => e.IsPlacementMatch)
+                    .HasColumnName("is_placement_match");
+
+                entity.Property(e => e.WasDerankProtectionReplenished)
+                    .HasColumnName("was_derank_protection_replenished");
+
+                entity.Property(e => e.RrDelta)
+                    .HasColumnName("rr_delta");
 
                 entity.Property(e => e.CreatedOn)
                     .HasColumnName("created_on")
@@ -1914,6 +2041,13 @@ namespace GameOn.Persistence
                 entity.Property(e => e.AceParticipantId)
                     .HasColumnName("ace_participant_id");
 
+                entity.Property(e => e.RiotMvpPuuid)
+                    .HasColumnName("riot_mvp_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PremierInfoJson)
+                    .HasColumnName("premier_info_json");
+
                 entity.HasIndex(e => e.GameStart);
                 entity.HasIndex(e => e.QueueId);
 
@@ -1945,6 +2079,18 @@ namespace GameOn.Persistence
                     .WithOne(f => f.Game)
                     .HasForeignKey(f => f.MatchId)
                     .HasConstraintName("FK_Val_Games_Round_Player_Stats")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.ValorantGameEventPlayerLocations)
+                    .WithOne(f => f.Game)
+                    .HasForeignKey(f => f.MatchId)
+                    .HasConstraintName("FK_Val_Games_Event_Player_Locations")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.ValorantGameRoundDamages)
+                    .WithOne(f => f.Game)
+                    .HasForeignKey(f => f.MatchId)
+                    .HasConstraintName("FK_Val_Games_Round_Damages")
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne<ValGameParticipant>()
@@ -1989,6 +2135,25 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.RoundsLost)
                     .HasColumnName("rounds_lost");
+
+                entity.Property(e => e.Placement)
+                    .HasColumnName("placement");
+
+                entity.Property(e => e.RiotMvpPuuid)
+                    .HasColumnName("riot_mvp_puuid")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PremierRosterId)
+                    .HasColumnName("premier_roster_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PremierTeamName)
+                    .HasColumnName("premier_team_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PremierTeamTag)
+                    .HasColumnName("premier_team_tag")
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<ValGameParticipant>(entity =>
@@ -2143,6 +2308,25 @@ namespace GameOn.Persistence
                 entity.Property(e => e.PostGameRankedRating)
                     .HasColumnName("post_game_ranked_rating");
 
+                entity.Property(e => e.TeamNumber)
+                    .HasColumnName("team_number");
+
+                entity.Property(e => e.PartyRrPenalty)
+                    .HasColumnName("party_rr_penalty");
+
+                entity.Property(e => e.IsRiotMatchMvp)
+                    .HasColumnName("is_riot_match_mvp");
+
+                entity.Property(e => e.IsRiotTeamMvp)
+                    .HasColumnName("is_riot_team_mvp");
+
+                entity.Property(e => e.BloomlineLevel)
+                    .HasColumnName("bloomline_level");
+
+                entity.Property(e => e.PreferredLevelBorderId)
+                    .HasColumnName("preferred_level_border_id")
+                    .HasMaxLength(100);
+
                 entity.HasAlternateKey(e => new { e.MatchId, e.Puuid })
                     .HasName("AK_ValGameParticipant_MatchId_Puuid");
 
@@ -2230,6 +2414,90 @@ namespace GameOn.Persistence
                 entity.Property(e => e.Rating)
                     .HasColumnName("rating");
 
+                entity.Property(e => e.AttackRounds)
+                    .HasColumnName("attack_rounds");
+
+                entity.Property(e => e.AttackRoundsWon)
+                    .HasColumnName("attack_rounds_won");
+
+                entity.Property(e => e.AttackKills)
+                    .HasColumnName("attack_kills");
+
+                entity.Property(e => e.AttackDeaths)
+                    .HasColumnName("attack_deaths");
+
+                entity.Property(e => e.AttackScore)
+                    .HasColumnName("attack_score");
+
+                entity.Property(e => e.DefenseRounds)
+                    .HasColumnName("defense_rounds");
+
+                entity.Property(e => e.DefenseRoundsWon)
+                    .HasColumnName("defense_rounds_won");
+
+                entity.Property(e => e.DefenseKills)
+                    .HasColumnName("defense_kills");
+
+                entity.Property(e => e.DefenseDeaths)
+                    .HasColumnName("defense_deaths");
+
+                entity.Property(e => e.DefenseScore)
+                    .HasColumnName("defense_score");
+
+                entity.Property(e => e.PistolRounds)
+                    .HasColumnName("pistol_rounds");
+
+                entity.Property(e => e.PistolRoundsWon)
+                    .HasColumnName("pistol_rounds_won");
+
+                entity.Property(e => e.EcoRounds)
+                    .HasColumnName("eco_rounds");
+
+                entity.Property(e => e.EcoRoundsWon)
+                    .HasColumnName("eco_rounds_won");
+
+                entity.Property(e => e.ForceBuyRounds)
+                    .HasColumnName("force_buy_rounds");
+
+                entity.Property(e => e.ForceBuyRoundsWon)
+                    .HasColumnName("force_buy_rounds_won");
+
+                entity.Property(e => e.FullBuyRounds)
+                    .HasColumnName("full_buy_rounds");
+
+                entity.Property(e => e.FullBuyRoundsWon)
+                    .HasColumnName("full_buy_rounds_won");
+
+                entity.Property(e => e.TradeKills)
+                    .HasColumnName("trade_kills");
+
+                entity.Property(e => e.TradedDeaths)
+                    .HasColumnName("traded_deaths");
+
+                entity.Property(e => e.ClutchAttempts)
+                    .HasColumnName("clutch_attempts");
+
+                entity.Property(e => e.Clutch1v1Won)
+                    .HasColumnName("clutch1v1_won");
+
+                entity.Property(e => e.Clutch1v2Won)
+                    .HasColumnName("clutch1v2_won");
+
+                entity.Property(e => e.Clutch1v3Won)
+                    .HasColumnName("clutch1v3_won");
+
+                entity.Property(e => e.Clutch1v4Won)
+                    .HasColumnName("clutch1v4_won");
+
+                entity.Property(e => e.Clutch1v5Won)
+                    .HasColumnName("clutch1v5_won");
+
+                entity.Property(e => e.AverageKillDistanceMeters)
+                    .HasColumnName("average_kill_distance_meters");
+
+                entity.Property(e => e.LongestKillDistanceMeters)
+                    .HasColumnName("longest_kill_distance_meters");
+
                 entity.Property(e => e.ComputedOn)
                     .HasColumnName("computed_on");
 
@@ -2309,6 +2577,26 @@ namespace GameOn.Persistence
                     .HasColumnName("defuse_player_puuid")
                     .HasMaxLength(100);
 
+                entity.Property(e => e.AttackingTeam)
+                    .HasColumnName("attacking_team")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PlantX)
+                    .HasColumnName("plant_x");
+
+                entity.Property(e => e.PlantY)
+                    .HasColumnName("plant_y");
+
+                entity.Property(e => e.PlantZone)
+                    .HasColumnName("plant_zone")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.DefuseX)
+                    .HasColumnName("defuse_x");
+
+                entity.Property(e => e.DefuseY)
+                    .HasColumnName("defuse_y");
+
                 entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
             });
 
@@ -2374,6 +2662,32 @@ namespace GameOn.Persistence
 
                 entity.Property(e => e.SecondaryFireMode)
                     .HasColumnName("secondary_fire_mode");
+
+                entity.Property(e => e.VictimX)
+                    .HasColumnName("victim_x");
+
+                entity.Property(e => e.VictimY)
+                    .HasColumnName("victim_y");
+
+                entity.Property(e => e.KillerX)
+                    .HasColumnName("killer_x");
+
+                entity.Property(e => e.KillerY)
+                    .HasColumnName("killer_y");
+
+                entity.Property(e => e.KillerViewRadians)
+                    .HasColumnName("killer_view_radians");
+
+                entity.Property(e => e.DistanceMeters)
+                    .HasColumnName("distance_meters");
+
+                entity.Property(e => e.VictimZone)
+                    .HasColumnName("victim_zone")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.KillerZone)
+                    .HasColumnName("killer_zone")
+                    .HasMaxLength(100);
 
                 entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
             });
@@ -2450,6 +2764,507 @@ namespace GameOn.Persistence
                     .HasColumnName("was_afk");
 
                 entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
+
+                entity.Property(e => e.ReceivedPenalty)
+                    .HasColumnName("received_penalty");
+
+                entity.Property(e => e.StayedInSpawn)
+                    .HasColumnName("stayed_in_spawn");
+            });
+
+            modelBuilder.Entity<ValGameParticipantPerformance>(entity =>
+            {
+                entity.ToTable("ValorantGameParticipantPerformance");
+
+                entity.Property(e => e.ValGameParticipantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("val_game_participant_id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.ValGameParticipantId);
+
+                entity.Property(e => e.Score)
+                    .HasColumnName("score");
+
+                entity.Property(e => e.Grade)
+                    .HasColumnName("grade")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CombatKillImpact)
+                    .HasColumnName("combat_kill_impact")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CombatDeathImpact)
+                    .HasColumnName("combat_death_impact")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CombatDamage)
+                    .HasColumnName("combat_damage")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CombatTrades)
+                    .HasColumnName("combat_trades")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.UtilityAssists)
+                    .HasColumnName("utility_assists")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.UtilityPlants)
+                    .HasColumnName("utility_plants")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.UtilityDefuses)
+                    .HasColumnName("utility_defuses")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.UtilityUsage)
+                    .HasColumnName("utility_usage")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.AdjustedKills)
+                    .HasColumnName("adjusted_kills");
+
+                entity.Property(e => e.AdjustedDeaths)
+                    .HasColumnName("adjusted_deaths");
+
+                entity.Property(e => e.Assists)
+                    .HasColumnName("assists");
+
+                entity.Property(e => e.Damage)
+                    .HasColumnName("damage");
+
+                entity.Property(e => e.Trades)
+                    .HasColumnName("trades");
+
+                entity.Property(e => e.UtilityUsagePerRound)
+                    .HasColumnName("utility_usage_per_round");
+
+                entity.Property(e => e.Plants)
+                    .HasColumnName("plants");
+
+                entity.Property(e => e.Defuses)
+                    .HasColumnName("defuses");
+
+                entity.HasOne(e => e.Participant)
+                    .WithOne(p => p.Performance)
+                    .HasForeignKey<ValGameParticipantPerformance>(e => e.ValGameParticipantId)
+                    .HasConstraintName("FK_Val_Game_Participant_Performance")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ValGameEventPlayerLocation>(entity =>
+            {
+                entity.ToTable("ValorantGameEventPlayerLocation");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RoundNumber)
+                    .HasColumnName("round_number");
+
+                entity.Property(e => e.EventType)
+                    .HasColumnName("event_type")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ValGameKillId)
+                    .HasColumnName("val_game_kill_id");
+
+                entity.Property(e => e.Puuid)
+                    .HasColumnName("puuid")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Team)
+                    .HasColumnName("team")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.X)
+                    .HasColumnName("x");
+
+                entity.Property(e => e.Y)
+                    .HasColumnName("y");
+
+                entity.Property(e => e.ViewRadians)
+                    .HasColumnName("view_radians");
+
+                entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
+
+                // NoAction: the kill and its snapshot both hang off the match, whose cascade already removes
+                // them; a second cascade path from the kill would be refused by SQL Server.
+                entity.HasOne(e => e.Kill)
+                    .WithMany(k => k.PlayerLocations)
+                    .HasForeignKey(e => e.ValGameKillId)
+                    .HasConstraintName("FK_Val_Game_Kill_Player_Locations")
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<ValGameRoundDamage>(entity =>
+            {
+                entity.ToTable("ValorantGameRoundDamage");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.MatchId)
+                    .HasColumnName("match_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RoundNumber)
+                    .HasColumnName("round_number");
+
+                entity.Property(e => e.AttackerPuuid)
+                    .HasColumnName("attacker_puuid")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ReceiverPuuid)
+                    .HasColumnName("receiver_puuid")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Damage)
+                    .HasColumnName("damage");
+
+                entity.Property(e => e.Headshots)
+                    .HasColumnName("headshots");
+
+                entity.Property(e => e.Bodyshots)
+                    .HasColumnName("bodyshots");
+
+                entity.Property(e => e.Legshots)
+                    .HasColumnName("legshots");
+
+                entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
+            });
+
+            modelBuilder.Entity<ValGameParticipantAccolade>(entity =>
+            {
+                entity.ToTable("ValorantGameParticipantAccolade");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.ValGameParticipantId)
+                    .HasColumnName("val_game_participant_id");
+
+                entity.Property(e => e.AccoladeId)
+                    .HasColumnName("accolade_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Type)
+                    .HasColumnName("type")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Value)
+                    .HasColumnName("value");
+
+                entity.Property(e => e.IsActRecord)
+                    .HasColumnName("is_act_record");
+
+                entity.HasIndex(e => new { e.ValGameParticipantId, e.AccoladeId }).IsUnique();
+
+                entity.HasOne(e => e.Participant)
+                    .WithMany(p => p.Accolades)
+                    .HasForeignKey(e => e.ValGameParticipantId)
+                    .HasConstraintName("FK_Val_Game_Participant_Accolades")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ValorantSeasonResult>(entity =>
+            {
+                entity.ToTable("ValorantSeasonResult");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id");
+
+                entity.Property(e => e.SeasonId)
+                    .HasColumnName("season_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.SeasonShort)
+                    .HasColumnName("season_short")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ActRankTierId)
+                    .HasColumnName("act_rank_tier_id");
+
+                entity.Property(e => e.ActRankTierName)
+                    .HasColumnName("act_rank_tier_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.EndTierId)
+                    .HasColumnName("end_tier_id");
+
+                entity.Property(e => e.EndTierName)
+                    .HasColumnName("end_tier_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.EndRr)
+                    .HasColumnName("end_rr");
+
+                entity.Property(e => e.Games)
+                    .HasColumnName("games");
+
+                entity.Property(e => e.Wins)
+                    .HasColumnName("wins");
+
+                entity.Property(e => e.WinsWithPlacements)
+                    .HasColumnName("wins_with_placements");
+
+                entity.Property(e => e.GamesNeededForRating)
+                    .HasColumnName("games_needed_for_rating");
+
+                entity.Property(e => e.LeaderboardRank)
+                    .HasColumnName("leaderboard_rank");
+
+                entity.Property(e => e.RankingSchema)
+                    .HasColumnName("ranking_schema")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ActWinsJson)
+                    .HasColumnName("act_wins_json");
+
+                entity.Property(e => e.PrestigeJson)
+                    .HasColumnName("prestige_json");
+
+                entity.Property(e => e.RefreshedOn)
+                    .HasColumnName("refreshed_on");
+
+                entity.HasIndex(e => new { e.PlayerId, e.SeasonId }).IsUnique();
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.ValorantSeasonResults)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_Player_ValorantSeasonResult")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ValorantAgentMastery>(entity =>
+            {
+                entity.ToTable("ValorantAgentMastery");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id");
+
+                entity.Property(e => e.AgentId)
+                    .HasColumnName("agent_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.AgentName)
+                    .HasColumnName("agent_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Level)
+                    .HasColumnName("level");
+
+                entity.Property(e => e.TracksJson)
+                    .HasColumnName("tracks_json");
+
+                entity.Property(e => e.FlourishShortLevel)
+                    .HasColumnName("flourish_short_level");
+
+                entity.Property(e => e.FlourishLongLevel)
+                    .HasColumnName("flourish_long_level");
+
+                entity.Property(e => e.HypeId)
+                    .HasColumnName("hype_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.BackgroundId)
+                    .HasColumnName("background_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ClipId)
+                    .HasColumnName("clip_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.BorderId)
+                    .HasColumnName("border_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RefreshedOn)
+                    .HasColumnName("refreshed_on");
+
+                entity.HasIndex(e => new { e.PlayerId, e.AgentId }).IsUnique();
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.ValorantAgentMasteries)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_Player_ValorantAgentMastery")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ValorantAccoladeSummary>(entity =>
+            {
+                entity.ToTable("ValorantAccoladeSummary");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id")
+                    .IsRequired();
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.PlayerId)
+                    .HasColumnName("player_id");
+
+                entity.Property(e => e.SeasonId)
+                    .HasColumnName("season_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.SeasonShort)
+                    .HasColumnName("season_short")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.AccoladeId)
+                    .HasColumnName("accolade_id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Type)
+                    .HasColumnName("type")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Count)
+                    .HasColumnName("count");
+
+                entity.Property(e => e.BestValue)
+                    .HasColumnName("best_value");
+
+                entity.Property(e => e.RefreshedOn)
+                    .HasColumnName("refreshed_on");
+
+                entity.HasIndex(e => new { e.PlayerId, e.SeasonId, e.AccoladeId });
+
+                entity.HasOne(e => e.Player)
+                    .WithMany(f => f.ValorantAccoladeSummaries)
+                    .HasForeignKey(e => e.PlayerId)
+                    .HasConstraintName("FK_Player_ValorantAccoladeSummary")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ValorantPremierTeam>(entity =>
+            {
+                entity.ToTable("ValorantPremierTeam");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Tag)
+                    .HasColumnName("tag")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.IconId)
+                    .HasColumnName("icon_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ImageUrl)
+                    .HasColumnName("image_url")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.PrimaryColor)
+                    .HasColumnName("primary_color")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.SecondaryColor)
+                    .HasColumnName("secondary_color")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TertiaryColor)
+                    .HasColumnName("tertiary_color")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnName("created_on");
+
+                entity.Property(e => e.CurrentSeasonId)
+                    .HasColumnName("current_season_id")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CurrentSeasonName)
+                    .HasColumnName("current_season_name")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Enrolled)
+                    .HasColumnName("enrolled");
+
+                entity.Property(e => e.Conference)
+                    .HasColumnName("conference")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Division)
+                    .HasColumnName("division");
+
+                entity.Property(e => e.Points)
+                    .HasColumnName("points");
+
+                entity.Property(e => e.Wins)
+                    .HasColumnName("wins");
+
+                entity.Property(e => e.Losses)
+                    .HasColumnName("losses");
+
+                entity.Property(e => e.RoundsWon)
+                    .HasColumnName("rounds_won");
+
+                entity.Property(e => e.RoundsLost)
+                    .HasColumnName("rounds_lost");
+
+                entity.Property(e => e.MembersJson)
+                    .HasColumnName("members_json");
+
+                entity.Property(e => e.SeasonsJson)
+                    .HasColumnName("seasons_json");
+
+                entity.Property(e => e.RefreshedOn)
+                    .HasColumnName("refreshed_on");
             });
 
             ConfigureUtcDates(modelBuilder);

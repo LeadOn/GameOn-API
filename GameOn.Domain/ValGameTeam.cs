@@ -42,6 +42,31 @@ namespace GameOn.Domain
         public int RoundsLost { get; set; }
 
         /// <summary>
+        /// Gets or sets the team placement (1 for the winner).
+        /// </summary>
+        public int? Placement { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PUUID of the team MVP elected by Riot.
+        /// </summary>
+        public string? RiotMvpPuuid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Premier roster UUID, on Premier matches only.
+        /// </summary>
+        public string? PremierRosterId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Premier team name, on Premier matches only.
+        /// </summary>
+        public string? PremierTeamName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Premier team tag, on Premier matches only.
+        /// </summary>
+        public string? PremierTeamTag { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent match.
         /// </summary>
         [JsonIgnore]

@@ -120,6 +120,16 @@ namespace GameOn.Domain
         public int? AceParticipantId { get; set; }
 
         /// <summary>
+        /// Gets or sets the PUUID of the match MVP elected by Riot (ours is <see cref="MvpParticipantId"/>).
+        /// </summary>
+        public string? RiotMvpPuuid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Premier match information as raw JSON, on Premier matches only.
+        /// </summary>
+        public string? PremierInfoJson { get; set; }
+
+        /// <summary>
         /// Gets the full map splash image URL from <c>media.valorant-api.com</c>, or null when no map UUID is set.
         /// </summary>
         [NotMapped]
@@ -162,5 +172,17 @@ namespace GameOn.Domain
         /// </summary>
         [JsonIgnore]
         public virtual List<ValGameRoundPlayerStat> ValorantGameRoundPlayerStats { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets where every player stood at each kill, plant and defuse.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<ValGameEventPlayerLocation> ValorantGameEventPlayerLocations { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the damage each player dealt to each other player, round by round.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<ValGameRoundDamage> ValorantGameRoundDamages { get; set; } = null!;
     }
 }

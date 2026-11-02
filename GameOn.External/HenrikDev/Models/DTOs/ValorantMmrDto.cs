@@ -4,7 +4,9 @@
 
 namespace GameOn.External.HenrikDev.Models.DTOs
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Payload returned by <c>GET /valorant/v3/by-puuid/mmr/{affinity}/{platform}/{puuid}</c>.
@@ -22,5 +24,23 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("peak")]
         public ValorantMmrPeakDto? Peak { get; set; }
+
+        /// <summary>
+        /// Gets or sets the end-of-act results, one entry per act the player was ranked in.
+        /// </summary>
+        [JsonProperty("seasonal")]
+        public List<ValorantMmrSeasonalDto> Seasonal { get; set; } = new List<ValorantMmrSeasonalDto>();
+
+        /// <summary>
+        /// Gets or sets the player's ranked visibility settings.
+        /// </summary>
+        [JsonProperty("ranked_state")]
+        public ValorantRankedStateDto? RankedState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lifetime prestige, kept as raw JSON (e.g. <c>{"DIAMOND": {"count": 6}}</c>).
+        /// </summary>
+        [JsonProperty("lifetime_prestige")]
+        public JToken? LifetimePrestige { get; set; }
     }
 }

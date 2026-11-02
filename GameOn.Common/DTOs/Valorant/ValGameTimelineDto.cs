@@ -32,5 +32,21 @@ namespace GameOn.Common.DTOs.Valorant
         /// and PUUID. Empty for matches imported before round stats were stored, until they are re-imported.
         /// </summary>
         public List<ValGameRoundPlayerStat> RoundPlayerStats { get; set; } = new List<ValGameRoundPlayerStat>();
+
+        /// <summary>
+        /// Gets or sets where every living player stood, and looked, at each kill (<see cref="ValGameEventPlayerLocation.ValGameKillId"/>),
+        /// plant and defuse. Empty for matches imported before positions were stored, until they are re-imported.
+        /// </summary>
+        public List<ValGameEventPlayerLocation> PlayerLocations { get; set; } = new List<ValGameEventPlayerLocation>();
+
+        /// <summary>
+        /// Gets or sets the damage each player dealt to each other player, round by round.
+        /// </summary>
+        public List<ValGameRoundDamage> Damages { get; set; } = new List<ValGameRoundDamage>();
+
+        /// <summary>
+        /// Gets or sets how to draw the positions on the minimap, null when the map has no minimap (e.g. skirmish maps).
+        /// </summary>
+        public ValMapTransformDto? MapTransform { get; set; }
     }
 }

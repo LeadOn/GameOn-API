@@ -59,5 +59,17 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("secondary_fire_mode")]
         public bool SecondaryFireMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the victim's position.
+        /// </summary>
+        [JsonProperty("location")]
+        public ValorantMatchLocationDto? Location { get; set; }
+
+        /// <summary>
+        /// Gets or sets where every living player stood at the kill.
+        /// </summary>
+        [JsonProperty("player_locations")]
+        public List<ValorantMatchPlayerLocationDto> PlayerLocations { get; set; } = new List<ValorantMatchPlayerLocationDto>();
     }
 }

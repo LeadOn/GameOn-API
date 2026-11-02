@@ -8,6 +8,7 @@ namespace GameOn.Application
     using GameOn.Application.LeagueOfLegends.Coach.Services;
     using GameOn.Application.LeagueOfLegends.Live.Services;
     using GameOn.Application.Services.Jobs;
+    using GameOn.Application.Valorant.Background.Services;
     using GameOn.Common.Exceptions;
     using GameOn.Common.Interfaces;
     using GameOn.External;
@@ -44,6 +45,9 @@ namespace GameOn.Application
             services.AddHostedService<RefreshLeagueQueuesJob>();
             services.AddHostedService<ProcessLoLCoachQueueJob>();
             services.AddHostedService<RefreshValorantPlayerRanksJob>();
+            services.AddSingleton<IValorantBackgroundQueue, ValorantBackgroundQueue>();
+            services.AddHostedService<ProcessValorantBackgroundQueueJob>();
+            services.AddHostedService<RefreshValorantPlayerExtrasJob>();
             return services;
         }
     }

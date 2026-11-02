@@ -28,5 +28,11 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("preferred_level_border")]
         public string? PreferredLevelBorder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the agent mastery cosmetics equipped.
+        /// </summary>
+        [JsonProperty("bloomline")]
+        public ValorantMatchBloomlineDto? Bloomline { get; set; }
     }
 }

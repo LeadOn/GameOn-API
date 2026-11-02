@@ -20,10 +20,11 @@ namespace GameOn.External.HenrikDev.Interfaces
         /// <param name="region">Valorant region/shard (e.g. "eu").</param>
         /// <param name="valorantPuuid">Raw 36-character Valorant PUUID.</param>
         /// <param name="size">Maximum number of matches to return (1 to 10).</param>
+        /// <param name="start">Zero-based offset into the match history, to page past the first 10.</param>
         /// <param name="mode">Optional queue/mode filter (e.g. "competitive", "unrated").</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of full Valorant match payloads.</returns>
-        Task<List<ValorantMatchDto>> GetLastMatchesByPuuid(string region, string valorantPuuid, int size = 10, string? mode = null, CancellationToken cancellationToken = default);
+        Task<List<ValorantMatchDto>> GetLastMatchesByPuuid(string region, string valorantPuuid, int size = 10, int start = 0, string? mode = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a single Valorant match by its match UUID.
@@ -31,7 +32,8 @@ namespace GameOn.External.HenrikDev.Interfaces
         /// <param name="region">Valorant region/shard (e.g. "eu").</param>
         /// <param name="matchId">Valorant match UUID.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
+        /// <param name="lowPriority">True for background work (backfill), which never takes the last requests of a quota window.</param>
         /// <returns>Full Valorant match payload, or null when not found.</returns>
-        Task<ValorantMatchDto?> GetMatchById(string region, string matchId, CancellationToken cancellationToken = default);
+        Task<ValorantMatchDto?> GetMatchById(string region, string matchId, CancellationToken cancellationToken = default, bool lowPriority = false);
     }
 }

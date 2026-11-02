@@ -51,6 +51,8 @@ namespace GameOn.Application.Valorant.Matches.Queries.GetLastValGamesPlayed
             var query = this.context.ValorantGames
                 .Include(x => x.ValorantGameParticipants)
                 .ThenInclude(y => y.Stats)
+                .Include(x => x.ValorantGameParticipants)
+                .ThenInclude(y => y.Performance)
                 .Include(x => x.ValorantGameTeams)
                 .AsQueryable();
 

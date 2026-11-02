@@ -25,6 +25,17 @@ namespace GameOn.External.HenrikDev.RateLimiting
     public class HenrikDevRateLimitHandler : DelegatingHandler
     {
         /// <summary>
+        /// Request option marking a low-priority call (backfill, daily extras), which leaves the last
+        /// <see cref="LowPriorityReserve"/> requests of each window to the regular refresh and the players.
+        /// </summary>
+        public static readonly HttpRequestOptionsKey<bool> LowPriority = new ("HenrikDev.LowPriority");
+
+        /// <summary>
+        /// Requests of each window a low-priority call never takes.
+        /// </summary>
+        private const int LowPriorityReserve = 10;
+
+        /// <summary>
         /// Window length assumed when a refusal carries no reset hint.
         /// </summary>
         private static readonly TimeSpan DefaultReset = TimeSpan.FromSeconds(60);
@@ -44,11 +55,12 @@ namespace GameOn.External.HenrikDev.RateLimiting
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             // Looped because another caller may have pushed the block further while this one was waiting.
-            var wait = this.state.GetWait();
+            var lowPriority = request.Options.TryGetValue(LowPriority, out var flag) && flag;
+            var wait = this.GetWait(lowPriority);
             while (wait > TimeSpan.Zero)
             {
                 await Task.Delay(wait, cancellationToken);
-                wait = this.state.GetWait();
+                wait = this.GetWait(lowPriority);
             }
 
             var response = await base.SendAsync(request, cancellationToken);
@@ -56,6 +68,8 @@ namespace GameOn.External.HenrikDev.RateLimiting
             var reset = ReadInt(response, "x-ratelimit-reset") is { } seconds
                 ? TimeSpan.FromSeconds(seconds)
                 : DefaultReset;
+
+            this.state.Report(ReadInt(response, "x-ratelimit-remaining"), reset);
 
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
@@ -85,5 +99,9 @@ namespace GameOn.External.HenrikDev.RateLimiting
 
             return null;
         }
+
+        private TimeSpan GetWait(bool lowPriority) => lowPriority
+            ? this.state.GetLowPriorityWait(LowPriorityReserve)
+            : this.state.GetWait();
     }
 }

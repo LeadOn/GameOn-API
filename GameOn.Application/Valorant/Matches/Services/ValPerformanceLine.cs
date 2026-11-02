@@ -50,6 +50,35 @@ namespace GameOn.Application.Valorant.Matches.Services
             SpikePlants = x.Stats != null ? x.Stats.SpikePlants : 0,
             SpikeDefuses = x.Stats != null ? x.Stats.SpikeDefuses : 0,
             KnifeKills = x.Stats != null ? x.Stats.KnifeKills : 0,
+            AttackRounds = x.Stats != null ? x.Stats.AttackRounds : null,
+            AttackRoundsWon = x.Stats != null ? x.Stats.AttackRoundsWon : null,
+            AttackKills = x.Stats != null ? x.Stats.AttackKills : null,
+            AttackDeaths = x.Stats != null ? x.Stats.AttackDeaths : null,
+            AttackScore = x.Stats != null ? x.Stats.AttackScore : null,
+            DefenseRounds = x.Stats != null ? x.Stats.DefenseRounds : null,
+            DefenseRoundsWon = x.Stats != null ? x.Stats.DefenseRoundsWon : null,
+            DefenseKills = x.Stats != null ? x.Stats.DefenseKills : null,
+            DefenseDeaths = x.Stats != null ? x.Stats.DefenseDeaths : null,
+            DefenseScore = x.Stats != null ? x.Stats.DefenseScore : null,
+            PistolRounds = x.Stats != null ? x.Stats.PistolRounds : null,
+            PistolRoundsWon = x.Stats != null ? x.Stats.PistolRoundsWon : null,
+            EcoRounds = x.Stats != null ? x.Stats.EcoRounds : null,
+            EcoRoundsWon = x.Stats != null ? x.Stats.EcoRoundsWon : null,
+            ForceBuyRounds = x.Stats != null ? x.Stats.ForceBuyRounds : null,
+            ForceBuyRoundsWon = x.Stats != null ? x.Stats.ForceBuyRoundsWon : null,
+            FullBuyRounds = x.Stats != null ? x.Stats.FullBuyRounds : null,
+            FullBuyRoundsWon = x.Stats != null ? x.Stats.FullBuyRoundsWon : null,
+            TradeKills = x.Stats != null ? x.Stats.TradeKills : 0,
+            TradedDeaths = x.Stats != null ? x.Stats.TradedDeaths : 0,
+            ClutchAttempts = x.Stats != null ? x.Stats.ClutchAttempts : 0,
+            Clutch1v1Won = x.Stats != null ? x.Stats.Clutch1v1Won : 0,
+            Clutch1v2Won = x.Stats != null ? x.Stats.Clutch1v2Won : 0,
+            Clutch1v3Won = x.Stats != null ? x.Stats.Clutch1v3Won : 0,
+            Clutch1v4Won = x.Stats != null ? x.Stats.Clutch1v4Won : 0,
+            Clutch1v5Won = x.Stats != null ? x.Stats.Clutch1v5Won : 0,
+            LongestKillDistanceMeters = x.Stats != null ? x.Stats.LongestKillDistanceMeters : null,
+            RiotPerformanceScore = x.Performance != null ? x.Performance.Score : null,
+            Puuid = x.Puuid,
         };
 
         /// <summary>Gets or sets the GameOn player ID.</summary>
@@ -141,6 +170,151 @@ namespace GameOn.Application.Valorant.Matches.Services
 
         /// <summary>Gets or sets the melee kills. 0 without derived stats.</summary>
         public int KnifeKills { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.AttackRounds"/>.
+        /// </summary>
+        public int? AttackRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.AttackRoundsWon"/>.
+        /// </summary>
+        public int? AttackRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.AttackKills"/>.
+        /// </summary>
+        public int? AttackKills { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.AttackDeaths"/>.
+        /// </summary>
+        public int? AttackDeaths { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.AttackScore"/>.
+        /// </summary>
+        public int? AttackScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.DefenseRounds"/>.
+        /// </summary>
+        public int? DefenseRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.DefenseRoundsWon"/>.
+        /// </summary>
+        public int? DefenseRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.DefenseKills"/>.
+        /// </summary>
+        public int? DefenseKills { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.DefenseDeaths"/>.
+        /// </summary>
+        public int? DefenseDeaths { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.DefenseScore"/>.
+        /// </summary>
+        public int? DefenseScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.PistolRounds"/>.
+        /// </summary>
+        public int? PistolRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.PistolRoundsWon"/>.
+        /// </summary>
+        public int? PistolRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.EcoRounds"/>.
+        /// </summary>
+        public int? EcoRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.EcoRoundsWon"/>.
+        /// </summary>
+        public int? EcoRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.ForceBuyRounds"/>.
+        /// </summary>
+        public int? ForceBuyRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.ForceBuyRoundsWon"/>.
+        /// </summary>
+        public int? ForceBuyRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.FullBuyRounds"/>.
+        /// </summary>
+        public int? FullBuyRounds { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.FullBuyRoundsWon"/>.
+        /// </summary>
+        public int? FullBuyRoundsWon { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.TradeKills"/>.
+        /// </summary>
+        public int TradeKills { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.TradedDeaths"/>.
+        /// </summary>
+        public int TradedDeaths { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.ClutchAttempts"/>.
+        /// </summary>
+        public int ClutchAttempts { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.Clutch1v1Won"/>.
+        /// </summary>
+        public int Clutch1v1Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.Clutch1v2Won"/>.
+        /// </summary>
+        public int Clutch1v2Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.Clutch1v3Won"/>.
+        /// </summary>
+        public int Clutch1v3Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.Clutch1v4Won"/>.
+        /// </summary>
+        public int Clutch1v4Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.Clutch1v5Won"/>.
+        /// </summary>
+        public int Clutch1v5Won { get; set; }
+
+        /// <summary>
+        /// Gets or sets <see cref="ValGameParticipantStat.LongestKillDistanceMeters"/>.
+        /// </summary>
+        public double? LongestKillDistanceMeters { get; set; }
+
+        /// <summary>
+        /// Gets or sets Riot's own performance score, null when Riot did not rate the game.
+        /// </summary>
+        public double? RiotPerformanceScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the account's Valorant PUUID in the game.
+        /// </summary>
+        public string Puuid { get; set; } = string.Empty;
 
         /// <summary>Gets the shots that hit, head, body and legs combined.</summary>
         public int ShotsHit => this.Headshots + this.Bodyshots + this.Legshots;

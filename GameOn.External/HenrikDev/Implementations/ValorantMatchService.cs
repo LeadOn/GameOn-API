@@ -14,6 +14,7 @@ namespace GameOn.External.HenrikDev.Implementations
     using GameOn.External.Common.Exceptions;
     using GameOn.External.HenrikDev.Interfaces;
     using GameOn.External.HenrikDev.Models.DTOs;
+    using GameOn.External.HenrikDev.RateLimiting;
 
     /// <summary>
     /// <see cref="IValorantMatchService"/> implementation backed by the HenrikDev Valorant v4 API.
@@ -35,12 +36,17 @@ namespace GameOn.External.HenrikDev.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<List<ValorantMatchDto>> GetLastMatchesByPuuid(string region, string valorantPuuid, int size = 10, string? mode = null, CancellationToken cancellationToken = default)
+        public async Task<List<ValorantMatchDto>> GetLastMatchesByPuuid(string region, string valorantPuuid, int size = 10, int start = 0, string? mode = null, CancellationToken cancellationToken = default)
         {
             var encodedRegion = Uri.EscapeDataString(string.IsNullOrWhiteSpace(region) ? "eu" : region.Trim().ToLowerInvariant());
             var encodedPuuid = Uri.EscapeDataString(valorantPuuid);
             var boundedSize = Math.Clamp(size, 1, 10);
             var url = $"{GetBaseUrl()}/valorant/v4/by-puuid/matches/{encodedRegion}/{DefaultPlatform}/{encodedPuuid}?size={boundedSize}";
+
+            if (start > 0)
+            {
+                url += $"&start={start}";
+            }
 
             if (!string.IsNullOrWhiteSpace(mode))
             {
@@ -61,11 +67,12 @@ namespace GameOn.External.HenrikDev.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<ValorantMatchDto?> GetMatchById(string region, string matchId, CancellationToken cancellationToken = default)
+        public async Task<ValorantMatchDto?> GetMatchById(string region, string matchId, CancellationToken cancellationToken = default, bool lowPriority = false)
         {
             var encodedRegion = Uri.EscapeDataString(string.IsNullOrWhiteSpace(region) ? "eu" : region.Trim().ToLowerInvariant());
             var encodedMatchId = Uri.EscapeDataString(matchId);
             var request = CreateRequest($"{GetBaseUrl()}/valorant/v4/match/{encodedRegion}/{encodedMatchId}");
+            request.Options.Set(HenrikDevRateLimitHandler.LowPriority, lowPriority);
 
             try
             {
