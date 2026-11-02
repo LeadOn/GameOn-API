@@ -15,6 +15,8 @@ namespace GameOn.External
     using GameOn.External.NetworkStorage.Interfaces;
     using GameOn.External.RiotGames.Implementations;
     using GameOn.External.RiotGames.Interfaces;
+    using GameOn.External.ValorantApi.Implementations;
+    using GameOn.External.ValorantApi.Interfaces;
     using Microsoft.Extensions.DependencyInjection;
     using Minio;
 
@@ -47,6 +49,9 @@ namespace GameOn.External
             services.AddHttpClient<IValorantAccountService, ValorantAccountService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
             services.AddHttpClient<IValorantMmrService, ValorantMmrService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
             services.AddHttpClient<IValorantMatchService, ValorantMatchService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
+            services.AddHttpClient<IValorantStoredDataService, ValorantStoredDataService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
+            services.AddHttpClient<IValorantPlayerExtrasService, ValorantPlayerExtrasService>().AddHttpMessageHandler<HenrikDevRateLimitHandler>();
+            services.AddHttpClient<IValorantMapService, ValorantMapService>();
 
             // The provider is picked at startup rather than at compile time: switching to the self-hosted box,
             // or falling back off it, is an environment variable and a restart rather than a deployment.

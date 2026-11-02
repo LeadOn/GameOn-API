@@ -70,6 +70,18 @@ namespace GameOn.Common.DTOs.Valorant
         public ValFunStatDto? NightOwl { get; set; }
 
         /// <summary>
+        /// Gets or sets the account that won the most clutches (left alone against at least one enemy) over the
+        /// period. Ties go to the most 1v3-or-worse clutches won.
+        /// </summary>
+        public ValFunStatDto? ClutchKing { get; set; }
+
+        /// <summary>
+        /// Gets or sets the longest kill of the period, in meters, from the positions of the killer and the victim.
+        /// Only matches imported with positions count.
+        /// </summary>
+        public ValFunStatDto? LongestKill { get; set; }
+
+        /// <summary>
         /// Gets or sets the Longest Win Streak award: most consecutive wins.
         /// </summary>
         public ValFunStatDto? LongestWinStreak { get; set; }

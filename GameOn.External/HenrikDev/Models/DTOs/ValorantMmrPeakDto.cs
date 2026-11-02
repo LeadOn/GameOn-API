@@ -28,5 +28,11 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("rr")]
         public int Rr { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ranking schema the peak was reached under (base or ascendant).
+        /// </summary>
+        [JsonProperty("ranking_schema")]
+        public string? RankingSchema { get; set; }
     }
 }

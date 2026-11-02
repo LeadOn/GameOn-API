@@ -92,6 +92,37 @@ namespace GameOn.Domain
         public string? DefusePlayerPuuid { get; set; }
 
         /// <summary>
+        /// Gets or sets the team attacking this round (Red or Blue), derived from the winning team role or,
+        /// on old matches without it, from the team that planted. Null when it cannot be told.
+        /// </summary>
+        public string? AttackingTeam { get; set; }
+
+        /// <summary>
+        /// Gets or sets the X game coordinate of the plant.
+        /// </summary>
+        public int? PlantX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Y game coordinate of the plant.
+        /// </summary>
+        public int? PlantY { get; set; }
+
+        /// <summary>
+        /// Gets or sets the map callout of the plant.
+        /// </summary>
+        public string? PlantZone { get; set; }
+
+        /// <summary>
+        /// Gets or sets the X game coordinate of the defuse.
+        /// </summary>
+        public int? DefuseX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Y game coordinate of the defuse.
+        /// </summary>
+        public int? DefuseY { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent match.
         /// </summary>
         [JsonIgnore]

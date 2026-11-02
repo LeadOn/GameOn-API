@@ -88,6 +88,69 @@ namespace GameOn.Domain
         public string? MapName { get; set; }
 
         /// <summary>
+        /// Gets or sets the queue ID of the match (e.g. competitive), null when unknown.
+        /// </summary>
+        public string? QueueId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the match length in milliseconds, null when unknown.
+        /// </summary>
+        public long? MatchLengthMs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tier ID held before the match.
+        /// </summary>
+        public int? TierBeforeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tier name held before the match.
+        /// </summary>
+        public string? TierBeforeName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR held before the match.
+        /// </summary>
+        public int? RrBeforeUpdate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR bonus earned from individual performance.
+        /// </summary>
+        public int? RrPerformanceBonus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR penalty factor applied to the match (e.g. 0.25 for a party size disparity).
+        /// </summary>
+        public double? RrPenalty { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR penalty applied for being AFK.
+        /// </summary>
+        public int? AfkPenalty { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR loss forgiven because the match was played on a new map.
+        /// </summary>
+        public int? NewMapIncentiveRrForgiven { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the match was a placement match.
+        /// </summary>
+        public bool? IsPlacementMatch { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the match replenished the rank protection shields.
+        /// </summary>
+        public bool? WasDerankProtectionReplenished { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RR actually won or lost on the match, computed from the Elo before and after it.
+        /// Unlike <see cref="LastChange"/>, which is the change Riot announces (-22 on a loss absorbed at 0 RR,
+        /// +16 on a promotion that really gave +22), it adds up across tiers. Null when it cannot be computed
+        /// (placement, unranked side, Immortal and above).
+        /// </summary>
+        public int? RrDelta { get; set; }
+
+        /// <summary>
         /// Gets or sets the UTC date of this rank entry.
         /// </summary>
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;

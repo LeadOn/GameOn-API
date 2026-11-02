@@ -108,6 +108,42 @@ namespace GameOn.Common.DTOs.Valorant
         public int FirstDeaths { get; set; }
 
         /// <summary>
+        /// Gets or sets the average of Riot's own performance score, over the games Riot rated. Riot ships it
+        /// as provisional data: shown next to <see cref="AverageRating"/>, never ranked on. Null without any rated game.
+        /// </summary>
+        public double? AverageRiotPerformanceScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the attack figures, null when no game has its sides resolved.
+        /// </summary>
+        public ValSideStatsDto? Attack { get; set; }
+
+        /// <summary>
+        /// Gets or sets the defense figures, null when no game has its sides resolved.
+        /// </summary>
+        public ValSideStatsDto? Defense { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rounds by buy type, null without any standard-mode game.
+        /// </summary>
+        public ValBuyTypeStatsDto? BuyTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the clutches.
+        /// </summary>
+        public ValClutchStatsDto Clutches { get; set; } = new ValClutchStatsDto();
+
+        /// <summary>
+        /// Gets or sets the trades.
+        /// </summary>
+        public ValTradeStatsDto Trades { get; set; } = new ValTradeStatsDto();
+
+        /// <summary>
+        /// Gets or sets the kills by weapon, most kills first.
+        /// </summary>
+        public List<ValWeaponStatDto> Weapons { get; set; } = new List<ValWeaponStatDto>();
+
+        /// <summary>
         /// Gets or sets the breakdown of every agent played in the period, most played first (ties broken by
         /// win rate, then agent name for a stable order).
         /// </summary>

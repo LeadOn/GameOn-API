@@ -46,5 +46,29 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("rank_protection_shields")]
         public int RankProtectionShields { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rank protection status (e.g. Empty, Full).
+        /// </summary>
+        [JsonProperty("rank_protection_status")]
+        public string? RankProtectionStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player currently sits on a protected tier floor.
+        /// </summary>
+        [JsonProperty("is_at_rank_protected_tier")]
+        public bool? IsAtRankProtectedTier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of games still needed to appear on the leaderboard.
+        /// </summary>
+        [JsonProperty("games_needed_for_leaderboard")]
+        public int? GamesNeededForLeaderboard { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current leaderboard placement, null when not ranked on it.
+        /// </summary>
+        [JsonProperty("leaderboard_placement")]
+        public ValorantLeaderboardPlacementDto? LeaderboardPlacement { get; set; }
     }
 }

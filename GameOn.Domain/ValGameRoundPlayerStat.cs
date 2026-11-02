@@ -102,6 +102,16 @@ namespace GameOn.Domain
         public bool WasAfk { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the player was penalized during the round.
+        /// </summary>
+        public bool ReceivedPenalty { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player stayed in spawn during the round.
+        /// </summary>
+        public bool StayedInSpawn { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent match.
         /// </summary>
         [JsonIgnore]

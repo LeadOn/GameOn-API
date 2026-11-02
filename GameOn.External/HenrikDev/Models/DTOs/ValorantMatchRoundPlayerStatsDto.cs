@@ -47,5 +47,11 @@ namespace GameOn.External.HenrikDev.Models.DTOs
         /// </summary>
         [JsonProperty("stayed_in_spawn")]
         public bool StayedInSpawn { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player was penalized during the round.
+        /// </summary>
+        [JsonProperty("received_penalty")]
+        public bool ReceivedPenalty { get; set; }
     }
 }

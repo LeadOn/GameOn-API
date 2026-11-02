@@ -4,6 +4,7 @@
 
 namespace GameOn.Domain
 {
+    using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
     /// <summary>
@@ -87,9 +88,55 @@ namespace GameOn.Domain
         public bool SecondaryFireMode { get; set; }
 
         /// <summary>
+        /// Gets or sets the X game coordinate of the victim.
+        /// </summary>
+        public int? VictimX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Y game coordinate of the victim.
+        /// </summary>
+        public int? VictimY { get; set; }
+
+        /// <summary>
+        /// Gets or sets the X game coordinate of the killer, null when unknown (fall, spike, killer already dead).
+        /// </summary>
+        public int? KillerX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Y game coordinate of the killer.
+        /// </summary>
+        public int? KillerY { get; set; }
+
+        /// <summary>
+        /// Gets or sets the killer's view direction, in radians.
+        /// </summary>
+        public double? KillerViewRadians { get; set; }
+
+        /// <summary>
+        /// Gets or sets the distance between killer and victim, in meters.
+        /// </summary>
+        public double? DistanceMeters { get; set; }
+
+        /// <summary>
+        /// Gets or sets the map callout the victim died in (e.g. A Main), from valorant-api.com.
+        /// </summary>
+        public string? VictimZone { get; set; }
+
+        /// <summary>
+        /// Gets or sets the map callout the killer stood in.
+        /// </summary>
+        public string? KillerZone { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent match.
         /// </summary>
         [JsonIgnore]
         public virtual ValGame Game { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets where every player stood when the kill happened.
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<ValGameEventPlayerLocation> PlayerLocations { get; set; } = new List<ValGameEventPlayerLocation>();
     }
 }

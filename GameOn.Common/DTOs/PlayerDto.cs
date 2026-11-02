@@ -51,6 +51,21 @@ namespace GameOn.Common.DTOs
             this.ValorantPeakTierName = player.ValorantPeakTierName;
             this.ValorantPeakRr = player.ValorantPeakRr;
             this.ValorantPeakSeasonShort = player.ValorantPeakSeasonShort;
+            this.ValorantRankProtectionShields = player.ValorantRankProtectionShields;
+            this.ValorantRankProtectionStatus = player.ValorantRankProtectionStatus;
+            this.ValorantIsAtRankProtectedTier = player.ValorantIsAtRankProtectedTier;
+            this.ValorantGamesNeededForRating = player.ValorantGamesNeededForRating;
+            this.ValorantGamesNeededForLeaderboard = player.ValorantGamesNeededForLeaderboard;
+            this.ValorantLeaderboardRank = player.ValorantLeaderboardRank;
+            this.ValorantLeaderboardUpdatedOn = player.ValorantLeaderboardUpdatedOn;
+            this.ValorantIsActRankBadgeHidden = player.ValorantIsActRankBadgeHidden;
+            this.ValorantIsLeaderboardAnonymized = player.ValorantIsLeaderboardAnonymized;
+            this.ValorantPeakRankingSchema = player.ValorantPeakRankingSchema;
+            this.ValorantLifetimePrestigeJson = player.ValorantLifetimePrestigeJson;
+            this.ValorantPremierTeamId = player.ValorantPremierTeamId;
+            this.ValorantPremierRole = player.ValorantPremierRole;
+            this.ValorantPremierJoinedOn = player.ValorantPremierJoinedOn;
+            this.ValorantExtrasRefreshedOn = player.ValorantExtrasRefreshedOn;
 
             if (player.ValorantPeakTierId is >= 3 and <= 27)
             {
@@ -193,6 +208,81 @@ namespace GameOn.Common.DTOs
         /// Gets or sets the Valorant Act/Season short code (e.g. e9a3) in which the peak rank was achieved.
         /// </summary>
         public string? ValorantPeakSeasonShort { get; set; }
+
+        /// <summary>
+        /// Gets or sets the remaining Valorant rank protection shields.
+        /// </summary>
+        public int? ValorantRankProtectionShields { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Valorant rank protection status (e.g. Empty, Full).
+        /// </summary>
+        public string? ValorantRankProtectionStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player currently sits on a protected Valorant tier floor.
+        /// </summary>
+        public bool? ValorantIsAtRankProtectedTier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Valorant placement games still needed to get a rank.
+        /// </summary>
+        public int? ValorantGamesNeededForRating { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Valorant ranked games still needed to appear on the leaderboard.
+        /// </summary>
+        public int? ValorantGamesNeededForLeaderboard { get; set; }
+
+        /// <summary>
+        /// Gets or sets the player's current Valorant leaderboard rank, null when not on it.
+        /// </summary>
+        public int? ValorantLeaderboardRank { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UTC date the Valorant leaderboard rank was last updated.
+        /// </summary>
+        public DateTime? ValorantLeaderboardUpdatedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player hides their Valorant act rank badge.
+        /// </summary>
+        public bool? ValorantIsActRankBadgeHidden { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player is anonymized on the Valorant leaderboard.
+        /// </summary>
+        public bool? ValorantIsLeaderboardAnonymized { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ranking schema the Valorant peak was reached under (base or ascendant).
+        /// </summary>
+        public string? ValorantPeakRankingSchema { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Valorant lifetime prestige as raw JSON (e.g. <c>{"DIAMOND": {"count": 6}}</c>).
+        /// </summary>
+        public string? ValorantLifetimePrestigeJson { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID of the Valorant Premier team the player belongs to, null when none.
+        /// </summary>
+        public string? ValorantPremierTeamId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the player's role in their Valorant Premier team (e.g. OWNER, MEMBER).
+        /// </summary>
+        public string? ValorantPremierRole { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UTC date the player joined their Valorant Premier team.
+        /// </summary>
+        public DateTime? ValorantPremierJoinedOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UTC date the Valorant accolades, agent mastery and Premier team were last refreshed.
+        /// </summary>
+        public DateTime? ValorantExtrasRefreshedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the large rank icon URL for the player's all-time peak Valorant tier on

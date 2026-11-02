@@ -241,6 +241,37 @@ namespace GameOn.Application.Valorant.Stats.Queries.GetValGlobalStats
                 result.NightOwl = BuildAward(players, nightOwl.PlayerId, nightOwl.NightGames, string.Create(CultureInfo.InvariantCulture, $"{nightOwl.NightGames} games between midnight and 6 AM ({nightWinRate}% win rate)"), null);
             }
 
+            var clutchKing = lines
+                .GroupBy(x => x.PlayerId)
+                .Select(g => new
+                {
+                    PlayerId = g.Key,
+                    Won = g.Sum(x => x.Clutch1v1Won + x.Clutch1v2Won + x.Clutch1v3Won + x.Clutch1v4Won + x.Clutch1v5Won),
+                    Hard = g.Sum(x => x.Clutch1v3Won + x.Clutch1v4Won + x.Clutch1v5Won),
+                    Attempts = g.Sum(x => x.ClutchAttempts),
+                })
+                .OrderByDescending(x => x.Won)
+                .ThenByDescending(x => x.Hard)
+                .ThenBy(x => x.PlayerId)
+                .First();
+
+            if (clutchKing.Won > 0)
+            {
+                result.ClutchKing = BuildAward(players, clutchKing.PlayerId, clutchKing.Won, $"{clutchKing.Won} clutches won out of {clutchKing.Attempts}, {clutchKing.Hard} of them 1v3 or worse", null);
+            }
+
+            var longestKill = lines
+                .Where(x => x.LongestKillDistanceMeters is > 0)
+                .OrderByDescending(x => x.LongestKillDistanceMeters)
+                .ThenBy(x => x.MatchId, StringComparer.Ordinal)
+                .ThenBy(x => x.PlayerId)
+                .FirstOrDefault();
+
+            if (longestKill is not null)
+            {
+                result.LongestKill = BuildAward(players, longestKill, longestKill.LongestKillDistanceMeters!.Value, string.Create(CultureInfo.InvariantCulture, $"A kill from {longestKill.LongestKillDistanceMeters} m on {longestKill.MapName ?? "an unknown map"} ({AgentOf(longestKill)})"));
+            }
+
             result.LongestWinStreak = BuildStreakAward(players, lines, x => x.Win, "wins");
 
             // A draw is not a loss, so it breaks a losing streak like a win does.

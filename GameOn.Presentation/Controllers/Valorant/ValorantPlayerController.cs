@@ -17,11 +17,16 @@ namespace GameOn.Presentation.Controllers.Valorant
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer;
     using GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayerAdmin;
     using GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers;
+    using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerAccolades;
+    using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerAgentMastery;
     using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerById;
+    using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerHeatmap;
     using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerRankHistory;
+    using GameOn.Application.Valorant.Players.Queries.GetValorantPlayerSeasons;
     using GameOn.Common.DTOs;
     using GameOn.Common.DTOs.Common;
     using GameOn.Common.DTOs.LeagueOfLegends;
+    using GameOn.Common.DTOs.Valorant;
     using GameOn.Domain;
     using GameOn.Presentation.Classes;
     using MediatR;
@@ -130,6 +135,92 @@ namespace GameOn.Presentation.Controllers.Valorant
                 Granularity = granularity,
                 Days = days,
             }));
+        }
+
+        /// <summary>
+        /// Get where a Valorant player got their kills, or died, on one map: points ready to draw on the minimap,
+        /// and the count per zone (callout).
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <param name="map">Map name (e.g. Ascent).</param>
+        /// <param name="type">Kills (where the player shot from) or Deaths (where they fell).</param>
+        /// <param name="side">Attack or Defense, omitted for both.</param>
+        /// <param name="period">Period.</param>
+        /// <param name="queues">Comma-separated queue IDs (e.g. competitive,unrated).</param>
+        /// <returns>200 OK with the heatmap.</returns>
+        [HttpGet]
+        [Route("{id:int}/heatmap")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get a Valorant player's kill or death heatmap on one map.")]
+        [SwaggerResponse(200, "The heatmap.", typeof(ValHeatmapDto))]
+        [SwaggerResponse(400, "No map given.")]
+        public async Task<IActionResult> GetHeatmap(int id, string map, ValHeatmapType type = ValHeatmapType.Kills, ValSide? side = null, LoLStatsPeriod period = LoLStatsPeriod.AllTime, string? queues = null)
+        {
+            if (string.IsNullOrWhiteSpace(map))
+            {
+                return this.BadRequest();
+            }
+
+            return this.Ok(await this.mediator.Send(new GetValorantPlayerHeatmapQuery
+            {
+                PlayerId = id,
+                MapName = map,
+                Type = type,
+                Side = side,
+                Period = period,
+                Queues = string.IsNullOrWhiteSpace(queues)
+                    ? null
+                    : queues.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList(),
+            }));
+        }
+
+        /// <summary>
+        /// Get a Valorant player's end-of-act results (act rank badge, final tier, record), oldest act first.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <returns>200 OK with one entry per act.</returns>
+        [HttpGet]
+        [Route("{id:int}/seasons")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get a Valorant player's end-of-act results.")]
+        [SwaggerResponse(200, "List of end-of-act results, oldest first.", typeof(List<ValorantSeasonResult>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetSeasons(int id)
+        {
+            return this.Ok(await this.mediator.Send(new GetValorantPlayerSeasonsQuery { PlayerId = id }));
+        }
+
+        /// <summary>
+        /// Get a Valorant player's agent mastery, highest level first. Refreshed once a day.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <returns>200 OK with one entry per agent.</returns>
+        [HttpGet]
+        [Route("{id:int}/mastery")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get a Valorant player's agent mastery.")]
+        [SwaggerResponse(200, "List of agent masteries.", typeof(List<ValorantAgentMastery>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetAgentMastery(int id)
+        {
+            return this.Ok(await this.mediator.Send(new GetValorantPlayerAgentMasteryQuery { PlayerId = id }));
+        }
+
+        /// <summary>
+        /// Get a Valorant player's accolade summaries (end-of-game gold stars): all-time rows (no act) first,
+        /// then one set per act. Refreshed once a day.
+        /// </summary>
+        /// <param name="id">Player ID.</param>
+        /// <returns>200 OK with the accolade summaries.</returns>
+        [HttpGet]
+        [Route("{id:int}/accolades")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get a Valorant player's accolade summaries.")]
+        [SwaggerResponse(200, "List of accolade summaries.", typeof(List<ValorantAccoladeSummary>))]
+        [SwaggerResponse(500, "Unknown error happened.")]
+        public async Task<IActionResult> GetAccolades(int id)
+        {
+            return this.Ok(await this.mediator.Send(new GetValorantPlayerAccoladesQuery { PlayerId = id }));
         }
 
         /// <summary>

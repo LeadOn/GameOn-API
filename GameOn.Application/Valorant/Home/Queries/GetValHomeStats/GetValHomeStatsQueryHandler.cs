@@ -87,9 +87,9 @@ namespace GameOn.Application.Valorant.Home.Queries.GetValHomeStats
             var winsLastWeek = lastWeek.Count(x => x.Win);
             var totalPlaytimeMinutes = thisWeek.Sum(x => x.GameLengthMs) / 60000.0;
 
-            // Net RR is the sum of Riot's own per-match change, not a difference between two snapshots like
-            // LoL's net LP: every ranked match is in the MMR history with the RR it moved, promotions and
-            // demotions included, so there is nothing to rebuild. It also survives act resets, where the
+            // Net RR is the sum of the per-match change, not a difference between two snapshots like LoL's
+            // net LP: every ranked match is in the MMR history with the RR it moved, promotions and demotions
+            // included (see ValorantRankHistory.RrDelta), so there is nothing to rebuild. It also survives act resets, where the
             // displayed rank jumps without any game having been played. Rows without a match are the extra
             // snapshots written when the current rank differs from the history, and carry a copy of the last
             // match's change: summing them would count that match twice.
@@ -106,8 +106,10 @@ namespace GameOn.Application.Valorant.Home.Queries.GetValHomeStats
                 rankHistoryQuery = rankHistoryQuery.Where(x => x.Player.PrimaryPlayerId == null);
             }
 
+            // RrDelta is the RR that really moved; LastChange is what Riot announces, which is off around
+            // tier changes (-22 announced on a loss absorbed at 0 RR). Old rows without the detail fall back on it.
             var rrChanges = await rankHistoryQuery
-                .Select(x => new { x.PlayerId, x.LastChange, x.CreatedOn })
+                .Select(x => new { x.PlayerId, LastChange = x.RrDelta ?? x.LastChange, x.CreatedOn })
                 .ToListAsync(cancellationToken);
 
             var rrChangeByPlayer = rrChanges
