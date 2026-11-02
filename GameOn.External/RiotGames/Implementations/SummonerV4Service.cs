@@ -4,7 +4,9 @@
 
 namespace GameOn.External.RiotGames.Implementations
 {
+    using System.Net;
     using GameOn.External.Common;
+    using GameOn.External.Common.Exceptions;
     using GameOn.External.RiotGames.Interfaces;
     using GameOn.External.RiotGames.Models.DTOs;
 
@@ -25,12 +27,20 @@ namespace GameOn.External.RiotGames.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<SummonerDto> GetSummonerByPuuid(string puuid, CancellationToken cancellationToken)
+        public async Task<SummonerDto?> GetSummonerByPuuid(string puuid, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"https://{Environment.GetEnvironmentVariable("RIOT_GAMES_SUMMONER_API_ROUTE")}/lol/summoner/v4/summoners/by-puuid/{puuid}?api_key={Environment.GetEnvironmentVariable("RIOT_GAMES_API_KEY")}");
-#pragma warning disable CS8603 // Possible null reference return.
-            return await RunRequest<SummonerDto>(this.client, request, cancellationToken);
-#pragma warning restore CS8603 // Possible null reference return.
+
+            try
+            {
+                return await RunRequest<SummonerDto>(this.client, request, cancellationToken);
+            }
+            catch (ExternalApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                // A Riot account that never played League of Legends (a Valorant-only player) has no summoner:
+                // an answer, not a failure.
+                return null;
+            }
         }
     }
 }
