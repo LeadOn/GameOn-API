@@ -53,12 +53,15 @@ namespace GameOn.Application.Valorant.Players.Queries.GetValorantPlayerById
 
                 playerInDb.ValorantCurrentRank = playerHistory.FirstOrDefault();
                 playerInDb.RrChange7DaysValorant = GetRrChange7Days(playerHistory, DateTime.UtcNow.AddDays(-7));
-                playerInDb.RecentFormValorant = await this.context.ValorantGameParticipants
+                var recentResults = await this.context.ValorantGameParticipants
                     .Where(x => x.PlayerId == playerInDb.Id && x.Game.QueueId == "competitive" && !x.Game.IsRemake)
                     .OrderByDescending(x => x.Game.GameStart)
                     .Take(8)
-                    .Select(x => x.Win)
+                    .Select(x => new { x.Win, IsDraw = !x.Win && x.Game.WinningTeamId == null })
                     .ToListAsync(cancellationToken);
+
+                playerInDb.RecentFormValorant = recentResults.Select(x => x.Win).ToList();
+                playerInDb.RecentResultsValorant = recentResults.Select(x => ValGameResultLabel.From(x.Win, x.IsDraw)).ToList();
 
                 var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
                 var mainAgent = await this.context.ValorantGameParticipants
