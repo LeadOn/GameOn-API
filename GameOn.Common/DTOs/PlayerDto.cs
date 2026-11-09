@@ -307,6 +307,13 @@ namespace GameOn.Common.DTOs
         public List<bool> RecentFormValorant { get; set; } = new List<bool>();
 
         /// <summary>
+        /// Gets or sets the player's most recent ranked Valorant game results, newest to oldest.
+        /// Each entry is exactly "Win", "Loss" or "Draw". Unlike <see cref="RecentFormValorant"/>,
+        /// a drawn game is not reported as a loss.
+        /// </summary>
+        public List<string> RecentResultsValorant { get; set; } = new List<string>();
+
+        /// <summary>
         /// Gets or sets the Valorant agent this account played the most over the last rolling month.
         /// </summary>
         public string? MainAgentName { get; set; }

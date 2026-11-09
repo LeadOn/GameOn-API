@@ -10,6 +10,7 @@ namespace GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers
     using System.Threading;
     using System.Threading.Tasks;
     using GameOn.Application.Common.Players;
+    using GameOn.Application.Valorant.Matches.Services;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
     using GameOn.Domain;
@@ -77,7 +78,7 @@ namespace GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers
             var competitiveParticipations = await this.context.ValorantGameParticipants
                 .Where(x => x.PlayerId != null && playerIds.Contains(x.PlayerId.Value) && x.Game.QueueId == "competitive" && !x.Game.IsRemake)
                 .OrderByDescending(x => x.Game.GameStart)
-                .Select(x => new { PlayerId = x.PlayerId!.Value, x.Win })
+                .Select(x => new { PlayerId = x.PlayerId!.Value, x.Win, IsDraw = !x.Win && x.Game.WinningTeamId == null })
                 .ToListAsync(cancellationToken);
 
             var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
@@ -93,11 +94,13 @@ namespace GameOn.Application.Valorant.Players.Queries.GetAllValorantPlayers
                 var history = rankHistory.Where(x => x.PlayerId == player.Id).ToList();
                 player.ValorantCurrentRank = history.FirstOrDefault();
                 player.RrChange7DaysValorant = GetRrChange7Days(history, sevenDaysAgo);
-                player.RecentFormValorant = competitiveParticipations
+                var recentResults = competitiveParticipations
                     .Where(x => x.PlayerId == player.Id)
                     .Take(5)
-                    .Select(x => x.Win)
                     .ToList();
+
+                player.RecentFormValorant = recentResults.Select(x => x.Win).ToList();
+                player.RecentResultsValorant = recentResults.Select(x => ValGameResultLabel.From(x.Win, x.IsDraw)).ToList();
 
                 var mainAgent = recentAgentParticipations
                     .Where(x => x.PlayerId == player.Id)

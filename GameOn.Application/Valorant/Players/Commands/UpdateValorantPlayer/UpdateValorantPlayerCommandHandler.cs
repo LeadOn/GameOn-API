@@ -10,6 +10,7 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
     using System.Threading;
     using System.Threading.Tasks;
     using GameOn.Application.Valorant.Matches.Commands.UpsertValorantMatches;
+    using GameOn.Application.Valorant.Matches.Services;
     using GameOn.Application.Valorant.Players.Services;
     using GameOn.Common.DTOs;
     using GameOn.Common.Interfaces;
@@ -145,12 +146,15 @@ namespace GameOn.Application.Valorant.Players.Commands.UpdateValorantPlayer
             dto.ValorantCurrentRank = playerRanks.FirstOrDefault();
             dto.RrChange7DaysValorant = ComputeRrChange7Days(playerRanks, DateTime.UtcNow.AddDays(-7));
 
-            dto.RecentFormValorant = await this.context.ValorantGameParticipants
+            var recentResults = await this.context.ValorantGameParticipants
                 .Where(x => x.PlayerId == playerInDb.Id && x.Game.QueueId == "competitive" && !x.Game.IsRemake)
                 .OrderByDescending(x => x.Game.GameStart)
                 .Take(8)
-                .Select(x => x.Win)
+                .Select(x => new { x.Win, IsDraw = !x.Win && x.Game.WinningTeamId == null })
                 .ToListAsync(cancellationToken);
+
+            dto.RecentFormValorant = recentResults.Select(x => x.Win).ToList();
+            dto.RecentResultsValorant = recentResults.Select(x => ValGameResultLabel.From(x.Win, x.IsDraw)).ToList();
 
             var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
             var mainAgent = await this.context.ValorantGameParticipants
